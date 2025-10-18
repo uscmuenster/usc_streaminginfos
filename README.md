@@ -57,7 +57,19 @@ Der CLI-Einstieg befindet sich im Modul `usc_kommentatoren.cli`. Ein typischer A
 PYTHONPATH=src python -m usc_kommentatoren.cli --config config.yml --format markdown --limit 15 --next-games 5
 ```
 
-Der Befehl erzeugt wahlweise Markdown- oder JSON-Ausgaben mit:
+Der Parameter `--format` akzeptiert `markdown`, `json` oder `html`. Mit `--output` kann die Ausgabe direkt in eine Datei
+geschrieben werden. Ein Beispiel für einen HTML-Bericht lautet:
+
+```bash
+PYTHONPATH=src python -m usc_kommentatoren.cli \
+  --config config.yml \
+  --format html \
+  --limit 15 \
+  --next-games 5 \
+  --output reports/usc-report.html
+```
+
+Der Befehl erzeugt wahlweise Markdown-, HTML- oder JSON-Ausgaben mit:
 
 * **Tabellenstand** der 1. Bundesliga Frauen
 * **Aktuelle Spielpläne** (Limit konfigurierbar)
@@ -66,8 +78,14 @@ Der Befehl erzeugt wahlweise Markdown- oder JSON-Ausgaben mit:
 
 Bei fehlendem API-Schlüssel werden Tabellen- und Spielplandaten übersprungen, die News-Sammlung funktioniert unabhängig davon.
 
+## Automatisierte HTML-Erstellung via GitHub Actions
+
+Das Repository enthält einen Workflow `.github/workflows/ci.yml`, der bei jedem Push, Pull Request **und einmal täglich**
+(`cron: "0 5 * * *"`, UTC) ausgeführt wird. Neben Kompilierungs- und Smoketests erzeugt der Workflow einen HTML-Bericht auf
+Basis der Beispielkonfiguration und stellt ihn als Build-Artefakt zur Verfügung. Du findest den Download nach jedem Lauf im
+Bereich "Actions" des GitHub-Repositories.
+
 ## Erweiterungsideen
 
 * Zusätzliche News-Feeds für weitere Vereine ergänzen
-* Ausgabe als HTML-Datei oder automatisierte Veröffentlichung
 * Automatisierte Speicherung der Ergebnisse in einer Datenbank
