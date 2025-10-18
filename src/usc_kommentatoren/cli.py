@@ -29,6 +29,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--format",
         choices=["markdown", "json", "html"],
+        choices=["markdown", "json"],
         default="markdown",
         help="Output format (default: markdown).",
     )
@@ -124,6 +125,37 @@ def render_markdown(
         output_lines.append(
             "| Platz | Team | Spiele | Siege | Niederlagen | Punkte | Satzquotient | Ballquotient |"
         )
+            "league_matches": [
+                {
+                    "uuid": match.uuid,
+                    "date": match.date.isoformat(),
+                    "team_home": match.team_home,
+                    "team_away": match.team_away,
+                    "venue": match.venue,
+                    "results": match.results,
+                }
+                for match in league_matches
+            ],
+            "usc_matches": [
+                {
+                    "uuid": match.uuid,
+                    "date": match.date.isoformat(),
+                    "team_home": match.team_home,
+                    "team_away": match.team_away,
+                    "venue": match.venue,
+                    "results": match.results,
+                }
+                for match in usc_matches
+            ],
+            "articles": [asdict(article) for article in articles],
+        }
+        print(json.dumps(payload, indent=2, ensure_ascii=False))
+        return 0
+
+    output_lines: List[str] = []
+    if standings:
+        output_lines.append("## Tabelle")
+        output_lines.append("| Platz | Team | Spiele | Siege | Niederlagen | Punkte | Satzquotient | Ballquotient |")
         output_lines.append("| --- | --- | --- | --- | --- | --- | --- | --- |")
         for row in standings:
             set_ratio = "-" if row.set_ratio is None else f"{row.set_ratio:.2f}"
@@ -148,6 +180,9 @@ def render_markdown(
         output_lines.append("\n## Spielplan")
         for match in sorted(league_matches, key=lambda item: item.date)[:limit]:
             output_lines.append(format_match_markdown(match))
+        upcoming = sorted(league_matches, key=lambda item: item.date)[: args.limit]
+        for match in upcoming:
+            output_lines.append(format_match(match))
     else:
         output_lines.append("\n## Spielplan")
         output_lines.append("Keine Spieldaten verfügbar.")
@@ -157,6 +192,13 @@ def render_markdown(
         output_lines.append("\n## Nächste Spiele USC Münster")
         for match in usc_future[:next_games]:
             output_lines.append(format_match_markdown(match))
+    if usc_matches:
+        output_lines.append("\n## Nächste Spiele USC Münster")
+        future_matches = [m for m in sorted(usc_matches, key=lambda item: item.date) if m.date >= datetime.now(timezone.utc)]
+        for match in future_matches[: args.next_games]:
+            output_lines.append(format_match(match))
+        if not future_matches:
+            output_lines.append("Keine anstehenden Spiele gefunden.")
     else:
         output_lines.append("\n## Nächste Spiele USC Münster")
         output_lines.append("Keine anstehenden Spiele verfügbar.")
@@ -276,6 +318,11 @@ def render_html(
 
 
 def format_match_markdown(match: LeagueMatch) -> str:
+    print("\n".join(output_lines))
+    return 0
+
+
+def format_match(match: LeagueMatch) -> str:
     date_str = match.date.astimezone(timezone.utc).strftime("%d.%m.%Y %H:%M UTC")
     parts = [f"- {date_str}: {match.team_home} vs. {match.team_away}"]
     if match.venue:
