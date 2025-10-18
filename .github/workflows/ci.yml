@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ work, main ]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check sources compile
+        run: python -m compileall src
+
+      - name: Run CLI smoke test
+        env:
+          PYTHONPATH: src
+        run: |
+          cat <<'CONFIG' > config.ci.yml
+          api:
+            api_key: ""
+            league_uuid: ""
+            team_uuid: ""
+            season_uuid: ""
+          news_sources: []
+          CONFIG
+          python -m usc_kommentatoren.cli --config config.ci.yml --format json --limit 1 --next-games 1
