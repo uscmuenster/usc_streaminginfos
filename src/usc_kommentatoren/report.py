@@ -457,7 +457,7 @@ def build_html_report(
     <div class=\"meta\">
       <p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>
       <p><strong>Austragungsort:</strong> {escape(location)}</p>
-      <p><strong>Tabelle:</strong> <a href=\"{TABLE_URL}\">{TABLE_URL}</a></p>
+      <p><strong>Tabelle:</strong> <a href=\"{TABLE_URL}\">Tabelle Volleyball-Bundesliga</a></p>
 {public_url_block}    </div>
     <section>
       <h2>Letzte Spiele von {escape(USC_CANONICAL_NAME)}</h2>
