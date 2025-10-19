@@ -1,0 +1,2062 @@
+from __future__ import annotations
+
+import base64
+import csv
+import time
+from dataclasses import dataclass
+import re
+from datetime import datetime, timedelta
+from pathlib import Path
+import mimetypes
+from html import escape
+from io import StringIO
+from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from zoneinfo import ZoneInfo
+from urllib.parse import parse_qs, urljoin, urlparse
+from email.utils import parsedate_to_datetime
+import xml.etree.ElementTree as ET
+
+import requests
+from bs4 import BeautifulSoup, Tag
+
+DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
+TABLE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml"
+VBL_NEWS_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml"
+VBL_PRESS_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/pressespiegel.xhtml"
+WECHSELBOERSE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/wechselboerse.xhtml"
+TEAM_PAGE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml"
+BERLIN_TZ = ZoneInfo("Europe/Berlin")
+USC_CANONICAL_NAME = "USC Münster"
+USC_HOMEPAGE = "https://www.usc-muenster.de/"
+
+REQUEST_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (compatible; usc-kommentatoren/1.0; +https://github.com/)"
+}
+HTML_ACCEPT_HEADER = {"Accept": "text/html,application/xhtml+xml"}
+RSS_ACCEPT_HEADER = {"Accept": "application/rss+xml,text/xml"}
+NEWS_LOOKBACK_DAYS = 14
+INSTAGRAM_SEARCH_URL = "https://duckduckgo.com/html/"
+
+GERMAN_STOPWORDS = {
+    "aber",
+    "als",
+    "am",
+    "auch",
+    "auf",
+    "aus",
+    "bei",
+    "bin",
+    "bis",
+    "da",
+    "damit",
+    "dann",
+    "der",
+    "die",
+    "das",
+    "dass",
+    "den",
+    "des",
+    "dem",
+    "ein",
+    "eine",
+    "einen",
+    "einem",
+    "er",
+    "es",
+    "für",
+    "hat",
+    "haben",
+    "ich",
+    "im",
+    "in",
+    "ist",
+    "mit",
+    "nach",
+    "nicht",
+    "noch",
+    "oder",
+    "sein",
+    "sind",
+    "so",
+    "und",
+    "vom",
+    "von",
+    "vor",
+    "war",
+    "wie",
+    "wir",
+    "zu",
+}
+
+SEARCH_TRANSLATION = str.maketrans(
+    {
+        "ä": "ae",
+        "ö": "oe",
+        "ü": "ue",
+        "Ä": "ae",
+        "Ö": "oe",
+        "Ü": "ue",
+        "ß": "ss",
+    }
+)
+
+
+@dataclass(frozen=True)
+class MatchResult:
+    score: str
+    total_points: Optional[str]
+    sets: tuple[str, ...]
+
+    @property
+    def summary(self) -> str:
+        segments: list[str] = [self.score]
+        if self.total_points:
+            segments.append(f"/ {self.total_points}")
+        if self.sets:
+            segments.append(f"({' '.join(self.sets)})")
+        return " ".join(segments)
+
+
+@dataclass(frozen=True)
+class Match:
+    kickoff: datetime
+    home_team: str
+    away_team: str
+    host: str
+    location: str
+    result: Optional[MatchResult]
+
+    @property
+    def is_finished(self) -> bool:
+        return self.result is not None
+
+
+@dataclass(frozen=True)
+class RosterMember:
+    number_label: Optional[str]
+    number_value: Optional[int]
+    name: str
+    role: str
+    is_official: bool
+    height: Optional[str]
+    birthdate_label: Optional[str]
+    nationality: Optional[str]
+
+    @property
+    def formatted_birthdate(self) -> Optional[str]:
+        if not self.birthdate_label:
+            return None
+        value = self.birthdate_label.strip()
+        if not value:
+            return None
+        for fmt in ("%d.%m.%Y", "%d.%m.%y"):
+            try:
+                parsed = datetime.strptime(value, fmt)
+            except ValueError:
+                continue
+            return parsed.strftime("%d.%m.%Y")
+        return value
+
+
+@dataclass(frozen=True)
+class NewsItem:
+    title: str
+    url: str
+    source: str
+    published: Optional[datetime]
+    search_text: str = ""
+
+    @property
+    def formatted_date(self) -> Optional[str]:
+        if not self.published:
+            return None
+        return self.published.astimezone(BERLIN_TZ).strftime("%d.%m.%Y %H:%M")
+
+
+@dataclass(frozen=True)
+class TransferItem:
+    date: Optional[datetime]
+    date_label: str
+    category: Optional[str]
+    type_code: str
+    name: str
+    url: Optional[str]
+    nationality: str
+    info: str
+    related_club: str
+
+    @property
+    def formatted_date(self) -> str:
+        if self.date:
+            return self.date.strftime("%d.%m.%Y")
+        return self.date_label
+
+@dataclass(frozen=True)
+class KeywordSet:
+    keywords: Tuple[str, ...]
+    strong: Tuple[str, ...]
+
+
+def simplify_text(value: str) -> str:
+    simplified = value.translate(SEARCH_TRANSLATION).lower()
+    simplified = re.sub(r"\s+", " ", simplified)
+    return simplified.strip()
+
+
+def build_keywords(*names: str) -> KeywordSet:
+    keywords: set[str] = set()
+    strong: set[str] = set()
+    for name in names:
+        simplified = simplify_text(name)
+        if not simplified:
+            continue
+        keywords.add(simplified)
+        strong.add(simplified)
+        condensed = simplified.replace(" ", "")
+        if condensed:
+            keywords.add(condensed)
+            if condensed != simplified:
+                strong.add(condensed)
+        tokens = [token for token in re.split(r"[^a-z0-9]+", simplified) if token]
+        keywords.update(tokens)
+    return KeywordSet(tuple(sorted(keywords)), tuple(sorted(strong)))
+
+
+def matches_keywords(text: str, keyword_set: KeywordSet) -> bool:
+    keywords = keyword_set.keywords
+    strong_keywords = keyword_set.strong
+    haystack = simplify_text(text)
+    if not haystack or not keywords:
+        return False
+
+    phrase_keywords = [keyword for keyword in keywords if " " in keyword]
+    for keyword in phrase_keywords:
+        if keyword and keyword in haystack:
+            return True
+
+    hits = {keyword for keyword in keywords if keyword and keyword in haystack}
+    if not hits:
+        return False
+
+    if len(hits) >= 2:
+        return True
+
+    # Accept single matches only when they correspond to the condensed team
+    # name (e.g. ``uscmunster``), not generic tokens like "Volleys".
+    return any(keyword in hits for keyword in strong_keywords if keyword)
+
+
+def _http_get(
+    url: str,
+    *,
+    headers: Optional[Dict[str, str]] = None,
+    params: Optional[Dict[str, str]] = None,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> requests.Response:
+    last_error: Optional[Exception] = None
+    merged_headers = dict(REQUEST_HEADERS)
+    if headers:
+        merged_headers.update(headers)
+    for attempt in range(retries):
+        try:
+            response = requests.get(
+                url,
+                timeout=30,
+                headers=merged_headers,
+                params=params,
+            )
+            response.raise_for_status()
+            return response
+        except requests.RequestException as exc:  # pragma: no cover - network errors
+            last_error = exc
+            if attempt == retries - 1:
+                raise
+            backoff = delay_seconds * (2 ** attempt)
+            time.sleep(backoff)
+    else:  # pragma: no cover
+        if last_error:
+            raise last_error
+        raise RuntimeError("Unbekannter Fehler beim Abrufen von Daten.")
+
+
+def fetch_html(
+    url: str,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+    headers: Optional[Dict[str, str]] = None,
+    params: Optional[Dict[str, str]] = None,
+) -> str:
+    response = _http_get(
+        url,
+        headers={**HTML_ACCEPT_HEADER, **(headers or {})},
+        params=params,
+        retries=retries,
+        delay_seconds=delay_seconds,
+    )
+    return response.text
+
+
+def fetch_rss(
+    url: str,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> str:
+    response = _http_get(
+        url,
+        headers=RSS_ACCEPT_HEADER,
+        retries=retries,
+        delay_seconds=delay_seconds,
+    )
+    return response.text
+
+
+DATE_PATTERN = re.compile(
+    r"(?P<day>\d{1,2})\.(?P<month>\d{1,2})\.(?P<year>\d{2,4})(?:,\s*(?P<hour>\d{1,2}):(?P<minute>\d{2}))?"
+)
+
+
+def parse_date_label(value: str) -> Optional[datetime]:
+    match = DATE_PATTERN.search(value)
+    if not match:
+        return None
+    day = int(match.group("day"))
+    month = int(match.group("month"))
+    year = int(match.group("year"))
+    if year < 100:
+        year += 2000
+    hour = int(match.group("hour")) if match.group("hour") else 0
+    minute = int(match.group("minute")) if match.group("minute") else 0
+    try:
+        return datetime(year, month, day, hour, minute, tzinfo=BERLIN_TZ)
+    except ValueError:
+        return None
+
+
+def _download_schedule_text(
+    url: str,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> str:
+    response = _http_get(
+        url,
+        retries=retries,
+        delay_seconds=delay_seconds,
+    )
+    return response.text
+
+
+def fetch_schedule(
+    url: str = DEFAULT_SCHEDULE_URL,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> List[Match]:
+    csv_text = _download_schedule_text(url, retries=retries, delay_seconds=delay_seconds)
+    return parse_schedule(csv_text)
+
+
+def download_schedule(
+    destination: Path,
+    *,
+    url: str = DEFAULT_SCHEDULE_URL,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> Path:
+    csv_text = _download_schedule_text(url, retries=retries, delay_seconds=delay_seconds)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(csv_text, encoding="utf-8")
+    return destination
+
+
+def _download_roster_text(
+    url: str,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> str:
+    response = _http_get(
+        url,
+        headers={"Accept": "text/csv"},
+        retries=retries,
+        delay_seconds=delay_seconds,
+    )
+    return response.content.decode("latin-1")
+
+OFFICIAL_ROLE_PRIORITY: Tuple[str, ...] = (
+    "Trainer",
+    "Co-Trainer",
+    "Co-Trainer (Scout)",
+    "Statistiker",
+    "Physiotherapeut",
+    "Arzt",
+)
+
+
+def _official_sort_key(member: RosterMember) -> Tuple[int, str, str]:
+    role = (member.role or "").strip()
+    normalized = role.lower()
+    order = len(OFFICIAL_ROLE_PRIORITY)
+    for index, label in enumerate(OFFICIAL_ROLE_PRIORITY):
+        if normalized == label.lower():
+            order = index
+            break
+    return (order, normalized, member.name.lower())
+
+
+def parse_roster(csv_text: str) -> List[RosterMember]:
+    buffer = StringIO(csv_text)
+    reader = csv.DictReader(buffer, delimiter=";", quotechar="\"")
+    players: List[RosterMember] = []
+    officials: List[RosterMember] = []
+    for row in reader:
+        name = (row.get("Titel Vorname Nachname") or "").strip()
+        if not name:
+            continue
+        number_raw = (row.get("Trikot") or "").strip()
+        role = (row.get("Position/Funktion Offizieller") or "").strip()
+        height = (row.get("Größe") or "").strip()
+        birthdate = (row.get("Geburtsdatum") or "").strip()
+        nationality = (row.get("Staatsangehörigkeit") or "").strip()
+        number_value: Optional[int] = None
+        is_official = True
+        if number_raw:
+            compact = number_raw.replace(" ", "")
+            if compact.isdigit():
+                number_value = int(compact)
+                is_official = False
+        member = RosterMember(
+            number_label=number_raw or None,
+            number_value=number_value,
+            name=name,
+            role=role,
+            is_official=is_official,
+            height=height or None,
+            birthdate_label=birthdate or None,
+            nationality=nationality or None,
+        )
+        if member.is_official:
+            officials.append(member)
+        else:
+            players.append(member)
+
+    players.sort(
+        key=lambda member: (
+            member.number_value if member.number_value is not None else 10_000,
+            member.name.lower(),
+        )
+    )
+    officials.sort(key=_official_sort_key)
+    return players + officials
+
+
+def collect_team_roster(
+    team_name: str,
+    directory: Path,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> List[RosterMember]:
+    url = get_team_roster_url(team_name)
+    if not url:
+        return []
+    csv_text = _download_roster_text(url, retries=retries, delay_seconds=delay_seconds)
+    directory.mkdir(parents=True, exist_ok=True)
+    slug = slugify_team_name(team_name) or "team"
+    destination = directory / f"{slug}.csv"
+    destination.write_text(csv_text, encoding="utf-8")
+    return parse_roster(csv_text)
+
+
+def load_schedule_from_file(path: Path) -> List[Match]:
+    csv_text = path.read_text(encoding="utf-8")
+    return parse_schedule(csv_text)
+
+
+def parse_schedule(csv_text: str) -> List[Match]:
+    buffer = StringIO(csv_text)
+    reader = csv.DictReader(buffer, delimiter=";", quotechar="\"")
+    matches: List[Match] = []
+    for row in reader:
+        try:
+            kickoff = parse_kickoff(row["Datum"], row["Uhrzeit"])
+        except (KeyError, ValueError):
+            continue
+
+        home_team = row.get("Mannschaft 1", "").strip()
+        away_team = row.get("Mannschaft 2", "").strip()
+        host = row.get("Gastgeber", "").strip()
+        location = row.get("Austragungsort", "").strip()
+        result = build_match_result(row)
+
+        matches.append(
+            Match(
+                kickoff=kickoff,
+                home_team=home_team,
+                away_team=away_team,
+                host=host,
+                location=location,
+                result=result,
+            )
+        )
+    return matches
+
+
+def parse_kickoff(date_str: str, time_str: str) -> datetime:
+    combined = f"{date_str.strip()} {time_str.strip()}"
+    kickoff = datetime.strptime(combined, "%d.%m.%Y %H:%M:%S")
+    return kickoff.replace(tzinfo=BERLIN_TZ)
+
+
+RESULT_PATTERN = re.compile(
+    r"\s*(?P<score>\d+:\d+)"
+    r"(?:\s*/\s*(?P<points>\d+:\d+))?"
+    r"(?:\s*\((?P<sets>[^)]+)\))?"
+)
+
+
+def _parse_result_text(raw: str | None) -> Optional[MatchResult]:
+    if not raw:
+        return None
+
+    cleaned = raw.strip()
+    if not cleaned:
+        return None
+
+    match = RESULT_PATTERN.match(cleaned)
+    if not match:
+        return MatchResult(score=cleaned, total_points=None, sets=())
+
+    score = match.group("score")
+    points = match.group("points")
+    sets_raw = match.group("sets")
+    sets: tuple[str, ...] = ()
+    if sets_raw:
+        normalized = sets_raw.replace(",", " ")
+        split_sets = [segment.strip() for segment in normalized.split() if segment.strip()]
+        sets = tuple(split_sets)
+
+    return MatchResult(score=score, total_points=points, sets=sets)
+
+
+def build_match_result(row: Dict[str, str]) -> Optional[MatchResult]:
+    fallback = _parse_result_text(row.get("Ergebnis"))
+
+    score = (row.get("Satzpunkte") or "").strip()
+    total_points = (row.get("Ballpunkte") or "").strip()
+
+    sets_list: list[str] = []
+    for index in range(1, 6):
+        home_key = f"Satz {index} - Ballpunkte 1"
+        away_key = f"Satz {index} - Ballpunkte 2"
+        home_points = (row.get(home_key) or "").strip()
+        away_points = (row.get(away_key) or "").strip()
+        if home_points and away_points:
+            sets_list.append(f"{home_points}:{away_points}")
+
+    if score or total_points or sets_list:
+        if not score and fallback:
+            score = fallback.score
+        if not total_points and fallback and fallback.total_points:
+            total_points = fallback.total_points
+        sets: tuple[str, ...]
+        if sets_list:
+            sets = tuple(sets_list)
+        elif fallback:
+            sets = fallback.sets
+        else:
+            sets = ()
+
+        cleaned_total = total_points or None
+        if score:
+            return MatchResult(score=score, total_points=cleaned_total, sets=sets)
+        if fallback:
+            return MatchResult(score=fallback.score, total_points=cleaned_total, sets=sets)
+        return None
+
+    return fallback
+
+
+def normalize_name(value: str) -> str:
+    normalized = value.lower()
+    normalized = normalized.replace("ü", "u").replace("mnster", "munster")
+    return normalized
+
+
+def slugify_team_name(value: str) -> str:
+    simplified = simplify_text(value)
+    slug = re.sub(r"[^a-z0-9]+", "-", simplified)
+    return slug.strip("-")
+
+
+def is_usc(name: str) -> bool:
+    normalized = normalize_name(name)
+    return "usc" in normalized and "munster" in normalized
+
+
+def _build_team_homepages() -> Dict[str, str]:
+    pairs = {
+        "Allianz MTV Stuttgart": "https://www.stuttgarts-schoenster-sport.de/",
+        "Binder Blaubären TSV Flacht": "https://binderblaubaeren.de/",
+        "Dresdner SC": "https://www.dscvolley.de/",
+        "ETV Hamburger Volksbank Volleys": "https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys/",
+        "Ladies in Black Aachen": "https://ladies-in-black.de/",
+        "SSC Palmberg Schwerin": "https://www.schweriner-sc.com/",
+        "Schwarz-Weiß Erfurt": "https://schwarz-weiss-erfurt.de/",
+        "Skurios Volleys Borken": "https://www.skurios-volleys-borken.de/",
+        "USC Münster": USC_HOMEPAGE,
+        "VC Wiesbaden": "https://www.vc-wiesbaden.de/",
+        "VfB Suhl LOTTO Thüringen": "https://volleyball-suhl.de/",
+    }
+    return {normalize_name(name): url for name, url in pairs.items()}
+
+
+TEAM_HOMEPAGES = _build_team_homepages()
+
+
+def get_team_homepage(team_name: str) -> Optional[str]:
+    return TEAM_HOMEPAGES.get(normalize_name(team_name))
+
+
+def _build_team_roster_ids() -> Dict[str, str]:
+    pairs = {
+        "Allianz MTV Stuttgart": "776311283",
+        "Binder Blaubären TSV Flacht": "776308950",
+        "Dresdner SC": "776311462",
+        "ETV Hamburger Volksbank Volleys": "776308974",
+        "Ladies in Black Aachen": "776311428",
+        "SSC Palmberg Schwerin": "776311399",
+        "Schwarz-Weiß Erfurt": "776311376",
+        "Skurios Volleys Borken": "776309053",
+        "USC Münster": "776311313",
+        "VC Wiesbaden": "776311253",
+        "VfB Suhl LOTTO Thüringen": "776311348",
+    }
+    return {normalize_name(name): team_id for name, team_id in pairs.items()}
+
+
+TEAM_ROSTER_IDS = _build_team_roster_ids()
+
+
+ROSTER_EXPORT_URL = (
+    "https://www.volleyball-bundesliga.de/servlet/sportsclub/TeamMemberCsvExport"
+)
+
+
+def get_team_roster_url(team_name: str) -> Optional[str]:
+    team_id = TEAM_ROSTER_IDS.get(normalize_name(team_name))
+    if not team_id:
+        return None
+    return f"{ROSTER_EXPORT_URL}?teamId={team_id}"
+
+
+def get_team_page_url(team_name: str) -> Optional[str]:
+    team_id = TEAM_ROSTER_IDS.get(normalize_name(team_name))
+    if not team_id:
+        return None
+    return f"{TEAM_PAGE_URL}?c.teamId={team_id}&c.view=teamMain"
+
+
+PHOTO_EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp")
+
+
+def _iter_cached_photos(directory: Path, slug: str) -> Iterable[Path]:
+    for extension in PHOTO_EXTENSIONS:
+        candidate = directory / f"{slug}{extension}"
+        if candidate.exists():
+            yield candidate
+
+
+def _encode_photo_data_uri(path: Path, *, mime_type: Optional[str] = None) -> str:
+    mime = mime_type or mimetypes.guess_type(path.name)[0] or "image/jpeg"
+    encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+    return f"data:{mime};base64,{encoded}"
+
+
+def collect_team_photo(
+    team_name: str,
+    directory: Path,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> Optional[str]:
+    slug = slugify_team_name(team_name)
+    if not slug:
+        return None
+
+    directory.mkdir(parents=True, exist_ok=True)
+
+    for cached_path in _iter_cached_photos(directory, slug):
+        try:
+            return _encode_photo_data_uri(cached_path)
+        except OSError:
+            try:
+                cached_path.unlink()
+            except OSError:
+                pass
+
+    page_url = get_team_page_url(team_name)
+    if not page_url:
+        return None
+
+    html = fetch_html(page_url, retries=retries, delay_seconds=delay_seconds)
+    soup = BeautifulSoup(html, "html.parser")
+    photo_tag = None
+    for img in soup.find_all("img"):
+        classes = {cls.lower() for cls in (img.get("class") or [])}
+        if "teamphoto" in classes:
+            photo_tag = img
+            break
+
+    if not photo_tag:
+        return None
+
+    src = photo_tag.get("src") or ""
+    if not src:
+        return None
+
+    photo_url = urljoin(page_url, src)
+    response = _http_get(
+        photo_url,
+        headers={"Accept": "image/*"},
+        retries=retries,
+        delay_seconds=delay_seconds,
+    )
+    content = response.content
+    content_type = response.headers.get("Content-Type", "").split(";", 1)[0].strip() or None
+
+    suffix = Path(urlparse(photo_url).path).suffix.lower()
+    if suffix not in PHOTO_EXTENSIONS:
+        guessed = ""
+        if content_type:
+            guessed = (mimetypes.guess_extension(content_type) or "").lower()
+        if guessed in PHOTO_EXTENSIONS:
+            suffix = guessed
+        else:
+            suffix = ".jpg"
+
+    filename = f"{slug}{suffix}"
+    path = directory / filename
+    path.write_bytes(content)
+    return _encode_photo_data_uri(path, mime_type=content_type)
+
+
+def _build_team_instagram() -> Dict[str, str]:
+    pairs = {
+        "Allianz MTV Stuttgart": "https://www.instagram.com/allianzmtvstuttgart/",
+        "Binder Blaubären TSV Flacht": "https://www.instagram.com/binderblaubaerenflacht/",
+        "Dresdner SC": "https://www.instagram.com/dsc1898/",
+        "ETV Hamburger Volksbank Volleys": "https://www.instagram.com/etv.hamburgervolksbank.volleys/",
+        "Ladies in Black Aachen": "https://www.instagram.com/ladiesinblackaachen/",
+        "SSC Palmberg Schwerin": "https://www.instagram.com/sscpalmbergschwerin/",
+        "Schwarz-Weiß Erfurt": "https://www.instagram.com/schwarzweisserfurt/",
+        "Skurios Volleys Borken": "https://www.instagram.com/skurios_volleys_borken/",
+        "USC Münster": "https://www.instagram.com/uscmuenster/",
+        "VC Wiesbaden": "https://www.instagram.com/vc_wiesbaden/",
+        "VfB Suhl LOTTO Thüringen": "https://www.instagram.com/vfbsuhl_lottothueringen/",
+    }
+    return {normalize_name(name): url for name, url in pairs.items()}
+
+
+TEAM_INSTAGRAM = _build_team_instagram()
+
+
+def get_team_instagram(team_name: str) -> Optional[str]:
+    return TEAM_INSTAGRAM.get(normalize_name(team_name))
+
+
+def _build_team_keyword_synonyms() -> Dict[str, Sequence[str]]:
+    pairs: Dict[str, Sequence[str]] = {
+        "Allianz MTV Stuttgart": ("MTV Stuttgart",),
+        "Binder Blaubären TSV Flacht": ("Binder Blaubären", "TSV Flacht"),
+        "Dresdner SC": ("DSC Volleys",),
+        "ETV Hamburger Volksbank Volleys": ("ETV Hamburg", "Hamburg Volleys"),
+        "Ladies in Black Aachen": ("Ladies in Black", "Aachen Ladies"),
+        "SSC Palmberg Schwerin": ("SSC Schwerin", "Palmberg Schwerin"),
+        "Schwarz-Weiß Erfurt": ("Schwarz Weiss Erfurt",),
+        "Skurios Volleys Borken": ("Skurios Borken",),
+        "USC Münster": ("USC Muenster",),
+        "VC Wiesbaden": ("VCW Wiesbaden",),
+        "VfB Suhl LOTTO Thüringen": ("VfB Suhl",),
+    }
+    return {normalize_name(name): synonyms for name, synonyms in pairs.items()}
+
+
+TEAM_KEYWORD_SYNONYMS = _build_team_keyword_synonyms()
+
+
+def get_team_keywords(team_name: str) -> KeywordSet:
+    synonyms = TEAM_KEYWORD_SYNONYMS.get(normalize_name(team_name), ())
+    return build_keywords(team_name, *synonyms)
+
+
+def _build_team_news_config() -> Dict[str, Dict[str, str]]:
+    return {
+        normalize_name(USC_CANONICAL_NAME): {
+            "type": "rss",
+            "url": "https://www.usc-muenster.de/feed/",
+            "label": "Homepage USC Münster",
+        },
+        normalize_name("ETV Hamburger Volksbank Volleys"): {
+            "type": "etv",
+            "url": "https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys/",
+            "label": "Homepage ETV Hamburger Volksbank Volleys",
+        },
+    }
+
+
+TEAM_NEWS_CONFIG = _build_team_news_config()
+
+
+def _deduplicate_news(items: Sequence[NewsItem]) -> List[NewsItem]:
+    seen: set[str] = set()
+    deduped: List[NewsItem] = []
+    for item in items:
+        key = item.url.strip()
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        deduped.append(item)
+    return deduped
+
+
+def _filter_by_keywords(items: Sequence[NewsItem], keyword_set: KeywordSet) -> List[NewsItem]:
+    return [
+        item
+        for item in items
+        if matches_keywords(item.search_text or item.title, keyword_set)
+    ]
+
+
+def _extract_best_candidate(soup: BeautifulSoup) -> Optional[str]:
+    best_text = ""
+    for element in soup.find_all(["article", "section", "div", "main"], limit=200):
+        text = element.get_text(" ", strip=True)
+        if len(text) > len(best_text):
+            best_text = text
+    if not best_text and soup.body:
+        best_text = soup.body.get_text(" ", strip=True)
+    return best_text or None
+
+
+def extract_article_text(url: str) -> Optional[str]:
+    try:
+        html = fetch_html(url)
+    except requests.RequestException:
+        return None
+
+    soup = BeautifulSoup(html, "html.parser")
+    for tag in soup.find_all(["script", "style", "noscript", "template"]):
+        tag.decompose()
+
+    hostname = urlparse(url).hostname or ""
+    hostname = hostname.lower()
+
+    prioritized_selectors: List[str] = []
+    if "volleyball-bundesliga.de" in hostname:
+        prioritized_selectors.extend(
+            [
+                ".samsCmsComponentContent",
+                ".samsArticleBody",
+                "article",
+            ]
+        )
+    elif "usc-muenster.de" in hostname:
+        prioritized_selectors.extend([
+            "article",
+            "div.entry-content",
+        ])
+    elif "etv-hamburg" in hostname:
+        prioritized_selectors.extend([
+            "div.article",
+            "div.text-wrapper",
+        ])
+
+    for selector in prioritized_selectors:
+        candidate = soup.select_one(selector)
+        if candidate:
+            text = candidate.get_text(" ", strip=True)
+            if len(text) >= 80:
+                return text
+
+    return _extract_best_candidate(soup)
+
+
+def collect_instagram_links(team_name: str, *, limit: int = 6) -> List[str]:
+    links: List[str] = []
+    base = get_team_instagram(team_name)
+    base_slug: Optional[str] = None
+    if base:
+        normalized_base = base.rstrip("/")
+        links.append(normalized_base)
+        base_path = urlparse(normalized_base).path.strip("/")
+        if base_path:
+            base_slug = base_path
+
+    query = f"{team_name} instagram"
+    try:
+        html = fetch_html(
+            INSTAGRAM_SEARCH_URL,
+            params={"q": query},
+            headers={"User-Agent": REQUEST_HEADERS["User-Agent"]},
+        )
+    except requests.RequestException:
+        return links
+
+    soup = BeautifulSoup(html, "html.parser")
+    for anchor in soup.select("a[href]"):
+        href = anchor.get("href", "")
+        if "instagram.com" not in href:
+            continue
+        target = href
+        if href.startswith("//"):
+            parsed = urlparse("https:" + href)
+            uddg = parse_qs(parsed.query).get("uddg", [""])[0]
+            if uddg:
+                target = uddg
+        if "instagram.com" not in target:
+            continue
+        normalized = target.split("?")[0].rstrip("/")
+        if not normalized or normalized in links:
+            continue
+        parsed = urlparse(normalized)
+        path = parsed.path.strip("/")
+        if not path:
+            continue
+        if base_slug:
+            if path != base_slug and not path.startswith(f"{base_slug}/"):
+                if not (path.startswith("p/") or path.startswith("reel/")):
+                    continue
+        else:
+            keywords = get_team_keywords(team_name)
+            if not matches_keywords(path, keywords):
+                continue
+        links.append(normalized)
+        if len(links) >= limit:
+            break
+
+    return links
+
+
+def _within_lookback(published: Optional[datetime], *, reference: datetime, lookback_days: int) -> bool:
+    if not published:
+        return False
+    cutoff = reference - timedelta(days=lookback_days)
+    return published >= cutoff
+
+
+def _fetch_rss_news(
+    url: str,
+    *,
+    label: str,
+    now: datetime,
+    lookback_days: int,
+) -> List[NewsItem]:
+    try:
+        rss_text = fetch_rss(url)
+    except requests.RequestException:
+        return []
+
+    try:
+        root = ET.fromstring(rss_text)
+    except ET.ParseError:
+        return []
+
+    items: List[NewsItem] = []
+    for item in root.findall(".//item"):
+        title = (item.findtext("title") or "").strip()
+        link = (item.findtext("link") or "").strip()
+        description = (item.findtext("description") or "").strip()
+        pub_date_raw = item.findtext("pubDate") or ""
+        if not title or not link:
+            continue
+        published: Optional[datetime] = None
+        if pub_date_raw:
+            try:
+                parsed = parsedate_to_datetime(pub_date_raw)
+                if parsed.tzinfo is None:
+                    parsed = parsed.replace(tzinfo=BERLIN_TZ)
+                published = parsed.astimezone(BERLIN_TZ)
+            except (TypeError, ValueError):
+                published = None
+        if not _within_lookback(published, reference=now, lookback_days=lookback_days):
+            continue
+        search_text = f"{title} {description}"
+        items.append(
+            NewsItem(
+                title=title,
+                url=link,
+                source=label,
+                published=published,
+                search_text=search_text,
+            )
+        )
+    return _deduplicate_news(items)
+
+
+def _fetch_etv_news(
+    url: str,
+    *,
+    label: str,
+    now: datetime,
+    lookback_days: int,
+) -> List[NewsItem]:
+    try:
+        html = fetch_html(url)
+    except requests.RequestException:
+        return []
+
+    soup = BeautifulSoup(html, "html.parser")
+    items: List[NewsItem] = []
+    seen_ids: set[str] = set()
+    for block in soup.select("div[id^=news-]"):
+        block_id = block.get("id") or ""
+        if block_id in seen_ids:
+            continue
+        seen_ids.add(block_id)
+        date_elem = block.select_one(".newsDate .date")
+        title_elem = block.select_one(".headline2")
+        if not title_elem:
+            continue
+        title = title_elem.get_text(strip=True)
+        if not title:
+            continue
+        link_elem = title_elem.find("a")
+        if link_elem and link_elem.has_attr("href"):
+            href = link_elem["href"]
+            link = urljoin(url, href)
+        else:
+            link = f"{url.rstrip('/') }#{block_id}"
+        date_text = date_elem.get_text(strip=True) if date_elem else ""
+        published = parse_date_label(date_text)
+        if not _within_lookback(published, reference=now, lookback_days=lookback_days):
+            continue
+        summary_elem = block.select_one(".text-wrapper")
+        summary = summary_elem.get_text(" ", strip=True) if summary_elem else ""
+        items.append(
+            NewsItem(
+                title=title,
+                url=link,
+                source=label,
+                published=published,
+                search_text=f"{title} {summary}",
+            )
+        )
+    return _deduplicate_news(items)
+
+
+def _fetch_vbl_articles(
+    url: str,
+    *,
+    label: str,
+    now: datetime,
+    lookback_days: int,
+) -> List[NewsItem]:
+    try:
+        html = fetch_html(url)
+    except requests.RequestException:
+        return []
+
+    soup = BeautifulSoup(html, "html.parser")
+    items: List[NewsItem] = []
+    for article in soup.select("div.samsArticle"):
+        header_link = article.select_one(".samsArticleHeader a")
+        if not header_link or not header_link.has_attr("href"):
+            continue
+        title = header_link.get_text(strip=True)
+        if not title:
+            continue
+        link = urljoin(url, header_link["href"])
+        info = article.select_one(".samsArticleInfo")
+        date_text = info.get_text(strip=True) if info else ""
+        published = parse_date_label(date_text)
+        if not _within_lookback(published, reference=now, lookback_days=lookback_days):
+            continue
+        summary_elem = article.select_one(".samsCmsComponentContent")
+        summary = summary_elem.get_text(" ", strip=True) if summary_elem else ""
+        category = article.select_one(".samsArticleCategory")
+        category_text = category.get_text(" ", strip=True) if category else ""
+        search_text = f"{title} {summary} {category_text}"
+        items.append(
+            NewsItem(
+                title=title,
+                url=link,
+                source=label,
+                published=published,
+                search_text=search_text,
+            )
+        )
+    return _deduplicate_news(items)
+
+
+def _fetch_vbl_press(
+    url: str,
+    *,
+    label: str,
+    now: datetime,
+    lookback_days: int,
+) -> List[NewsItem]:
+    try:
+        html = fetch_html(url)
+    except requests.RequestException:
+        return []
+
+    soup = BeautifulSoup(html, "html.parser")
+    rows = soup.select("table.samsDataTable tbody tr")
+    items: List[NewsItem] = []
+    for row in rows:
+        columns = row.find_all("td")
+        if len(columns) < 3:
+            continue
+        link_elem = columns[0].find("a")
+        source_elem = columns[1].get_text(strip=True)
+        date_text = columns[2].get_text(strip=True)
+        if not link_elem or not link_elem.has_attr("href"):
+            continue
+        title = link_elem.get_text(strip=True)
+        if not title:
+            continue
+        link = link_elem["href"]
+        published = parse_date_label(date_text)
+        if not _within_lookback(published, reference=now, lookback_days=lookback_days):
+            continue
+        search_text = f"{title} {source_elem}"
+        items.append(
+            NewsItem(
+                title=title,
+                url=link,
+                source=f"{source_elem} via VBL Pressespiegel",
+                published=published,
+                search_text=search_text,
+            )
+        )
+    return _deduplicate_news(items)
+
+
+def fetch_team_news(
+    team_name: str,
+    *,
+    now: Optional[datetime] = None,
+    lookback_days: int = NEWS_LOOKBACK_DAYS,
+) -> List[NewsItem]:
+    config = TEAM_NEWS_CONFIG.get(normalize_name(team_name))
+    if not config:
+        return []
+    now = now or datetime.now(tz=BERLIN_TZ)
+    label = config.get("label", team_name)
+    fetch_type = config.get("type")
+    url = config.get("url", "")
+    if not url:
+        return []
+    if fetch_type == "rss":
+        return _fetch_rss_news(url, label=label, now=now, lookback_days=lookback_days)
+    if fetch_type == "etv":
+        return _fetch_etv_news(url, label=label, now=now, lookback_days=lookback_days)
+    return []
+
+
+def collect_team_news(
+    next_home: Match,
+    *,
+    now: Optional[datetime] = None,
+    lookback_days: int = NEWS_LOOKBACK_DAYS,
+) -> Tuple[List[NewsItem], List[NewsItem]]:
+    now = now or datetime.now(tz=BERLIN_TZ)
+    usc_news = fetch_team_news(USC_CANONICAL_NAME, now=now, lookback_days=lookback_days)
+    opponent_news = fetch_team_news(next_home.away_team, now=now, lookback_days=lookback_days)
+
+    vbl_articles = _fetch_vbl_articles(
+        VBL_NEWS_URL,
+        label="Volleyball Bundesliga",
+        now=now,
+        lookback_days=lookback_days,
+    )
+    vbl_press = _fetch_vbl_press(
+        VBL_PRESS_URL,
+        label="Volleyball Bundesliga",
+        now=now,
+        lookback_days=lookback_days,
+    )
+
+    combined_vbl = _deduplicate_news(vbl_articles + vbl_press)
+
+    usc_keywords = get_team_keywords(USC_CANONICAL_NAME)
+    opponent_keywords = get_team_keywords(next_home.away_team)
+
+    usc_vbl = _filter_by_keywords(combined_vbl, usc_keywords)
+    opponent_vbl = _filter_by_keywords(combined_vbl, opponent_keywords)
+
+    usc_combined = _deduplicate_news([*usc_news, *usc_vbl])
+    opponent_combined = _deduplicate_news([*opponent_news, *opponent_vbl])
+
+    return usc_combined, opponent_combined
+
+
+def _parse_transfer_table(table: "BeautifulSoup") -> List[TransferItem]:
+    rows = table.find_all("tr")
+    items: List[TransferItem] = []
+    current_category: Optional[str] = None
+    for row in rows:
+        cells = row.find_all("td")
+        if not cells:
+            headers = row.find_all("th")
+            if headers:
+                label = headers[0].get_text(strip=True)
+                if label:
+                    current_category = label
+            continue
+        texts = [cell.get_text(strip=True) for cell in cells]
+        if not any(texts):
+            continue
+        first = texts[0]
+        parsed_date = parse_date_label(first)
+        if not parsed_date and not DATE_PATTERN.match(first):
+            label = first or None
+            if label:
+                current_category = label
+            continue
+        name_cell = cells[2] if len(cells) > 2 else None
+        name = name_cell.get_text(strip=True) if name_cell else ""
+        if not name:
+            continue
+        link = None
+        if name_cell:
+            anchor = name_cell.find("a")
+            if anchor and anchor.has_attr("href"):
+                link = urljoin(WECHSELBOERSE_URL, anchor["href"])
+        type_code = texts[1] if len(texts) > 1 else ""
+        nationality = texts[3] if len(texts) > 3 else ""
+        info = texts[4] if len(texts) > 4 else ""
+        related = texts[5] if len(texts) > 5 else ""
+        items.append(
+            TransferItem(
+                date=parsed_date,
+                date_label=first,
+                category=current_category,
+                type_code=type_code,
+                name=name,
+                url=link,
+                nationality=nationality,
+                info=info,
+                related_club=related,
+            )
+        )
+    return items
+
+
+_TRANSFER_CACHE: Optional[Dict[str, List[TransferItem]]] = None
+
+
+def _load_transfer_cache() -> Dict[str, List[TransferItem]]:
+    global _TRANSFER_CACHE
+    if _TRANSFER_CACHE is not None:
+        return _TRANSFER_CACHE
+    try:
+        html = fetch_html(WECHSELBOERSE_URL, headers=REQUEST_HEADERS)
+    except requests.RequestException:
+        _TRANSFER_CACHE = {}
+        return _TRANSFER_CACHE
+    soup = BeautifulSoup(html, "html.parser")
+    mapping: Dict[str, List[TransferItem]] = {}
+    for heading in soup.find_all("h2"):
+        team_name = heading.get_text(strip=True)
+        if not team_name:
+            continue
+        collected: List[TransferItem] = []
+        sibling = heading.next_sibling
+        while sibling:
+            if isinstance(sibling, Tag):
+                if sibling.name == "h2":
+                    break
+                if sibling.name == "table":
+                    collected.extend(_parse_transfer_table(sibling))
+            sibling = sibling.next_sibling
+        if collected:
+            mapping[normalize_name(team_name)] = collected
+    _TRANSFER_CACHE = mapping
+    return mapping
+
+
+def collect_team_transfers(team_name: str) -> List[TransferItem]:
+    cache = _load_transfer_cache()
+    return list(cache.get(normalize_name(team_name), ()))
+
+
+def pretty_name(name: str) -> str:
+    if is_usc(name):
+        return USC_CANONICAL_NAME
+    return (
+        name.replace("Mnster", "Münster")
+        .replace("Munster", "Münster")
+        .replace("Thringen", "Thüringen")
+        .replace("Wei", "Weiß")
+        .replace("wei", "weiß")
+    )
+
+
+def find_next_usc_home_match(matches: Iterable[Match], *, reference: Optional[datetime] = None) -> Optional[Match]:
+    now = reference or datetime.now(tz=BERLIN_TZ)
+    future_home_games = [
+        match
+        for match in matches
+        if is_usc(match.host) and match.kickoff >= now
+    ]
+    future_home_games.sort(key=lambda match: match.kickoff)
+    return future_home_games[0] if future_home_games else None
+
+
+def find_last_matches_for_team(
+    matches: Iterable[Match],
+    team_name: str,
+    *,
+    limit: int,
+    reference: Optional[datetime] = None,
+) -> List[Match]:
+    now = reference or datetime.now(tz=BERLIN_TZ)
+    relevant = [
+        match
+        for match in matches
+        if match.is_finished and match.kickoff < now and team_in_match(team_name, match)
+    ]
+    relevant.sort(key=lambda match: match.kickoff, reverse=True)
+    return relevant[:limit]
+
+
+def team_in_match(team_name: str, match: Match) -> bool:
+    return is_same_team(team_name, match.home_team) or is_same_team(team_name, match.away_team)
+
+
+def is_same_team(a: str, b: str) -> bool:
+    return normalize_name(a) == normalize_name(b)
+
+
+GERMAN_WEEKDAYS = {
+    0: "Mo",
+    1: "Di",
+    2: "Mi",
+    3: "Do",
+    4: "Fr",
+    5: "Sa",
+    6: "So",
+}
+
+
+def format_match_line(match: Match) -> str:
+    date_label = match.kickoff.strftime("%d.%m.%Y")
+    weekday = GERMAN_WEEKDAYS.get(match.kickoff.weekday(), match.kickoff.strftime("%a"))
+    kickoff_label = f"{date_label} ({weekday})"
+    home = pretty_name(match.home_team)
+    away = pretty_name(match.away_team)
+    result = match.result.summary if match.result else "-"
+    teams = f"{home} vs. {away}"
+    return (
+        "<li>"
+        "<div class=\"match-line\">"
+        f"<div class=\"match-header\"><strong>{escape(kickoff_label)}</strong> – {escape(teams)}</div>"
+        f"<div class=\"match-result\">Ergebnis: {escape(result)}</div>"
+        "</div>"
+        "</li>"
+    )
+
+
+def format_news_list(items: Sequence[NewsItem]) -> str:
+    if not items:
+        return "<li>Keine aktuellen Artikel gefunden.</li>"
+
+    rendered: List[str] = []
+    for item in items:
+        title = escape(item.title)
+        url = escape(item.url)
+        meta_parts: List[str] = [escape(item.source)] if item.source else []
+        date_label = item.formatted_date
+        if date_label:
+            meta_parts.append(escape(date_label))
+        meta = " – ".join(meta_parts)
+        meta_html = f"<span class=\"news-meta\">{meta}</span>" if meta else ""
+        rendered.append(
+            f"<li><a href=\"{url}\">{title}</a>{meta_html}</li>"
+        )
+    return "\n      ".join(rendered)
+
+
+def format_instagram_list(links: Sequence[str]) -> str:
+    if not links:
+        return "<li>Keine Links gefunden.</li>"
+
+    rendered: List[str] = []
+    for link in links:
+        parsed = urlparse(link)
+        segments = [segment for segment in parsed.path.split("/") if segment]
+        display: str
+        if not segments:
+            display = f"@{parsed.netloc}" if parsed.netloc else link
+        elif "p" in segments:
+            index = segments.index("p")
+            if index + 1 < len(segments):
+                display = f"Beitrag {segments[index + 1]}"
+            else:
+                display = "Instagram-Post"
+        elif "reel" in segments:
+            index = segments.index("reel")
+            if index + 1 < len(segments):
+                display = f"Reel {segments[index + 1]}"
+            else:
+                display = "Reels"
+        elif segments[0] == "stories" and len(segments) > 1:
+            display = f"Stories @{segments[1]}"
+        elif segments[-1] == "reels":
+            display = "Reels-Übersicht"
+        else:
+            display = f"@{segments[0]}"
+        rendered.append(f"<li><a href=\"{escape(link)}\">{escape(display)}</a></li>")
+    return "\n          ".join(rendered)
+
+
+def format_roster_list(roster: Sequence[RosterMember]) -> str:
+    if not roster:
+        return "<li>Keine Kaderdaten gefunden.</li>"
+
+    rendered: List[str] = []
+    for member in roster:
+        number = member.number_label
+        if number and number.strip().isdigit():
+            number_display = f"#{number.strip()}"
+        elif number:
+            number_display = number.strip()
+        else:
+            number_display = "Staff"
+        name_html = escape(member.name)
+        label_role = "Funktion" if member.is_official else "Position"
+        height_display: Optional[str] = None
+        if member.height and not member.is_official:
+            height_value = member.height.strip()
+            if height_value:
+                normalized = height_value.replace(',', '.').replace(' ', '')
+                if normalized.replace('.', '', 1).isdigit():
+                    if not height_value.endswith('cm'):
+                        height_display = f"{height_value} cm"
+                    else:
+                        height_display = height_value
+                else:
+                    height_display = height_value
+        details: List[Tuple[str, Optional[str]]] = []
+        if not member.is_official:
+            details.append(("Größe", height_display))
+        details.extend(
+            [
+                ("Geburtstag", member.formatted_birthdate),
+                ("Nation", member.nationality),
+                (label_role, member.role or None),
+            ]
+        )
+        detail_parts: List[str] = []
+        for label, value in details:
+            display = escape(value) if value else "–"
+            detail_parts.append(f"{escape(label)}: {display}")
+        meta_block = "<div class=\"roster-meta\">{}</div>".format(
+            " • ".join(detail_parts)
+        )
+        classes = ["roster-item"]
+        classes.append("roster-official" if member.is_official else "roster-player")
+        rendered.append(
+            ("<li class=\"{classes}\">"
+             "<span class=\"roster-number\">{number}</span>"
+             "<div class=\"roster-text\"><span class=\"roster-name\">{name}</span>{meta}</div>"
+             "</li>").format(
+                classes=" ".join(classes),
+                number=escape(number_display),
+                name=name_html,
+                meta=meta_block,
+            )
+        )
+    return "\n          ".join(rendered)
+
+
+def format_transfer_list(items: Sequence[TransferItem]) -> str:
+    if not items:
+        return "<li>Keine Wechsel gemeldet.</li>"
+
+    rendered: List[str] = []
+    current_category: Optional[str] = None
+    for item in items:
+        if item.category and item.category != current_category:
+            rendered.append(
+                f"<li class=\"transfer-category\">{escape(item.category)}</li>"
+            )
+            current_category = item.category
+        parts: List[str] = []
+        name_part = item.name.strip()
+        if name_part:
+            parts.append(name_part)
+        type_label = item.type_code.strip()
+        if type_label:
+            parts.append(type_label)
+        nationality = item.nationality.strip()
+        if nationality:
+            parts.append(nationality)
+        info = item.info.strip()
+        if info:
+            parts.append(info)
+        related = item.related_club.strip()
+        if related:
+            parts.append(related)
+        if not parts:
+            continue
+        rendered.append(
+            f"<li class=\"transfer-line\">{' | '.join(escape(part) for part in parts)}</li>"
+        )
+    return "\n          ".join(rendered)
+
+
+
+def build_html_report(
+    *,
+    next_home: Match,
+    usc_recent: List[Match],
+    opponent_recent: List[Match],
+    usc_news: Sequence[NewsItem],
+    opponent_news: Sequence[NewsItem],
+    usc_instagram: Sequence[str],
+    opponent_instagram: Sequence[str],
+    usc_roster: Sequence[RosterMember],
+    opponent_roster: Sequence[RosterMember],
+    usc_transfers: Sequence[TransferItem],
+    opponent_transfers: Sequence[TransferItem],
+    usc_photo: Optional[str],
+    opponent_photo: Optional[str],
+    font_scale: float = 1.0,
+) -> str:
+    heading = pretty_name(next_home.away_team)
+    kickoff = next_home.kickoff.strftime("%d.%m.%Y %H:%M")
+    location = pretty_name(next_home.location)
+    usc_url = get_team_homepage(USC_CANONICAL_NAME) or USC_HOMEPAGE
+    opponent_url = get_team_homepage(next_home.away_team)
+
+    if usc_recent:
+        usc_items = "\n      ".join(
+            format_match_line(match) for match in usc_recent
+        )
+    else:
+        usc_items = "<li>Keine Daten verfügbar.</li>"
+
+    if opponent_recent:
+        opponent_items = "\n      ".join(
+            format_match_line(match) for match in opponent_recent
+        )
+    else:
+        opponent_items = "<li>Keine Daten verfügbar.</li>"
+
+    usc_news_items = format_news_list(usc_news)
+    opponent_news_items = format_news_list(opponent_news)
+    usc_instagram_items = format_instagram_list(usc_instagram)
+    opponent_instagram_items = format_instagram_list(opponent_instagram)
+    usc_roster_items = format_roster_list(usc_roster)
+    opponent_roster_items = format_roster_list(opponent_roster)
+    usc_transfer_items = format_transfer_list(usc_transfers)
+    opponent_transfer_items = format_transfer_list(opponent_transfers)
+
+    opponent_photo_block = ""
+    if opponent_photo:
+        opponent_photo_block = (
+            "          <figure class=\"team-photo\">"
+            f"<img src=\"{escape(opponent_photo)}\" alt=\"Teamfoto {escape(heading)}\" />"
+            f"<figcaption>Teamfoto {escape(heading)}</figcaption>"
+            "</figure>\n"
+        )
+
+    usc_photo_block = ""
+    if usc_photo:
+        usc_photo_block = (
+            "          <figure class=\"team-photo\">"
+            f"<img src=\"{escape(usc_photo)}\" alt=\"Teamfoto {escape(USC_CANONICAL_NAME)}\" />"
+            f"<figcaption>Teamfoto {escape(USC_CANONICAL_NAME)}</figcaption>"
+            "</figure>\n"
+        )
+    meta_lines = [
+        f"<p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>",
+        f"<p><strong>Austragungsort:</strong> {escape(location)}</p>",
+        f"<p><a class=\"meta-link\" href=\"{escape(TABLE_URL)}\">Tabelle der Volleyball Bundesliga</a></p>",
+    ]
+    if usc_url:
+        meta_lines.append(
+            f"<p><a class=\"meta-link\" href=\"{escape(usc_url)}\">Homepage USC Münster</a></p>"
+        )
+    if opponent_url:
+        meta_lines.append(
+            f"<p><a class=\"meta-link\" href=\"{escape(opponent_url)}\">Homepage {escape(heading)}</a></p>"
+        )
+    meta_html = "\n      ".join(meta_lines)
+
+    font_scale = max(0.3, min(font_scale, 3.0))
+    scale_value = f"{font_scale:.4f}".rstrip("0").rstrip(".")
+    if not scale_value:
+        scale_value = "1"
+
+    html = f"""<!DOCTYPE html>
+<html lang=\"de\">
+<head>
+  <meta charset=\"utf-8\">
+  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+  <title>Nächster USC-Heimgegner</title>
+  <style>
+    :root {{
+      color-scheme: light dark;
+      --font-scale: {scale_value};
+      --accordion-opponent-bg: #e0f2fe;
+      --accordion-opponent-shadow: rgba(30, 64, 175, 0.08);
+      --accordion-usc-bg: #dcfce7;
+      --accordion-usc-shadow: rgba(22, 163, 74, 0.08);
+    }}
+    body {{
+      margin: 0;
+      font-family: \"Inter\", \"Segoe UI\", -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Arial, sans-serif;
+      line-height: 1.6;
+      font-size: calc(var(--font-scale) * clamp(0.95rem, 1.8vw, 1.05rem));
+      background: #f5f7f9;
+      color: #1f2933;
+    }}
+    main {{
+      max-width: 60rem;
+      margin: 0 auto;
+      padding: clamp(0.75rem, 3vw, 1.5rem) clamp(1rem, 4vw, 3rem);
+    }}
+    h1 {{
+      color: #004c54;
+      font-size: calc(var(--font-scale) * clamp(1.55rem, 4.5vw, 2.35rem));
+      margin: 0 0 1.25rem 0;
+    }}
+    h2 {{
+      font-size: calc(var(--font-scale) * clamp(1.15rem, 3.6vw, 1.6rem));
+      margin-bottom: 1rem;
+    }}
+    section {{
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+    }}
+    .meta {{
+      display: grid;
+      gap: 0.35rem;
+      margin: 0 0 1.5rem 0;
+      padding: 0;
+    }}
+    .meta p {{
+      margin: 0;
+    }}
+    .match-list {{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 1rem;
+    }}
+    .match-list li {{
+      background: #ffffff;
+      border-radius: 0.85rem;
+      padding: 1rem clamp(1rem, 3vw, 1.5rem);
+      box-shadow: 0 10px 30px rgba(0, 76, 84, 0.08);
+    }}
+    .match-line {{
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }}
+    .match-header {{
+      font-weight: 600;
+      color: inherit;
+    }}
+    .match-result {{
+      font-family: \"Fira Mono\", \"SFMono-Regular\", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #0f766e;
+    }}
+    .news-group,
+    .roster-group,
+    .transfer-group {{
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+      display: grid;
+      gap: 1rem;
+    }}
+    .accordion {{
+      border-radius: 0.85rem;
+      overflow: hidden;
+      background: var(--accordion-opponent-bg);
+      box-shadow: 0 18px 40px var(--accordion-opponent-shadow);
+      border: none;
+    }}
+    .roster-group details:nth-of-type(2),
+    .transfer-group details:nth-of-type(2),
+    .news-group details:nth-of-type(2) {{
+      background: var(--accordion-usc-bg);
+      box-shadow: 0 18px 40px var(--accordion-usc-shadow);
+    }}
+    .accordion summary {{
+      cursor: pointer;
+      padding: 1rem 1.35rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.6vw, 1.2rem));
+    }}
+    .accordion summary::-webkit-details-marker {{
+      display: none;
+    }}
+    .accordion summary::after {{
+      content: \"▾\";
+      font-size: calc(var(--font-scale) * 1rem);
+      transition: transform 0.2s ease;
+    }}
+    .accordion[open] summary::after {{
+      transform: rotate(180deg);
+    }}
+    .accordion-content {{
+      padding: 0 1.35rem 1.35rem;
+    }}
+    .news-list {{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }}
+    .news-list li {{
+      margin: 0;
+      padding: 0;
+    }}
+    .news-meta {{
+      display: block;
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #64748b;
+      margin-top: 0.2rem;
+    }}
+    .transfer-list {{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.65rem;
+    }}
+    .transfer-category {{
+      font-weight: 700;
+      color: #1d4ed8;
+      padding-top: 0.35rem;
+      margin: 0;
+    }}
+    .transfer-line {{
+      font-size: calc(var(--font-scale) * 0.95rem);
+      font-weight: 500;
+      color: inherit;
+      word-break: break-word;
+    }}
+    .team-photo {{
+      margin: 0 0 1.1rem 0;
+    }}
+    .team-photo img {{
+      width: 100%;
+      border-radius: 0.85rem;
+      display: block;
+    }}
+    .team-photo figcaption {{
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #64748b;
+      margin-top: 0.35rem;
+      text-align: center;
+    }}
+    .roster-list {{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.8rem;
+    }}
+    .roster-item {{
+      display: grid;
+      grid-template-columns: minmax(3.6rem, auto) 1fr;
+      gap: 0.75rem;
+      align-items: center;
+    }}
+    .roster-number {{
+      font-family: \"Fira Mono\", \"SFMono-Regular\", Menlo, Consolas, monospace;
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * 0.95rem);
+      background: #bae6fd;
+      color: #1f2933;
+      border-radius: 0.65rem;
+      padding: 0.35rem 0.65rem;
+      text-align: center;
+    }}
+    .roster-official .roster-number {{
+      background: #e2e8f0;
+    }}
+    .roster-text {{
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }}
+    .roster-name {{
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * 1rem);
+    }}
+    .roster-meta {{
+      font-size: calc(var(--font-scale) * 0.82rem);
+      color: #475569;
+      line-height: 1.35;
+    }}
+    .instagram-group {{
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+    }}
+    .instagram-grid {{
+      display: grid;
+      gap: 1.2rem;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }}
+    .instagram-card {{
+      background: #ffffff;
+      border-radius: 0.85rem;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.12);
+    }}
+    .instagram-card h3 {{
+      margin: 0 0 0.75rem 0;
+      font-size: calc(var(--font-scale) * clamp(1.05rem, 3vw, 1.3rem));
+    }}
+    .instagram-list {{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.35rem;
+    }}
+    .meta-link {{
+      font-weight: 600;
+    }}
+    a {{
+      color: #0f766e;
+    }}
+    a:hover,
+    a:focus {{
+      text-decoration: underline;
+    }}
+    @media (max-width: 40rem) {{
+      body {{
+        font-size: calc(var(--font-scale) * 0.9rem);
+      }}
+      h1 {{
+        font-size: calc(var(--font-scale) * 1.6rem);
+      }}
+      h2 {{
+        font-size: calc(var(--font-scale) * 1.1rem);
+      }}
+      .match-list li {{
+        padding: 0.85rem 1rem;
+      }}
+      .match-result {{
+        font-size: calc(var(--font-scale) * 0.85rem);
+      }}
+      .accordion summary {{
+        font-size: calc(var(--font-scale) * 1.05rem);
+      }}
+      .roster-item {{
+        grid-template-columns: minmax(3rem, auto) 1fr;
+      }}
+      .roster-number {{
+        font-size: calc(var(--font-scale) * 0.8rem);
+        padding: 0.3rem 0.5rem;
+      }}
+      .team-photo {{
+        margin-bottom: 0.9rem;
+      }}
+    }}
+    @media (prefers-color-scheme: dark) {{
+      :root {{
+        --accordion-opponent-bg: #1c3f5f;
+        --accordion-opponent-shadow: rgba(56, 189, 248, 0.28);
+        --accordion-usc-bg: #1a4f3a;
+        --accordion-usc-shadow: rgba(74, 222, 128, 0.26);
+      }}
+      body {{
+        background: #0e1b1f;
+        color: #e6f1f3;
+      }}
+      .match-list li {{
+        background: #132a30;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      }}
+      .accordion {{
+        background: var(--accordion-opponent-bg);
+        box-shadow: 0 18px 40px var(--accordion-opponent-shadow);
+      }}
+      .roster-group details:nth-of-type(2),
+      .transfer-group details:nth-of-type(2),
+      .news-group details:nth-of-type(2) {{
+        background: var(--accordion-usc-bg);
+        box-shadow: 0 18px 40px var(--accordion-usc-shadow);
+      }}
+      .instagram-card {{
+        background: #132a30;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }}
+      .match-result {{
+        color: #5eead4;
+      }}
+      .transfer-line {{
+        color: #dbeafe;
+      }}
+      .news-meta {{
+        color: #9ca3af;
+      }}
+      .transfer-category {{
+        color: #bfdbfe;
+      }}
+      .roster-number {{
+        background: #155e75;
+        color: #ecfeff;
+      }}
+      .roster-official .roster-number {{
+        background: #1f2933;
+      }}
+      .roster-meta {{
+        color: #cbd5f5;
+      }}
+      .team-photo figcaption {{
+        color: #94a3b8;
+      }}
+      a {{
+        color: #5eead4;
+      }}
+    }}
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Nächster USC-Heimgegner:<br>{escape(heading)}</h1>
+    <div class=\"meta\">
+      {meta_html}
+    </div>
+    <section>
+      <h2>Letzte Spiele von {escape(heading)}</h2>
+      <ul class=\"match-list\">
+        {opponent_items}
+      </ul>
+    </section>
+    <section>
+      <h2>Letzte Spiele von {escape(USC_CANONICAL_NAME)}</h2>
+      <ul class=\"match-list\">
+        {usc_items}
+      </ul>
+    </section>
+    <section class=\"roster-group\">
+      <details class=\"accordion\">
+        <summary>Kader {escape(heading)}</summary>
+        <div class=\"accordion-content\">
+{opponent_photo_block}          <ul class=\"roster-list\">
+            {opponent_roster_items}
+          </ul>
+        </div>
+      </details>
+      <details class=\"accordion\">
+        <summary>Kader {escape(USC_CANONICAL_NAME)}</summary>
+        <div class=\"accordion-content\">
+{usc_photo_block}          <ul class=\"roster-list\">
+            {usc_roster_items}
+          </ul>
+        </div>
+      </details>
+    </section>
+    <section class=\"transfer-group\">
+      <details class=\"accordion\">
+        <summary>Wechselbörse {escape(heading)}</summary>
+        <div class=\"accordion-content\">
+          <ul class=\"transfer-list\">
+            {opponent_transfer_items}
+          </ul>
+        </div>
+      </details>
+      <details class=\"accordion\">
+        <summary>Wechselbörse {escape(USC_CANONICAL_NAME)}</summary>
+        <div class=\"accordion-content\">
+          <ul class=\"transfer-list\">
+            {usc_transfer_items}
+          </ul>
+        </div>
+      </details>
+    </section>
+    <section class=\"news-group\">
+      <details class=\"accordion\">
+        <summary>News von {escape(heading)}</summary>
+        <div class=\"accordion-content\">
+          <ul class=\"news-list\">
+            {opponent_news_items}
+          </ul>
+        </div>
+      </details>
+      <details class=\"accordion\">
+        <summary>News von {escape(USC_CANONICAL_NAME)}</summary>
+        <div class=\"accordion-content\">
+          <ul class=\"news-list\">
+            {usc_news_items}
+          </ul>
+        </div>
+      </details>
+    </section>
+    <section class=\"instagram-group\">
+      <h2>Instagram-Links</h2>
+      <div class=\"instagram-grid\">
+        <article class=\"instagram-card\">
+          <h3>{escape(heading)}</h3>
+          <ul class=\"instagram-list\">
+            {opponent_instagram_items}
+          </ul>
+        </article>
+        <article class=\"instagram-card\">
+          <h3>{escape(USC_CANONICAL_NAME)}</h3>
+          <ul class=\"instagram-list\">
+            {usc_instagram_items}
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+"""
+
+    return html
+
+
+__all__ = [
+    "DEFAULT_SCHEDULE_URL",
+    "NEWS_LOOKBACK_DAYS",
+    "NewsItem",
+    "Match",
+    "MatchResult",
+    "RosterMember",
+    "TransferItem",
+    "TEAM_HOMEPAGES",
+    "TEAM_ROSTER_IDS",
+    "TABLE_URL",
+    "VBL_NEWS_URL",
+    "VBL_PRESS_URL",
+    "WECHSELBOERSE_URL",
+    "USC_HOMEPAGE",
+    "collect_team_news",
+    "collect_team_transfers",
+    "collect_instagram_links",
+    "collect_team_roster",
+    "collect_team_photo",
+    "build_html_report",
+    "download_schedule",
+    "get_team_homepage",
+    "get_team_roster_url",
+    "fetch_team_news",
+    "fetch_schedule",
+    "find_last_matches_for_team",
+    "find_next_usc_home_match",
+    "load_schedule_from_file",
+    "parse_roster",
+    "parse_schedule",
+]
