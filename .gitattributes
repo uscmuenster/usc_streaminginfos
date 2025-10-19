@@ -1,0 +1,7 @@
+# Automatisch generierte Codex-Dateien – immer neue Version übernehmen
+*.py merge=theirs
+*.yml merge=theirs
+*.yaml merge=theirs
+*.json merge=theirs
+*.html merge=theirs
+*.csv merge=theirs
