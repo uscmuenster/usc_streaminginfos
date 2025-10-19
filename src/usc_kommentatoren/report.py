@@ -17,7 +17,7 @@ from email.utils import parsedate_to_datetime
 import xml.etree.ElementTree as ET
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
 TABLE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml"
@@ -138,6 +138,24 @@ class RosterMember:
     name: str
     role: str
     is_official: bool
+    height: Optional[str]
+    birthdate_label: Optional[str]
+    nationality: Optional[str]
+
+    @property
+    def formatted_birthdate(self) -> Optional[str]:
+        if not self.birthdate_label:
+            return None
+        value = self.birthdate_label.strip()
+        if not value:
+            return None
+        for fmt in ("%d.%m.%Y", "%d.%m.%y"):
+            try:
+                parsed = datetime.strptime(value, fmt)
+            except ValueError:
+                continue
+            return parsed.strftime("%d.%m.%Y")
+        return value
 
 
 @dataclass(frozen=True)
@@ -380,6 +398,9 @@ def parse_roster(csv_text: str) -> List[RosterMember]:
             continue
         number_raw = (row.get("Trikot") or "").strip()
         role = (row.get("Position/Funktion Offizieller") or "").strip()
+        height = (row.get("Größe") or "").strip()
+        birthdate = (row.get("Geburtsdatum") or "").strip()
+        nationality = (row.get("Staatsangehörigkeit") or "").strip()
         number_value: Optional[int] = None
         is_official = True
         if number_raw:
@@ -393,6 +414,9 @@ def parse_roster(csv_text: str) -> List[RosterMember]:
             name=name,
             role=role,
             is_official=is_official,
+            height=height or None,
+            birthdate_label=birthdate or None,
+            nationality=nationality or None,
         )
         if member.is_official:
             officials.append(member)
@@ -1220,11 +1244,17 @@ def _load_transfer_cache() -> Dict[str, List[TransferItem]]:
         team_name = heading.get_text(strip=True)
         if not team_name:
             continue
-        table = heading.find_next("table")
-        if not table:
-            continue
-        items = _parse_transfer_table(table)
-        mapping[normalize_name(team_name)] = items
+        collected: List[TransferItem] = []
+        sibling = heading.next_sibling
+        while sibling:
+            if isinstance(sibling, Tag):
+                if sibling.name == "h2":
+                    break
+                if sibling.name == "table":
+                    collected.extend(_parse_transfer_table(sibling))
+            sibling = sibling.next_sibling
+        if collected:
+            mapping[normalize_name(team_name)] = collected
     _TRANSFER_CACHE = mapping
     return mapping
 
@@ -1378,21 +1408,40 @@ def format_roster_list(roster: Sequence[RosterMember]) -> str:
         else:
             number_display = "Staff"
         name_html = escape(member.name)
-        role_html = escape(member.role) if member.role else ""
-        role_block = (
-            f"<span class=\"roster-role\">{role_html}</span>" if role_html else ""
+        label_role = "Funktion" if member.is_official else "Position"
+        height_value = member.height.strip() if member.height else ""
+        if height_value:
+            normalized = height_value.replace(',', '.').replace(' ', '')
+            if normalized.replace('.', '', 1).isdigit():
+                height_display: Optional[str] = f"{height_value} cm" if not height_value.endswith('cm') else height_value
+            else:
+                height_display = height_value
+        else:
+            height_display = None
+        details: List[Tuple[str, Optional[str]]] = [
+            ("Größe", height_display),
+            ("Geburtstag", member.formatted_birthdate),
+            ("Nation", member.nationality),
+            (label_role, member.role or None),
+        ]
+        detail_parts: List[str] = []
+        for label, value in details:
+            display = escape(value) if value else "–"
+            detail_parts.append(f"{escape(label)}: {display}")
+        meta_block = "<div class=\"roster-meta\">{}</div>".format(
+            " • ".join(detail_parts)
         )
         classes = ["roster-item"]
         classes.append("roster-official" if member.is_official else "roster-player")
         rendered.append(
-            "<li class=\"{classes}\">"
-            "<span class=\"roster-number\">{number}</span>"
-            "<div class=\"roster-text\"><span class=\"roster-name\">{name}</span>{role}</div>"
-            "</li>".format(
+            ("<li class=\"{classes}\">"
+             "<span class=\"roster-number\">{number}</span>"
+             "<div class=\"roster-text\"><span class=\"roster-name\">{name}</span>{meta}</div>"
+             "</li>").format(
                 classes=" ".join(classes),
                 number=escape(number_display),
                 name=name_html,
-                role=role_block,
+                meta=meta_block,
             )
         )
     return "\n          ".join(rendered)
@@ -1750,9 +1799,10 @@ def build_html_report(
       font-weight: 600;
       font-size: calc(var(--font-scale) * 1rem);
     }}
-    .roster-role {{
-      font-size: calc(var(--font-scale) * 0.85rem);
-      color: #64748b;
+    .roster-meta {{
+      font-size: calc(var(--font-scale) * 0.82rem);
+      color: #475569;
+      line-height: 1.35;
     }}
     .instagram-group {{
       margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
@@ -1862,6 +1912,9 @@ def build_html_report(
       }}
       .roster-official .roster-number {{
         background: #1f2933;
+      }}
+      .roster-meta {{
+        color: #cbd5f5;
       }}
       .team-photo figcaption {{
         color: #94a3b8;
