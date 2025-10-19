@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import csv
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import re
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -10,7 +10,7 @@ from html import escape
 from io import StringIO
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 from zoneinfo import ZoneInfo
-from urllib.parse import urljoin
+from urllib.parse import parse_qs, urljoin, urlparse
 from email.utils import parsedate_to_datetime
 import xml.etree.ElementTree as ET
 
@@ -25,10 +25,68 @@ BERLIN_TZ = ZoneInfo("Europe/Berlin")
 USC_CANONICAL_NAME = "USC Münster"
 USC_HOMEPAGE = "https://www.usc-muenster.de/"
 
-REQUEST_HEADERS = {"User-Agent": "usc-kommentatoren/1.0 (+https://github.com/)"}
+REQUEST_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (compatible; usc-kommentatoren/1.0; +https://github.com/)"
+}
 HTML_ACCEPT_HEADER = {"Accept": "text/html,application/xhtml+xml"}
 RSS_ACCEPT_HEADER = {"Accept": "application/rss+xml,text/xml"}
 NEWS_LOOKBACK_DAYS = 14
+
+SUMMARY_SENTENCE_LIMIT = 3
+SUMMARY_MIN_LENGTH = 140
+SUMMARY_MAX_LENGTH = 600
+INSTAGRAM_SEARCH_URL = "https://duckduckgo.com/html/"
+
+GERMAN_STOPWORDS = {
+    "aber",
+    "als",
+    "am",
+    "auch",
+    "auf",
+    "aus",
+    "bei",
+    "bin",
+    "bis",
+    "da",
+    "damit",
+    "dann",
+    "der",
+    "die",
+    "das",
+    "dass",
+    "den",
+    "des",
+    "dem",
+    "ein",
+    "eine",
+    "einen",
+    "einem",
+    "er",
+    "es",
+    "für",
+    "hat",
+    "haben",
+    "ich",
+    "im",
+    "in",
+    "ist",
+    "mit",
+    "nach",
+    "nicht",
+    "noch",
+    "oder",
+    "sein",
+    "sind",
+    "so",
+    "und",
+    "vom",
+    "von",
+    "vor",
+    "war",
+    "wie",
+    "wir",
+    "zu",
+}
 
 SEARCH_TRANSLATION = str.maketrans(
     {
@@ -80,6 +138,7 @@ class NewsItem:
     source: str
     published: Optional[datetime]
     search_text: str = ""
+    summary: Optional[str] = None
 
     @property
     def formatted_date(self) -> Optional[str]:
@@ -147,6 +206,7 @@ def _http_get(
     url: str,
     *,
     headers: Optional[Dict[str, str]] = None,
+    params: Optional[Dict[str, str]] = None,
     retries: int = 5,
     delay_seconds: float = 2.0,
 ) -> requests.Response:
@@ -156,7 +216,12 @@ def _http_get(
         merged_headers.update(headers)
     for attempt in range(retries):
         try:
-            response = requests.get(url, timeout=30, headers=merged_headers)
+            response = requests.get(
+                url,
+                timeout=30,
+                headers=merged_headers,
+                params=params,
+            )
             response.raise_for_status()
             return response
         except requests.RequestException as exc:  # pragma: no cover - network errors
@@ -177,10 +242,12 @@ def fetch_html(
     retries: int = 5,
     delay_seconds: float = 2.0,
     headers: Optional[Dict[str, str]] = None,
+    params: Optional[Dict[str, str]] = None,
 ) -> str:
     response = _http_get(
         url,
         headers={**HTML_ACCEPT_HEADER, **(headers or {})},
+        params=params,
         retries=retries,
         delay_seconds=delay_seconds,
     )
@@ -405,6 +472,30 @@ def get_team_homepage(team_name: str) -> Optional[str]:
     return TEAM_HOMEPAGES.get(normalize_name(team_name))
 
 
+def _build_team_instagram() -> Dict[str, str]:
+    pairs = {
+        "Allianz MTV Stuttgart": "https://www.instagram.com/allianzmtvstuttgart/",
+        "Binder Blaubären TSV Flacht": "https://www.instagram.com/binderblaubaerenflacht/",
+        "Dresdner SC": "https://www.instagram.com/dsc1898/",
+        "ETV Hamburger Volksbank Volleys": "https://www.instagram.com/etv.hamburgervolksbank.volleys/",
+        "Ladies in Black Aachen": "https://www.instagram.com/ladiesinblackaachen/",
+        "SSC Palmberg Schwerin": "https://www.instagram.com/sscpalmbergschwerin/",
+        "Schwarz-Weiß Erfurt": "https://www.instagram.com/schwarzweisserfurt/",
+        "Skurios Volleys Borken": "https://www.instagram.com/skurios_volleys_borken/",
+        "USC Münster": "https://www.instagram.com/uscmuenster/",
+        "VC Wiesbaden": "https://www.instagram.com/vc_wiesbaden/",
+        "VfB Suhl LOTTO Thüringen": "https://www.instagram.com/vfbsuhl_lottothueringen/",
+    }
+    return {normalize_name(name): url for name, url in pairs.items()}
+
+
+TEAM_INSTAGRAM = _build_team_instagram()
+
+
+def get_team_instagram(team_name: str) -> Optional[str]:
+    return TEAM_INSTAGRAM.get(normalize_name(team_name))
+
+
 def _build_team_keyword_synonyms() -> Dict[str, Sequence[str]]:
     pairs: Dict[str, Sequence[str]] = {
         "Allianz MTV Stuttgart": ("MTV Stuttgart",),
@@ -466,6 +557,205 @@ def _filter_by_keywords(items: Sequence[NewsItem], keyword_set: KeywordSet) -> L
         for item in items
         if matches_keywords(item.search_text or item.title, keyword_set)
     ]
+
+
+def _extract_best_candidate(soup: BeautifulSoup) -> Optional[str]:
+    best_text = ""
+    for element in soup.find_all(["article", "section", "div", "main"], limit=200):
+        text = element.get_text(" ", strip=True)
+        if len(text) > len(best_text):
+            best_text = text
+    if not best_text and soup.body:
+        best_text = soup.body.get_text(" ", strip=True)
+    return best_text or None
+
+
+def extract_article_text(url: str) -> Optional[str]:
+    try:
+        html = fetch_html(url)
+    except requests.RequestException:
+        return None
+
+    soup = BeautifulSoup(html, "html.parser")
+    for tag in soup.find_all(["script", "style", "noscript", "template"]):
+        tag.decompose()
+
+    hostname = urlparse(url).hostname or ""
+    hostname = hostname.lower()
+
+    prioritized_selectors: List[str] = []
+    if "volleyball-bundesliga.de" in hostname:
+        prioritized_selectors.extend(
+            [
+                ".samsCmsComponentContent",
+                ".samsArticleBody",
+                "article",
+            ]
+        )
+    elif "usc-muenster.de" in hostname:
+        prioritized_selectors.extend([
+            "article",
+            "div.entry-content",
+        ])
+    elif "etv-hamburg" in hostname:
+        prioritized_selectors.extend([
+            "div.article",
+            "div.text-wrapper",
+        ])
+
+    for selector in prioritized_selectors:
+        candidate = soup.select_one(selector)
+        if candidate:
+            text = candidate.get_text(" ", strip=True)
+            if len(text) >= 80:
+                return text
+
+    return _extract_best_candidate(soup)
+
+
+def _tokenize(text: str) -> List[str]:
+    tokens = re.findall(r"[A-Za-zÄÖÜäöüß]+", text)
+    normalized = [token.lower() for token in tokens]
+    return [token for token in normalized if token and token not in GERMAN_STOPWORDS]
+
+
+def _split_sentences(text: str) -> List[str]:
+    sentences = re.split(r"(?<=[.!?])\s+", text)
+    return [sentence.strip() for sentence in sentences if sentence.strip()]
+
+
+def summarize_text(text: str) -> Optional[str]:
+    sentences = _split_sentences(text)
+    if not sentences:
+        return None
+    if len(sentences) <= SUMMARY_SENTENCE_LIMIT:
+        summary = " ".join(sentences)
+        return summary[:SUMMARY_MAX_LENGTH]
+
+    frequencies: Dict[str, int] = {}
+    for sentence in sentences:
+        for token in _tokenize(sentence):
+            frequencies[token] = frequencies.get(token, 0) + 1
+
+    if not frequencies:
+        summary = " ".join(sentences[:SUMMARY_SENTENCE_LIMIT])
+        return summary[:SUMMARY_MAX_LENGTH]
+
+    scored: List[Tuple[int, float, str]] = []
+    for index, sentence in enumerate(sentences):
+        tokens = _tokenize(sentence)
+        if not tokens:
+            continue
+        score = sum(frequencies[token] for token in tokens) / len(tokens)
+        scored.append((index, score, sentence))
+
+    if not scored:
+        summary = " ".join(sentences[:SUMMARY_SENTENCE_LIMIT])
+        return summary[:SUMMARY_MAX_LENGTH]
+
+    scored.sort(key=lambda item: (-item[1], item[0]))
+    selected_indices: List[int] = []
+    for index, _score, _sentence in scored:
+        if index not in selected_indices:
+            selected_indices.append(index)
+        if len(selected_indices) == SUMMARY_SENTENCE_LIMIT:
+            break
+
+    selected_indices.sort()
+    summary_parts = [sentences[idx] for idx in selected_indices]
+
+    summary = " ".join(summary_parts)
+    if len(summary) < SUMMARY_MIN_LENGTH:
+        for index, _score, sentence in scored:
+            if index in selected_indices:
+                continue
+            summary_parts.append(sentence)
+            selected_indices.append(index)
+            summary = " ".join(summary_parts)
+            if len(summary_parts) >= SUMMARY_SENTENCE_LIMIT + 2 or len(summary) >= SUMMARY_MIN_LENGTH:
+                break
+        summary = " ".join(summary_parts)
+
+    return summary[:SUMMARY_MAX_LENGTH]
+
+
+def summarize_article(url: str) -> Optional[str]:
+    article_text = extract_article_text(url)
+    if not article_text:
+        return None
+    return summarize_text(article_text)
+
+
+def summarize_news_items(items: Sequence[NewsItem]) -> List[NewsItem]:
+    summarized: List[NewsItem] = []
+    for item in items:
+        summary: Optional[str] = None
+        try:
+            summary = summarize_article(item.url)
+        except requests.RequestException:
+            summary = None
+        except Exception:
+            summary = None
+        if summary:
+            summary = summary.strip()
+        summarized.append(replace(item, summary=summary))
+    return summarized
+
+
+def collect_instagram_links(team_name: str, *, limit: int = 6) -> List[str]:
+    links: List[str] = []
+    base = get_team_instagram(team_name)
+    base_slug: Optional[str] = None
+    if base:
+        normalized_base = base.rstrip("/")
+        links.append(normalized_base)
+        base_path = urlparse(normalized_base).path.strip("/")
+        if base_path:
+            base_slug = base_path
+
+    query = f"{team_name} instagram"
+    try:
+        html = fetch_html(
+            INSTAGRAM_SEARCH_URL,
+            params={"q": query},
+            headers={"User-Agent": REQUEST_HEADERS["User-Agent"]},
+        )
+    except requests.RequestException:
+        return links
+
+    soup = BeautifulSoup(html, "html.parser")
+    for anchor in soup.select("a[href]"):
+        href = anchor.get("href", "")
+        if "instagram.com" not in href:
+            continue
+        target = href
+        if href.startswith("//"):
+            parsed = urlparse("https:" + href)
+            uddg = parse_qs(parsed.query).get("uddg", [""])[0]
+            if uddg:
+                target = uddg
+        if "instagram.com" not in target:
+            continue
+        normalized = target.split("?")[0].rstrip("/")
+        if not normalized or normalized in links:
+            continue
+        parsed = urlparse(normalized)
+        path = parsed.path.strip("/")
+        if not path:
+            continue
+        if base_slug:
+            if path != base_slug and not path.startswith(f"{base_slug}/"):
+                if not (path.startswith("p/") or path.startswith("reel/")):
+                    continue
+        else:
+            keywords = get_team_keywords(team_name)
+            if not matches_keywords(path, keywords):
+                continue
+        links.append(normalized)
+        if len(links) >= limit:
+            break
+
+    return links
 
 
 def _within_lookback(published: Optional[datetime], *, reference: datetime, lookback_days: int) -> bool:
@@ -719,7 +1009,10 @@ def collect_team_news(
     usc_combined = _deduplicate_news([*usc_news, *usc_vbl])
     opponent_combined = _deduplicate_news([*opponent_news, *opponent_vbl])
 
-    return usc_combined, opponent_combined
+    summarized_usc = summarize_news_items(usc_combined)
+    summarized_opponent = summarize_news_items(opponent_combined)
+
+    return summarized_usc, summarized_opponent
 
 
 def pretty_name(name: str) -> str:
@@ -813,10 +1106,46 @@ def format_news_list(items: Sequence[NewsItem]) -> str:
             meta_parts.append(escape(date_label))
         meta = " – ".join(meta_parts)
         meta_html = f"<span class=\"news-meta\">{meta}</span>" if meta else ""
+        summary_html = ""
+        if item.summary:
+            summary_html = f"<p class=\"news-summary\">{escape(item.summary)}</p>"
         rendered.append(
-            f"<li><a href=\"{url}\">{title}</a>{meta_html}</li>"
+            f"<li><a href=\"{url}\">{title}</a>{meta_html}{summary_html}</li>"
         )
     return "\n      ".join(rendered)
+
+
+def format_instagram_list(links: Sequence[str]) -> str:
+    if not links:
+        return "<li>Keine Links gefunden.</li>"
+
+    rendered: List[str] = []
+    for link in links:
+        parsed = urlparse(link)
+        segments = [segment for segment in parsed.path.split("/") if segment]
+        display: str
+        if not segments:
+            display = f"@{parsed.netloc}" if parsed.netloc else link
+        elif "p" in segments:
+            index = segments.index("p")
+            if index + 1 < len(segments):
+                display = f"Beitrag {segments[index + 1]}"
+            else:
+                display = "Instagram-Post"
+        elif "reel" in segments:
+            index = segments.index("reel")
+            if index + 1 < len(segments):
+                display = f"Reel {segments[index + 1]}"
+            else:
+                display = "Reels"
+        elif segments[0] == "stories" and len(segments) > 1:
+            display = f"Stories @{segments[1]}"
+        elif segments[-1] == "reels":
+            display = "Reels-Übersicht"
+        else:
+            display = f"@{segments[0]}"
+        rendered.append(f"<li><a href=\"{escape(link)}\">{escape(display)}</a></li>")
+    return "\n          ".join(rendered)
 
 
 def build_html_report(
@@ -826,6 +1155,8 @@ def build_html_report(
     opponent_recent: List[Match],
     usc_news: Sequence[NewsItem],
     opponent_news: Sequence[NewsItem],
+    usc_instagram: Sequence[str],
+    opponent_instagram: Sequence[str],
     public_url: Optional[str] = None,
 ) -> str:
     heading = pretty_name(next_home.away_team)
@@ -850,6 +1181,8 @@ def build_html_report(
 
     usc_news_items = format_news_list(usc_news)
     opponent_news_items = format_news_list(opponent_news)
+    usc_instagram_items = format_instagram_list(usc_instagram)
+    opponent_instagram_items = format_instagram_list(opponent_instagram)
 
     usc_link_block = ""
     if usc_url:
@@ -995,6 +1328,36 @@ def build_html_report(
       color: #64748b;
       margin-top: 0.2rem;
     }}
+    .news-summary {{
+      margin: 0.4rem 0 0;
+      font-size: clamp(0.88rem, 1.6vw, 0.97rem);
+      color: #334155;
+    }}
+    .instagram-group {{
+      margin-top: clamp(1.75rem, 4vw, 2.75rem);
+    }}
+    .instagram-grid {{
+      display: grid;
+      gap: 1.2rem;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }}
+    .instagram-card {{
+      background: #ffffff;
+      border-radius: 0.85rem;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.12);
+    }}
+    .instagram-card h3 {{
+      margin: 0 0 0.75rem 0;
+      font-size: clamp(1.05rem, 3vw, 1.3rem);
+    }}
+    .instagram-list {{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.35rem;
+    }}
     .meta-link {{
       font-weight: 600;
     }}
@@ -1038,6 +1401,10 @@ def build_html_report(
         background: #0f2529;
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
       }}
+      .instagram-card {{
+        background: #132a30;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }}
       .match-result {{
         color: #5eead4;
       }}
@@ -1049,6 +1416,9 @@ def build_html_report(
       }}
       .news-meta {{
         color: #94a3b8;
+      }}
+      .news-summary {{
+        color: #cbd5f5;
       }}
     }}
   </style>
@@ -1091,6 +1461,23 @@ def build_html_report(
         </div>
       </details>
     </section>
+    <section class=\"instagram-group\">
+      <h2>Instagram-Links</h2>
+      <div class=\"instagram-grid\">
+        <article class=\"instagram-card\">
+          <h3>{escape(heading)}</h3>
+          <ul class=\"instagram-list\">
+            {opponent_instagram_items}
+          </ul>
+        </article>
+        <article class=\"instagram-card\">
+          <h3>{escape(USC_CANONICAL_NAME)}</h3>
+          <ul class=\"instagram-list\">
+            {usc_instagram_items}
+          </ul>
+        </article>
+      </div>
+    </section>
   </main>
 </body>
 </html>
@@ -1111,6 +1498,7 @@ __all__ = [
     "VBL_PRESS_URL",
     "USC_HOMEPAGE",
     "collect_team_news",
+    "collect_instagram_links",
     "build_html_report",
     "download_schedule",
     "fetch_team_news",

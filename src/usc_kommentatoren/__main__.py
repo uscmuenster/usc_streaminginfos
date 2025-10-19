@@ -8,6 +8,7 @@ from .report import (
     NEWS_LOOKBACK_DAYS,
     USC_CANONICAL_NAME,
     build_html_report,
+    collect_instagram_links,
     collect_team_news,
     download_schedule,
     find_last_matches_for_team,
@@ -77,12 +78,17 @@ def main() -> int:
         lookback_days=args.news_lookback,
     )
 
+    usc_instagram = collect_instagram_links(USC_CANONICAL_NAME)
+    opponent_instagram = collect_instagram_links(next_home.away_team)
+
     html = build_html_report(
         next_home=next_home,
         usc_recent=usc_recent,
         opponent_recent=opponent_recent,
         usc_news=usc_news,
         opponent_news=opponent_news,
+        usc_instagram=usc_instagram,
+        opponent_instagram=opponent_instagram,
         public_url=args.public_url,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
