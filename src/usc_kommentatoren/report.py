@@ -4,6 +4,7 @@ import csv
 import time
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
 from html import escape
 from io import StringIO
 from typing import Iterable, List, Optional
@@ -30,7 +31,12 @@ class Match:
         return bool(self.result)
 
 
-def fetch_schedule(url: str = DEFAULT_SCHEDULE_URL, *, retries: int = 5, delay_seconds: float = 2.0) -> List[Match]:
+def _download_schedule_text(
+    url: str,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> str:
     last_error: Optional[Exception] = None
     for attempt in range(retries):
         try:
@@ -40,7 +46,7 @@ def fetch_schedule(url: str = DEFAULT_SCHEDULE_URL, *, retries: int = 5, delay_s
                 headers={"User-Agent": "usc-kommentatoren/1.0 (+https://github.com/)"},
             )
             response.raise_for_status()
-            break
+            return response.text
         except requests.RequestException as exc:  # pragma: no cover - network errors
             last_error = exc
             if attempt == retries - 1:
@@ -52,7 +58,37 @@ def fetch_schedule(url: str = DEFAULT_SCHEDULE_URL, *, retries: int = 5, delay_s
             raise last_error
         raise RuntimeError("Unbekannter Fehler beim Abrufen des Spielplans.")
 
-    buffer = StringIO(response.text)
+
+def fetch_schedule(
+    url: str = DEFAULT_SCHEDULE_URL,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> List[Match]:
+    csv_text = _download_schedule_text(url, retries=retries, delay_seconds=delay_seconds)
+    return parse_schedule(csv_text)
+
+
+def download_schedule(
+    destination: Path,
+    *,
+    url: str = DEFAULT_SCHEDULE_URL,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> Path:
+    csv_text = _download_schedule_text(url, retries=retries, delay_seconds=delay_seconds)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(csv_text, encoding="utf-8")
+    return destination
+
+
+def load_schedule_from_file(path: Path) -> List[Match]:
+    csv_text = path.read_text(encoding="utf-8")
+    return parse_schedule(csv_text)
+
+
+def parse_schedule(csv_text: str) -> List[Match]:
+    buffer = StringIO(csv_text)
     reader = csv.DictReader(buffer, delimiter=";", quotechar="\"")
     matches: List[Match] = []
     for row in reader:
@@ -223,8 +259,11 @@ def build_html_report(
 __all__ = [
     "DEFAULT_SCHEDULE_URL",
     "Match",
+    "build_html_report",
+    "download_schedule",
     "fetch_schedule",
     "find_last_matches_for_team",
     "find_next_usc_home_match",
-    "build_html_report",
+    "load_schedule_from_file",
+    "parse_schedule",
 ]

@@ -7,9 +7,10 @@ from .report import (
     DEFAULT_SCHEDULE_URL,
     USC_CANONICAL_NAME,
     build_html_report,
-    fetch_schedule,
+    download_schedule,
     find_last_matches_for_team,
     find_next_usc_home_match,
+    load_schedule_from_file,
 )
 
 
@@ -27,6 +28,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Target HTML file path.",
     )
     parser.add_argument(
+        "--schedule-path",
+        type=Path,
+        default=Path("data/schedule.csv"),
+        help="Local path to store the downloaded schedule CSV.",
+    )
+    parser.add_argument(
         "--recent-limit",
         type=int,
         default=2,
@@ -39,7 +46,11 @@ def main() -> int:
     parser = build_parser()
     args = parser.parse_args()
 
-    matches = fetch_schedule(args.schedule_url)
+    download_schedule(
+        args.schedule_path,
+        url=args.schedule_url,
+    )
+    matches = load_schedule_from_file(args.schedule_path)
     next_home = find_next_usc_home_match(matches)
     if not next_home:
         raise SystemExit("Kein zukünftiges Heimspiel des USC Münster gefunden.")

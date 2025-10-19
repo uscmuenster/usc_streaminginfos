@@ -18,11 +18,14 @@ Das Paket stellt einen kleinen Helfer bereit, der den offiziellen Spielplan läd
 PYTHONPATH=src python -m usc_kommentatoren --output usc_report.html
 ```
 
-Optional lässt sich eine andere Quelle angeben oder die Anzahl der vergangenen Partien anpassen:
+Beim ersten Aufruf (und bei jeder späteren Aktualisierung) lädt das Skript den CSV-Spielplan herunter und speichert ihn unter
+`data/schedule.csv`. Wenn bereits eine lokale Kopie existiert, wird sie überschrieben. Der Pfad kann mit `--schedule-path`
+angepasst werden. Optional lassen sich außerdem Quelle und Anzahl der vergangenen Partien ändern:
 
 ```bash
 PYTHONPATH=src python -m usc_kommentatoren \
   --schedule-url "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171" \
+  --schedule-path data/custom_schedule.csv \
   --recent-limit 3 \
   --output usc_report.html
 ```
@@ -37,9 +40,9 @@ Die HTML-Datei enthält:
 ## Automatisierung mit GitHub Actions
 
 Der Workflow `.github/workflows/ci.yml` kann manuell gestartet werden (`workflow_dispatch`) und läuft zusätzlich jede Nacht um
-03:00 Uhr deutscher Zeit (`cron: "0 1 * * *"` in UTC). Bei jedem Lauf werden die Abhängigkeiten installiert, das Modul
-kompiliert und anschließend der HTML-Bericht erzeugt. Das Ergebnis wird als Artefakt `usc-report` bereitgestellt und kann über
-den jeweiligen Workflow-Run heruntergeladen werden.
+03:00 Uhr deutscher Zeit (`cron: "0 1 * * *"` in UTC). Bei jedem Lauf werden die Abhängigkeiten installiert, der aktuelle
+CSV-Spielplan nach `data/schedule.csv` heruntergeladen, das Modul kompiliert und anschließend der HTML-Bericht erzeugt. Das
+Ergebnis wird als Artefakt `usc-report` bereitgestellt und kann über den jeweiligen Workflow-Run heruntergeladen werden.
 
 ## Nächste Schritte
 
