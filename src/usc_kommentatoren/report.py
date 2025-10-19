@@ -386,6 +386,26 @@ def _download_roster_text(
     )
     return response.content.decode("latin-1")
 
+OFFICIAL_ROLE_PRIORITY: Tuple[str, ...] = (
+    "Trainer",
+    "Co-Trainer",
+    "Co-Trainer (Scout)",
+    "Statistiker",
+    "Physiotherapeut",
+    "Arzt",
+)
+
+
+def _official_sort_key(member: RosterMember) -> Tuple[int, str, str]:
+    role = (member.role or "").strip()
+    normalized = role.lower()
+    order = len(OFFICIAL_ROLE_PRIORITY)
+    for index, label in enumerate(OFFICIAL_ROLE_PRIORITY):
+        if normalized == label.lower():
+            order = index
+            break
+    return (order, normalized, member.name.lower())
+
 
 def parse_roster(csv_text: str) -> List[RosterMember]:
     buffer = StringIO(csv_text)
@@ -429,6 +449,7 @@ def parse_roster(csv_text: str) -> List[RosterMember]:
             member.name.lower(),
         )
     )
+    officials.sort(key=_official_sort_key)
     return players + officials
 
 
@@ -1409,21 +1430,28 @@ def format_roster_list(roster: Sequence[RosterMember]) -> str:
             number_display = "Staff"
         name_html = escape(member.name)
         label_role = "Funktion" if member.is_official else "Position"
-        height_value = member.height.strip() if member.height else ""
-        if height_value:
-            normalized = height_value.replace(',', '.').replace(' ', '')
-            if normalized.replace('.', '', 1).isdigit():
-                height_display: Optional[str] = f"{height_value} cm" if not height_value.endswith('cm') else height_value
-            else:
-                height_display = height_value
-        else:
-            height_display = None
-        details: List[Tuple[str, Optional[str]]] = [
-            ("Größe", height_display),
-            ("Geburtstag", member.formatted_birthdate),
-            ("Nation", member.nationality),
-            (label_role, member.role or None),
-        ]
+        height_display: Optional[str] = None
+        if member.height and not member.is_official:
+            height_value = member.height.strip()
+            if height_value:
+                normalized = height_value.replace(',', '.').replace(' ', '')
+                if normalized.replace('.', '', 1).isdigit():
+                    if not height_value.endswith('cm'):
+                        height_display = f"{height_value} cm"
+                    else:
+                        height_display = height_value
+                else:
+                    height_display = height_value
+        details: List[Tuple[str, Optional[str]]] = []
+        if not member.is_official:
+            details.append(("Größe", height_display))
+        details.extend(
+            [
+                ("Geburtstag", member.formatted_birthdate),
+                ("Nation", member.nationality),
+                (label_role, member.role or None),
+            ]
+        )
         detail_parts: List[str] = []
         for label, value in details:
             display = escape(value) if value else "–"
@@ -1459,43 +1487,29 @@ def format_transfer_list(items: Sequence[TransferItem]) -> str:
                 f"<li class=\"transfer-category\">{escape(item.category)}</li>"
             )
             current_category = item.category
-        name_html = escape(item.name)
-        if item.url:
-            name_html = f"<a href=\"{escape(item.url)}\">{name_html}</a>"
-        meta_parts: List[str] = []
+        parts: List[str] = []
+        name_part = item.name.strip()
+        if name_part:
+            parts.append(name_part)
         type_label = item.type_code.strip()
         if type_label:
-            meta_parts.append(escape(type_label))
+            parts.append(type_label)
         nationality = item.nationality.strip()
         if nationality:
-            meta_parts.append(escape(nationality))
-        meta_block = (
-            f"<span class=\"transfer-meta\">{' – '.join(meta_parts)}</span>"
-            if meta_parts
-            else ""
-        )
-        detail_parts: List[str] = []
+            parts.append(nationality)
         info = item.info.strip()
         if info:
-            detail_parts.append(escape(info))
+            parts.append(info)
         related = item.related_club.strip()
         if related:
-            detail_parts.append(escape(related))
-        details_block = (
-            f"<span class=\"transfer-details\">{' | '.join(detail_parts)}</span>"
-            if detail_parts
-            else ""
-        )
+            parts.append(related)
+        if not parts:
+            continue
         rendered.append(
-            "<li>"
-            "<div class=\"transfer-entry\">"
-            f"<span class=\"transfer-date\">{escape(item.formatted_date)}</span>"
-            f"<span class=\"transfer-name\">{name_html}</span>"
-            f"{meta_block}{details_block}"
-            "</div>"
-            "</li>"
+            f"<li class=\"transfer-line\">{' | '.join(escape(part) for part in parts)}</li>"
         )
     return "\n          ".join(rendered)
+
 
 
 def build_html_report(
@@ -1513,7 +1527,6 @@ def build_html_report(
     opponent_transfers: Sequence[TransferItem],
     usc_photo: Optional[str],
     opponent_photo: Optional[str],
-    public_url: Optional[str] = None,
     font_scale: float = 1.0,
 ) -> str:
     heading = pretty_name(next_home.away_team)
@@ -1575,10 +1588,6 @@ def build_html_report(
         meta_lines.append(
             f"<p><a class=\"meta-link\" href=\"{escape(opponent_url)}\">Homepage {escape(heading)}</a></p>"
         )
-    if public_url:
-        meta_lines.append(
-            f"<p><a class=\"meta-link\" href=\"{escape(public_url)}\">Öffentliche Adresse</a></p>"
-        )
     meta_html = "\n      ".join(meta_lines)
 
     font_scale = max(0.3, min(font_scale, 3.0))
@@ -1593,7 +1602,14 @@ def build_html_report(
   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
   <title>Nächster USC-Heimgegner</title>
   <style>
-    :root {{ color-scheme: light dark; --font-scale: {scale_value}; }}
+    :root {{
+      color-scheme: light dark;
+      --font-scale: {scale_value};
+      --accordion-opponent-bg: #e0f2fe;
+      --accordion-opponent-shadow: rgba(30, 64, 175, 0.08);
+      --accordion-usc-bg: #dcfce7;
+      --accordion-usc-shadow: rgba(22, 163, 74, 0.08);
+    }}
     body {{
       margin: 0;
       font-family: \"Inter\", \"Segoe UI\", -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Arial, sans-serif;
@@ -1665,15 +1681,15 @@ def build_html_report(
     .accordion {{
       border-radius: 0.85rem;
       overflow: hidden;
-      background: #e0f2fe;
-      box-shadow: 0 18px 40px rgba(30, 64, 175, 0.08);
+      background: var(--accordion-opponent-bg);
+      box-shadow: 0 18px 40px var(--accordion-opponent-shadow);
       border: none;
     }}
     .roster-group details:nth-of-type(2),
     .transfer-group details:nth-of-type(2),
     .news-group details:nth-of-type(2) {{
-      background: #dcfce7;
-      box-shadow: 0 18px 40px rgba(22, 163, 74, 0.08);
+      background: var(--accordion-usc-bg);
+      box-shadow: 0 18px 40px var(--accordion-usc-shadow);
     }}
     .accordion summary {{
       cursor: pointer;
@@ -1730,25 +1746,11 @@ def build_html_report(
       padding-top: 0.35rem;
       margin: 0;
     }}
-    .transfer-entry {{
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }}
-    .transfer-date {{
-      font-weight: 600;
+    .transfer-line {{
       font-size: calc(var(--font-scale) * 0.95rem);
-      color: #0f172a;
-    }}
-    .transfer-name {{
-      font-weight: 600;
-      font-size: calc(var(--font-scale) * 1rem);
-    }}
-    .transfer-meta,
-    .transfer-details {{
-      display: block;
-      font-size: calc(var(--font-scale) * 0.85rem);
-      color: #475569;
+      font-weight: 500;
+      color: inherit;
+      word-break: break-word;
     }}
     .team-photo {{
       margin: 0 0 1.1rem 0;
@@ -1870,6 +1872,12 @@ def build_html_report(
       }}
     }}
     @media (prefers-color-scheme: dark) {{
+      :root {{
+        --accordion-opponent-bg: #1c3f5f;
+        --accordion-opponent-shadow: rgba(56, 189, 248, 0.28);
+        --accordion-usc-bg: #1a4f3a;
+        --accordion-usc-shadow: rgba(74, 222, 128, 0.26);
+      }}
       body {{
         background: #0e1b1f;
         color: #e6f1f3;
@@ -1879,14 +1887,14 @@ def build_html_report(
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
       }}
       .accordion {{
-        background: #102437;
-        box-shadow: 0 18px 40px rgba(15, 118, 255, 0.2);
+        background: var(--accordion-opponent-bg);
+        box-shadow: 0 18px 40px var(--accordion-opponent-shadow);
       }}
       .roster-group details:nth-of-type(2),
       .transfer-group details:nth-of-type(2),
       .news-group details:nth-of-type(2) {{
-        background: #123026;
-        box-shadow: 0 18px 40px rgba(45, 212, 191, 0.18);
+        background: var(--accordion-usc-bg);
+        box-shadow: 0 18px 40px var(--accordion-usc-shadow);
       }}
       .instagram-card {{
         background: #132a30;
@@ -1895,16 +1903,14 @@ def build_html_report(
       .match-result {{
         color: #5eead4;
       }}
-      .transfer-date {{
-        color: #bae6fd;
+      .transfer-line {{
+        color: #dbeafe;
       }}
-      .transfer-meta,
-      .transfer-details,
       .news-meta {{
         color: #9ca3af;
       }}
       .transfer-category {{
-        color: #93c5fd;
+        color: #bfdbfe;
       }}
       .roster-number {{
         background: #155e75;

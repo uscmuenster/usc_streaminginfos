@@ -5,11 +5,6 @@ on:
     branches: [ work, main ]
   pull_request:
   workflow_dispatch:
-    inputs:
-      public_url:
-        description: 'Optional öffentliche URL des HTML-Berichts'
-        required: false
-        type: string
   schedule:
     - cron: '0 1 * * *'
 
@@ -44,13 +39,7 @@ jobs:
       - name: Generate USC HTML report
         env:
           PYTHONPATH: src
-          PUBLIC_URL: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.public_url || '' }}
-        run: |
-          if [ -n "${PUBLIC_URL}" ]; then
-            python -m usc_kommentatoren --public-url "${PUBLIC_URL}"
-          else
-            python -m usc_kommentatoren
-          fi
+        run: python -m usc_kommentatoren
 
       - name: Upload HTML artifact
         if: always()

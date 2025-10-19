@@ -5,7 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Nächster USC-Heimgegner</title>
   <style>
-    :root { color-scheme: light dark; --font-scale: 1; }
+    :root {
+      color-scheme: light dark;
+      --font-scale: 1;
+      --accordion-opponent-bg: #e0f2fe;
+      --accordion-opponent-shadow: rgba(30, 64, 175, 0.08);
+      --accordion-usc-bg: #dcfce7;
+      --accordion-usc-shadow: rgba(22, 163, 74, 0.08);
+    }
     body {
       margin: 0;
       font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
@@ -77,15 +84,15 @@
     .accordion {
       border-radius: 0.85rem;
       overflow: hidden;
-      background: #e0f2fe;
-      box-shadow: 0 18px 40px rgba(30, 64, 175, 0.08);
+      background: var(--accordion-opponent-bg);
+      box-shadow: 0 18px 40px var(--accordion-opponent-shadow);
       border: none;
     }
     .roster-group details:nth-of-type(2),
     .transfer-group details:nth-of-type(2),
     .news-group details:nth-of-type(2) {
-      background: #dcfce7;
-      box-shadow: 0 18px 40px rgba(22, 163, 74, 0.08);
+      background: var(--accordion-usc-bg);
+      box-shadow: 0 18px 40px var(--accordion-usc-shadow);
     }
     .accordion summary {
       cursor: pointer;
@@ -142,25 +149,11 @@
       padding-top: 0.35rem;
       margin: 0;
     }
-    .transfer-entry {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-    .transfer-date {
-      font-weight: 600;
+    .transfer-line {
       font-size: calc(var(--font-scale) * 0.95rem);
-      color: #0f172a;
-    }
-    .transfer-name {
-      font-weight: 600;
-      font-size: calc(var(--font-scale) * 1rem);
-    }
-    .transfer-meta,
-    .transfer-details {
-      display: block;
-      font-size: calc(var(--font-scale) * 0.85rem);
-      color: #475569;
+      font-weight: 500;
+      color: inherit;
+      word-break: break-word;
     }
     .team-photo {
       margin: 0 0 1.1rem 0;
@@ -282,6 +275,12 @@
       }
     }
     @media (prefers-color-scheme: dark) {
+      :root {
+        --accordion-opponent-bg: #1c3f5f;
+        --accordion-opponent-shadow: rgba(56, 189, 248, 0.28);
+        --accordion-usc-bg: #1a4f3a;
+        --accordion-usc-shadow: rgba(74, 222, 128, 0.26);
+      }
       body {
         background: #0e1b1f;
         color: #e6f1f3;
@@ -291,14 +290,14 @@
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
       }
       .accordion {
-        background: #102437;
-        box-shadow: 0 18px 40px rgba(15, 118, 255, 0.2);
+        background: var(--accordion-opponent-bg);
+        box-shadow: 0 18px 40px var(--accordion-opponent-shadow);
       }
       .roster-group details:nth-of-type(2),
       .transfer-group details:nth-of-type(2),
       .news-group details:nth-of-type(2) {
-        background: #123026;
-        box-shadow: 0 18px 40px rgba(45, 212, 191, 0.18);
+        background: var(--accordion-usc-bg);
+        box-shadow: 0 18px 40px var(--accordion-usc-shadow);
       }
       .instagram-card {
         background: #132a30;
@@ -307,16 +306,14 @@
       .match-result {
         color: #5eead4;
       }
-      .transfer-date {
-        color: #bae6fd;
+      .transfer-line {
+        color: #dbeafe;
       }
-      .transfer-meta,
-      .transfer-details,
       .news-meta {
         color: #9ca3af;
       }
       .transfer-category {
-        color: #93c5fd;
+        color: #bfdbfe;
       }
       .roster-number {
         background: #155e75;
@@ -382,16 +379,16 @@
           <li class="roster-item roster-player"><span class="roster-number">#14</span><div class="roster-text"><span class="roster-name">Fiona Dittmann</span><div class="roster-meta">Größe: 181 cm • Geburtstag: 14.02.1998 • Nation: Deutschland • Position: Außenangriff</div></div></li>
           <li class="roster-item roster-player"><span class="roster-number">#15</span><div class="roster-text"><span class="roster-name">Alexa Sophie Thaden</span><div class="roster-meta">Größe: 186 cm • Geburtstag: 26.02.2000 • Nation: Deutschland • Position: Mittelblock</div></div></li>
           <li class="roster-item roster-player"><span class="roster-number">#17</span><div class="roster-text"><span class="roster-name">Louisa Krams</span><div class="roster-meta">Größe: 181 cm • Geburtstag: 10.09.1997 • Nation: Deutschland • Position: Mittelblock</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Markus Friedrich</span><div class="roster-meta">Größe: – • Geburtstag: 02.05.1990 • Nation: Deutschland • Funktion: Trainer</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Matthias Krause</span><div class="roster-meta">Größe: – • Geburtstag: 09.11.1971 • Nation: Deutschland • Funktion: Statistiker</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Ines Laube</span><div class="roster-meta">Größe: 175 cm • Geburtstag: 14.02.1990 • Nation: Deutschland • Funktion: Co-Trainer</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Sarah Stiriz</span><div class="roster-meta">Größe: 166 cm • Geburtstag: 11.11.2003 • Nation: Deutschland • Funktion: Co-Trainer (Scout)</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Arne Timmer</span><div class="roster-meta">Größe: – • Geburtstag: 01.01.2000 • Nation: Deutschland • Funktion: Physiotherapeut</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Feli Anne Clemann</span><div class="roster-meta">Größe: 163 cm • Geburtstag: 23.08.2006 • Nation: Deutschland • Funktion: Co-Trainer (Scout)</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Louisa Krams</span><div class="roster-meta">Größe: 181 cm • Geburtstag: 10.09.1997 • Nation: Deutschland • Funktion: Co-Trainer (Scout)</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Emily Witasiak</span><div class="roster-meta">Größe: – • Geburtstag: 11.09.1999 • Nation: Deutschland • Funktion: Physiotherapeut</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Jana-Marie Meiser</span><div class="roster-meta">Größe: 165 cm • Geburtstag: 27.07.1989 • Nation: Deutschland • Funktion: Co-Trainer (Scout)</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Matthias Krause</span><div class="roster-meta">Größe: – • Geburtstag: 09.11.1971 • Nation: Deutschland • Funktion: Co-Trainer</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Markus Friedrich</span><div class="roster-meta">Geburtstag: 02.05.1990 • Nation: Deutschland • Funktion: Trainer</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Ines Laube</span><div class="roster-meta">Geburtstag: 14.02.1990 • Nation: Deutschland • Funktion: Co-Trainer</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Matthias Krause</span><div class="roster-meta">Geburtstag: 09.11.1971 • Nation: Deutschland • Funktion: Co-Trainer</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Feli Anne Clemann</span><div class="roster-meta">Geburtstag: 23.08.2006 • Nation: Deutschland • Funktion: Co-Trainer (Scout)</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Jana-Marie Meiser</span><div class="roster-meta">Geburtstag: 27.07.1989 • Nation: Deutschland • Funktion: Co-Trainer (Scout)</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Louisa Krams</span><div class="roster-meta">Geburtstag: 10.09.1997 • Nation: Deutschland • Funktion: Co-Trainer (Scout)</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Sarah Stiriz</span><div class="roster-meta">Geburtstag: 11.11.2003 • Nation: Deutschland • Funktion: Co-Trainer (Scout)</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Matthias Krause</span><div class="roster-meta">Geburtstag: 09.11.1971 • Nation: Deutschland • Funktion: Statistiker</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Arne Timmer</span><div class="roster-meta">Geburtstag: 01.01.2000 • Nation: Deutschland • Funktion: Physiotherapeut</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Emily Witasiak</span><div class="roster-meta">Geburtstag: 11.09.1999 • Nation: Deutschland • Funktion: Physiotherapeut</div></div></li>
           </ul>
         </div>
       </details>
@@ -414,16 +411,16 @@
           <li class="roster-item roster-player"><span class="roster-number">#16</span><div class="roster-text"><span class="roster-name">Lena Schultze</span><div class="roster-meta">Größe: 185 cm • Geburtstag: 19.05.2008 • Nation: Deutschland • Position: Außenangriff</div></div></li>
           <li class="roster-item roster-player"><span class="roster-number">#17</span><div class="roster-text"><span class="roster-name">Isabel Rebecca Martin</span><div class="roster-meta">Größe: 183 cm • Geburtstag: 14.12.2000 • Nation: Deutschland • Position: Außenangriff</div></div></li>
           <li class="roster-item roster-player"><span class="roster-number">#18</span><div class="roster-text"><span class="roster-name">Diane Seybering</span><div class="roster-meta">Größe: 195 cm • Geburtstag: 28.01.2007 • Nation: Deutschland • Position: Mittelblock</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Rieke Herzog</span><div class="roster-meta">Größe: – • Geburtstag: 11.12.1979 • Nation: Deutschland • Funktion: Arzt</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Simon Brüggemann</span><div class="roster-meta">Größe: – • Geburtstag: 02.05.1990 • Nation: Deutschland • Funktion: Physiotherapeut</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Jack Payne</span><div class="roster-meta">Größe: – • Geburtstag: 17.03.1994 • Nation: Australien • Funktion: Co-Trainer</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Dr. Silvia Everding</span><div class="roster-meta">Größe: – • Geburtstag: 08.11.1983 • Nation: Deutschland • Funktion: Arzt</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Prof. Dr. med. Peter Willeke</span><div class="roster-meta">Größe: – • Geburtstag: 15.09.1970 • Nation: Deutschland • Funktion: Arzt</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Jack Payne</span><div class="roster-meta">Größe: – • Geburtstag: 17.03.1994 • Nation: Australien • Funktion: Co-Trainer (Scout)</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Wopke Jurjen Nawijn</span><div class="roster-meta">Größe: – • Geburtstag: 13.01.1999 • Nation: Niederlande • Funktion: Co-Trainer (Scout)</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Matthias Pack</span><div class="roster-meta">Größe: – • Geburtstag: 29.11.1985 • Nation: Österreich • Funktion: Trainer</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Constantin Lingenfelser</span><div class="roster-meta">Größe: – • Geburtstag: 17.09.1992 • Nation: Deutschland • Funktion: Physiotherapeut</div></div></li>
-          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Dr. Christian Fechtrup</span><div class="roster-meta">Größe: 0 cm • Geburtstag: 13.03.1961 • Nation: Deutschland • Funktion: Arzt</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Matthias Pack</span><div class="roster-meta">Geburtstag: 29.11.1985 • Nation: Österreich • Funktion: Trainer</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Jack Payne</span><div class="roster-meta">Geburtstag: 17.03.1994 • Nation: Australien • Funktion: Co-Trainer</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Jack Payne</span><div class="roster-meta">Geburtstag: 17.03.1994 • Nation: Australien • Funktion: Co-Trainer (Scout)</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Wopke Jurjen Nawijn</span><div class="roster-meta">Geburtstag: 13.01.1999 • Nation: Niederlande • Funktion: Co-Trainer (Scout)</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Constantin Lingenfelser</span><div class="roster-meta">Geburtstag: 17.09.1992 • Nation: Deutschland • Funktion: Physiotherapeut</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Simon Brüggemann</span><div class="roster-meta">Geburtstag: 02.05.1990 • Nation: Deutschland • Funktion: Physiotherapeut</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Dr. Christian Fechtrup</span><div class="roster-meta">Geburtstag: 13.03.1961 • Nation: Deutschland • Funktion: Arzt</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Dr. Silvia Everding</span><div class="roster-meta">Geburtstag: 08.11.1983 • Nation: Deutschland • Funktion: Arzt</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Prof. Dr. med. Peter Willeke</span><div class="roster-meta">Geburtstag: 15.09.1970 • Nation: Deutschland • Funktion: Arzt</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Rieke Herzog</span><div class="roster-meta">Geburtstag: 11.12.1979 • Nation: Deutschland • Funktion: Arzt</div></div></li>
           </ul>
         </div>
       </details>
@@ -434,27 +431,27 @@
         <div class="accordion-content">
           <ul class="transfer-list">
             <li class="transfer-category">Trainer</li>
-          <li><div class="transfer-entry"><span class="transfer-date">28.06.2025</span><span class="transfer-name"><a href="https://www.etv-hamburg.de/de/sportangebot/sportangebote-und-abteilungen/volleyball/news/">Markus Friedrich</a></span><span class="transfer-meta">T – GER</span><span class="transfer-details">Vertrag bis 2028 | TuB Bocholt</span></div></li>
+          <li class="transfer-line">Markus Friedrich | T | GER | Vertrag bis 2028 | TuB Bocholt</li>
           <li class="transfer-category">Zugänge</li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Hannah Ammerman</a></span><span class="transfer-meta">AA – USA</span><span class="transfer-details">Vertrag bis 2026 | vereinslos</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Sarah Stiriz</a></span><span class="transfer-meta">L – GER</span><span class="transfer-details">Vertrag bis 2026 | VfL Oythe</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Fiona Dittmann</a></span><span class="transfer-meta">D – GER</span><span class="transfer-details">Vertrag bis 2026 | TG Bad Soden</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Lina Köster</a></span><span class="transfer-meta">AA – GER</span><span class="transfer-details">Vertrag bis 2026 | Team 48 Hildesheim</span></div></li>
+          <li class="transfer-line">Hannah Ammerman | AA | USA | Vertrag bis 2026 | vereinslos</li>
+          <li class="transfer-line">Sarah Stiriz | L | GER | Vertrag bis 2026 | VfL Oythe</li>
+          <li class="transfer-line">Fiona Dittmann | D | GER | Vertrag bis 2026 | TG Bad Soden</li>
+          <li class="transfer-line">Lina Köster | AA | GER | Vertrag bis 2026 | Team 48 Hildesheim</li>
           <li class="transfer-category">weiterhin im Kader</li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Feli Clemann</a></span><span class="transfer-meta">L – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Jana-Marie Meiser</a></span><span class="transfer-meta">L – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Zoe Konjer</a></span><span class="transfer-meta">Z – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Constanze Von Meyenn</a></span><span class="transfer-meta">D – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Leonie Körtzinger</a></span><span class="transfer-meta">AA – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Svea Frobel</a></span><span class="transfer-meta">AA – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Louisa Krams</a></span><span class="transfer-meta">AA – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Anna Hartig</a></span><span class="transfer-meta">MB – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Lena Liegert</a></span><span class="transfer-meta">MB – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.09.2025</span><span class="transfer-name"><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml?c.teamId=776308974&amp;c.view=teamMain#samsCmsComponent_226143">Alexa Sophie Thaden</a></span><span class="transfer-meta">MB – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
+          <li class="transfer-line">Feli Clemann | L | GER | Vertrag bis 2026</li>
+          <li class="transfer-line">Jana-Marie Meiser | L | GER | Vertrag bis 2026</li>
+          <li class="transfer-line">Zoe Konjer | Z | GER | Vertrag bis 2026</li>
+          <li class="transfer-line">Constanze Von Meyenn | D | GER | Vertrag bis 2026</li>
+          <li class="transfer-line">Leonie Körtzinger | AA | GER | Vertrag bis 2026</li>
+          <li class="transfer-line">Svea Frobel | AA | GER | Vertrag bis 2026</li>
+          <li class="transfer-line">Louisa Krams | AA | GER | Vertrag bis 2026</li>
+          <li class="transfer-line">Anna Hartig | MB | GER | Vertrag bis 2026</li>
+          <li class="transfer-line">Lena Liegert | MB | GER | Vertrag bis 2026</li>
+          <li class="transfer-line">Alexa Sophie Thaden | MB | GER | Vertrag bis 2026</li>
           <li class="transfer-category">Abgänge</li>
-          <li><div class="transfer-entry"><span class="transfer-date">15.05.2025</span><span class="transfer-name"><a href="https://www.instagram.com/p/DJrF-4PKQW5/?img_index=1">Gina Köppen</a></span><span class="transfer-meta">AA – GER</span><span class="transfer-details">Karriereende</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">16.05.2025</span><span class="transfer-name"><a href="https://www.instagram.com/p/DJt6OFOqk03/?img_index=1">Laura Eickhof</a></span><span class="transfer-meta">U – GER</span><span class="transfer-details">Karriereende</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">17.05.2025</span><span class="transfer-name"><a href="https://www.instagram.com/p/DJwOsZYK9Yu/?img_index=1">Maja Pahlke</a></span><span class="transfer-meta">D – GER</span><span class="transfer-details">BBSC Berlin</span></div></li>
+          <li class="transfer-line">Gina Köppen | AA | GER | Karriereende</li>
+          <li class="transfer-line">Laura Eickhof | U | GER | Karriereende</li>
+          <li class="transfer-line">Maja Pahlke | D | GER | BBSC Berlin</li>
           </ul>
         </div>
       </details>
@@ -463,29 +460,29 @@
         <div class="accordion-content">
           <ul class="transfer-list">
             <li class="transfer-category">Trainer</li>
-          <li><div class="transfer-entry"><span class="transfer-date">11.03.2025</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/head-coach-matthias-pack-verlaengert-beim-usc-muenster/">Matthias Pack</a></span><span class="transfer-meta">T – AUT</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">11.04.2025</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/neuer-co-trainer-beim-usc-muenster-jack-payne-uebernimmt-nach-kiyarash-maleki/">Jack Payne</a></span><span class="transfer-meta">CT – AUS</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
+          <li class="transfer-line">Matthias Pack | T | AUT | Vertrag bis 2026</li>
+          <li class="transfer-line">Jack Payne | CT | AUS | Vertrag bis 2026</li>
           <li class="transfer-category">Zugänge</li>
-          <li><div class="transfer-entry"><span class="transfer-date">09.05.2025</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/zuspiel-mit-heimatgefuehl-yina-liu-wechselt-zum-usc-muenster/">Yina Liu</a></span><span class="transfer-meta">Z – GER</span><span class="transfer-details">Vertrag bis 2026 | VfB Suhl LOTTO Thüringen</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">14.05.2025</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/usc-muenster-verpflichtet-us-amerikanerin-brianna-ford-fuer-die-diagonalposition/">Brianna Ford</a></span><span class="transfer-meta">D – USA</span><span class="transfer-details">Vertrag bis 2026 | University of Texas at Arlington</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">21.05.2025</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/usc-muenster-verpflichtet-belgische-mittelblockerin-anke-waelkens/">Anke Waelkens</a></span><span class="transfer-meta">MB – BEL</span><span class="transfer-details">Vertrag bis 2026 | E.S. Charleroi Volley</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">27.05.2025</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/cecilia-malm-verstaerkt-den-usc-muenster-auf-der-aussenposition/">Cecilia Malm</a></span><span class="transfer-meta">AA – SWE</span><span class="transfer-details">Vertrag bis 2026 | E.S. Charleroi Volley</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">12.06.2025</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/diane-seybering-wird-festes-mitglied-des-usc-kaders/">Diane Seybering</a></span><span class="transfer-meta">MB – GER</span><span class="transfer-details">Vertragsdauer unbekannt | USC Münster II</span></div></li>
+          <li class="transfer-line">Yina Liu | Z | GER | Vertrag bis 2026 | VfB Suhl LOTTO Thüringen</li>
+          <li class="transfer-line">Brianna Ford | D | USA | Vertrag bis 2026 | University of Texas at Arlington</li>
+          <li class="transfer-line">Anke Waelkens | MB | BEL | Vertrag bis 2026 | E.S. Charleroi Volley</li>
+          <li class="transfer-line">Cecilia Malm | AA | SWE | Vertrag bis 2026 | E.S. Charleroi Volley</li>
+          <li class="transfer-line">Diane Seybering | MB | GER | Vertragsdauer unbekannt | USC Münster II</li>
           <li class="transfer-category">weiterhin im Kader</li>
-          <li><div class="transfer-entry"><span class="transfer-date">29.05.2024</span><span class="transfer-name"><a href="https://www.usc-muenster.de/usc/zwei-perspektivspielerinnen-fuer-den-usc-muenster/">Amelie Strothoff</a></span><span class="transfer-meta">D – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">29.05.2024</span><span class="transfer-name"><a href="https://www.usc-muenster.de/usc/zwei-perspektivspielerinnen-fuer-den-usc-muenster/">Lara Schaefer</a></span><span class="transfer-meta">L – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">08.04.2024</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/emilia-jordan-verlaengert-vertrag-beim-usc-muenster/">Emilia Jordan</a></span><span class="transfer-meta">Z – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">10.04.2024</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/elena-koemmling-bleibt-beim-usc-muenster-aussenangreiferin-geht-in-ihre-fuenfte-saison/">Elena Kömmling</a></span><span class="transfer-meta">AA – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">15.04.2024</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/pippa-molenaar-setzt-ihre-reise-in-muenster-fort/">Pippa Molenaar</a></span><span class="transfer-meta">L – NED</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">22.04.2024</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/esther-spoeler-verlaengert-beim-usc-muenster-mit-herz-leidenschaft-und-teamspirit-in-die-neue-saison/">Esther Spöler</a></span><span class="transfer-meta">MB – GER</span><span class="transfer-details">Vertrag bis 2026</span></div></li>
+          <li class="transfer-line">Amelie Strothoff | D | GER | Vertrag bis 2026</li>
+          <li class="transfer-line">Lara Schaefer | L | GER | Vertrag bis 2026</li>
+          <li class="transfer-line">Emilia Jordan | Z | GER | Vertrag bis 2026</li>
+          <li class="transfer-line">Elena Kömmling | AA | GER | Vertrag bis 2026</li>
+          <li class="transfer-line">Pippa Molenaar | L | NED | Vertrag bis 2026</li>
+          <li class="transfer-line">Esther Spöler | MB | GER | Vertrag bis 2026</li>
           <li class="transfer-category">Abgänge</li>
-          <li><div class="transfer-entry"><span class="transfer-date">30.03.2025</span><span class="transfer-name"><a href="https://www.instagram.com/p/DJrGcG8IrhQ/?igsh=MTNmbzZodG1maHM4bg%3D%3D">Mia Kirchhoff</a></span><span class="transfer-meta">AA – GER</span><span class="transfer-details">SSC Palmberg Schwerin</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">30.03.2025</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/danke-luisa-drei-jahre-die-eine-aera-gepraegt-haben/">Luisa van Clewe</a></span><span class="transfer-meta">MB – GER</span><span class="transfer-details">SSC Palmberg Schwerin</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">30.03.2025</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/tak-mikala-drei-jahre-usc-eine-besondere-zeit-geht-zu-ende/">Mikala Mogensen</a></span><span class="transfer-meta">AA – DEN</span><span class="transfer-details">Allianz MTV Stuttgart</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">30.03.2025</span><span class="transfer-name"><a href="https://www.instagram.com/p/DJrtVQbsnGl/?igsh=dmhnYmliaDEyeGxw">Pia Fernau</a></span><span class="transfer-meta">Z – GER</span><span class="transfer-details">Rote Raben Vilsbiburg</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">30.03.2025</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/marije-ten-brinke-ein-jahr-voller-wachstum-herausforderungen-und-unvergesslicher-momente/">Marije ten Brinke</a></span><span class="transfer-meta">MB – NED</span><span class="transfer-details">SSC Palmberg Schwerin</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">30.03.2025</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/kiyarash-maleki-ein-trainer-analytiker-und-mentor-verlaesst-muenster/">Kiyarash Maleki</a></span><span class="transfer-meta">CT – IRN</span><span class="transfer-details">Allianz MTV Stuttgart</span></div></li>
-          <li><div class="transfer-entry"><span class="transfer-date">01.05.2025</span><span class="transfer-name"><a href="https://www.usc-muenster.de/erste-liga/usc-muenster-sagt-danke-rosa-entius-verlaesst-den-verein/">Rosa Entius</a></span><span class="transfer-meta">D – NED</span><span class="transfer-details">Dresdner SC</span></div></li>
+          <li class="transfer-line">Mia Kirchhoff | AA | GER | SSC Palmberg Schwerin</li>
+          <li class="transfer-line">Luisa van Clewe | MB | GER | SSC Palmberg Schwerin</li>
+          <li class="transfer-line">Mikala Mogensen | AA | DEN | Allianz MTV Stuttgart</li>
+          <li class="transfer-line">Pia Fernau | Z | GER | Rote Raben Vilsbiburg</li>
+          <li class="transfer-line">Marije ten Brinke | MB | NED | SSC Palmberg Schwerin</li>
+          <li class="transfer-line">Kiyarash Maleki | CT | IRN | Allianz MTV Stuttgart</li>
+          <li class="transfer-line">Rosa Entius | D | NED | Dresdner SC</li>
           </ul>
         </div>
       </details>
@@ -527,12 +524,14 @@
           <h3>ETV Hamburger Volksbank Volleys</h3>
           <ul class="instagram-list">
             <li><a href="https://www.instagram.com/etv.hamburgervolksbank.volleys">@etv.hamburgervolksbank.volleys</a></li>
+          <li><a href="https://www.instagram.com/etv.hamburgervolksbank.volleys/reel/DNP_1J1selF">Reel DNP_1J1selF</a></li>
           </ul>
         </article>
         <article class="instagram-card">
           <h3>USC Münster</h3>
           <ul class="instagram-list">
             <li><a href="https://www.instagram.com/uscmuenster">@uscmuenster</a></li>
+          <li><a href="https://www.instagram.com/uscmuenster/reels">Reels-Übersicht</a></li>
           </ul>
         </article>
       </div>

@@ -78,10 +78,6 @@ def build_parser() -> argparse.ArgumentParser:
         help="Number of previous matches to include per team (default: 2).",
     )
     parser.add_argument(
-        "--public-url",
-        help="Optional öffentliche URL, unter der der Bericht erreichbar sein wird.",
-    )
-    parser.add_argument(
         "--news-lookback",
         type=int,
         default=NEWS_LOOKBACK_DAYS,
@@ -179,7 +175,6 @@ def main() -> int:
         opponent_transfers=opponent_transfers,
         usc_photo=usc_photo,
         opponent_photo=opponent_photo,
-        public_url=args.public_url,
     )
 
     html = build_html_report(**report_kwargs)
