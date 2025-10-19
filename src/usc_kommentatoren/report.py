@@ -290,8 +290,10 @@ def format_match_line(match: Match) -> str:
     gap = "&nbsp;" * 5
     return (
         "<li>"
+        "<div class=\"match-line\">"
         f"<span class=\"match-header\"><strong>{escape(kickoff_label)}</strong> – {escape(teams)}</span>"
-        f"{gap}<span class=\"match-result\">Ergebnis: {escape(result)}</span>"
+        f"<span class=\"match-result\"><span class=\"match-gap\" aria-hidden=\"true\">{gap}</span>Ergebnis: {escape(result)}</span>"
+        "</div>"
         "</li>"
     )
 
@@ -325,7 +327,7 @@ def build_html_report(
     if public_url:
         safe_url = escape(public_url)
         public_url_block = (
-            "  <p><strong>Öffentliche Adresse:</strong> "
+            "      <p><strong>Öffentliche Adresse:</strong> "
             f"<a href=\"{safe_url}\">{safe_url}</a></p>\n"
         )
 
@@ -333,38 +335,147 @@ def build_html_report(
 <html lang=\"de\">
 <head>
   <meta charset=\"utf-8\">
+  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
   <title>Nächster USC-Heimgegner</title>
   <style>
-    body {{ font-family: Arial, sans-serif; margin: 2rem; line-height: 1.5; }}
-    h1 {{ color: #004c54; }}
-    section {{ margin-top: 2rem; }}
-    ul {{ list-style: none; padding: 0; }}
-    li {{ margin-bottom: 0.75rem; }}
-    .match-header {{ display: inline; }}
-    .match-result {{ white-space: nowrap; }}
+    :root {{ color-scheme: light dark; }}
+    body {{
+      margin: 0;
+      font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      background: #f5f7f9;
+      color: #1f2933;
+    }}
+    main {{
+      max-width: 60rem;
+      margin: 0 auto;
+      padding: clamp(1.25rem, 4vw, 3rem);
+    }}
+    h1 {{
+      color: #004c54;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      margin-bottom: 1.25rem;
+    }}
+    h2 {{
+      font-size: clamp(1.3rem, 4vw, 1.75rem);
+      margin-bottom: 1rem;
+    }}
+    section {{
+      margin-top: clamp(1.75rem, 4vw, 2.75rem);
+    }}
+    .meta {{
+      display: grid;
+      gap: 0.35rem;
+      margin: 0 0 1.5rem 0;
+      padding: 0;
+    }}
+    .meta p {{
+      margin: 0;
+    }}
+    ul {{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 1rem;
+    }}
+    li {{
+      background: #ffffff;
+      border-radius: 0.85rem;
+      padding: 1rem clamp(1rem, 3vw, 1.5rem);
+      box-shadow: 0 10px 30px rgba(0, 76, 84, 0.08);
+    }}
+    .match-line {{
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }}
+    .match-header {{
+      font-weight: 600;
+      color: inherit;
+    }}
+    .match-result {{
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: 0.95rem;
+      color: #0f766e;
+    }}
+    .match-gap {{
+      display: inline;
+    }}
+    a {{
+      color: #0f766e;
+    }}
+    a:hover,
+    a:focus {{
+      text-decoration: underline;
+    }}
+    @media (min-width: 40rem) {{
+      .match-line {{
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: baseline;
+      }}
+      .match-result {{
+        font-size: 1rem;
+      }}
+    }}
+    @media (max-width: 40rem) {{
+      li {{
+        padding: 0.85rem 1rem;
+      }}
+      .match-gap {{
+        display: none;
+      }}
+      .match-result {{
+        font-size: 0.95rem;
+      }}
+    }}
+    @media (prefers-color-scheme: dark) {{
+      body {{
+        background: #0e1b1f;
+        color: #e6f1f3;
+      }}
+      li {{
+        background: #132a30;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      }}
+      .match-result {{
+        color: #5eead4;
+      }}
+      a {{
+        color: #5eead4;
+      }}
+      h1 {{
+        color: #5eead4;
+      }}
+    }}
   </style>
 </head>
 <body>
-  <h1>Nächster USC-Heimgegner: {escape(heading)}</h1>
-  <p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>
-  <p><strong>Austragungsort:</strong> {escape(location)}</p>
-  <p><strong>Tabelle:</strong> <a href=\"{TABLE_URL}\">{TABLE_URL}</a></p>
-{public_url_block}
-  <section>
-    <h2>Letzte Spiele: {escape(USC_CANONICAL_NAME)}</h2>
-    <ul>
-      {usc_items}
-    </ul>
-  </section>
-  <section>
-    <h2>Letzte Spiele: {escape(heading)}</h2>
-    <ul>
-      {opponent_items}
-    </ul>
-  </section>
+  <main>
+    <h1>Nächster USC-Heimgegner: {escape(heading)}</h1>
+    <div class=\"meta\">
+      <p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>
+      <p><strong>Austragungsort:</strong> {escape(location)}</p>
+      <p><strong>Tabelle:</strong> <a href=\"{TABLE_URL}\">{TABLE_URL}</a></p>
+{public_url_block}    </div>
+    <section>
+      <h2>Letzte Spiele von {escape(USC_CANONICAL_NAME)}</h2>
+      <ul>
+        {usc_items}
+      </ul>
+    </section>
+    <section>
+      <h2>Letzte Spiele von {escape(heading)}</h2>
+      <ul>
+        {opponent_items}
+      </ul>
+    </section>
+  </main>
 </body>
 </html>
 """
+
     return html
 
 
