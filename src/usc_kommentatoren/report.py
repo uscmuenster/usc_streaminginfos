@@ -204,6 +204,7 @@ def build_html_report(
     next_home: Match,
     usc_recent: List[Match],
     opponent_recent: List[Match],
+    public_url: Optional[str] = None,
 ) -> str:
     heading = pretty_name(next_home.away_team)
     kickoff = next_home.kickoff.strftime("%d.%m.%Y %H:%M")
@@ -223,6 +224,14 @@ def build_html_report(
     else:
         opponent_items = "<li>Keine Daten verfügbar.</li>"
 
+    public_url_block = ""
+    if public_url:
+        safe_url = escape(public_url)
+        public_url_block = (
+            "  <p><strong>Öffentliche Adresse:</strong> "
+            f"<a href=\"{safe_url}\">{safe_url}</a></p>"
+        )
+
     html = f"""<!DOCTYPE html>
 <html lang=\"de\">
 <head>
@@ -238,6 +247,7 @@ def build_html_report(
   <h1>Nächster USC-Heimgegner: {escape(heading)}</h1>
   <p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>
   <p><strong>Austragungsort:</strong> {escape(location)}</p>
+{public_url_block}
   <section>
     <h2>Letzte Spiele von {escape(USC_CANONICAL_NAME)}</h2>
     <ul>

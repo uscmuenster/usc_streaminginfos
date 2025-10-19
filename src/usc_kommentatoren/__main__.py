@@ -39,6 +39,10 @@ def build_parser() -> argparse.ArgumentParser:
         default=2,
         help="Number of previous matches to include per team (default: 2).",
     )
+    parser.add_argument(
+        "--public-url",
+        help="Optional öffentliche URL, unter der der Bericht erreichbar sein wird.",
+    )
     return parser
 
 
@@ -58,7 +62,12 @@ def main() -> int:
     usc_recent = find_last_matches_for_team(matches, USC_CANONICAL_NAME, limit=args.recent_limit)
     opponent_recent = find_last_matches_for_team(matches, next_home.away_team, limit=args.recent_limit)
 
-    html = build_html_report(next_home=next_home, usc_recent=usc_recent, opponent_recent=opponent_recent)
+    html = build_html_report(
+        next_home=next_home,
+        usc_recent=usc_recent,
+        opponent_recent=opponent_recent,
+        public_url=args.public_url,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(html, encoding="utf-8")
     return 0
