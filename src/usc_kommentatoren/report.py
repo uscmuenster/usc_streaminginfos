@@ -287,10 +287,11 @@ def format_match_line(match: Match) -> str:
     away = pretty_name(match.away_team)
     result = match.result.summary if match.result else "-"
     teams = f"{home} vs. {away}"
+    gap = "&nbsp;" * 5
     return (
         "<li>"
         f"<span class=\"match-header\"><strong>{escape(kickoff_label)}</strong> – {escape(teams)}</span>"
-        f"<span class=\"match-result\">Ergebnis: {escape(result)}</span>"
+        f"{gap}<span class=\"match-result\">Ergebnis: {escape(result)}</span>"
         "</li>"
     )
 
@@ -338,8 +339,8 @@ def build_html_report(
     h1 {{ color: #004c54; }}
     section {{ margin-top: 2rem; }}
     ul {{ list-style: none; padding: 0; }}
-    li {{ display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.75rem; }}
-    .match-header {{ flex: 1 1 auto; min-width: 16rem; }}
+    li {{ margin-bottom: 0.75rem; }}
+    .match-header {{ display: inline; }}
     .match-result {{ white-space: nowrap; }}
   </style>
 </head>
