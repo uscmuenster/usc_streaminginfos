@@ -1,0 +1,45 @@
+name: HTML Report
+
+on:
+  push:
+    branches: [ work, main ]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 1 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check sources compile
+        run: python -m compileall src
+
+      - name: Generate USC HTML report
+        env:
+          PYTHONPATH: src
+        run: |
+          python -m usc_kommentatoren --output report.html
+
+      - name: Upload HTML artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: usc-report
+          path: report.html
+          if-no-files-found: error
