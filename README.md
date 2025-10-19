@@ -1,4 +1,4 @@
-# usc_kommentatoren
+# USC Streaminginfos
 
 Dieses Repository erzeugt täglich eine schlanke HTML-Seite zum Frauen-Bundesligateam des USC Münster. Die Seite zeigt den
 nächsten Heimgegner des USC als Überschrift, listet die letzten vier Ergebnisse sowohl des USC als auch des kommenden Gegners
