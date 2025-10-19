@@ -881,13 +881,40 @@ def build_html_report(
       color: #0f766e;
     }}
     .news-group {{
-      margin-top: 1.5rem;
+      margin-top: 1.75rem;
       display: grid;
-      gap: 0.6rem;
+      gap: 1rem;
     }}
-    .news-group h3 {{
+    .accordion {{
+      border-radius: 0.85rem;
+      overflow: hidden;
+      background: #e0f2f1;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+      border: none;
+    }}
+    .accordion summary {{
+      cursor: pointer;
+      padding: 1rem 1.35rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
       font-size: clamp(1.05rem, 3vw, 1.25rem);
-      margin: 0;
+    }}
+    .accordion summary::-webkit-details-marker {{
+      display: none;
+    }}
+    .accordion summary::after {{
+      content: "▾";
+      font-size: 1rem;
+      transition: transform 0.2s ease;
+    }}
+    .accordion[open] summary::after {{
+      transform: rotate(180deg);
+    }}
+    .accordion-content {{
+      padding: 0 1.35rem 1.35rem;
     }}
     .news-list {{
       list-style: none;
@@ -934,6 +961,10 @@ def build_html_report(
         background: #132a30;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
       }}
+      .accordion {{
+        background: #0f2529;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }}
       .match-result {{
         color: #5eead4;
       }}
@@ -958,28 +989,34 @@ def build_html_report(
       <p><a class=\"meta-link\" href=\"{TABLE_URL}\">Tabelle der Volleyball Bundesliga</a></p>
 {usc_link_block}{opponent_link_block}{public_url_block}    </div>
     <section>
-      <h2>Letzte Spiele von {escape(USC_CANONICAL_NAME)}</h2>
-      <ul class=\"match-list\">
-        {usc_items}
-      </ul>
-      <div class=\"news-group\">
-        <h3>Aktuelle News</h3>
-        <ul class=\"news-list\">
-          {usc_news_items}
-        </ul>
-      </div>
-    </section>
-    <section>
       <h2>Letzte Spiele von {escape(heading)}</h2>
       <ul class=\"match-list\">
         {opponent_items}
       </ul>
-      <div class=\"news-group\">
-        <h3>Aktuelle News</h3>
-        <ul class=\"news-list\">
-          {opponent_news_items}
-        </ul>
-      </div>
+    </section>
+    <section>
+      <h2>Letzte Spiele von {escape(USC_CANONICAL_NAME)}</h2>
+      <ul class=\"match-list\">
+        {usc_items}
+      </ul>
+    </section>
+    <section class=\"news-group\">
+      <details class=\"accordion\">
+        <summary>News von {escape(heading)}</summary>
+        <div class=\"accordion-content\">
+          <ul class=\"news-list\">
+            {opponent_news_items}
+          </ul>
+        </div>
+      </details>
+      <details class=\"accordion\">
+        <summary>News von {escape(USC_CANONICAL_NAME)}</summary>
+        <div class=\"accordion-content\">
+          <ul class=\"news-list\">
+            {usc_news_items}
+          </ul>
+        </div>
+      </details>
     </section>
   </main>
 </body>

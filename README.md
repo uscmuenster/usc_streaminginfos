@@ -50,7 +50,7 @@ Die HTML-Datei enthält:
 * Die beiden letzten Ergebnisse des anstehenden Gegners inklusive Gesamt- und Satzergebnissen
 * Einen direkten Link auf die offizielle Bundesligatabelle
 * Verlinkungen auf die Vereins-Homepages des USC Münster und des kommenden Gegners mit sprechenden Linktexten (z. B. "Homepage USC Münster")
-* Einen News-Block unter jedem Ergebnisabschnitt mit aktuellen Artikeln der letzten zwei Wochen von den Vereinsseiten sowie den VBL-News- und Pressespiegel-Seiten – gefiltert auf Beiträge zu den beiden Teams
+* Einen News-Block je Team unterhalb der Ergebnislisten – als aufklappbare Accordion-Sektion mit Artikeln der letzten zwei Wochen von den Vereinsseiten sowie den VBL-News- und Pressespiegel-Seiten, gefiltert auf Beiträge zu den beiden Teams
 * Ein responsives Layout, das sich auf Smartphones und großen Displays gut lesen lässt
 
 ## Automatisierung mit GitHub Actions
