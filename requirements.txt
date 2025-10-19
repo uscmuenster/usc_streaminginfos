@@ -1,5 +1,1 @@
-beautifulsoup4>=4.12
-feedparser>=6.0
-python-dateutil>=2.9
-PyYAML>=6.0
 requests>=2.32

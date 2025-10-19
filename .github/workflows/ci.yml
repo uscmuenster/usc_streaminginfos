@@ -1,4 +1,4 @@
-name: CI
+name: HTML Report
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   pull_request:
   workflow_dispatch:
   schedule:
-    - cron: '0 5 * * *'
+    - cron: '0 1 * * *'
 
 permissions:
   contents: read
@@ -30,25 +30,11 @@ jobs:
       - name: Check sources compile
         run: python -m compileall src
 
-      - name: Run CLI smoke test
+      - name: Generate USC HTML report
         env:
           PYTHONPATH: src
         run: |
-          cat <<'CONFIG' > config.ci.yml
-          api:
-            api_key: ""
-            league_uuid: ""
-            team_uuid: ""
-            season_uuid: ""
-          news_sources: []
-          CONFIG
-          python -m usc_kommentatoren.cli --config config.ci.yml --format json --limit 1 --next-games 1
-
-      - name: Generate HTML report
-        env:
-          PYTHONPATH: src
-        run: |
-          python -m usc_kommentatoren.cli --config config.ci.yml --format html --limit 5 --next-games 5 --output report.html
+          python -m usc_kommentatoren --output report.html
 
       - name: Upload HTML artifact
         if: always()
@@ -56,4 +42,4 @@ jobs:
         with:
           name: usc-report
           path: report.html
-          if-no-files-found: warn
+          if-no-files-found: error
