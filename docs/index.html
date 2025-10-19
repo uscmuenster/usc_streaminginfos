@@ -39,14 +39,14 @@
     .meta p {
       margin: 0;
     }
-    ul {
+    .match-list {
       list-style: none;
       padding: 0;
       margin: 0;
       display: grid;
       gap: 1rem;
     }
-    li {
+    .match-list li {
       background: #ffffff;
       border-radius: 0.85rem;
       padding: 1rem clamp(1rem, 3vw, 1.5rem);
@@ -66,6 +66,33 @@
       font-size: 0.95rem;
       color: #0f766e;
     }
+    .news-group {
+      margin-top: 1.5rem;
+      display: grid;
+      gap: 0.6rem;
+    }
+    .news-group h3 {
+      font-size: clamp(1.05rem, 3vw, 1.25rem);
+      margin: 0;
+    }
+    .news-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .news-list li {
+      margin: 0;
+      padding: 0;
+    }
+    .news-meta {
+      display: block;
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 0.2rem;
+    }
     .meta-link {
       font-weight: 600;
     }
@@ -77,7 +104,7 @@
       text-decoration: underline;
     }
     @media (max-width: 40rem) {
-      li {
+      .match-list li {
         padding: 0.85rem 1rem;
       }
       .match-result {
@@ -89,7 +116,7 @@
         background: #0e1b1f;
         color: #e6f1f3;
       }
-      li {
+      .match-list li {
         background: #132a30;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
       }
@@ -102,12 +129,15 @@
       h1 {
         color: #5eead4;
       }
+      .news-meta {
+        color: #94a3b8;
+      }
     }
   </style>
 </head>
 <body>
   <main>
-    <h1>Nächster USC-Heimgegner: ETV Hamburger Volksbank Volleys</h1>
+    <h1>Nächster USC-Heimgegner:<br>ETV Hamburger Volksbank Volleys</h1>
     <div class="meta">
       <p><strong>Spieltermin:</strong> 26.10.2025 16:00 Uhr</p>
       <p><strong>Austragungsort:</strong> Sporthalle Berg Fidel (48153 Münster)</p>
@@ -117,17 +147,49 @@
     </div>
     <section>
       <h2>Letzte Spiele von USC Münster</h2>
-      <ul>
+      <ul class="match-list">
         <li><div class="match-line"><div class="match-header"><strong>15.10.2025 (Mi)</strong> – Binder Blaubären TSV Flacht vs. USC Münster</div><div class="match-result">Ergebnis: 0:3 / 49:75 (14:25 15:25 20:25)</div></div></li>
       <li><div class="match-line"><div class="match-header"><strong>12.10.2025 (So)</strong> – USC Münster vs. SSC Palmberg Schwerin</div><div class="match-result">Ergebnis: 3:2 / 106:106 (20:25 25:22 21:25 25:21 15:13)</div></div></li>
       </ul>
+      <div class="news-group">
+        <h3>Aktuelle News</h3>
+        <ul class="news-list">
+          <li><a href="https://www.usc-muenster.de/erste-liga/usc-muenster-feiert-ersten-auswaertssieg/">USC Münster feiert ersten Auswärtssieg</a><span class="news-meta">Homepage USC Münster – 15.10.2025 21:30</span></li>
+      <li><a href="https://www.usc-muenster.de/erste-liga/usc-muenster-reist-zum-aufsteiger-nach-flacht/">USC Münster reist zum Aufsteiger nach Flacht</a><span class="news-meta">Homepage USC Münster – 14.10.2025 15:37</span></li>
+      <li><a href="https://www.usc-muenster.de/usc/heimsieg-gegen-den-deutschen-meister-und-ein-extra-fuer-alle-fans/">Heimsieg gegen den Deutschen Meister – und ein Extra für alle Fans!</a><span class="news-meta">Homepage USC Münster – 13.10.2025 15:24</span></li>
+      <li><a href="https://www.usc-muenster.de/erste-liga/spektakel-am-berg-fidel/">Spektakel am Berg Fidel</a><span class="news-meta">Homepage USC Münster – 12.10.2025 19:38</span></li>
+      <li><a href="https://www.usc-muenster.de/erste-liga/auftaktkracher-gegen-den-meister-aus-schwerin/">Auftaktkracher gegen den Meister aus Schwerin</a><span class="news-meta">Homepage USC Münster – 10.10.2025 17:59</span></li>
+      <li><a href="https://www.usc-muenster.de/erste-liga/saisonstart-am-berg-fidel/">Saisonstart am Berg Fidel</a><span class="news-meta">Homepage USC Münster – 08.10.2025 14:57</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778781369&amp;component_56784875.page=0#a_56784875_778781369">Heimauftakt nach Maß</a><span class="news-meta">Volleyball Bundesliga – 19.10.2025 10:13</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778727554&amp;component_56784875.page=0#a_56784875_778727554">USC Münster feiert ersten Auswärtssieg</a><span class="news-meta">Volleyball Bundesliga – 15.10.2025 21:35</span></li>
+      <li><a href="https://www.swr.de/sport/mehr-sport/volleyball-tsv-flacht-erstes-heimspiel-100.html">Trotz Heim-Niederlage: TSV Flacht erlebt historischen Abend gegen Münster</a><span class="news-meta">SWR Hörfunk via VBL Pressespiegel – 16.10.2025 12:20</span></li>
+      <li><a href="https://www.ostsee-zeitung.de/sport/regional/ssc-plamberg-schwerin-verliert-auftakt-in-volleyball-bundesliga-auftakt-gegen-usc-muenster-VOKFY5DSLFG33NWVISQPWP7WDU.html">Drama im Tiebreak: Schweriner Volleyballerinnen patzen beim Bundesliga-Auftakt in Münster</a><span class="news-meta">Ostsee-Zeitung (OZ) via VBL Pressespiegel – 12.10.2025 21:46</span></li>
+        </ul>
+      </div>
     </section>
     <section>
       <h2>Letzte Spiele von ETV Hamburger Volksbank Volleys</h2>
-      <ul>
+      <ul class="match-list">
         <li><div class="match-line"><div class="match-header"><strong>18.10.2025 (Sa)</strong> – SSC Palmberg Schwerin vs. ETV Hamburger Volksbank Volleys</div><div class="match-result">Ergebnis: 3:0 / 75:41 (25:16 25:11 25:14)</div></div></li>
       <li><div class="match-line"><div class="match-header"><strong>11.10.2025 (Sa)</strong> – ETV Hamburger Volksbank Volleys vs. Allianz MTV Stuttgart</div><div class="match-result">Ergebnis: 0:3 / 51:75 (14:25 20:25 17:25)</div></div></li>
       </ul>
+      <div class="news-group">
+        <h3>Aktuelle News</h3>
+        <ul class="news-list">
+          <li><a href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys#news-3442-269">ETV Hamburger Volksbank Volleys auswärts gegen amtierenden Deutschen Meister SSC Palmberg Schwerin</a><span class="news-meta">Homepage ETV Hamburger Volksbank Volleys – 17.10.2025 00:00</span></li>
+      <li><a href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys#news-3442-257">ETV Hamburger Volksbank Volleys starten couragiert in erste Bundesligasaison</a><span class="news-meta">Homepage ETV Hamburger Volksbank Volleys – 11.10.2025 00:00</span></li>
+      <li><a href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys#news-3442-254">ETV Hamburger Volksbank Volleys vor erstem Bundesligaspiel</a><span class="news-meta">Homepage ETV Hamburger Volksbank Volleys – 10.10.2025 00:00</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778772327&amp;component_56784875.page=0#a_56784875_778772327">Hart erkämpfter Sieg gegen Suhl</a><span class="news-meta">Volleyball Bundesliga – 18.10.2025 21:02</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778770711&amp;component_56784875.page=0#a_56784875_778770711">Heimsieg gegen Hamburger Aufsteiger</a><span class="news-meta">Volleyball Bundesliga – 18.10.2025 19:29</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778768593&amp;component_56784875.page=0#a_56784875_778768593">Auf nach Wiesbaden!</a><span class="news-meta">Volleyball Bundesliga – 18.10.2025 14:36</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778745105&amp;component_56784875.page=0#a_56784875_778745105">Gänsehautmomente: Auftakt gegen Borken</a><span class="news-meta">Volleyball Bundesliga – 18.10.2025 10:58</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778756586&amp;component_56784875.page=0#a_56784875_778756586">ETV auswärts gegen Schwerin</a><span class="news-meta">Volleyball Bundesliga – 17.10.2025 10:47</span></li>
+      <li><a href="https://www.abendblatt.de/sport/article410245756/wie-hamburgs-volleyballerinnen-erstklassig-werden-wollen.html">Wie Hamburgs Volleyballerinnen erstklassig werden wollen</a><span class="news-meta">Hamburger Abendblatt via VBL Pressespiegel – 18.10.2025 06:00</span></li>
+      <li><a href="https://www.sportschau.de/regional/mdr/mdr-dsc-volleys-vor-vbl-auftakt-mit-jungem-superstar-und-urspruenglicher-kommunikation-100.html">DSC Volleys vor VBL-Auftakt: Mit jungem Superstar und ursprünglicher Kommunikation</a><span class="news-meta">Sportschau via VBL Pressespiegel – 14.10.2025 10:10</span></li>
+      <li><a href="https://suederelbe24.de/mutiger-bundesliga-auftakt-etv-hamburger-volksbank-volleys-begeistern-trotz-niederlage-gegen-stuttgart/">Mutiger Bundesliga-Auftakt: ETV Hamburger Volksbank Volleys begeistern trotz Niederlage gegen Stuttgart</a><span class="news-meta">Suederelbe24 via VBL Pressespiegel – 13.10.2025 20:09</span></li>
+      <li><a href="https://www.abendblatt.de/sport/article410206173/volleyball-bundesliga-frauen-etv-volksbank-volleys-hamburg-mtv-allianz-stuttgart-aufstieg-cu-arena-geld-1.html">Wie der ETV mit dem neuen Geld in der Bundesliga plant</a><span class="news-meta">Hamburger Abendblatt via VBL Pressespiegel – 13.10.2025 13:46</span></li>
+        </ul>
+      </div>
     </section>
   </main>
 </body>

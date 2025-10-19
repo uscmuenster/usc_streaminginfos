@@ -4,20 +4,43 @@ import csv
 import time
 from dataclasses import dataclass
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from html import escape
 from io import StringIO
-from typing import Dict, Iterable, List, Optional
+from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 from zoneinfo import ZoneInfo
+from urllib.parse import urljoin
+from email.utils import parsedate_to_datetime
+import xml.etree.ElementTree as ET
 
 import requests
+from bs4 import BeautifulSoup
 
 DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
 TABLE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml"
+VBL_NEWS_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml"
+VBL_PRESS_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/pressespiegel.xhtml"
 BERLIN_TZ = ZoneInfo("Europe/Berlin")
 USC_CANONICAL_NAME = "USC Münster"
 USC_HOMEPAGE = "https://www.usc-muenster.de/"
+
+REQUEST_HEADERS = {"User-Agent": "usc-kommentatoren/1.0 (+https://github.com/)"}
+HTML_ACCEPT_HEADER = {"Accept": "text/html,application/xhtml+xml"}
+RSS_ACCEPT_HEADER = {"Accept": "application/rss+xml,text/xml"}
+NEWS_LOOKBACK_DAYS = 14
+
+SEARCH_TRANSLATION = str.maketrans(
+    {
+        "ä": "ae",
+        "ö": "oe",
+        "ü": "ue",
+        "Ä": "ae",
+        "Ö": "oe",
+        "Ü": "ue",
+        "ß": "ss",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -50,22 +73,61 @@ class Match:
         return self.result is not None
 
 
-def _download_schedule_text(
+@dataclass(frozen=True)
+class NewsItem:
+    title: str
+    url: str
+    source: str
+    published: Optional[datetime]
+    search_text: str = ""
+
+    @property
+    def formatted_date(self) -> Optional[str]:
+        if not self.published:
+            return None
+        return self.published.astimezone(BERLIN_TZ).strftime("%d.%m.%Y %H:%M")
+
+
+def simplify_text(value: str) -> str:
+    simplified = value.translate(SEARCH_TRANSLATION).lower()
+    simplified = re.sub(r"\s+", " ", simplified)
+    return simplified.strip()
+
+
+def build_keywords(*names: str) -> List[str]:
+    keywords: set[str] = set()
+    for name in names:
+        simplified = simplify_text(name)
+        if not simplified:
+            continue
+        keywords.add(simplified)
+        keywords.add(simplified.replace(" ", ""))
+        tokens = [token for token in re.split(r"[^a-z0-9]+", simplified) if token]
+        keywords.update(tokens)
+    return sorted(keywords)
+
+
+def matches_keywords(text: str, keywords: Sequence[str]) -> bool:
+    haystack = simplify_text(text)
+    return any(keyword and keyword in haystack for keyword in keywords)
+
+
+def _http_get(
     url: str,
     *,
+    headers: Optional[Dict[str, str]] = None,
     retries: int = 5,
     delay_seconds: float = 2.0,
-) -> str:
+) -> requests.Response:
     last_error: Optional[Exception] = None
+    merged_headers = dict(REQUEST_HEADERS)
+    if headers:
+        merged_headers.update(headers)
     for attempt in range(retries):
         try:
-            response = requests.get(
-                url,
-                timeout=30,
-                headers={"User-Agent": "usc-kommentatoren/1.0 (+https://github.com/)"},
-            )
+            response = requests.get(url, timeout=30, headers=merged_headers)
             response.raise_for_status()
-            return response.text
+            return response
         except requests.RequestException as exc:  # pragma: no cover - network errors
             last_error = exc
             if attempt == retries - 1:
@@ -75,7 +137,74 @@ def _download_schedule_text(
     else:  # pragma: no cover
         if last_error:
             raise last_error
-        raise RuntimeError("Unbekannter Fehler beim Abrufen des Spielplans.")
+        raise RuntimeError("Unbekannter Fehler beim Abrufen von Daten.")
+
+
+def fetch_html(
+    url: str,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+    headers: Optional[Dict[str, str]] = None,
+) -> str:
+    response = _http_get(
+        url,
+        headers={**HTML_ACCEPT_HEADER, **(headers or {})},
+        retries=retries,
+        delay_seconds=delay_seconds,
+    )
+    return response.text
+
+
+def fetch_rss(
+    url: str,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> str:
+    response = _http_get(
+        url,
+        headers=RSS_ACCEPT_HEADER,
+        retries=retries,
+        delay_seconds=delay_seconds,
+    )
+    return response.text
+
+
+DATE_PATTERN = re.compile(
+    r"(?P<day>\d{1,2})\.(?P<month>\d{1,2})\.(?P<year>\d{2,4})(?:,\s*(?P<hour>\d{1,2}):(?P<minute>\d{2}))?"
+)
+
+
+def parse_date_label(value: str) -> Optional[datetime]:
+    match = DATE_PATTERN.search(value)
+    if not match:
+        return None
+    day = int(match.group("day"))
+    month = int(match.group("month"))
+    year = int(match.group("year"))
+    if year < 100:
+        year += 2000
+    hour = int(match.group("hour")) if match.group("hour") else 0
+    minute = int(match.group("minute")) if match.group("minute") else 0
+    try:
+        return datetime(year, month, day, hour, minute, tzinfo=BERLIN_TZ)
+    except ValueError:
+        return None
+
+
+def _download_schedule_text(
+    url: str,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> str:
+    response = _http_get(
+        url,
+        retries=retries,
+        delay_seconds=delay_seconds,
+    )
+    return response.text
 
 
 def fetch_schedule(
@@ -245,6 +374,294 @@ def get_team_homepage(team_name: str) -> Optional[str]:
     return TEAM_HOMEPAGES.get(normalize_name(team_name))
 
 
+def _build_team_news_config() -> Dict[str, Dict[str, str]]:
+    return {
+        normalize_name(USC_CANONICAL_NAME): {
+            "type": "rss",
+            "url": "https://www.usc-muenster.de/feed/",
+            "label": "Homepage USC Münster",
+        },
+        normalize_name("ETV Hamburger Volksbank Volleys"): {
+            "type": "etv",
+            "url": "https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys/",
+            "label": "Homepage ETV Hamburger Volksbank Volleys",
+        },
+    }
+
+
+TEAM_NEWS_CONFIG = _build_team_news_config()
+
+
+def _deduplicate_news(items: Sequence[NewsItem]) -> List[NewsItem]:
+    seen: set[str] = set()
+    deduped: List[NewsItem] = []
+    for item in items:
+        key = item.url.strip()
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        deduped.append(item)
+    return deduped
+
+
+def _filter_by_keywords(items: Sequence[NewsItem], keywords: Sequence[str]) -> List[NewsItem]:
+    return [item for item in items if matches_keywords(item.search_text or item.title, keywords)]
+
+
+def _within_lookback(published: Optional[datetime], *, reference: datetime, lookback_days: int) -> bool:
+    if not published:
+        return False
+    cutoff = reference - timedelta(days=lookback_days)
+    return published >= cutoff
+
+
+def _fetch_rss_news(
+    url: str,
+    *,
+    label: str,
+    now: datetime,
+    lookback_days: int,
+) -> List[NewsItem]:
+    try:
+        rss_text = fetch_rss(url)
+    except requests.RequestException:
+        return []
+
+    try:
+        root = ET.fromstring(rss_text)
+    except ET.ParseError:
+        return []
+
+    items: List[NewsItem] = []
+    for item in root.findall(".//item"):
+        title = (item.findtext("title") or "").strip()
+        link = (item.findtext("link") or "").strip()
+        description = (item.findtext("description") or "").strip()
+        pub_date_raw = item.findtext("pubDate") or ""
+        if not title or not link:
+            continue
+        published: Optional[datetime] = None
+        if pub_date_raw:
+            try:
+                parsed = parsedate_to_datetime(pub_date_raw)
+                if parsed.tzinfo is None:
+                    parsed = parsed.replace(tzinfo=BERLIN_TZ)
+                published = parsed.astimezone(BERLIN_TZ)
+            except (TypeError, ValueError):
+                published = None
+        if not _within_lookback(published, reference=now, lookback_days=lookback_days):
+            continue
+        search_text = f"{title} {description}"
+        items.append(
+            NewsItem(
+                title=title,
+                url=link,
+                source=label,
+                published=published,
+                search_text=search_text,
+            )
+        )
+    return _deduplicate_news(items)
+
+
+def _fetch_etv_news(
+    url: str,
+    *,
+    label: str,
+    now: datetime,
+    lookback_days: int,
+) -> List[NewsItem]:
+    try:
+        html = fetch_html(url)
+    except requests.RequestException:
+        return []
+
+    soup = BeautifulSoup(html, "html.parser")
+    items: List[NewsItem] = []
+    seen_ids: set[str] = set()
+    for block in soup.select("div[id^=news-]"):
+        block_id = block.get("id") or ""
+        if block_id in seen_ids:
+            continue
+        seen_ids.add(block_id)
+        date_elem = block.select_one(".newsDate .date")
+        title_elem = block.select_one(".headline2")
+        if not title_elem:
+            continue
+        title = title_elem.get_text(strip=True)
+        if not title:
+            continue
+        link_elem = title_elem.find("a")
+        if link_elem and link_elem.has_attr("href"):
+            href = link_elem["href"]
+            link = urljoin(url, href)
+        else:
+            link = f"{url.rstrip('/') }#{block_id}"
+        date_text = date_elem.get_text(strip=True) if date_elem else ""
+        published = parse_date_label(date_text)
+        if not _within_lookback(published, reference=now, lookback_days=lookback_days):
+            continue
+        summary_elem = block.select_one(".text-wrapper")
+        summary = summary_elem.get_text(" ", strip=True) if summary_elem else ""
+        items.append(
+            NewsItem(
+                title=title,
+                url=link,
+                source=label,
+                published=published,
+                search_text=f"{title} {summary}",
+            )
+        )
+    return _deduplicate_news(items)
+
+
+def _fetch_vbl_articles(
+    url: str,
+    *,
+    label: str,
+    now: datetime,
+    lookback_days: int,
+) -> List[NewsItem]:
+    try:
+        html = fetch_html(url)
+    except requests.RequestException:
+        return []
+
+    soup = BeautifulSoup(html, "html.parser")
+    items: List[NewsItem] = []
+    for article in soup.select("div.samsArticle"):
+        header_link = article.select_one(".samsArticleHeader a")
+        if not header_link or not header_link.has_attr("href"):
+            continue
+        title = header_link.get_text(strip=True)
+        if not title:
+            continue
+        link = urljoin(url, header_link["href"])
+        info = article.select_one(".samsArticleInfo")
+        date_text = info.get_text(strip=True) if info else ""
+        published = parse_date_label(date_text)
+        if not _within_lookback(published, reference=now, lookback_days=lookback_days):
+            continue
+        summary_elem = article.select_one(".samsCmsComponentContent")
+        summary = summary_elem.get_text(" ", strip=True) if summary_elem else ""
+        category = article.select_one(".samsArticleCategory")
+        category_text = category.get_text(" ", strip=True) if category else ""
+        search_text = f"{title} {summary} {category_text}"
+        items.append(
+            NewsItem(
+                title=title,
+                url=link,
+                source=label,
+                published=published,
+                search_text=search_text,
+            )
+        )
+    return _deduplicate_news(items)
+
+
+def _fetch_vbl_press(
+    url: str,
+    *,
+    label: str,
+    now: datetime,
+    lookback_days: int,
+) -> List[NewsItem]:
+    try:
+        html = fetch_html(url)
+    except requests.RequestException:
+        return []
+
+    soup = BeautifulSoup(html, "html.parser")
+    rows = soup.select("table.samsDataTable tbody tr")
+    items: List[NewsItem] = []
+    for row in rows:
+        columns = row.find_all("td")
+        if len(columns) < 3:
+            continue
+        link_elem = columns[0].find("a")
+        source_elem = columns[1].get_text(strip=True)
+        date_text = columns[2].get_text(strip=True)
+        if not link_elem or not link_elem.has_attr("href"):
+            continue
+        title = link_elem.get_text(strip=True)
+        if not title:
+            continue
+        link = link_elem["href"]
+        published = parse_date_label(date_text)
+        if not _within_lookback(published, reference=now, lookback_days=lookback_days):
+            continue
+        search_text = f"{title} {source_elem}"
+        items.append(
+            NewsItem(
+                title=title,
+                url=link,
+                source=f"{source_elem} via VBL Pressespiegel",
+                published=published,
+                search_text=search_text,
+            )
+        )
+    return _deduplicate_news(items)
+
+
+def fetch_team_news(
+    team_name: str,
+    *,
+    now: Optional[datetime] = None,
+    lookback_days: int = NEWS_LOOKBACK_DAYS,
+) -> List[NewsItem]:
+    config = TEAM_NEWS_CONFIG.get(normalize_name(team_name))
+    if not config:
+        return []
+    now = now or datetime.now(tz=BERLIN_TZ)
+    label = config.get("label", team_name)
+    fetch_type = config.get("type")
+    url = config.get("url", "")
+    if not url:
+        return []
+    if fetch_type == "rss":
+        return _fetch_rss_news(url, label=label, now=now, lookback_days=lookback_days)
+    if fetch_type == "etv":
+        return _fetch_etv_news(url, label=label, now=now, lookback_days=lookback_days)
+    return []
+
+
+def collect_team_news(
+    next_home: Match,
+    *,
+    now: Optional[datetime] = None,
+    lookback_days: int = NEWS_LOOKBACK_DAYS,
+) -> Tuple[List[NewsItem], List[NewsItem]]:
+    now = now or datetime.now(tz=BERLIN_TZ)
+    usc_news = fetch_team_news(USC_CANONICAL_NAME, now=now, lookback_days=lookback_days)
+    opponent_news = fetch_team_news(next_home.away_team, now=now, lookback_days=lookback_days)
+
+    vbl_articles = _fetch_vbl_articles(
+        VBL_NEWS_URL,
+        label="Volleyball Bundesliga",
+        now=now,
+        lookback_days=lookback_days,
+    )
+    vbl_press = _fetch_vbl_press(
+        VBL_PRESS_URL,
+        label="Volleyball Bundesliga",
+        now=now,
+        lookback_days=lookback_days,
+    )
+
+    combined_vbl = _deduplicate_news(vbl_articles + vbl_press)
+
+    usc_keywords = build_keywords(USC_CANONICAL_NAME)
+    opponent_keywords = build_keywords(next_home.away_team)
+
+    usc_vbl = _filter_by_keywords(combined_vbl, usc_keywords)
+    opponent_vbl = _filter_by_keywords(combined_vbl, opponent_keywords)
+
+    usc_combined = _deduplicate_news([*usc_news, *usc_vbl])
+    opponent_combined = _deduplicate_news([*opponent_news, *opponent_vbl])
+
+    return usc_combined, opponent_combined
+
+
 def pretty_name(name: str) -> str:
     if is_usc(name):
         return USC_CANONICAL_NAME
@@ -322,11 +739,33 @@ def format_match_line(match: Match) -> str:
     )
 
 
+def format_news_list(items: Sequence[NewsItem]) -> str:
+    if not items:
+        return "<li>Keine aktuellen Artikel gefunden.</li>"
+
+    rendered: List[str] = []
+    for item in items:
+        title = escape(item.title)
+        url = escape(item.url)
+        meta_parts: List[str] = [escape(item.source)] if item.source else []
+        date_label = item.formatted_date
+        if date_label:
+            meta_parts.append(escape(date_label))
+        meta = " – ".join(meta_parts)
+        meta_html = f"<span class=\"news-meta\">{meta}</span>" if meta else ""
+        rendered.append(
+            f"<li><a href=\"{url}\">{title}</a>{meta_html}</li>"
+        )
+    return "\n      ".join(rendered)
+
+
 def build_html_report(
     *,
     next_home: Match,
     usc_recent: List[Match],
     opponent_recent: List[Match],
+    usc_news: Sequence[NewsItem],
+    opponent_news: Sequence[NewsItem],
     public_url: Optional[str] = None,
 ) -> str:
     heading = pretty_name(next_home.away_team)
@@ -348,6 +787,9 @@ def build_html_report(
         )
     else:
         opponent_items = "<li>Keine Daten verfügbar.</li>"
+
+    usc_news_items = format_news_list(usc_news)
+    opponent_news_items = format_news_list(opponent_news)
 
     usc_link_block = ""
     if usc_url:
@@ -411,14 +853,14 @@ def build_html_report(
     .meta p {{
       margin: 0;
     }}
-    ul {{
+    .match-list {{
       list-style: none;
       padding: 0;
       margin: 0;
       display: grid;
       gap: 1rem;
     }}
-    li {{
+    .match-list li {{
       background: #ffffff;
       border-radius: 0.85rem;
       padding: 1rem clamp(1rem, 3vw, 1.5rem);
@@ -438,6 +880,33 @@ def build_html_report(
       font-size: 0.95rem;
       color: #0f766e;
     }}
+    .news-group {{
+      margin-top: 1.5rem;
+      display: grid;
+      gap: 0.6rem;
+    }}
+    .news-group h3 {{
+      font-size: clamp(1.05rem, 3vw, 1.25rem);
+      margin: 0;
+    }}
+    .news-list {{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }}
+    .news-list li {{
+      margin: 0;
+      padding: 0;
+    }}
+    .news-meta {{
+      display: block;
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 0.2rem;
+    }}
     .meta-link {{
       font-weight: 600;
     }}
@@ -449,7 +918,7 @@ def build_html_report(
       text-decoration: underline;
     }}
     @media (max-width: 40rem) {{
-      li {{
+      .match-list li {{
         padding: 0.85rem 1rem;
       }}
       .match-result {{
@@ -461,7 +930,7 @@ def build_html_report(
         background: #0e1b1f;
         color: #e6f1f3;
       }}
-      li {{
+      .match-list li {{
         background: #132a30;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
       }}
@@ -474,12 +943,15 @@ def build_html_report(
       h1 {{
         color: #5eead4;
       }}
+      .news-meta {{
+        color: #94a3b8;
+      }}
     }}
   </style>
 </head>
 <body>
   <main>
-    <h1>Nächster USC-Heimgegner: {escape(heading)}</h1>
+    <h1>Nächster USC-Heimgegner:<br>{escape(heading)}</h1>
     <div class=\"meta\">
       <p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>
       <p><strong>Austragungsort:</strong> {escape(location)}</p>
@@ -487,15 +959,27 @@ def build_html_report(
 {usc_link_block}{opponent_link_block}{public_url_block}    </div>
     <section>
       <h2>Letzte Spiele von {escape(USC_CANONICAL_NAME)}</h2>
-      <ul>
+      <ul class=\"match-list\">
         {usc_items}
       </ul>
+      <div class=\"news-group\">
+        <h3>Aktuelle News</h3>
+        <ul class=\"news-list\">
+          {usc_news_items}
+        </ul>
+      </div>
     </section>
     <section>
       <h2>Letzte Spiele von {escape(heading)}</h2>
-      <ul>
+      <ul class=\"match-list\">
         {opponent_items}
       </ul>
+      <div class=\"news-group\">
+        <h3>Aktuelle News</h3>
+        <ul class=\"news-list\">
+          {opponent_news_items}
+        </ul>
+      </div>
     </section>
   </main>
 </body>
@@ -507,13 +991,19 @@ def build_html_report(
 
 __all__ = [
     "DEFAULT_SCHEDULE_URL",
+    "NEWS_LOOKBACK_DAYS",
+    "NewsItem",
     "Match",
     "MatchResult",
     "TEAM_HOMEPAGES",
     "TABLE_URL",
+    "VBL_NEWS_URL",
+    "VBL_PRESS_URL",
     "USC_HOMEPAGE",
+    "collect_team_news",
     "build_html_report",
     "download_schedule",
+    "fetch_team_news",
     "fetch_schedule",
     "find_last_matches_for_team",
     "find_next_usc_home_match",
