@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import csv
 import time
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 import re
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -31,10 +31,6 @@ REQUEST_HEADERS = {
 HTML_ACCEPT_HEADER = {"Accept": "text/html,application/xhtml+xml"}
 RSS_ACCEPT_HEADER = {"Accept": "application/rss+xml,text/xml"}
 NEWS_LOOKBACK_DAYS = 14
-
-SUMMARY_SENTENCE_LIMIT = 3
-SUMMARY_MIN_LENGTH = 140
-SUMMARY_MAX_LENGTH = 600
 INSTAGRAM_SEARCH_URL = "https://duckduckgo.com/html/"
 
 GERMAN_STOPWORDS = {
@@ -138,7 +134,6 @@ class NewsItem:
     source: str
     published: Optional[datetime]
     search_text: str = ""
-    summary: Optional[str] = None
 
     @property
     def formatted_date(self) -> Optional[str]:
@@ -613,95 +608,6 @@ def extract_article_text(url: str) -> Optional[str]:
     return _extract_best_candidate(soup)
 
 
-def _tokenize(text: str) -> List[str]:
-    tokens = re.findall(r"[A-Za-zÄÖÜäöüß]+", text)
-    normalized = [token.lower() for token in tokens]
-    return [token for token in normalized if token and token not in GERMAN_STOPWORDS]
-
-
-def _split_sentences(text: str) -> List[str]:
-    sentences = re.split(r"(?<=[.!?])\s+", text)
-    return [sentence.strip() for sentence in sentences if sentence.strip()]
-
-
-def summarize_text(text: str) -> Optional[str]:
-    sentences = _split_sentences(text)
-    if not sentences:
-        return None
-    if len(sentences) <= SUMMARY_SENTENCE_LIMIT:
-        summary = " ".join(sentences)
-        return summary[:SUMMARY_MAX_LENGTH]
-
-    frequencies: Dict[str, int] = {}
-    for sentence in sentences:
-        for token in _tokenize(sentence):
-            frequencies[token] = frequencies.get(token, 0) + 1
-
-    if not frequencies:
-        summary = " ".join(sentences[:SUMMARY_SENTENCE_LIMIT])
-        return summary[:SUMMARY_MAX_LENGTH]
-
-    scored: List[Tuple[int, float, str]] = []
-    for index, sentence in enumerate(sentences):
-        tokens = _tokenize(sentence)
-        if not tokens:
-            continue
-        score = sum(frequencies[token] for token in tokens) / len(tokens)
-        scored.append((index, score, sentence))
-
-    if not scored:
-        summary = " ".join(sentences[:SUMMARY_SENTENCE_LIMIT])
-        return summary[:SUMMARY_MAX_LENGTH]
-
-    scored.sort(key=lambda item: (-item[1], item[0]))
-    selected_indices: List[int] = []
-    for index, _score, _sentence in scored:
-        if index not in selected_indices:
-            selected_indices.append(index)
-        if len(selected_indices) == SUMMARY_SENTENCE_LIMIT:
-            break
-
-    selected_indices.sort()
-    summary_parts = [sentences[idx] for idx in selected_indices]
-
-    summary = " ".join(summary_parts)
-    if len(summary) < SUMMARY_MIN_LENGTH:
-        for index, _score, sentence in scored:
-            if index in selected_indices:
-                continue
-            summary_parts.append(sentence)
-            selected_indices.append(index)
-            summary = " ".join(summary_parts)
-            if len(summary_parts) >= SUMMARY_SENTENCE_LIMIT + 2 or len(summary) >= SUMMARY_MIN_LENGTH:
-                break
-        summary = " ".join(summary_parts)
-
-    return summary[:SUMMARY_MAX_LENGTH]
-
-
-def summarize_article(url: str) -> Optional[str]:
-    article_text = extract_article_text(url)
-    if not article_text:
-        return None
-    return summarize_text(article_text)
-
-
-def summarize_news_items(items: Sequence[NewsItem]) -> List[NewsItem]:
-    summarized: List[NewsItem] = []
-    for item in items:
-        summary: Optional[str] = None
-        try:
-            summary = summarize_article(item.url)
-        except requests.RequestException:
-            summary = None
-        except Exception:
-            summary = None
-        if summary:
-            summary = summary.strip()
-        summarized.append(replace(item, summary=summary))
-    return summarized
-
-
 def collect_instagram_links(team_name: str, *, limit: int = 6) -> List[str]:
     links: List[str] = []
     base = get_team_instagram(team_name)
@@ -1009,10 +915,7 @@ def collect_team_news(
     usc_combined = _deduplicate_news([*usc_news, *usc_vbl])
     opponent_combined = _deduplicate_news([*opponent_news, *opponent_vbl])
 
-    summarized_usc = summarize_news_items(usc_combined)
-    summarized_opponent = summarize_news_items(opponent_combined)
-
-    return summarized_usc, summarized_opponent
+    return usc_combined, opponent_combined
 
 
 def pretty_name(name: str) -> str:
@@ -1106,11 +1009,8 @@ def format_news_list(items: Sequence[NewsItem]) -> str:
             meta_parts.append(escape(date_label))
         meta = " – ".join(meta_parts)
         meta_html = f"<span class=\"news-meta\">{meta}</span>" if meta else ""
-        summary_html = ""
-        if item.summary:
-            summary_html = f"<p class=\"news-summary\">{escape(item.summary)}</p>"
         rendered.append(
-            f"<li><a href=\"{url}\">{title}</a>{meta_html}{summary_html}</li>"
+            f"<li><a href=\"{url}\">{title}</a>{meta_html}</li>"
         )
     return "\n      ".join(rendered)
 
@@ -1282,9 +1182,13 @@ def build_html_report(
     .accordion {{
       border-radius: 0.85rem;
       overflow: hidden;
-      background: #e0f2f1;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+      background: #e0f2fe;
+      box-shadow: 0 18px 40px rgba(30, 64, 175, 0.08);
       border: none;
+    }}
+    .news-group details:nth-of-type(2) {{
+      background: #dcfce7;
+      box-shadow: 0 18px 40px rgba(22, 163, 74, 0.08);
     }}
     .accordion summary {{
       cursor: pointer;
@@ -1327,11 +1231,6 @@ def build_html_report(
       font-size: 0.85rem;
       color: #64748b;
       margin-top: 0.2rem;
-    }}
-    .news-summary {{
-      margin: 0.4rem 0 0;
-      font-size: clamp(0.88rem, 1.6vw, 0.97rem);
-      color: #334155;
     }}
     .instagram-group {{
       margin-top: clamp(1.75rem, 4vw, 2.75rem);
@@ -1398,8 +1297,12 @@ def build_html_report(
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
       }}
       .accordion {{
-        background: #0f2529;
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+        background: #102437;
+        box-shadow: 0 18px 40px rgba(15, 118, 255, 0.2);
+      }}
+      .news-group details:nth-of-type(2) {{
+        background: #123026;
+        box-shadow: 0 18px 40px rgba(45, 212, 191, 0.18);
       }}
       .instagram-card {{
         background: #132a30;
@@ -1416,9 +1319,6 @@ def build_html_report(
       }}
       .news-meta {{
         color: #94a3b8;
-      }}
-      .news-summary {{
-        color: #cbd5f5;
       }}
     }}
   </style>

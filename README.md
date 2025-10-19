@@ -2,7 +2,7 @@
 
 Dieses Repository erzeugt täglich eine schlanke HTML-Seite zum Frauen-Bundesligateam des USC Münster. Die Seite zeigt den
 nächsten Heimgegner des USC als Überschrift, listet die beiden letzten Ergebnisse sowohl des USC als auch des kommenden Gegners
-auf, sammelt aktuelle Artikel von den Team-Homepages sowie der Volleyball Bundesliga und fasst sie automatisch zusammen. Alle Spielinformationen stammen aus dem
+auf und sammelt aktuelle Artikel von den Team-Homepages sowie der Volleyball Bundesliga. Alle Spielinformationen stammen aus dem
 öffentlichen CSV-Spielplan der Volleyball Bundesliga – es wird kein API-Schlüssel benötigt.
 
 ## Voraussetzungen
@@ -51,7 +51,6 @@ Die HTML-Datei enthält:
 * Einen direkten Link auf die offizielle Bundesligatabelle
 * Verlinkungen auf die Vereins-Homepages des USC Münster und des kommenden Gegners mit sprechenden Linktexten (z. B. "Homepage USC Münster")
 * Einen News-Block je Team unterhalb der Ergebnislisten – als aufklappbare Accordion-Sektion mit Artikeln der letzten zwei Wochen von den Vereinsseiten sowie den VBL-News- und Pressespiegel-Seiten, gefiltert auf Beiträge zu den beiden Teams
-* Automatisch erstellte Kurzfassungen (maximal drei Sätze) der gefundenen Artikel, generiert aus den Seiteninhalten ohne externe APIs
 * Eine Instagram-Sektion mit Links zu den offiziellen Accounts und weiteren Treffern aus der Websuche für beide Mannschaften
 * Ein responsives Layout, das sich auf Smartphones und großen Displays gut lesen lässt
 
