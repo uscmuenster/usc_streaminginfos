@@ -17,6 +17,7 @@ DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/Play
 TABLE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml"
 BERLIN_TZ = ZoneInfo("Europe/Berlin")
 USC_CANONICAL_NAME = "USC Münster"
+USC_HOMEPAGE = "https://www.usc-muenster.de/"
 
 
 @dataclass(frozen=True)
@@ -220,6 +221,30 @@ def is_usc(name: str) -> bool:
     return "usc" in normalized and "munster" in normalized
 
 
+def _build_team_homepages() -> Dict[str, str]:
+    pairs = {
+        "Allianz MTV Stuttgart": "https://www.stuttgarts-schoenster-sport.de/",
+        "Binder Blaubären TSV Flacht": "https://binderblaubaeren.de/",
+        "Dresdner SC": "https://www.dscvolley.de/",
+        "ETV Hamburger Volksbank Volleys": "https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys/",
+        "Ladies in Black Aachen": "https://ladies-in-black.de/",
+        "SSC Palmberg Schwerin": "https://www.schweriner-sc.com/",
+        "Schwarz-Weiß Erfurt": "https://schwarz-weiss-erfurt.de/",
+        "Skurios Volleys Borken": "https://www.skurios-volleys-borken.de/",
+        "USC Münster": USC_HOMEPAGE,
+        "VC Wiesbaden": "https://www.vc-wiesbaden.de/",
+        "VfB Suhl LOTTO Thüringen": "https://volleyball-suhl.de/",
+    }
+    return {normalize_name(name): url for name, url in pairs.items()}
+
+
+TEAM_HOMEPAGES = _build_team_homepages()
+
+
+def get_team_homepage(team_name: str) -> Optional[str]:
+    return TEAM_HOMEPAGES.get(normalize_name(team_name))
+
+
 def pretty_name(name: str) -> str:
     if is_usc(name):
         return USC_CANONICAL_NAME
@@ -308,6 +333,8 @@ def build_html_report(
     heading = pretty_name(next_home.away_team)
     kickoff = next_home.kickoff.strftime("%d.%m.%Y %H:%M")
     location = pretty_name(next_home.location)
+    usc_url = get_team_homepage(USC_CANONICAL_NAME) or USC_HOMEPAGE
+    opponent_url = get_team_homepage(next_home.away_team)
 
     if usc_recent:
         usc_items = "\n      ".join(
@@ -322,6 +349,22 @@ def build_html_report(
         )
     else:
         opponent_items = "<li>Keine Daten verfügbar.</li>"
+
+    usc_link_block = ""
+    if usc_url:
+        safe_usc_url = escape(usc_url)
+        usc_link_block = (
+            "      <p><strong>USC Münster:</strong> "
+            f"<a href=\"{safe_usc_url}\">{safe_usc_url}</a></p>\n"
+        )
+
+    opponent_link_block = ""
+    if opponent_url:
+        safe_opponent_url = escape(opponent_url)
+        opponent_link_block = (
+            f"      <p><strong>{escape(heading)}:</strong> "
+            f"<a href=\"{safe_opponent_url}\">{safe_opponent_url}</a></p>\n"
+        )
 
     public_url_block = ""
     if public_url:
@@ -457,8 +500,8 @@ def build_html_report(
     <div class=\"meta\">
       <p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>
       <p><strong>Austragungsort:</strong> {escape(location)}</p>
-      <p><strong>Tabelle:</strong> <a href=\"{TABLE_URL}\">Tabelle Volleyball-Bundesliga</a></p>
-{public_url_block}    </div>
+      <p><strong>Tabelle:</strong> <a href=\"{TABLE_URL}\">{TABLE_URL}</a></p>
+{usc_link_block}{opponent_link_block}{public_url_block}    </div>
     <section>
       <h2>Letzte Spiele von {escape(USC_CANONICAL_NAME)}</h2>
       <ul>
@@ -483,12 +526,15 @@ __all__ = [
     "DEFAULT_SCHEDULE_URL",
     "Match",
     "MatchResult",
+    "TEAM_HOMEPAGES",
     "TABLE_URL",
+    "USC_HOMEPAGE",
     "build_html_report",
     "download_schedule",
     "fetch_schedule",
     "find_last_matches_for_team",
     "find_next_usc_home_match",
+    "get_team_homepage",
     "load_schedule_from_file",
     "parse_schedule",
 ]
