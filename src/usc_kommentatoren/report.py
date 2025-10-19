@@ -3,18 +3,36 @@ from __future__ import annotations
 import csv
 import time
 from dataclasses import dataclass
+import re
 from datetime import datetime
 from pathlib import Path
 from html import escape
 from io import StringIO
-from typing import Iterable, List, Optional
+from typing import Dict, Iterable, List, Optional
 from zoneinfo import ZoneInfo
 
 import requests
 
 DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
+TABLE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml"
 BERLIN_TZ = ZoneInfo("Europe/Berlin")
 USC_CANONICAL_NAME = "USC Münster"
+
+
+@dataclass(frozen=True)
+class MatchResult:
+    score: str
+    total_points: Optional[str]
+    sets: tuple[str, ...]
+
+    @property
+    def summary(self) -> str:
+        segments: list[str] = [self.score]
+        if self.total_points:
+            segments.append(f"/ {self.total_points}")
+        if self.sets:
+            segments.append(f"({' '.join(self.sets)})")
+        return " ".join(segments)
 
 
 @dataclass(frozen=True)
@@ -24,11 +42,11 @@ class Match:
     away_team: str
     host: str
     location: str
-    result: str
+    result: Optional[MatchResult]
 
     @property
     def is_finished(self) -> bool:
-        return bool(self.result)
+        return self.result is not None
 
 
 def _download_schedule_text(
@@ -101,7 +119,7 @@ def parse_schedule(csv_text: str) -> List[Match]:
         away_team = row.get("Mannschaft 2", "").strip()
         host = row.get("Gastgeber", "").strip()
         location = row.get("Austragungsort", "").strip()
-        result = extract_result(row.get("Ergebnis", ""))
+        result = build_match_result(row)
 
         matches.append(
             Match(
@@ -122,12 +140,73 @@ def parse_kickoff(date_str: str, time_str: str) -> datetime:
     return kickoff.replace(tzinfo=BERLIN_TZ)
 
 
-def extract_result(raw: str) -> str:
+RESULT_PATTERN = re.compile(
+    r"\s*(?P<score>\d+:\d+)"
+    r"(?:\s*/\s*(?P<points>\d+:\d+))?"
+    r"(?:\s*\((?P<sets>[^)]+)\))?"
+)
+
+
+def _parse_result_text(raw: str | None) -> Optional[MatchResult]:
+    if not raw:
+        return None
+
     cleaned = raw.strip()
     if not cleaned:
-        return ""
-    first_segment = cleaned.split("/")[0].strip()
-    return first_segment
+        return None
+
+    match = RESULT_PATTERN.match(cleaned)
+    if not match:
+        return MatchResult(score=cleaned, total_points=None, sets=())
+
+    score = match.group("score")
+    points = match.group("points")
+    sets_raw = match.group("sets")
+    sets: tuple[str, ...] = ()
+    if sets_raw:
+        normalized = sets_raw.replace(",", " ")
+        split_sets = [segment.strip() for segment in normalized.split() if segment.strip()]
+        sets = tuple(split_sets)
+
+    return MatchResult(score=score, total_points=points, sets=sets)
+
+
+def build_match_result(row: Dict[str, str]) -> Optional[MatchResult]:
+    fallback = _parse_result_text(row.get("Ergebnis"))
+
+    score = (row.get("Satzpunkte") or "").strip()
+    total_points = (row.get("Ballpunkte") or "").strip()
+
+    sets_list: list[str] = []
+    for index in range(1, 6):
+        home_key = f"Satz {index} - Ballpunkte 1"
+        away_key = f"Satz {index} - Ballpunkte 2"
+        home_points = (row.get(home_key) or "").strip()
+        away_points = (row.get(away_key) or "").strip()
+        if home_points and away_points:
+            sets_list.append(f"{home_points}:{away_points}")
+
+    if score or total_points or sets_list:
+        if not score and fallback:
+            score = fallback.score
+        if not total_points and fallback and fallback.total_points:
+            total_points = fallback.total_points
+        sets: tuple[str, ...]
+        if sets_list:
+            sets = tuple(sets_list)
+        elif fallback:
+            sets = fallback.sets
+        else:
+            sets = ()
+
+        cleaned_total = total_points or None
+        if score:
+            return MatchResult(score=score, total_points=cleaned_total, sets=sets)
+        if fallback:
+            return MatchResult(score=fallback.score, total_points=cleaned_total, sets=sets)
+        return None
+
+    return fallback
 
 
 def normalize_name(value: str) -> str:
@@ -189,14 +268,31 @@ def is_same_team(a: str, b: str) -> bool:
     return normalize_name(a) == normalize_name(b)
 
 
-def format_match_line(match: Match, team_name: str) -> str:
-    kickoff = match.kickoff.strftime("%d.%m.%Y %H:%M")
+GERMAN_WEEKDAYS = {
+    0: "Mo",
+    1: "Di",
+    2: "Mi",
+    3: "Do",
+    4: "Fr",
+    5: "Sa",
+    6: "So",
+}
+
+
+def format_match_line(match: Match) -> str:
+    date_label = match.kickoff.strftime("%d.%m.%Y")
+    weekday = GERMAN_WEEKDAYS.get(match.kickoff.weekday(), match.kickoff.strftime("%a"))
+    kickoff_label = f"{date_label} ({weekday})"
     home = pretty_name(match.home_team)
     away = pretty_name(match.away_team)
-    opponent = away if is_same_team(home, team_name) else home
-    role = "Heim" if is_same_team(home, team_name) else "Auswärts"
-    result = match.result or "-"
-    return f"<li><strong>{escape(kickoff)}</strong> – {escape(role)} vs. {escape(opponent)} – Ergebnis: {escape(result)}</li>"
+    result = match.result.summary if match.result else "-"
+    teams = f"{home} vs. {away}"
+    return (
+        "<li>"
+        f"<span class=\"match-header\"><strong>{escape(kickoff_label)}</strong> – {escape(teams)}</span>"
+        f"<span class=\"match-result\">Ergebnis: {escape(result)}</span>"
+        "</li>"
+    )
 
 
 def build_html_report(
@@ -212,14 +308,14 @@ def build_html_report(
 
     if usc_recent:
         usc_items = "\n      ".join(
-            format_match_line(match, USC_CANONICAL_NAME) for match in usc_recent
+            format_match_line(match) for match in usc_recent
         )
     else:
         usc_items = "<li>Keine Daten verfügbar.</li>"
 
     if opponent_recent:
         opponent_items = "\n      ".join(
-            format_match_line(match, next_home.away_team) for match in opponent_recent
+            format_match_line(match) for match in opponent_recent
         )
     else:
         opponent_items = "<li>Keine Daten verfügbar.</li>"
@@ -229,7 +325,7 @@ def build_html_report(
         safe_url = escape(public_url)
         public_url_block = (
             "  <p><strong>Öffentliche Adresse:</strong> "
-            f"<a href=\"{safe_url}\">{safe_url}</a></p>"
+            f"<a href=\"{safe_url}\">{safe_url}</a></p>\n"
         )
 
     html = f"""<!DOCTYPE html>
@@ -241,12 +337,17 @@ def build_html_report(
     body {{ font-family: Arial, sans-serif; margin: 2rem; line-height: 1.5; }}
     h1 {{ color: #004c54; }}
     section {{ margin-top: 2rem; }}
+    ul {{ list-style: none; padding: 0; }}
+    li {{ display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.75rem; }}
+    .match-header {{ flex: 1 1 auto; min-width: 16rem; }}
+    .match-result {{ white-space: nowrap; }}
   </style>
 </head>
 <body>
   <h1>Nächster USC-Heimgegner: {escape(heading)}</h1>
   <p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>
   <p><strong>Austragungsort:</strong> {escape(location)}</p>
+  <p><strong>Tabelle:</strong> <a href=\"{TABLE_URL}\">{TABLE_URL}</a></p>
 {public_url_block}
   <section>
     <h2>Letzte Spiele von {escape(USC_CANONICAL_NAME)}</h2>
@@ -269,6 +370,8 @@ def build_html_report(
 __all__ = [
     "DEFAULT_SCHEDULE_URL",
     "Match",
+    "MatchResult",
+    "TABLE_URL",
     "build_html_report",
     "download_schedule",
     "fetch_schedule",

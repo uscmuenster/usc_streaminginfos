@@ -45,8 +45,9 @@ Die HTML-Datei enthält:
 
 * Überschrift mit dem nächsten Heimgegner des USC Münster
 * Spieltermin und Austragungsort
-* Die beiden letzten Ergebnisse des USC Münster
-* Die beiden letzten Ergebnisse des anstehenden Gegners
+* Die beiden letzten Ergebnisse des USC Münster inklusive Gesamt- und Satzergebnissen
+* Die beiden letzten Ergebnisse des anstehenden Gegners inklusive Gesamt- und Satzergebnissen
+* Einen direkten Link auf die offizielle Bundesligatabelle
 
 ## Automatisierung mit GitHub Actions
 

@@ -3,6 +3,8 @@
 from .report import (
     DEFAULT_SCHEDULE_URL,
     Match,
+    MatchResult,
+    TABLE_URL,
     build_html_report,
     download_schedule,
     fetch_schedule,
@@ -15,6 +17,7 @@ from .report import (
 __all__ = [
     "DEFAULT_SCHEDULE_URL",
     "Match",
+    "MatchResult",
     "build_html_report",
     "download_schedule",
     "fetch_schedule",
@@ -22,4 +25,5 @@ __all__ = [
     "find_next_usc_home_match",
     "load_schedule_from_file",
     "parse_schedule",
+    "TABLE_URL",
 ]
