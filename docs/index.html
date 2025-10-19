@@ -10,6 +10,7 @@
       margin: 0;
       font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
       line-height: 1.6;
+      font-size: clamp(0.95rem, 1.8vw, 1.05rem);
       background: #f5f7f9;
       color: #1f2933;
     }
@@ -20,11 +21,11 @@
     }
     h1 {
       color: #004c54;
-      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-size: clamp(1.55rem, 4.5vw, 2.35rem);
       margin-bottom: 1.25rem;
     }
     h2 {
-      font-size: clamp(1.3rem, 4vw, 1.75rem);
+      font-size: clamp(1.15rem, 3.6vw, 1.6rem);
       margin-bottom: 1rem;
     }
     section {
@@ -63,7 +64,7 @@
     }
     .match-result {
       font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: #0f766e;
     }
     .news-group {
@@ -86,7 +87,7 @@
       align-items: center;
       justify-content: space-between;
       list-style: none;
-      font-size: clamp(1.05rem, 3vw, 1.25rem);
+      font-size: clamp(1rem, 2.6vw, 1.2rem);
     }
     .accordion summary::-webkit-details-marker {
       display: none;
@@ -131,11 +132,23 @@
       text-decoration: underline;
     }
     @media (max-width: 40rem) {
+      body {
+        font-size: 0.95rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      h2 {
+        font-size: 1.25rem;
+      }
       .match-list li {
         padding: 0.85rem 1rem;
       }
       .match-result {
-        font-size: 0.95rem;
+        font-size: 0.85rem;
+      }
+      .accordion summary {
+        font-size: 1.05rem;
       }
     }
     @media (prefers-color-scheme: dark) {
