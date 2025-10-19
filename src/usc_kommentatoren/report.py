@@ -5,7 +5,7 @@ import csv
 import time
 from dataclasses import dataclass
 import re
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 import mimetypes
 from html import escape
@@ -144,6 +144,16 @@ class RosterMember:
 
     @property
     def formatted_birthdate(self) -> Optional[str]:
+        parsed = self.birthdate_value
+        if parsed:
+            return parsed.strftime("%d.%m.%Y")
+        if not self.birthdate_label:
+            return None
+        value = self.birthdate_label.strip()
+        return value or None
+
+    @property
+    def birthdate_value(self) -> Optional[date]:
         if not self.birthdate_label:
             return None
         value = self.birthdate_label.strip()
@@ -154,8 +164,8 @@ class RosterMember:
                 parsed = datetime.strptime(value, fmt)
             except ValueError:
                 continue
-            return parsed.strftime("%d.%m.%Y")
-        return value
+            return parsed.date()
+        return None
 
 
 @dataclass(frozen=True)
@@ -1415,11 +1425,27 @@ def format_instagram_list(links: Sequence[str]) -> str:
     return "\n          ".join(rendered)
 
 
-def format_roster_list(roster: Sequence[RosterMember]) -> str:
+def calculate_age(birthdate: date, reference: date) -> Optional[int]:
+    if birthdate > reference:
+        return None
+    years = reference.year - birthdate.year
+    if (reference.month, reference.day) < (birthdate.month, birthdate.day):
+        years -= 1
+    return years
+
+
+def format_roster_list(
+    roster: Sequence[RosterMember], *, match_date: Optional[date] = None
+) -> str:
     if not roster:
         return "<li>Keine Kaderdaten gefunden.</li>"
 
     rendered: List[str] = []
+    if isinstance(match_date, datetime):
+        match_day: Optional[date] = match_date.date()
+    else:
+        match_day = match_date
+
     for member in roster:
         number = member.number_label
         if number and number.strip().isdigit():
@@ -1429,7 +1455,6 @@ def format_roster_list(roster: Sequence[RosterMember]) -> str:
         else:
             number_display = "Staff"
         name_html = escape(member.name)
-        label_role = "Funktion" if member.is_official else "Position"
         height_display: Optional[str] = None
         if member.height and not member.is_official:
             height_value = member.height.strip()
@@ -1442,22 +1467,31 @@ def format_roster_list(roster: Sequence[RosterMember]) -> str:
                         height_display = height_value
                 else:
                     height_display = height_value
-        details: List[Tuple[str, Optional[str]]] = []
-        if not member.is_official:
-            details.append(("Größe", height_display))
-        details.extend(
-            [
-                ("Geburtstag", member.formatted_birthdate),
-                ("Nation", member.nationality),
-                (label_role, member.role or None),
-            ]
-        )
+        birth_display = member.formatted_birthdate
+        birthdate_value = member.birthdate_value
+        age_display: Optional[str] = None
+        if birthdate_value and match_day:
+            age_value = calculate_age(birthdate_value, match_day)
+            if age_value is not None:
+                age_display = f"{age_value}"
+        if birth_display:
+            if age_display:
+                birth_display = f"{birth_display} ({age_display})"
+        else:
+            birth_display = "–"
+
+        nationality_value = (member.nationality or "").strip() or "–"
+        role_value = (member.role or "").strip() or "–"
+
         detail_parts: List[str] = []
-        for label, value in details:
-            display = escape(value) if value else "–"
-            detail_parts.append(f"{escape(label)}: {display}")
-        meta_block = "<div class=\"roster-meta\">{}</div>".format(
-            " • ".join(detail_parts)
+        if not member.is_official:
+            detail_parts.append(height_display or "–")
+        detail_parts.append(birth_display)
+        detail_parts.append(nationality_value)
+        detail_parts.append(role_value)
+
+        meta_block = "<div class=\"roster-details\">{}</div>".format(
+            " | ".join(escape(part) for part in detail_parts)
         )
         classes = ["roster-item"]
         classes.append("roster-official" if member.is_official else "roster-player")
@@ -1473,6 +1507,30 @@ def format_roster_list(roster: Sequence[RosterMember]) -> str:
             )
         )
     return "\n          ".join(rendered)
+
+
+def collect_birthday_notes(
+    match_date: date,
+    rosters: Sequence[tuple[str, Sequence[RosterMember]]],
+) -> List[str]:
+    notes: List[str] = []
+    for _team_name, roster in rosters:
+        for member in roster:
+            birthdate = member.birthdate_value
+            if not birthdate:
+                continue
+            if (birthdate.month, birthdate.day) != (
+                match_date.month,
+                match_date.day,
+            ):
+                continue
+            age_value = calculate_age(birthdate, match_date)
+            if age_value is not None:
+                note = f"{member.name.strip()} hat heute Geburtstag ({age_value} Jahre)!"
+            else:
+                note = f"{member.name.strip()} hat heute Geburtstag!"
+            notes.append(note)
+    return notes
 
 
 def format_transfer_list(items: Sequence[TransferItem]) -> str:
@@ -1530,7 +1588,9 @@ def build_html_report(
     font_scale: float = 1.0,
 ) -> str:
     heading = pretty_name(next_home.away_team)
-    kickoff = next_home.kickoff.strftime("%d.%m.%Y %H:%M")
+    kickoff_dt = next_home.kickoff.astimezone(BERLIN_TZ)
+    kickoff = kickoff_dt.strftime("%d.%m.%Y %H:%M")
+    match_day = kickoff_dt.date()
     location = pretty_name(next_home.location)
     usc_url = get_team_homepage(USC_CANONICAL_NAME) or USC_HOMEPAGE
     opponent_url = get_team_homepage(next_home.away_team)
@@ -1553,8 +1613,8 @@ def build_html_report(
     opponent_news_items = format_news_list(opponent_news)
     usc_instagram_items = format_instagram_list(usc_instagram)
     opponent_instagram_items = format_instagram_list(opponent_instagram)
-    usc_roster_items = format_roster_list(usc_roster)
-    opponent_roster_items = format_roster_list(opponent_roster)
+    usc_roster_items = format_roster_list(usc_roster, match_date=match_day)
+    opponent_roster_items = format_roster_list(opponent_roster, match_date=match_day)
     usc_transfer_items = format_transfer_list(usc_transfers)
     opponent_transfer_items = format_transfer_list(opponent_transfers)
 
@@ -1589,6 +1649,29 @@ def build_html_report(
             f"<p><a class=\"meta-link\" href=\"{escape(opponent_url)}\">Homepage {escape(heading)}</a></p>"
         )
     meta_html = "\n      ".join(meta_lines)
+
+    birthday_notes = collect_birthday_notes(
+        match_day,
+        (
+            (USC_CANONICAL_NAME, usc_roster),
+            (heading, opponent_roster),
+        ),
+    )
+    notes_html = ""
+    if birthday_notes:
+        note_items = "\n        ".join(
+            f"<li>{escape(note)}</li>" for note in birthday_notes
+        )
+        notes_html = (
+            "\n"
+            "    <section class=\"notice-group\">\n"
+            "      <h2>Bemerkungen</h2>\n"
+            "      <ul class=\"notice-list\">\n"
+            f"        {note_items}\n"
+            "      </ul>\n"
+            "    </section>\n"
+            "\n"
+        )
 
     font_scale = max(0.3, min(font_scale, 3.0))
     scale_value = f"{font_scale:.4f}".rstrip("0").rstrip(".")
@@ -1801,10 +1884,27 @@ def build_html_report(
       font-weight: 600;
       font-size: calc(var(--font-scale) * 1rem);
     }}
-    .roster-meta {{
+    .roster-details {{
       font-size: calc(var(--font-scale) * 0.82rem);
       color: #475569;
       line-height: 1.35;
+    }}
+    .notice-group {{
+      margin-top: clamp(1.4rem, 3vw, 2rem);
+    }}
+    .notice-list {{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.65rem;
+    }}
+    .notice-list li {{
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border-radius: 0.85rem;
+      padding: clamp(0.85rem, 2.8vw, 1.15rem);
+      font-weight: 600;
+      box-shadow: 0 16px 34px rgba(250, 204, 21, 0.22);
     }}
     .instagram-group {{
       margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
@@ -1919,8 +2019,13 @@ def build_html_report(
       .roster-official .roster-number {{
         background: #1f2933;
       }}
-      .roster-meta {{
+      .roster-details {{
         color: #cbd5f5;
+      }}
+      .notice-list li {{
+        background: linear-gradient(135deg, #7c2d12, #a16207);
+        color: #fef3c7;
+        box-shadow: 0 20px 48px rgba(250, 204, 21, 0.35);
       }}
       .team-photo figcaption {{
         color: #94a3b8;
@@ -1937,7 +2042,7 @@ def build_html_report(
     <div class=\"meta\">
       {meta_html}
     </div>
-    <section>
+{notes_html}    <section>
       <h2>Letzte Spiele von {escape(heading)}</h2>
       <ul class=\"match-list\">
         {opponent_items}

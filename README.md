@@ -51,7 +51,8 @@ Die HTML-Datei enthält:
 * Die beiden letzten Ergebnisse des USC Münster inklusive Gesamt- und Satzergebnissen
 * Die beiden letzten Ergebnisse des anstehenden Gegners inklusive Gesamt- und Satzergebnissen
 * Einen direkten Link auf die offizielle Bundesligatabelle
-* Aufklappbare Kaderübersichten beider Teams inklusive lokal eingebundenem Mannschaftsfoto, sortierten Rückennummern und den Offiziellen
+* Eine "Bemerkungen"-Rubrik, die auf Geburtstage am Spieltag hinweist, damit besondere Anlässe nicht übersehen werden
+* Aufklappbare Kaderübersichten beider Teams inklusive lokal eingebundenem Mannschaftsfoto, sortierten Rückennummern sowie allen Spielerinnen-Details (Größe, Geburtstag inklusive Alter am Spieltag, Nation, Position) und den Offiziellen direkt darunter
 * Eine zusätzliche Wechselbörse-Sektion pro Team mit den jüngsten Zu- und Abgängen aus der offiziellen VBL-Wechselbörse
 * Verlinkungen auf die Vereins-Homepages des USC Münster und des kommenden Gegners mit sprechenden Linktexten (z. B. "Homepage USC Münster")
 * Einen News-Block je Team unterhalb der Ergebnislisten – als aufklappbare Accordion-Sektion mit Artikeln der letzten zwei Wochen von den Vereinsseiten sowie den VBL-News- und Pressespiegel-Seiten, gefiltert auf Beiträge zu den beiden Teams
