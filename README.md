@@ -48,7 +48,7 @@ Die HTML-Datei enthält:
 * Die beiden letzten Ergebnisse des USC Münster inklusive Gesamt- und Satzergebnissen
 * Die beiden letzten Ergebnisse des anstehenden Gegners inklusive Gesamt- und Satzergebnissen
 * Einen direkten Link auf die offizielle Bundesligatabelle
-* Verlinkungen auf die Vereins-Homepages des USC Münster und des kommenden Gegners
+* Verlinkungen auf die Vereins-Homepages des USC Münster und des kommenden Gegners mit sprechenden Linktexten (z. B. "Homepage USC Münster")
 * Ein responsives Layout, das sich auf Smartphones und großen Displays gut lesen lässt
 
 ## Automatisierung mit GitHub Actions

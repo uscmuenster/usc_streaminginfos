@@ -66,8 +66,8 @@
       font-size: 0.95rem;
       color: #0f766e;
     }
-    .match-gap {
-      display: inline;
+    .meta-link {
+      font-weight: 600;
     }
     a {
       color: #0f766e;
@@ -76,22 +76,9 @@
     a:focus {
       text-decoration: underline;
     }
-    @media (min-width: 40rem) {
-      .match-line {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: baseline;
-      }
-      .match-result {
-        font-size: 1rem;
-      }
-    }
     @media (max-width: 40rem) {
       li {
         padding: 0.85rem 1rem;
-      }
-      .match-gap {
-        display: none;
       }
       .match-result {
         font-size: 0.95rem;
@@ -124,22 +111,22 @@
     <div class="meta">
       <p><strong>Spieltermin:</strong> 26.10.2025 16:00 Uhr</p>
       <p><strong>Austragungsort:</strong> Sporthalle Berg Fidel (48153 Münster)</p>
-      <p><strong>Tabelle:</strong> <a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml">https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml</a></p>
-      <p><strong>USC Münster:</strong> <a href="https://www.usc-muenster.de/">https://www.usc-muenster.de/</a></p>
-      <p><strong>ETV Hamburger Volksbank Volleys:</strong> <a href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys/">https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys/</a></p>
+      <p><a class="meta-link" href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml">Tabelle der Volleyball Bundesliga</a></p>
+      <p><a class="meta-link" href="https://www.usc-muenster.de/">Homepage USC Münster</a></p>
+      <p><a class="meta-link" href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys/">Homepage ETV Hamburger Volksbank Volleys</a></p>
     </div>
     <section>
       <h2>Letzte Spiele von USC Münster</h2>
       <ul>
-        <li><div class="match-line"><span class="match-header"><strong>15.10.2025 (Mi)</strong> – Binder Blaubären TSV Flacht vs. USC Münster</span><span class="match-result"><span class="match-gap" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>Ergebnis: 0:3 / 49:75 (14:25 15:25 20:25)</span></div></li>
-      <li><div class="match-line"><span class="match-header"><strong>12.10.2025 (So)</strong> – USC Münster vs. SSC Palmberg Schwerin</span><span class="match-result"><span class="match-gap" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>Ergebnis: 3:2 / 106:106 (20:25 25:22 21:25 25:21 15:13)</span></div></li>
+        <li><div class="match-line"><div class="match-header"><strong>15.10.2025 (Mi)</strong> – Binder Blaubären TSV Flacht vs. USC Münster</div><div class="match-result">Ergebnis: 0:3 / 49:75 (14:25 15:25 20:25)</div></div></li>
+      <li><div class="match-line"><div class="match-header"><strong>12.10.2025 (So)</strong> – USC Münster vs. SSC Palmberg Schwerin</div><div class="match-result">Ergebnis: 3:2 / 106:106 (20:25 25:22 21:25 25:21 15:13)</div></div></li>
       </ul>
     </section>
     <section>
       <h2>Letzte Spiele von ETV Hamburger Volksbank Volleys</h2>
       <ul>
-        <li><div class="match-line"><span class="match-header"><strong>18.10.2025 (Sa)</strong> – SSC Palmberg Schwerin vs. ETV Hamburger Volksbank Volleys</span><span class="match-result"><span class="match-gap" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>Ergebnis: 3:0 / 75:41 (25:16 25:11 25:14)</span></div></li>
-      <li><div class="match-line"><span class="match-header"><strong>11.10.2025 (Sa)</strong> – ETV Hamburger Volksbank Volleys vs. Allianz MTV Stuttgart</span><span class="match-result"><span class="match-gap" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>Ergebnis: 0:3 / 51:75 (14:25 20:25 17:25)</span></div></li>
+        <li><div class="match-line"><div class="match-header"><strong>18.10.2025 (Sa)</strong> – SSC Palmberg Schwerin vs. ETV Hamburger Volksbank Volleys</div><div class="match-result">Ergebnis: 3:0 / 75:41 (25:16 25:11 25:14)</div></div></li>
+      <li><div class="match-line"><div class="match-header"><strong>11.10.2025 (Sa)</strong> – ETV Hamburger Volksbank Volleys vs. Allianz MTV Stuttgart</div><div class="match-result">Ergebnis: 0:3 / 51:75 (14:25 20:25 17:25)</div></div></li>
       </ul>
     </section>
   </main>

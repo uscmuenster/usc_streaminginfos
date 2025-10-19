@@ -312,12 +312,11 @@ def format_match_line(match: Match) -> str:
     away = pretty_name(match.away_team)
     result = match.result.summary if match.result else "-"
     teams = f"{home} vs. {away}"
-    gap = "&nbsp;" * 5
     return (
         "<li>"
         "<div class=\"match-line\">"
-        f"<span class=\"match-header\"><strong>{escape(kickoff_label)}</strong> – {escape(teams)}</span>"
-        f"<span class=\"match-result\"><span class=\"match-gap\" aria-hidden=\"true\">{gap}</span>Ergebnis: {escape(result)}</span>"
+        f"<div class=\"match-header\"><strong>{escape(kickoff_label)}</strong> – {escape(teams)}</div>"
+        f"<div class=\"match-result\">Ergebnis: {escape(result)}</div>"
         "</div>"
         "</li>"
     )
@@ -354,24 +353,21 @@ def build_html_report(
     if usc_url:
         safe_usc_url = escape(usc_url)
         usc_link_block = (
-            "      <p><strong>USC Münster:</strong> "
-            f"<a href=\"{safe_usc_url}\">{safe_usc_url}</a></p>\n"
+            f"      <p><a class=\"meta-link\" href=\"{safe_usc_url}\">Homepage USC Münster</a></p>\n"
         )
 
     opponent_link_block = ""
     if opponent_url:
         safe_opponent_url = escape(opponent_url)
         opponent_link_block = (
-            f"      <p><strong>{escape(heading)}:</strong> "
-            f"<a href=\"{safe_opponent_url}\">{safe_opponent_url}</a></p>\n"
+            f"      <p><a class=\"meta-link\" href=\"{safe_opponent_url}\">Homepage {escape(heading)}</a></p>\n"
         )
 
     public_url_block = ""
     if public_url:
         safe_url = escape(public_url)
         public_url_block = (
-            "      <p><strong>Öffentliche Adresse:</strong> "
-            f"<a href=\"{safe_url}\">{safe_url}</a></p>\n"
+            f"      <p><a class=\"meta-link\" href=\"{safe_url}\">Öffentliche Adresse</a></p>\n"
         )
 
     html = f"""<!DOCTYPE html>
@@ -442,8 +438,8 @@ def build_html_report(
       font-size: 0.95rem;
       color: #0f766e;
     }}
-    .match-gap {{
-      display: inline;
+    .meta-link {{
+      font-weight: 600;
     }}
     a {{
       color: #0f766e;
@@ -452,22 +448,9 @@ def build_html_report(
     a:focus {{
       text-decoration: underline;
     }}
-    @media (min-width: 40rem) {{
-      .match-line {{
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: baseline;
-      }}
-      .match-result {{
-        font-size: 1rem;
-      }}
-    }}
     @media (max-width: 40rem) {{
       li {{
         padding: 0.85rem 1rem;
-      }}
-      .match-gap {{
-        display: none;
       }}
       .match-result {{
         font-size: 0.95rem;
@@ -500,7 +483,7 @@ def build_html_report(
     <div class=\"meta\">
       <p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>
       <p><strong>Austragungsort:</strong> {escape(location)}</p>
-      <p><strong>Tabelle:</strong> <a href=\"{TABLE_URL}\">{TABLE_URL}</a></p>
+      <p><a class=\"meta-link\" href=\"{TABLE_URL}\">Tabelle der Volleyball Bundesliga</a></p>
 {usc_link_block}{opponent_link_block}{public_url_block}    </div>
     <section>
       <h2>Letzte Spiele von {escape(USC_CANONICAL_NAME)}</h2>
