@@ -1,0 +1,14 @@
+api:
+  api_key: ""
+  league_uuid: ""
+  team_uuid: ""
+  season_uuid: ""
+news_sources:
+  - name: "Volleyball Bundesliga News"
+    type: rss
+    url: "https://www.volleyball-bundesliga.de/rss/articleFeed.xhtml?categoryIds=185851,185927,201995,182334,185863,185861,180490,441495,185870,185869,185929,185868,766577093"
+    limit: 10
+  - name: "USC Münster"
+    type: rss
+    url: "https://usc-muenster.de/feed/"
+    limit: 10
