@@ -54,12 +54,12 @@ Der Workflow `.github/workflows/ci.yml` kann manuell gestartet werden (`workflow
 03:00 Uhr deutscher Zeit (`cron: "0 1 * * *"` in UTC). Bei einem manuellen Lauf kannst du optional eine öffentliche URL
 eingeben, die in den Bericht aufgenommen wird. Bei jedem Lauf werden die Abhängigkeiten installiert, der aktuelle
 CSV-Spielplan nach `data/schedule.csv` heruntergeladen, das Modul kompiliert und anschließend der HTML-Bericht erzeugt. Das
-Ergebnis wird sowohl als Artefakt `usc-report` bereitgestellt als auch in `docs/index.html` geschrieben und bei Änderungen
-automatisch in den `main`-Branch eingecheckt.
+Ergebnis wird als Artefakt `usc-report` bereitgestellt, in `docs/index.html` geschrieben, bei Änderungen automatisch in den
+`main`-Branch eingecheckt **und** direkt über GitHub Pages veröffentlicht.
 
-Sobald GitHub Pages in den Repository-Einstellungen aktiviert ist (Quelle: `main`, Ordner: `docs/`), steht der Bericht unter
-`https://<dein-account>.github.io/<repository-name>/` öffentlich bereit – vergleichbar mit
-[`https://uscmuenster.github.io/USC-Spielplaene2526/index_trainer.html`](https://uscmuenster.github.io/USC-Spielplaene2526/index_trainer.html).
+Nach dem ersten erfolgreichen Workflow-Lauf ist der Bericht unter
+`https://<dein-account>.github.io/<repository-name>/` öffentlich abrufbar – vergleichbar mit
+[`https://uscmuenster.github.io/USC-Spielplaene2526/index_trainer.html`](https://uscmuenster.github.io/USC-Spielplaene2526/index_trainer.html). Eine separate Aktivierung von GitHub Pages ist nicht mehr nötig; das Deployment erledigt der Workflow.
 
 ## Nächste Schritte
 

@@ -15,6 +15,12 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -54,6 +60,12 @@ jobs:
           path: docs/index.html
           if-no-files-found: error
 
+      - name: Upload GitHub Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
       - name: Commit updated report
         if: github.event_name != 'pull_request'
         env:
@@ -69,3 +81,15 @@ jobs:
           git add docs/index.html
           git commit -m "Update generated USC report"
           git push
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
