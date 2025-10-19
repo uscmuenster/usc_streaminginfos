@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 
 from .report import (
@@ -9,7 +10,10 @@ from .report import (
     USC_CANONICAL_NAME,
     build_html_report,
     collect_instagram_links,
+    collect_team_roster,
     collect_team_news,
+    collect_team_photo,
+    collect_team_transfers,
     download_schedule,
     find_last_matches_for_team,
     find_next_usc_home_match,
@@ -33,10 +37,39 @@ def build_parser() -> argparse.ArgumentParser:
         help="Target HTML file path (default: docs/index.html).",
     )
     parser.add_argument(
+        "--app-output",
+        type=Path,
+        default=Path("docs/index_app.html"),
+        help="Pfad für die App-optimierte HTML-Version (Standard: docs/index_app.html).",
+    )
+    parser.add_argument(
+        "--app-scale",
+        type=float,
+        default=0.75,
+        help="Schriftgrößenfaktor für die App-Version (Standard: 0.75).",
+    )
+    parser.add_argument(
+        "--skip-app-output",
+        action="store_true",
+        help="App-optimierte HTML-Datei nicht erzeugen.",
+    )
+    parser.add_argument(
         "--schedule-path",
         type=Path,
         default=Path("data/schedule.csv"),
         help="Local path to store the downloaded schedule CSV.",
+    )
+    parser.add_argument(
+        "--roster-dir",
+        type=Path,
+        default=Path("data/rosters"),
+        help="Local directory to persist downloaded roster CSV exports (default: data/rosters).",
+    )
+    parser.add_argument(
+        "--photo-dir",
+        type=Path,
+        default=Path("data/team_photos"),
+        help="Local directory to cache downloaded team photos (default: data/team_photos).",
     )
     parser.add_argument(
         "--recent-limit",
@@ -81,7 +114,58 @@ def main() -> int:
     usc_instagram = collect_instagram_links(USC_CANONICAL_NAME)
     opponent_instagram = collect_instagram_links(next_home.away_team)
 
-    html = build_html_report(
+    try:
+        usc_roster = collect_team_roster(USC_CANONICAL_NAME, args.roster_dir)
+    except Exception as exc:  # pragma: no cover - network failure
+        print(
+            f"Warnung: Kader für {USC_CANONICAL_NAME} konnte nicht geladen werden: {exc}",
+            file=sys.stderr,
+        )
+        usc_roster = []
+    try:
+        opponent_roster = collect_team_roster(next_home.away_team, args.roster_dir)
+    except Exception as exc:  # pragma: no cover - network failure
+        print(
+            f"Warnung: Kader für {next_home.away_team} konnte nicht geladen werden: {exc}",
+            file=sys.stderr,
+        )
+        opponent_roster = []
+
+    try:
+        usc_transfers = collect_team_transfers(USC_CANONICAL_NAME)
+    except Exception as exc:  # pragma: no cover - network failure
+        print(
+            f"Warnung: Wechselbörse für {USC_CANONICAL_NAME} konnte nicht geladen werden: {exc}",
+            file=sys.stderr,
+        )
+        usc_transfers = []
+    try:
+        opponent_transfers = collect_team_transfers(next_home.away_team)
+    except Exception as exc:  # pragma: no cover - network failure
+        print(
+            f"Warnung: Wechselbörse für {next_home.away_team} konnte nicht geladen werden: {exc}",
+            file=sys.stderr,
+        )
+        opponent_transfers = []
+
+    try:
+        usc_photo = collect_team_photo(USC_CANONICAL_NAME, args.photo_dir)
+    except Exception as exc:  # pragma: no cover - network failure
+        print(
+            f"Warnung: Teamfoto für {USC_CANONICAL_NAME} konnte nicht geladen werden: {exc}",
+            file=sys.stderr,
+        )
+        usc_photo = None
+    try:
+        opponent_photo = collect_team_photo(next_home.away_team, args.photo_dir)
+    except Exception as exc:  # pragma: no cover - network failure
+        print(
+            f"Warnung: Teamfoto für {next_home.away_team} konnte nicht geladen werden: {exc}",
+            file=sys.stderr,
+        )
+        opponent_photo = None
+
+    report_kwargs = dict(
         next_home=next_home,
         usc_recent=usc_recent,
         opponent_recent=opponent_recent,
@@ -89,10 +173,23 @@ def main() -> int:
         opponent_news=opponent_news,
         usc_instagram=usc_instagram,
         opponent_instagram=opponent_instagram,
+        usc_roster=usc_roster,
+        opponent_roster=opponent_roster,
+        usc_transfers=usc_transfers,
+        opponent_transfers=opponent_transfers,
+        usc_photo=usc_photo,
+        opponent_photo=opponent_photo,
         public_url=args.public_url,
     )
+
+    html = build_html_report(**report_kwargs)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(html, encoding="utf-8")
+
+    if not args.skip_app_output and args.app_output:
+        app_html = build_html_report(font_scale=args.app_scale, **report_kwargs)
+        args.app_output.parent.mkdir(parents=True, exist_ok=True)
+        args.app_output.write_text(app_html, encoding="utf-8")
     return 0
 
 

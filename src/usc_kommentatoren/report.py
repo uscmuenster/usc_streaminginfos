@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import base64
 import csv
 import time
 from dataclasses import dataclass
 import re
 from datetime import datetime, timedelta
 from pathlib import Path
+import mimetypes
 from html import escape
 from io import StringIO
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
@@ -21,6 +23,8 @@ DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/Play
 TABLE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml"
 VBL_NEWS_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml"
 VBL_PRESS_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/pressespiegel.xhtml"
+WECHSELBOERSE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/wechselboerse.xhtml"
+TEAM_PAGE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml"
 BERLIN_TZ = ZoneInfo("Europe/Berlin")
 USC_CANONICAL_NAME = "USC Münster"
 USC_HOMEPAGE = "https://www.usc-muenster.de/"
@@ -128,6 +132,15 @@ class Match:
 
 
 @dataclass(frozen=True)
+class RosterMember:
+    number_label: Optional[str]
+    number_value: Optional[int]
+    name: str
+    role: str
+    is_official: bool
+
+
+@dataclass(frozen=True)
 class NewsItem:
     title: str
     url: str
@@ -141,6 +154,24 @@ class NewsItem:
             return None
         return self.published.astimezone(BERLIN_TZ).strftime("%d.%m.%Y %H:%M")
 
+
+@dataclass(frozen=True)
+class TransferItem:
+    date: Optional[datetime]
+    date_label: str
+    category: Optional[str]
+    type_code: str
+    name: str
+    url: Optional[str]
+    nationality: str
+    info: str
+    related_club: str
+
+    @property
+    def formatted_date(self) -> str:
+        if self.date:
+            return self.date.strftime("%d.%m.%Y")
+        return self.date_label
 
 @dataclass(frozen=True)
 class KeywordSet:
@@ -323,6 +354,78 @@ def download_schedule(
     return destination
 
 
+def _download_roster_text(
+    url: str,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> str:
+    response = _http_get(
+        url,
+        headers={"Accept": "text/csv"},
+        retries=retries,
+        delay_seconds=delay_seconds,
+    )
+    return response.content.decode("latin-1")
+
+
+def parse_roster(csv_text: str) -> List[RosterMember]:
+    buffer = StringIO(csv_text)
+    reader = csv.DictReader(buffer, delimiter=";", quotechar="\"")
+    players: List[RosterMember] = []
+    officials: List[RosterMember] = []
+    for row in reader:
+        name = (row.get("Titel Vorname Nachname") or "").strip()
+        if not name:
+            continue
+        number_raw = (row.get("Trikot") or "").strip()
+        role = (row.get("Position/Funktion Offizieller") or "").strip()
+        number_value: Optional[int] = None
+        is_official = True
+        if number_raw:
+            compact = number_raw.replace(" ", "")
+            if compact.isdigit():
+                number_value = int(compact)
+                is_official = False
+        member = RosterMember(
+            number_label=number_raw or None,
+            number_value=number_value,
+            name=name,
+            role=role,
+            is_official=is_official,
+        )
+        if member.is_official:
+            officials.append(member)
+        else:
+            players.append(member)
+
+    players.sort(
+        key=lambda member: (
+            member.number_value if member.number_value is not None else 10_000,
+            member.name.lower(),
+        )
+    )
+    return players + officials
+
+
+def collect_team_roster(
+    team_name: str,
+    directory: Path,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> List[RosterMember]:
+    url = get_team_roster_url(team_name)
+    if not url:
+        return []
+    csv_text = _download_roster_text(url, retries=retries, delay_seconds=delay_seconds)
+    directory.mkdir(parents=True, exist_ok=True)
+    slug = slugify_team_name(team_name) or "team"
+    destination = directory / f"{slug}.csv"
+    destination.write_text(csv_text, encoding="utf-8")
+    return parse_roster(csv_text)
+
+
 def load_schedule_from_file(path: Path) -> List[Match]:
     csv_text = path.read_text(encoding="utf-8")
     return parse_schedule(csv_text)
@@ -438,6 +541,12 @@ def normalize_name(value: str) -> str:
     return normalized
 
 
+def slugify_team_name(value: str) -> str:
+    simplified = simplify_text(value)
+    slug = re.sub(r"[^a-z0-9]+", "-", simplified)
+    return slug.strip("-")
+
+
 def is_usc(name: str) -> bool:
     normalized = normalize_name(name)
     return "usc" in normalized and "munster" in normalized
@@ -465,6 +574,129 @@ TEAM_HOMEPAGES = _build_team_homepages()
 
 def get_team_homepage(team_name: str) -> Optional[str]:
     return TEAM_HOMEPAGES.get(normalize_name(team_name))
+
+
+def _build_team_roster_ids() -> Dict[str, str]:
+    pairs = {
+        "Allianz MTV Stuttgart": "776311283",
+        "Binder Blaubären TSV Flacht": "776308950",
+        "Dresdner SC": "776311462",
+        "ETV Hamburger Volksbank Volleys": "776308974",
+        "Ladies in Black Aachen": "776311428",
+        "SSC Palmberg Schwerin": "776311399",
+        "Schwarz-Weiß Erfurt": "776311376",
+        "Skurios Volleys Borken": "776309053",
+        "USC Münster": "776311313",
+        "VC Wiesbaden": "776311253",
+        "VfB Suhl LOTTO Thüringen": "776311348",
+    }
+    return {normalize_name(name): team_id for name, team_id in pairs.items()}
+
+
+TEAM_ROSTER_IDS = _build_team_roster_ids()
+
+
+ROSTER_EXPORT_URL = (
+    "https://www.volleyball-bundesliga.de/servlet/sportsclub/TeamMemberCsvExport"
+)
+
+
+def get_team_roster_url(team_name: str) -> Optional[str]:
+    team_id = TEAM_ROSTER_IDS.get(normalize_name(team_name))
+    if not team_id:
+        return None
+    return f"{ROSTER_EXPORT_URL}?teamId={team_id}"
+
+
+def get_team_page_url(team_name: str) -> Optional[str]:
+    team_id = TEAM_ROSTER_IDS.get(normalize_name(team_name))
+    if not team_id:
+        return None
+    return f"{TEAM_PAGE_URL}?c.teamId={team_id}&c.view=teamMain"
+
+
+PHOTO_EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp")
+
+
+def _iter_cached_photos(directory: Path, slug: str) -> Iterable[Path]:
+    for extension in PHOTO_EXTENSIONS:
+        candidate = directory / f"{slug}{extension}"
+        if candidate.exists():
+            yield candidate
+
+
+def _encode_photo_data_uri(path: Path, *, mime_type: Optional[str] = None) -> str:
+    mime = mime_type or mimetypes.guess_type(path.name)[0] or "image/jpeg"
+    encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+    return f"data:{mime};base64,{encoded}"
+
+
+def collect_team_photo(
+    team_name: str,
+    directory: Path,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> Optional[str]:
+    slug = slugify_team_name(team_name)
+    if not slug:
+        return None
+
+    directory.mkdir(parents=True, exist_ok=True)
+
+    for cached_path in _iter_cached_photos(directory, slug):
+        try:
+            return _encode_photo_data_uri(cached_path)
+        except OSError:
+            try:
+                cached_path.unlink()
+            except OSError:
+                pass
+
+    page_url = get_team_page_url(team_name)
+    if not page_url:
+        return None
+
+    html = fetch_html(page_url, retries=retries, delay_seconds=delay_seconds)
+    soup = BeautifulSoup(html, "html.parser")
+    photo_tag = None
+    for img in soup.find_all("img"):
+        classes = {cls.lower() for cls in (img.get("class") or [])}
+        if "teamphoto" in classes:
+            photo_tag = img
+            break
+
+    if not photo_tag:
+        return None
+
+    src = photo_tag.get("src") or ""
+    if not src:
+        return None
+
+    photo_url = urljoin(page_url, src)
+    response = _http_get(
+        photo_url,
+        headers={"Accept": "image/*"},
+        retries=retries,
+        delay_seconds=delay_seconds,
+    )
+    content = response.content
+    content_type = response.headers.get("Content-Type", "").split(";", 1)[0].strip() or None
+
+    suffix = Path(urlparse(photo_url).path).suffix.lower()
+    if suffix not in PHOTO_EXTENSIONS:
+        guessed = ""
+        if content_type:
+            guessed = (mimetypes.guess_extension(content_type) or "").lower()
+        if guessed in PHOTO_EXTENSIONS:
+            suffix = guessed
+        else:
+            suffix = ".jpg"
+
+    filename = f"{slug}{suffix}"
+    path = directory / filename
+    path.write_bytes(content)
+    return _encode_photo_data_uri(path, mime_type=content_type)
 
 
 def _build_team_instagram() -> Dict[str, str]:
@@ -918,6 +1150,90 @@ def collect_team_news(
     return usc_combined, opponent_combined
 
 
+def _parse_transfer_table(table: "BeautifulSoup") -> List[TransferItem]:
+    rows = table.find_all("tr")
+    items: List[TransferItem] = []
+    current_category: Optional[str] = None
+    for row in rows:
+        cells = row.find_all("td")
+        if not cells:
+            headers = row.find_all("th")
+            if headers:
+                label = headers[0].get_text(strip=True)
+                if label:
+                    current_category = label
+            continue
+        texts = [cell.get_text(strip=True) for cell in cells]
+        if not any(texts):
+            continue
+        first = texts[0]
+        parsed_date = parse_date_label(first)
+        if not parsed_date and not DATE_PATTERN.match(first):
+            label = first or None
+            if label:
+                current_category = label
+            continue
+        name_cell = cells[2] if len(cells) > 2 else None
+        name = name_cell.get_text(strip=True) if name_cell else ""
+        if not name:
+            continue
+        link = None
+        if name_cell:
+            anchor = name_cell.find("a")
+            if anchor and anchor.has_attr("href"):
+                link = urljoin(WECHSELBOERSE_URL, anchor["href"])
+        type_code = texts[1] if len(texts) > 1 else ""
+        nationality = texts[3] if len(texts) > 3 else ""
+        info = texts[4] if len(texts) > 4 else ""
+        related = texts[5] if len(texts) > 5 else ""
+        items.append(
+            TransferItem(
+                date=parsed_date,
+                date_label=first,
+                category=current_category,
+                type_code=type_code,
+                name=name,
+                url=link,
+                nationality=nationality,
+                info=info,
+                related_club=related,
+            )
+        )
+    return items
+
+
+_TRANSFER_CACHE: Optional[Dict[str, List[TransferItem]]] = None
+
+
+def _load_transfer_cache() -> Dict[str, List[TransferItem]]:
+    global _TRANSFER_CACHE
+    if _TRANSFER_CACHE is not None:
+        return _TRANSFER_CACHE
+    try:
+        html = fetch_html(WECHSELBOERSE_URL, headers=REQUEST_HEADERS)
+    except requests.RequestException:
+        _TRANSFER_CACHE = {}
+        return _TRANSFER_CACHE
+    soup = BeautifulSoup(html, "html.parser")
+    mapping: Dict[str, List[TransferItem]] = {}
+    for heading in soup.find_all("h2"):
+        team_name = heading.get_text(strip=True)
+        if not team_name:
+            continue
+        table = heading.find_next("table")
+        if not table:
+            continue
+        items = _parse_transfer_table(table)
+        mapping[normalize_name(team_name)] = items
+    _TRANSFER_CACHE = mapping
+    return mapping
+
+
+def collect_team_transfers(team_name: str) -> List[TransferItem]:
+    cache = _load_transfer_cache()
+    return list(cache.get(normalize_name(team_name), ()))
+
+
 def pretty_name(name: str) -> str:
     if is_usc(name):
         return USC_CANONICAL_NAME
@@ -1048,6 +1364,91 @@ def format_instagram_list(links: Sequence[str]) -> str:
     return "\n          ".join(rendered)
 
 
+def format_roster_list(roster: Sequence[RosterMember]) -> str:
+    if not roster:
+        return "<li>Keine Kaderdaten gefunden.</li>"
+
+    rendered: List[str] = []
+    for member in roster:
+        number = member.number_label
+        if number and number.strip().isdigit():
+            number_display = f"#{number.strip()}"
+        elif number:
+            number_display = number.strip()
+        else:
+            number_display = "Staff"
+        name_html = escape(member.name)
+        role_html = escape(member.role) if member.role else ""
+        role_block = (
+            f"<span class=\"roster-role\">{role_html}</span>" if role_html else ""
+        )
+        classes = ["roster-item"]
+        classes.append("roster-official" if member.is_official else "roster-player")
+        rendered.append(
+            "<li class=\"{classes}\">"
+            "<span class=\"roster-number\">{number}</span>"
+            "<div class=\"roster-text\"><span class=\"roster-name\">{name}</span>{role}</div>"
+            "</li>".format(
+                classes=" ".join(classes),
+                number=escape(number_display),
+                name=name_html,
+                role=role_block,
+            )
+        )
+    return "\n          ".join(rendered)
+
+
+def format_transfer_list(items: Sequence[TransferItem]) -> str:
+    if not items:
+        return "<li>Keine Wechsel gemeldet.</li>"
+
+    rendered: List[str] = []
+    current_category: Optional[str] = None
+    for item in items:
+        if item.category and item.category != current_category:
+            rendered.append(
+                f"<li class=\"transfer-category\">{escape(item.category)}</li>"
+            )
+            current_category = item.category
+        name_html = escape(item.name)
+        if item.url:
+            name_html = f"<a href=\"{escape(item.url)}\">{name_html}</a>"
+        meta_parts: List[str] = []
+        type_label = item.type_code.strip()
+        if type_label:
+            meta_parts.append(escape(type_label))
+        nationality = item.nationality.strip()
+        if nationality:
+            meta_parts.append(escape(nationality))
+        meta_block = (
+            f"<span class=\"transfer-meta\">{' – '.join(meta_parts)}</span>"
+            if meta_parts
+            else ""
+        )
+        detail_parts: List[str] = []
+        info = item.info.strip()
+        if info:
+            detail_parts.append(escape(info))
+        related = item.related_club.strip()
+        if related:
+            detail_parts.append(escape(related))
+        details_block = (
+            f"<span class=\"transfer-details\">{' | '.join(detail_parts)}</span>"
+            if detail_parts
+            else ""
+        )
+        rendered.append(
+            "<li>"
+            "<div class=\"transfer-entry\">"
+            f"<span class=\"transfer-date\">{escape(item.formatted_date)}</span>"
+            f"<span class=\"transfer-name\">{name_html}</span>"
+            f"{meta_block}{details_block}"
+            "</div>"
+            "</li>"
+        )
+    return "\n          ".join(rendered)
+
+
 def build_html_report(
     *,
     next_home: Match,
@@ -1057,7 +1458,14 @@ def build_html_report(
     opponent_news: Sequence[NewsItem],
     usc_instagram: Sequence[str],
     opponent_instagram: Sequence[str],
+    usc_roster: Sequence[RosterMember],
+    opponent_roster: Sequence[RosterMember],
+    usc_transfers: Sequence[TransferItem],
+    opponent_transfers: Sequence[TransferItem],
+    usc_photo: Optional[str],
+    opponent_photo: Optional[str],
     public_url: Optional[str] = None,
+    font_scale: float = 1.0,
 ) -> str:
     heading = pretty_name(next_home.away_team)
     kickoff = next_home.kickoff.strftime("%d.%m.%Y %H:%M")
@@ -1083,27 +1491,51 @@ def build_html_report(
     opponent_news_items = format_news_list(opponent_news)
     usc_instagram_items = format_instagram_list(usc_instagram)
     opponent_instagram_items = format_instagram_list(opponent_instagram)
+    usc_roster_items = format_roster_list(usc_roster)
+    opponent_roster_items = format_roster_list(opponent_roster)
+    usc_transfer_items = format_transfer_list(usc_transfers)
+    opponent_transfer_items = format_transfer_list(opponent_transfers)
 
-    usc_link_block = ""
+    opponent_photo_block = ""
+    if opponent_photo:
+        opponent_photo_block = (
+            "          <figure class=\"team-photo\">"
+            f"<img src=\"{escape(opponent_photo)}\" alt=\"Teamfoto {escape(heading)}\" />"
+            f"<figcaption>Teamfoto {escape(heading)}</figcaption>"
+            "</figure>\n"
+        )
+
+    usc_photo_block = ""
+    if usc_photo:
+        usc_photo_block = (
+            "          <figure class=\"team-photo\">"
+            f"<img src=\"{escape(usc_photo)}\" alt=\"Teamfoto {escape(USC_CANONICAL_NAME)}\" />"
+            f"<figcaption>Teamfoto {escape(USC_CANONICAL_NAME)}</figcaption>"
+            "</figure>\n"
+        )
+    meta_lines = [
+        f"<p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>",
+        f"<p><strong>Austragungsort:</strong> {escape(location)}</p>",
+        f"<p><a class=\"meta-link\" href=\"{escape(TABLE_URL)}\">Tabelle der Volleyball Bundesliga</a></p>",
+    ]
     if usc_url:
-        safe_usc_url = escape(usc_url)
-        usc_link_block = (
-            f"      <p><a class=\"meta-link\" href=\"{safe_usc_url}\">Homepage USC Münster</a></p>\n"
+        meta_lines.append(
+            f"<p><a class=\"meta-link\" href=\"{escape(usc_url)}\">Homepage USC Münster</a></p>"
         )
-
-    opponent_link_block = ""
     if opponent_url:
-        safe_opponent_url = escape(opponent_url)
-        opponent_link_block = (
-            f"      <p><a class=\"meta-link\" href=\"{safe_opponent_url}\">Homepage {escape(heading)}</a></p>\n"
+        meta_lines.append(
+            f"<p><a class=\"meta-link\" href=\"{escape(opponent_url)}\">Homepage {escape(heading)}</a></p>"
         )
-
-    public_url_block = ""
     if public_url:
-        safe_url = escape(public_url)
-        public_url_block = (
-            f"      <p><a class=\"meta-link\" href=\"{safe_url}\">Öffentliche Adresse</a></p>\n"
+        meta_lines.append(
+            f"<p><a class=\"meta-link\" href=\"{escape(public_url)}\">Öffentliche Adresse</a></p>"
         )
+    meta_html = "\n      ".join(meta_lines)
+
+    font_scale = max(0.3, min(font_scale, 3.0))
+    scale_value = f"{font_scale:.4f}".rstrip("0").rstrip(".")
+    if not scale_value:
+        scale_value = "1"
 
     html = f"""<!DOCTYPE html>
 <html lang=\"de\">
@@ -1112,31 +1544,31 @@ def build_html_report(
   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
   <title>Nächster USC-Heimgegner</title>
   <style>
-    :root {{ color-scheme: light dark; }}
+    :root {{ color-scheme: light dark; --font-scale: {scale_value}; }}
     body {{
       margin: 0;
-      font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      font-family: \"Inter\", \"Segoe UI\", -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Arial, sans-serif;
       line-height: 1.6;
-      font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+      font-size: calc(var(--font-scale) * clamp(0.95rem, 1.8vw, 1.05rem));
       background: #f5f7f9;
       color: #1f2933;
     }}
     main {{
       max-width: 60rem;
       margin: 0 auto;
-      padding: clamp(1.25rem, 4vw, 3rem);
+      padding: clamp(0.75rem, 3vw, 1.5rem) clamp(1rem, 4vw, 3rem);
     }}
     h1 {{
       color: #004c54;
-      font-size: clamp(1.55rem, 4.5vw, 2.35rem);
-      margin-bottom: 1.25rem;
+      font-size: calc(var(--font-scale) * clamp(1.55rem, 4.5vw, 2.35rem));
+      margin: 0 0 1.25rem 0;
     }}
     h2 {{
-      font-size: clamp(1.15rem, 3.6vw, 1.6rem);
+      font-size: calc(var(--font-scale) * clamp(1.15rem, 3.6vw, 1.6rem));
       margin-bottom: 1rem;
     }}
     section {{
-      margin-top: clamp(1.75rem, 4vw, 2.75rem);
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
     }}
     .meta {{
       display: grid;
@@ -1170,12 +1602,14 @@ def build_html_report(
       color: inherit;
     }}
     .match-result {{
-      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
-      font-size: 0.9rem;
+      font-family: \"Fira Mono\", \"SFMono-Regular\", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * 0.9rem);
       color: #0f766e;
     }}
-    .news-group {{
-      margin-top: 1.75rem;
+    .news-group,
+    .roster-group,
+    .transfer-group {{
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
       display: grid;
       gap: 1rem;
     }}
@@ -1186,6 +1620,8 @@ def build_html_report(
       box-shadow: 0 18px 40px rgba(30, 64, 175, 0.08);
       border: none;
     }}
+    .roster-group details:nth-of-type(2),
+    .transfer-group details:nth-of-type(2),
     .news-group details:nth-of-type(2) {{
       background: #dcfce7;
       box-shadow: 0 18px 40px rgba(22, 163, 74, 0.08);
@@ -1198,14 +1634,14 @@ def build_html_report(
       align-items: center;
       justify-content: space-between;
       list-style: none;
-      font-size: clamp(1rem, 2.6vw, 1.2rem);
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.6vw, 1.2rem));
     }}
     .accordion summary::-webkit-details-marker {{
       display: none;
     }}
     .accordion summary::after {{
-      content: "▾";
-      font-size: 1rem;
+      content: \"▾\";
+      font-size: calc(var(--font-scale) * 1rem);
       transition: transform 0.2s ease;
     }}
     .accordion[open] summary::after {{
@@ -1228,12 +1664,98 @@ def build_html_report(
     }}
     .news-meta {{
       display: block;
-      font-size: 0.85rem;
+      font-size: calc(var(--font-scale) * 0.85rem);
       color: #64748b;
       margin-top: 0.2rem;
     }}
+    .transfer-list {{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.65rem;
+    }}
+    .transfer-category {{
+      font-weight: 700;
+      color: #1d4ed8;
+      padding-top: 0.35rem;
+      margin: 0;
+    }}
+    .transfer-entry {{
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }}
+    .transfer-date {{
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * 0.95rem);
+      color: #0f172a;
+    }}
+    .transfer-name {{
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * 1rem);
+    }}
+    .transfer-meta,
+    .transfer-details {{
+      display: block;
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #475569;
+    }}
+    .team-photo {{
+      margin: 0 0 1.1rem 0;
+    }}
+    .team-photo img {{
+      width: 100%;
+      border-radius: 0.85rem;
+      display: block;
+    }}
+    .team-photo figcaption {{
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #64748b;
+      margin-top: 0.35rem;
+      text-align: center;
+    }}
+    .roster-list {{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.8rem;
+    }}
+    .roster-item {{
+      display: grid;
+      grid-template-columns: minmax(3.6rem, auto) 1fr;
+      gap: 0.75rem;
+      align-items: center;
+    }}
+    .roster-number {{
+      font-family: \"Fira Mono\", \"SFMono-Regular\", Menlo, Consolas, monospace;
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * 0.95rem);
+      background: #bae6fd;
+      color: #1f2933;
+      border-radius: 0.65rem;
+      padding: 0.35rem 0.65rem;
+      text-align: center;
+    }}
+    .roster-official .roster-number {{
+      background: #e2e8f0;
+    }}
+    .roster-text {{
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }}
+    .roster-name {{
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * 1rem);
+    }}
+    .roster-role {{
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #64748b;
+    }}
     .instagram-group {{
-      margin-top: clamp(1.75rem, 4vw, 2.75rem);
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
     }}
     .instagram-grid {{
       display: grid;
@@ -1248,7 +1770,7 @@ def build_html_report(
     }}
     .instagram-card h3 {{
       margin: 0 0 0.75rem 0;
-      font-size: clamp(1.05rem, 3vw, 1.3rem);
+      font-size: calc(var(--font-scale) * clamp(1.05rem, 3vw, 1.3rem));
     }}
     .instagram-list {{
       list-style: none;
@@ -1269,22 +1791,32 @@ def build_html_report(
     }}
     @media (max-width: 40rem) {{
       body {{
-        font-size: 0.95rem;
+        font-size: calc(var(--font-scale) * 0.9rem);
       }}
       h1 {{
-        font-size: 1.8rem;
+        font-size: calc(var(--font-scale) * 1.6rem);
       }}
       h2 {{
-        font-size: 1.25rem;
+        font-size: calc(var(--font-scale) * 1.1rem);
       }}
       .match-list li {{
         padding: 0.85rem 1rem;
       }}
       .match-result {{
-        font-size: 0.85rem;
+        font-size: calc(var(--font-scale) * 0.85rem);
       }}
       .accordion summary {{
-        font-size: 1.05rem;
+        font-size: calc(var(--font-scale) * 1.05rem);
+      }}
+      .roster-item {{
+        grid-template-columns: minmax(3rem, auto) 1fr;
+      }}
+      .roster-number {{
+        font-size: calc(var(--font-scale) * 0.8rem);
+        padding: 0.3rem 0.5rem;
+      }}
+      .team-photo {{
+        margin-bottom: 0.9rem;
       }}
     }}
     @media (prefers-color-scheme: dark) {{
@@ -1300,6 +1832,8 @@ def build_html_report(
         background: #102437;
         box-shadow: 0 18px 40px rgba(15, 118, 255, 0.2);
       }}
+      .roster-group details:nth-of-type(2),
+      .transfer-group details:nth-of-type(2),
       .news-group details:nth-of-type(2) {{
         background: #123026;
         box-shadow: 0 18px 40px rgba(45, 212, 191, 0.18);
@@ -1311,14 +1845,29 @@ def build_html_report(
       .match-result {{
         color: #5eead4;
       }}
+      .transfer-date {{
+        color: #bae6fd;
+      }}
+      .transfer-meta,
+      .transfer-details,
+      .news-meta {{
+        color: #9ca3af;
+      }}
+      .transfer-category {{
+        color: #93c5fd;
+      }}
+      .roster-number {{
+        background: #155e75;
+        color: #ecfeff;
+      }}
+      .roster-official .roster-number {{
+        background: #1f2933;
+      }}
+      .team-photo figcaption {{
+        color: #94a3b8;
+      }}
       a {{
         color: #5eead4;
-      }}
-      h1 {{
-        color: #5eead4;
-      }}
-      .news-meta {{
-        color: #94a3b8;
       }}
     }}
   </style>
@@ -1327,10 +1876,8 @@ def build_html_report(
   <main>
     <h1>Nächster USC-Heimgegner:<br>{escape(heading)}</h1>
     <div class=\"meta\">
-      <p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>
-      <p><strong>Austragungsort:</strong> {escape(location)}</p>
-      <p><a class=\"meta-link\" href=\"{TABLE_URL}\">Tabelle der Volleyball Bundesliga</a></p>
-{usc_link_block}{opponent_link_block}{public_url_block}    </div>
+      {meta_html}
+    </div>
     <section>
       <h2>Letzte Spiele von {escape(heading)}</h2>
       <ul class=\"match-list\">
@@ -1342,6 +1889,42 @@ def build_html_report(
       <ul class=\"match-list\">
         {usc_items}
       </ul>
+    </section>
+    <section class=\"roster-group\">
+      <details class=\"accordion\">
+        <summary>Kader {escape(heading)}</summary>
+        <div class=\"accordion-content\">
+{opponent_photo_block}          <ul class=\"roster-list\">
+            {opponent_roster_items}
+          </ul>
+        </div>
+      </details>
+      <details class=\"accordion\">
+        <summary>Kader {escape(USC_CANONICAL_NAME)}</summary>
+        <div class=\"accordion-content\">
+{usc_photo_block}          <ul class=\"roster-list\">
+            {usc_roster_items}
+          </ul>
+        </div>
+      </details>
+    </section>
+    <section class=\"transfer-group\">
+      <details class=\"accordion\">
+        <summary>Wechselbörse {escape(heading)}</summary>
+        <div class=\"accordion-content\">
+          <ul class=\"transfer-list\">
+            {opponent_transfer_items}
+          </ul>
+        </div>
+      </details>
+      <details class=\"accordion\">
+        <summary>Wechselbörse {escape(USC_CANONICAL_NAME)}</summary>
+        <div class=\"accordion-content\">
+          <ul class=\"transfer-list\">
+            {usc_transfer_items}
+          </ul>
+        </div>
+      </details>
     </section>
     <section class=\"news-group\">
       <details class=\"accordion\">
@@ -1392,20 +1975,29 @@ __all__ = [
     "NewsItem",
     "Match",
     "MatchResult",
+    "RosterMember",
+    "TransferItem",
     "TEAM_HOMEPAGES",
+    "TEAM_ROSTER_IDS",
     "TABLE_URL",
     "VBL_NEWS_URL",
     "VBL_PRESS_URL",
+    "WECHSELBOERSE_URL",
     "USC_HOMEPAGE",
     "collect_team_news",
+    "collect_team_transfers",
     "collect_instagram_links",
+    "collect_team_roster",
+    "collect_team_photo",
     "build_html_report",
     "download_schedule",
+    "get_team_homepage",
+    "get_team_roster_url",
     "fetch_team_news",
     "fetch_schedule",
     "find_last_matches_for_team",
     "find_next_usc_home_match",
-    "get_team_homepage",
     "load_schedule_from_file",
+    "parse_roster",
     "parse_schedule",
 ]

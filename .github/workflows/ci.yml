@@ -57,7 +57,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: usc-report
-          path: docs/index.html
+          path: |
+            docs/index.html
+            docs/index_app.html
           if-no-files-found: error
 
       - name: Upload GitHub Pages artifact
@@ -71,15 +73,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if git diff --quiet -- docs/index.html; then
-            echo "Keine Änderungen am HTML-Bericht"
+          if git diff --quiet -- docs/index.html docs/index_app.html; then
+            echo "Keine Änderungen an den HTML-Berichten"
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/index.html
-          git commit -m "Update generated USC report"
+          git add docs/index.html docs/index_app.html
+          git commit -m "Update generated USC reports"
           git push
 
   deploy:
