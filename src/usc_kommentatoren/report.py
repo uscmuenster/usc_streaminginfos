@@ -1513,24 +1513,45 @@ def collect_birthday_notes(
     match_date: date,
     rosters: Sequence[tuple[str, Sequence[RosterMember]]],
 ) -> List[str]:
-    notes: List[str] = []
+    notes: List[tuple[int, str]] = []
     for _team_name, roster in rosters:
         for member in roster:
+            if member.is_official:
+                continue
             birthdate = member.birthdate_value
             if not birthdate:
                 continue
-            if (birthdate.month, birthdate.day) != (
-                match_date.month,
-                match_date.day,
-            ):
+            try:
+                occurrence = date(match_date.year, birthdate.month, birthdate.day)
+            except ValueError:
+                # Defensive: skip invalid dates such as 29.02 in non-leap years
+                try:
+                    occurrence = date(match_date.year - 1, birthdate.month, birthdate.day)
+                except ValueError:
+                    continue
+            if occurrence > match_date:
+                occurrence = date(match_date.year - 1, birthdate.month, birthdate.day)
+            delta = (match_date - occurrence).days
+            if delta < 0 or delta > 7:
                 continue
             age_value = calculate_age(birthdate, match_date)
-            if age_value is not None:
-                note = f"{member.name.strip()} hat heute Geburtstag ({age_value} Jahre)!"
+            if delta == 0:
+                if age_value is not None:
+                    note = f"{member.name.strip()} hat heute Geburtstag ({age_value} Jahre)!"
+                else:
+                    note = f"{member.name.strip()} hat heute Geburtstag!"
             else:
-                note = f"{member.name.strip()} hat heute Geburtstag!"
-            notes.append(note)
-    return notes
+                date_label = occurrence.strftime("%d.%m.%Y")
+                if age_value is not None:
+                    note = (
+                        f"{member.name.strip()} hatte am {date_label} Geburtstag"
+                        f" ({age_value} Jahre)."
+                    )
+                else:
+                    note = f"{member.name.strip()} hatte am {date_label} Geburtstag."
+            notes.append((delta, note))
+    notes.sort(key=lambda item: (item[0], item[1]))
+    return [note for _, note in notes]
 
 
 def format_transfer_list(items: Sequence[TransferItem]) -> str:
@@ -2049,7 +2070,7 @@ def build_html_report(
       </ul>
     </section>
     <section>
-      <h2>Letzte Spiele von {escape(USC_CANONICAL_NAME)}</h2>
+      <h2>Letzte Spiele vom {escape(USC_CANONICAL_NAME)}</h2>
       <ul class=\"match-list\">
         {usc_items}
       </ul>

@@ -74,8 +74,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--recent-limit",
         type=int,
-        default=2,
-        help="Number of previous matches to include per team (default: 2).",
+        default=4,
+        help="Number of previous matches to include per team (default: 4).",
     )
     parser.add_argument(
         "--news-lookback",

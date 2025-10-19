@@ -1,7 +1,7 @@
 # usc_kommentatoren
 
 Dieses Repository erzeugt täglich eine schlanke HTML-Seite zum Frauen-Bundesligateam des USC Münster. Die Seite zeigt den
-nächsten Heimgegner des USC als Überschrift, listet die beiden letzten Ergebnisse sowohl des USC als auch des kommenden Gegners
+nächsten Heimgegner des USC als Überschrift, listet die letzten vier Ergebnisse sowohl des USC als auch des kommenden Gegners
 auf und sammelt aktuelle Artikel von den Team-Homepages sowie der Volleyball Bundesliga. Alle Spielinformationen stammen aus dem
 öffentlichen CSV-Spielplan der Volleyball Bundesliga – es wird kein API-Schlüssel benötigt.
 
@@ -48,10 +48,10 @@ Die HTML-Datei enthält:
 
 * Überschrift mit dem nächsten Heimgegner des USC Münster
 * Spieltermin und Austragungsort
-* Die beiden letzten Ergebnisse des USC Münster inklusive Gesamt- und Satzergebnissen
-* Die beiden letzten Ergebnisse des anstehenden Gegners inklusive Gesamt- und Satzergebnissen
+* Die letzten vier Ergebnisse des USC Münster inklusive Gesamt- und Satzergebnissen (sofern vorhanden)
+* Die letzten vier Ergebnisse des anstehenden Gegners inklusive Gesamt- und Satzergebnissen (sofern vorhanden)
 * Einen direkten Link auf die offizielle Bundesligatabelle
-* Eine "Bemerkungen"-Rubrik, die auf Geburtstage am Spieltag hinweist, damit besondere Anlässe nicht übersehen werden
+* Eine "Bemerkungen"-Rubrik, die Spielerinnen mit Geburtstagen am Spieltag sowie aus den sieben Tagen davor hervorhebt – inklusive Datum und Alter
 * Aufklappbare Kaderübersichten beider Teams inklusive lokal eingebundenem Mannschaftsfoto, sortierten Rückennummern sowie allen Spielerinnen-Details (Größe, Geburtstag inklusive Alter am Spieltag, Nation, Position) und den Offiziellen direkt darunter
 * Eine zusätzliche Wechselbörse-Sektion pro Team mit den jüngsten Zu- und Abgängen aus der offiziellen VBL-Wechselbörse
 * Verlinkungen auf die Vereins-Homepages des USC Münster und des kommenden Gegners mit sprechenden Linktexten (z. B. "Homepage USC Münster")
