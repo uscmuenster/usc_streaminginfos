@@ -14,7 +14,7 @@ on:
     - cron: '0 1 * * *'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -41,9 +41,9 @@ jobs:
           PUBLIC_URL: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.public_url || '' }}
         run: |
           if [ -n "${PUBLIC_URL}" ]; then
-            python -m usc_kommentatoren --output report.html --public-url "${PUBLIC_URL}"
+            python -m usc_kommentatoren --public-url "${PUBLIC_URL}"
           else
-            python -m usc_kommentatoren --output report.html
+            python -m usc_kommentatoren
           fi
 
       - name: Upload HTML artifact
@@ -51,5 +51,21 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: usc-report
-          path: report.html
+          path: docs/index.html
           if-no-files-found: error
+
+      - name: Commit updated report
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet -- docs/index.html; then
+            echo "Keine Änderungen am HTML-Bericht"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/index.html
+          git commit -m "Update generated USC report"
+          git push

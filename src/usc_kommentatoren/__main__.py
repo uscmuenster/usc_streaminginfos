@@ -13,6 +13,8 @@ from .report import (
     load_schedule_from_file,
 )
 
+DEFAULT_OUTPUT_PATH = Path("docs/index.html")
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate USC Münster schedule report")
@@ -24,8 +26,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--output",
         type=Path,
-        required=True,
-        help="Target HTML file path.",
+        default=DEFAULT_OUTPUT_PATH,
+        help="Target HTML file path (default: docs/index.html).",
     )
     parser.add_argument(
         "--schedule-path",

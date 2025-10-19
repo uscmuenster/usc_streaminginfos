@@ -12,10 +12,12 @@ kein API-Schlüssel benötigt.
 
 ## Manuelle Ausführung
 
-Das Paket stellt einen kleinen Helfer bereit, der den offiziellen Spielplan lädt und die HTML-Datei erzeugt. Beispiel:
+Das Paket stellt einen kleinen Helfer bereit, der den offiziellen Spielplan lädt und die HTML-Datei erzeugt. Standardmäßig
+schreibt der Befehl die Ausgabe nach `docs/index.html`, damit sie direkt von GitHub Pages oder einem anderen statischen
+Hoster ausgeliefert werden kann. Beispiel:
 
 ```bash
-PYTHONPATH=src python -m usc_kommentatoren --output usc_report.html
+PYTHONPATH=src python -m usc_kommentatoren
 ```
 
 Wenn du bereits weißt, unter welcher öffentlichen Adresse der Bericht erreichbar sein soll (z. B. eine GitHub-Pages-URL),
@@ -23,20 +25,19 @@ kannst du sie optional mitgeben, damit sie in der HTML-Datei verlinkt wird:
 
 ```bash
 PYTHONPATH=src python -m usc_kommentatoren \
-  --output usc_report.html \
   --public-url "https://example.com/usc-report.html"
 ```
 
 Beim ersten Aufruf (und bei jeder späteren Aktualisierung) lädt das Skript den CSV-Spielplan herunter und speichert ihn unter
 `data/schedule.csv`. Wenn bereits eine lokale Kopie existiert, wird sie überschrieben. Der Pfad kann mit `--schedule-path`
-angepasst werden. Optional lassen sich außerdem Quelle und Anzahl der vergangenen Partien ändern:
+angepasst werden. Optional lassen sich außerdem Zielpfad, Quelle und Anzahl der vergangenen Partien ändern:
 
 ```bash
 PYTHONPATH=src python -m usc_kommentatoren \
   --schedule-url "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171" \
   --schedule-path data/custom_schedule.csv \
   --recent-limit 3 \
-  --output usc_report.html \
+  --output docs/custom_report.html \
   --public-url "https://example.com/usc-report.html"
 ```
 
@@ -53,7 +54,12 @@ Der Workflow `.github/workflows/ci.yml` kann manuell gestartet werden (`workflow
 03:00 Uhr deutscher Zeit (`cron: "0 1 * * *"` in UTC). Bei einem manuellen Lauf kannst du optional eine öffentliche URL
 eingeben, die in den Bericht aufgenommen wird. Bei jedem Lauf werden die Abhängigkeiten installiert, der aktuelle
 CSV-Spielplan nach `data/schedule.csv` heruntergeladen, das Modul kompiliert und anschließend der HTML-Bericht erzeugt. Das
-Ergebnis wird als Artefakt `usc-report` bereitgestellt und kann über den jeweiligen Workflow-Run heruntergeladen werden.
+Ergebnis wird sowohl als Artefakt `usc-report` bereitgestellt als auch in `docs/index.html` geschrieben und bei Änderungen
+automatisch in den `main`-Branch eingecheckt.
+
+Sobald GitHub Pages in den Repository-Einstellungen aktiviert ist (Quelle: `main`, Ordner: `docs/`), steht der Bericht unter
+`https://<dein-account>.github.io/<repository-name>/` öffentlich bereit – vergleichbar mit
+[`https://uscmuenster.github.io/USC-Spielplaene2526/index_trainer.html`](https://uscmuenster.github.io/USC-Spielplaene2526/index_trainer.html).
 
 ## Nächste Schritte
 
