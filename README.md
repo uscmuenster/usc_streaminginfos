@@ -64,7 +64,8 @@ Ergebnis wird als Artefakt `usc-report` bereitgestellt, in `docs/index.html` ges
 
 Nach dem ersten erfolgreichen Workflow-Lauf ist der Bericht unter
 `https://<dein-account>.github.io/<repository-name>/` öffentlich abrufbar – vergleichbar mit
-[`https://uscmuenster.github.io/USC-Spielplaene2526/index_trainer.html`](https://uscmuenster.github.io/USC-Spielplaene2526/index_trainer.html). Eine separate Aktivierung von GitHub Pages ist nicht mehr nötig; das Deployment erledigt der Workflow.
+[`https://uscmuenster.github.io/USC-Spielplaene2526/index_trainer.html`](https://uscmuenster.github.io/USC-Spielplaene2526/index_trainer.html). Eine separate Aktivierung von GitHub Pages ist nicht mehr nötig; das Deployment erledigt der Workflow. Die jeweils aktuelle Ausgabe dieses Repositories findest du unter
+[`https://nielswl.github.io/usc_kommentatoren/index.html`](https://nielswl.github.io/usc_kommentatoren/index.html).
 
 ## Nächste Schritte
 

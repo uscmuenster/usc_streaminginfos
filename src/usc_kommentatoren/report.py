@@ -88,28 +88,59 @@ class NewsItem:
         return self.published.astimezone(BERLIN_TZ).strftime("%d.%m.%Y %H:%M")
 
 
+@dataclass(frozen=True)
+class KeywordSet:
+    keywords: Tuple[str, ...]
+    strong: Tuple[str, ...]
+
+
 def simplify_text(value: str) -> str:
     simplified = value.translate(SEARCH_TRANSLATION).lower()
     simplified = re.sub(r"\s+", " ", simplified)
     return simplified.strip()
 
 
-def build_keywords(*names: str) -> List[str]:
+def build_keywords(*names: str) -> KeywordSet:
     keywords: set[str] = set()
+    strong: set[str] = set()
     for name in names:
         simplified = simplify_text(name)
         if not simplified:
             continue
         keywords.add(simplified)
-        keywords.add(simplified.replace(" ", ""))
+        strong.add(simplified)
+        condensed = simplified.replace(" ", "")
+        if condensed:
+            keywords.add(condensed)
+            if condensed != simplified:
+                strong.add(condensed)
         tokens = [token for token in re.split(r"[^a-z0-9]+", simplified) if token]
         keywords.update(tokens)
-    return sorted(keywords)
+    return KeywordSet(tuple(sorted(keywords)), tuple(sorted(strong)))
 
 
-def matches_keywords(text: str, keywords: Sequence[str]) -> bool:
+def matches_keywords(text: str, keyword_set: KeywordSet) -> bool:
+    keywords = keyword_set.keywords
+    strong_keywords = keyword_set.strong
     haystack = simplify_text(text)
-    return any(keyword and keyword in haystack for keyword in keywords)
+    if not haystack or not keywords:
+        return False
+
+    phrase_keywords = [keyword for keyword in keywords if " " in keyword]
+    for keyword in phrase_keywords:
+        if keyword and keyword in haystack:
+            return True
+
+    hits = {keyword for keyword in keywords if keyword and keyword in haystack}
+    if not hits:
+        return False
+
+    if len(hits) >= 2:
+        return True
+
+    # Accept single matches only when they correspond to the condensed team
+    # name (e.g. ``uscmunster``), not generic tokens like "Volleys".
+    return any(keyword in hits for keyword in strong_keywords if keyword)
 
 
 def _http_get(
@@ -374,6 +405,31 @@ def get_team_homepage(team_name: str) -> Optional[str]:
     return TEAM_HOMEPAGES.get(normalize_name(team_name))
 
 
+def _build_team_keyword_synonyms() -> Dict[str, Sequence[str]]:
+    pairs: Dict[str, Sequence[str]] = {
+        "Allianz MTV Stuttgart": ("MTV Stuttgart",),
+        "Binder Blaubären TSV Flacht": ("Binder Blaubären", "TSV Flacht"),
+        "Dresdner SC": ("DSC Volleys",),
+        "ETV Hamburger Volksbank Volleys": ("ETV Hamburg", "Hamburg Volleys"),
+        "Ladies in Black Aachen": ("Ladies in Black", "Aachen Ladies"),
+        "SSC Palmberg Schwerin": ("SSC Schwerin", "Palmberg Schwerin"),
+        "Schwarz-Weiß Erfurt": ("Schwarz Weiss Erfurt",),
+        "Skurios Volleys Borken": ("Skurios Borken",),
+        "USC Münster": ("USC Muenster",),
+        "VC Wiesbaden": ("VCW Wiesbaden",),
+        "VfB Suhl LOTTO Thüringen": ("VfB Suhl",),
+    }
+    return {normalize_name(name): synonyms for name, synonyms in pairs.items()}
+
+
+TEAM_KEYWORD_SYNONYMS = _build_team_keyword_synonyms()
+
+
+def get_team_keywords(team_name: str) -> KeywordSet:
+    synonyms = TEAM_KEYWORD_SYNONYMS.get(normalize_name(team_name), ())
+    return build_keywords(team_name, *synonyms)
+
+
 def _build_team_news_config() -> Dict[str, Dict[str, str]]:
     return {
         normalize_name(USC_CANONICAL_NAME): {
@@ -404,8 +460,12 @@ def _deduplicate_news(items: Sequence[NewsItem]) -> List[NewsItem]:
     return deduped
 
 
-def _filter_by_keywords(items: Sequence[NewsItem], keywords: Sequence[str]) -> List[NewsItem]:
-    return [item for item in items if matches_keywords(item.search_text or item.title, keywords)]
+def _filter_by_keywords(items: Sequence[NewsItem], keyword_set: KeywordSet) -> List[NewsItem]:
+    return [
+        item
+        for item in items
+        if matches_keywords(item.search_text or item.title, keyword_set)
+    ]
 
 
 def _within_lookback(published: Optional[datetime], *, reference: datetime, lookback_days: int) -> bool:
@@ -650,8 +710,8 @@ def collect_team_news(
 
     combined_vbl = _deduplicate_news(vbl_articles + vbl_press)
 
-    usc_keywords = build_keywords(USC_CANONICAL_NAME)
-    opponent_keywords = build_keywords(next_home.away_team)
+    usc_keywords = get_team_keywords(USC_CANONICAL_NAME)
+    opponent_keywords = get_team_keywords(next_home.away_team)
 
     usc_vbl = _filter_by_keywords(combined_vbl, usc_keywords)
     opponent_vbl = _filter_by_keywords(combined_vbl, opponent_keywords)
