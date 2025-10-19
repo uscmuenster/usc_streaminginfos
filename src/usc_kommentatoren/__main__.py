@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from datetime import timedelta
 from pathlib import Path
 
 from .report import (
@@ -100,8 +101,17 @@ def main() -> int:
     if not next_home:
         raise SystemExit("Kein zukünftiges Heimspiel des USC Münster gefunden.")
 
-    usc_next = find_next_match_for_team(matches, USC_CANONICAL_NAME)
-    opponent_next = find_next_match_for_team(matches, next_home.away_team)
+    reference_time = next_home.kickoff + timedelta(seconds=1)
+    usc_next = find_next_match_for_team(
+        matches,
+        USC_CANONICAL_NAME,
+        reference=reference_time,
+    )
+    opponent_next = find_next_match_for_team(
+        matches,
+        next_home.away_team,
+        reference=reference_time,
+    )
 
     usc_recent = find_last_matches_for_team(matches, USC_CANONICAL_NAME, limit=args.recent_limit)
     opponent_recent = find_last_matches_for_team(matches, next_home.away_team, limit=args.recent_limit)

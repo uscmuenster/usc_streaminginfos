@@ -535,6 +535,8 @@ def _parse_result_text(raw: str | None) -> Optional[MatchResult]:
     cleaned = raw.strip()
     if not cleaned:
         return None
+    if cleaned in {"-", "–"}:
+        return None
 
     match = RESULT_PATTERN.match(cleaned)
     if not match:
@@ -1371,18 +1373,23 @@ GERMAN_WEEKDAYS = {
 
 
 def format_match_line(match: Match) -> str:
-    date_label = match.kickoff.strftime("%d.%m.%Y")
-    weekday = GERMAN_WEEKDAYS.get(match.kickoff.weekday(), match.kickoff.strftime("%a"))
-    kickoff_label = f"{date_label} ({weekday})"
+    kickoff_local = match.kickoff.astimezone(BERLIN_TZ)
+    date_label = kickoff_local.strftime("%d.%m.%Y")
+    weekday = GERMAN_WEEKDAYS.get(kickoff_local.weekday(), kickoff_local.strftime("%a"))
+    time_label = kickoff_local.strftime("%H:%M")
+    kickoff_label = f"{date_label} ({weekday}) {time_label} Uhr"
     home = pretty_name(match.home_team)
     away = pretty_name(match.away_team)
     result = match.result.summary if match.result else "-"
     teams = f"{home} vs. {away}"
+    result_block = ""
+    if match.is_finished:
+        result_block = f"<div class=\"match-result\">Ergebnis: {escape(result)}</div>"
     return (
         "<li>"
         "<div class=\"match-line\">"
         f"<div class=\"match-header\"><strong>{escape(kickoff_label)}</strong> – {escape(teams)}</div>"
-        f"<div class=\"match-result\">Ergebnis: {escape(result)}</div>"
+        f"{result_block}"
         "</div>"
         "</li>"
     )
