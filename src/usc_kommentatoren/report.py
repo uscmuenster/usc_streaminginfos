@@ -351,13 +351,13 @@ def build_html_report(
   <p><strong>Tabelle:</strong> <a href=\"{TABLE_URL}\">{TABLE_URL}</a></p>
 {public_url_block}
   <section>
-    <h2>Letzte Spiele von {escape(USC_CANONICAL_NAME)}</h2>
+    <h2>Letzte Spiele: {escape(USC_CANONICAL_NAME)}</h2>
     <ul>
       {usc_items}
     </ul>
   </section>
   <section>
-    <h2>Letzte Spiele von {escape(heading)}</h2>
+    <h2>Letzte Spiele: {escape(heading)}</h2>
     <ul>
       {opponent_items}
     </ul>
