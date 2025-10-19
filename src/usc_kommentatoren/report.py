@@ -1335,6 +1335,22 @@ def find_last_matches_for_team(
     return relevant[:limit]
 
 
+def find_next_match_for_team(
+    matches: Iterable[Match],
+    team_name: str,
+    *,
+    reference: Optional[datetime] = None,
+) -> Optional[Match]:
+    now = reference or datetime.now(tz=BERLIN_TZ)
+    upcoming = [
+        match
+        for match in matches
+        if match.kickoff >= now and team_in_match(team_name, match)
+    ]
+    upcoming.sort(key=lambda match: match.kickoff)
+    return upcoming[0] if upcoming else None
+
+
 def team_in_match(team_name: str, match: Match) -> bool:
     return is_same_team(team_name, match.home_team) or is_same_team(team_name, match.away_team)
 
@@ -1596,6 +1612,8 @@ def build_html_report(
     next_home: Match,
     usc_recent: List[Match],
     opponent_recent: List[Match],
+    usc_next: Optional[Match] = None,
+    opponent_next: Optional[Match] = None,
     usc_news: Sequence[NewsItem],
     opponent_news: Sequence[NewsItem],
     usc_instagram: Sequence[str],
@@ -1616,19 +1634,32 @@ def build_html_report(
     usc_url = get_team_homepage(USC_CANONICAL_NAME) or USC_HOMEPAGE
     opponent_url = get_team_homepage(next_home.away_team)
 
-    if usc_recent:
-        usc_items = "\n      ".join(
-            format_match_line(match) for match in usc_recent
-        )
-    else:
-        usc_items = "<li>Keine Daten verfügbar.</li>"
+    def _combine_matches(next_match: Optional[Match], recent_matches: List[Match]) -> str:
+        combined: List[str] = []
+        seen: set[tuple[datetime, str, str]] = set()
 
-    if opponent_recent:
-        opponent_items = "\n      ".join(
-            format_match_line(match) for match in opponent_recent
-        )
-    else:
-        opponent_items = "<li>Keine Daten verfügbar.</li>"
+        ordered: List[Match] = []
+        if next_match:
+            ordered.append(next_match)
+        ordered.extend(recent_matches)
+
+        for match in ordered:
+            signature = (
+                match.kickoff,
+                normalize_name(match.home_team),
+                normalize_name(match.away_team),
+            )
+            if signature in seen:
+                continue
+            seen.add(signature)
+            combined.append(format_match_line(match))
+
+        if not combined:
+            return "<li>Keine Daten verfügbar.</li>"
+        return "\n      ".join(combined)
+
+    usc_items = _combine_matches(usc_next, usc_recent)
+    opponent_items = _combine_matches(opponent_next, opponent_recent)
 
     usc_news_items = format_news_list(usc_news)
     opponent_news_items = format_news_list(opponent_news)
@@ -2064,13 +2095,13 @@ def build_html_report(
       {meta_html}
     </div>
 {notes_html}    <section>
-      <h2>Letzte Spiele von {escape(heading)}</h2>
+      <h2>Spiele: {escape(heading)}</h2>
       <ul class=\"match-list\">
         {opponent_items}
       </ul>
     </section>
     <section>
-      <h2>Letzte Spiele vom {escape(USC_CANONICAL_NAME)}</h2>
+      <h2>Spiele: {escape(USC_CANONICAL_NAME)}</h2>
       <ul class=\"match-list\">
         {usc_items}
       </ul>
@@ -2181,6 +2212,7 @@ __all__ = [
     "fetch_team_news",
     "fetch_schedule",
     "find_last_matches_for_team",
+    "find_next_match_for_team",
     "find_next_usc_home_match",
     "load_schedule_from_file",
     "parse_roster",
