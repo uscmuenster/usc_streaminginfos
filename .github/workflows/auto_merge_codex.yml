@@ -27,4 +27,8 @@ jobs:
       - name: Merge Codex branch into main
         run: |
           git fetch origin +${{ github.ref }}:${{ github.ref }}
-          git merge -X theirs ${{ github.r
+          git merge -X theirs ${{ github.ref }} --no-edit || true
+
+      - name: Push merged changes
+        run: |
+          git push origin main
