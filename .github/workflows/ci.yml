@@ -1,0 +1,95 @@
+name: HTML Report
+
+on:
+  push:
+    branches: [ work, main ]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      public_url:
+        description: 'Optional öffentliche URL des HTML-Berichts'
+        required: false
+        type: string
+  schedule:
+    - cron: '0 1 * * *'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check sources compile
+        run: python -m compileall src
+
+      - name: Generate USC HTML report
+        env:
+          PYTHONPATH: src
+          PUBLIC_URL: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.public_url || '' }}
+        run: |
+          if [ -n "${PUBLIC_URL}" ]; then
+            python -m usc_kommentatoren --public-url "${PUBLIC_URL}"
+          else
+            python -m usc_kommentatoren
+          fi
+
+      - name: Upload HTML artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: usc-report
+          path: docs/index.html
+          if-no-files-found: error
+
+      - name: Upload GitHub Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Commit updated report
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet -- docs/index.html; then
+            echo "Keine Änderungen am HTML-Bericht"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/index.html
+          git commit -m "Update generated USC report"
+          git push
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
