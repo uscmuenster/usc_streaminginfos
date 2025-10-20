@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Startaufstellungen USC Münster II</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --font-scale: 1;
+      --card-shadow: rgba(15, 23, 42, 0.08);
+      --accent: #0f766e;
+      --accent-soft: #ccfbf1;
+      --usc: #047857;
+      --opponent: #1d4ed8;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      font-size: calc(var(--font-scale) * clamp(0.95rem, 1.8vw, 1.05rem));
+      line-height: 1.6;
+      background: #f5f7f9;
+      color: #1f2933;
+    }
+    main {
+      max-width: 70rem;
+      margin: 0 auto;
+      padding: clamp(0.75rem, 3vw, 1.5rem) clamp(1rem, 4vw, 3rem);
+      display: grid;
+      gap: clamp(1.5rem, 4vw, 2.75rem);
+    }
+    header h1 {
+      margin: 0 0 0.75rem 0;
+      font-size: calc(var(--font-scale) * clamp(1.65rem, 4.5vw, 2.5rem));
+      color: #004c54;
+    }
+    header p {
+      margin: 0.35rem 0 0 0;
+      max-width: 55ch;
+    }
+    header nav {
+      margin-top: clamp(0.75rem, 2.5vw, 1.2rem);
+    }
+    header nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+      background: #ecfdf5;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    header nav a:hover,
+    header nav a:focus-visible {
+      background: var(--accent);
+      color: #ffffff;
+      outline: none;
+    }
+    section {
+      background: #ffffff;
+      border-radius: 1rem;
+      padding: clamp(1rem, 3vw, 1.5rem) clamp(1rem, 4vw, 1.75rem);
+      box-shadow: 0 20px 45px var(--card-shadow);
+    }
+    section h2 {
+      margin: 0 0 0.75rem 0;
+      font-size: calc(var(--font-scale) * clamp(1.25rem, 3.5vw, 1.7rem));
+    }
+    .meta-list,
+    .status-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.35rem;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.65rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: calc(var(--font-scale) * 0.85rem);
+      font-weight: 600;
+    }
+    .match-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 1.25rem;
+    }
+    .match-card {
+      border-radius: 1rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: clamp(1rem, 3vw, 1.5rem);
+      display: grid;
+      gap: 1rem;
+    }
+    .match-card header {
+      display: grid;
+      gap: 0.35rem;
+    }
+    .match-card header h3 {
+      margin: 0;
+      font-size: calc(var(--font-scale) * clamp(1.1rem, 3.2vw, 1.4rem));
+    }
+    .match-card header .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #475569;
+    }
+    details {
+      border-radius: 0.85rem;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+    }
+    summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 0.85rem 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: calc(var(--font-scale) * 1rem);
+    }
+    summary::marker,
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    summary::after {
+      content: "▾";
+      font-size: 0.9em;
+      transition: transform 0.2s ease;
+    }
+    details[open] summary::after {
+      transform: rotate(180deg);
+    }
+    .set-grid {
+      padding: 0 1.1rem 1.1rem;
+      display: grid;
+      gap: 0.9rem;
+    }
+    .set-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #475569;
+    }
+    .lineup-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #f8fafc;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      font-size: calc(var(--font-scale) * 0.9rem);
+    }
+    .lineup-table thead {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .lineup-table th,
+    .lineup-table td {
+      padding: 0.65rem 0.85rem;
+      text-align: left;
+      border-bottom: 1px solid #cbd5f5;
+    }
+    .lineup-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .team-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.8em;
+      font-weight: 600;
+      background: #dbeafe;
+      color: var(--opponent);
+    }
+    .team-chip.usc {
+      background: #dcfce7;
+      color: var(--usc);
+    }
+    .placeholder {
+      padding: 1.1rem;
+      border-radius: 0.85rem;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: calc(var(--font-scale) * 0.95rem);
+    }
+    @media (max-width: 720px) {
+      .match-card header .meta {
+        flex-direction: column;
+        gap: 0.3rem;
+        align-items: flex-start;
+      }
+      .lineup-table th,
+      .lineup-table td {
+        padding: 0.55rem 0.65rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Startaufstellungen USC Münster II</h1>
+      <p>Auf dieser Seite bündeln wir zukünftig die Startaufstellungen aus den offiziellen Spielberichtsbögen. Die Ansicht ist speziell für die letzten beiden Partien vorbereitet und zeigt pro Satz die Aufstellungen des USC und der jeweiligen Gegnerinnen.</p>
+      <nav aria-label="Navigation">
+        <a href="index.html">⟵ zurück zur Übersicht</a>
+      </nav>
+    </header>
+
+    <section aria-labelledby="workflow">
+      <h2 id="workflow">Arbeitsstand &amp; nächste Schritte</h2>
+      <ul class="meta-list">
+        <li class="status-badge">🛠️ Extraktion der Startaufstellungen wird vorbereitet</li>
+      </ul>
+      <p>Die PDFs werden über die Spielplan-CSV identifiziert. Die dort hinterlegte Spielnummer (Spalte „#“) bildet den letzten Teil des PDF-Links, beispielsweise <code>/2011</code> oder <code>/2001</code>. Sobald die Extraktion implementiert ist, erscheinen hier automatisch die Startaufstellungen für den USC und den jeweiligen Gegner, Satz für Satz.</p>
+      <p>Für manuelle Tests kannst du bereits jetzt die öffentlichen PDF-Links verwenden, etwa <a href="https://distributor.sams-score.de/scoresheet/pdf/ab4891bf-921b-4fe1-8aaa-97f2b9acb6d9/2011" target="_blank" rel="noopener">Spiel 2011</a> oder <a href="https://distributor.sams-score.de/scoresheet/pdf/e58c59f9-6b0f-4d2b-b725-6205fd7aaf65/2001" target="_blank" rel="noopener">Spiel 2001</a>.</p>
+    </section>
+
+    <section aria-labelledby="lineup-section">
+      <h2 id="lineup-section">Startaufstellungen der letzten Begegnungen</h2>
+      <div id="lineupStatus" class="placeholder" role="status">Noch keine Startaufstellungen geladen.</div>
+      <ul id="matchList" class="match-list" hidden></ul>
+    </section>
+  </main>
+
+  <template id="matchTemplate">
+    <li class="match-card">
+      <header>
+        <h3></h3>
+        <div class="meta"></div>
+      </header>
+      <div class="sets"></div>
+    </li>
+  </template>
+
+  <template id="setTemplate">
+    <details>
+      <summary></summary>
+      <div class="set-grid">
+        <div class="set-header"></div>
+        <table class="lineup-table">
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>Position I</th>
+              <th>Position II</th>
+              <th>Position III</th>
+              <th>Position IV</th>
+              <th>Position V</th>
+              <th>Position VI</th>
+              <th>Wechsel</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </details>
+  </template>
+
+  <script>
+    const sampleMatches = [];
+
+    const statusEl = document.getElementById("lineupStatus");
+    const listEl = document.getElementById("matchList");
+    const matchTemplate = document.getElementById("matchTemplate");
+    const setTemplate = document.getElementById("setTemplate");
+
+    const renderLineups = (matches) => {
+      if (!Array.isArray(matches) || matches.length === 0) {
+        statusEl.textContent = "Noch keine Startaufstellungen verfügbar. Sobald die Daten aus den PDFs extrahiert sind, werden sie hier automatisch angezeigt.";
+        listEl.hidden = true;
+        return;
+      }
+
+      statusEl.remove();
+      listEl.hidden = false;
+      listEl.innerHTML = "";
+
+      matches.forEach((match) => {
+        const matchNode = matchTemplate.content.cloneNode(true);
+        const title = matchNode.querySelector("h3");
+        const meta = matchNode.querySelector(".meta");
+        const setsContainer = matchNode.querySelector(".sets");
+
+        title.textContent = `${match.date} · USC Münster II vs. ${match.opponent}`;
+        meta.innerHTML = `
+          <span>Spielfolge: ${match.matchId}</span>
+          <span>PDF: <a href="${match.pdfUrl}" target="_blank" rel="noopener">öffnen</a></span>
+          <span>Wettbewerb: ${match.competition}</span>
+        `;
+
+        match.sets.forEach((set) => {
+          const setNode = setTemplate.content.cloneNode(true);
+          const summary = setNode.querySelector("summary");
+          const setHeader = setNode.querySelector(".set-header");
+          const tbody = setNode.querySelector("tbody");
+
+          summary.textContent = `Satz ${set.number}`;
+          setHeader.textContent = set.score ? `Ergebnis: ${set.score}` : "Ergebnis folgt";
+
+          const renderRow = (teamLabel, teamKey) => {
+            const row = document.createElement("tr");
+            const lineup = set.lineups[teamKey];
+            const teamCell = document.createElement("td");
+            const chip = document.createElement("span");
+            chip.className = `team-chip ${teamKey === "usc" ? "usc" : ""}`;
+            chip.textContent = teamLabel;
+            teamCell.appendChild(chip);
+            row.appendChild(teamCell);
+
+            const positions = lineup?.positions ?? Array(6).fill("–");
+            positions.slice(0, 6).forEach((pos) => {
+              const cell = document.createElement("td");
+              cell.textContent = pos || "–";
+              row.appendChild(cell);
+            });
+
+            const subsCell = document.createElement("td");
+            subsCell.textContent = lineup?.substitutions?.length ? lineup.substitutions.join(", ") : "–";
+            row.appendChild(subsCell);
+
+            tbody.appendChild(row);
+          };
+
+          renderRow("USC Münster II", "usc");
+          renderRow(match.opponent, "opponent");
+
+          setsContainer.appendChild(setNode);
+        });
+
+        listEl.appendChild(matchNode);
+      });
+    };
+
+    renderLineups(sampleMatches);
+  </script>
+</body>
+</html>
