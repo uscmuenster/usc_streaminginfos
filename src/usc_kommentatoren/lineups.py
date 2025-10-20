@@ -59,6 +59,7 @@ class SetLineup:
 
     number: int
     lineups: Dict[str, List[str]]
+    scores: Dict[str, Optional[str]]
 
 
 @dataclass(frozen=True)
@@ -91,6 +92,14 @@ class MatchLineups:
 
 def _simplify(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip().lower()
+
+
+def _find_team_code(team_names: Dict[str, str], target_name: str) -> Optional[str]:
+    normalized_target = _simplify(target_name)
+    for code, name in team_names.items():
+        if _simplify(name) == normalized_target:
+            return code
+    return None
 
 
 def fetch_schedule_csv(url: str = DEFAULT_SCHEDULE_URL) -> str:
@@ -230,10 +239,10 @@ def extract_lineups_from_pdf(pdf_path: Path) -> MatchLineups:
             set_number = _detect_set_number(table)
             if set_number is None:
                 continue
-            lineups = _extract_positions_from_table(table)
+            lineups, scores = _extract_positions_from_table(table)
             if not lineups:
                 continue
-            set_lineups.append(SetLineup(number=set_number, lineups=lineups))
+            set_lineups.append(SetLineup(number=set_number, lineups=lineups, scores=scores))
 
     set_lineups.sort(key=lambda item: item.number)
 
@@ -292,19 +301,38 @@ def _detect_set_number(table: Sequence[Sequence[str]]) -> Optional[int]:
 
 def _extract_positions_from_table(
     table: Sequence[Sequence[str]],
-) -> Dict[str, List[str]]:
+) -> Tuple[Dict[str, List[str]], Dict[str, Optional[str]]]:
     rows = [[_clean_cell(cell) for cell in row] for row in table]
     header_info = _find_header_indices(rows)
     if header_info:
-        header_index, left_cols, right_cols, team_codes = header_info
+        (
+            header_index,
+            left_cols,
+            right_cols,
+            team_codes,
+            left_score_idx,
+            right_score_idx,
+        ) = header_info
         for row in rows[header_index + 1 :]:
             left_values = _collect_positions(row, left_cols)
             right_values = _collect_positions(row, right_cols)
             if len(left_values) == 6 and len(right_values) == 6:
-                return {
-                    team_codes[0]: left_values,
-                    team_codes[1]: right_values,
-                }
+                scores: Dict[str, Optional[str]] = {}
+                if left_score_idx is not None:
+                    score = _extract_score_value(row, left_score_idx)
+                    if score is not None:
+                        scores[team_codes[0]] = score
+                if right_score_idx is not None:
+                    score = _extract_score_value(row, right_score_idx)
+                    if score is not None:
+                        scores[team_codes[1]] = score
+                return (
+                    {
+                        team_codes[0]: left_values,
+                        team_codes[1]: right_values,
+                    },
+                    scores,
+                )
 
     # Fallback für Tabellen ohne klaren Header (z. B. Satz 5)
     team_order = _detect_codes_from_row(rows[0])
@@ -327,15 +355,24 @@ def _extract_positions_from_table(
         right = _collect_positions(fallback_row, right_cols)
         if len(left) == 6 and len(right) == 6:
             if team_order:
-                return {team_order[0]: left, team_order[1]: right}
-            return {"left": left, "right": right}
+                return ({team_order[0]: left, team_order[1]: right}, {})
+            return ({"left": left, "right": right}, {})
 
-    return {}
+    return ({}, {})
 
 
 def _find_header_indices(
     rows: Sequence[Sequence[str]],
-) -> Optional[Tuple[int, List[int], List[int], Tuple[str, str]]]:
+) -> Optional[
+    Tuple[
+        int,
+        List[int],
+        List[int],
+        Tuple[str, str],
+        Optional[int],
+        Optional[int],
+    ]
+]:
     for index, row in enumerate(rows):
         roman_cols = [i for i, value in enumerate(row) if value in {"I", "II", "III", "IV", "V", "VI"}]
         if len(roman_cols) >= 12:
@@ -348,7 +385,17 @@ def _find_header_indices(
                 continue
             left_cols = roman_cols[:6]
             right_cols = roman_cols[6:12]
-            return index, left_cols, right_cols, team_codes
+            score_indices = [i for i, value in enumerate(row) if value == "Punkte"]
+            left_score_idx = score_indices[0] if score_indices else None
+            right_score_idx = score_indices[1] if len(score_indices) > 1 else None
+            return (
+                index,
+                left_cols,
+                right_cols,
+                team_codes,
+                left_score_idx,
+                right_score_idx,
+            )
     return None
 
 
@@ -374,6 +421,18 @@ def _collect_positions(row: Sequence[str], columns: Sequence[int]) -> List[str]:
         if match:
             values.append(match.group(0))
     return values[:6]
+
+
+def _extract_score_value(row: Sequence[str], index: int) -> Optional[str]:
+    if index < 0 or index >= len(row):
+        return None
+    value = _clean_cell(row[index])
+    if not value:
+        return None
+    match = re.search(r"\b\d{1,2}\b", value)
+    if match:
+        return match.group(0)
+    return None
 
 
 def _extract_rosters(
@@ -632,6 +691,8 @@ def _serialize_dataset(
     for focus, match in matches:
         usc_code = match.usc_code
         opponent_code = match.opponent_code
+        home_code = _find_team_code(match.team_names, match.match.home_team)
+        away_code = _find_team_code(match.team_names, match.match.away_team)
 
         focus_code: Optional[str] = None
         if focus == "usc":
@@ -688,12 +749,35 @@ def _serialize_dataset(
                     )
                 lineups[code] = entries
 
+            score_entries = {
+                code: value
+                for code, value in set_lineup.scores.items()
+                if value is not None
+            }
+            score_label: Optional[str] = None
+            if home_code and away_code:
+                home_score = set_lineup.scores.get(home_code)
+                away_score = set_lineup.scores.get(away_code)
+                if home_score is not None and away_score is not None:
+                    score_label = f"{home_score}:{away_score}"
+
             serialized_sets.append(
                 {
                     "number": set_lineup.number,
                     "lineups": lineups,
+                    "scores": score_entries,
+                    "score_label": score_label,
                 }
             )
+
+        set_score_labels: List[str] = []
+        if home_code and away_code:
+            for set_lineup in match.sets:
+                home_score = set_lineup.scores.get(home_code)
+                away_score = set_lineup.scores.get(away_code)
+                if home_score is None or away_score is None:
+                    continue
+                set_score_labels.append(f"{home_score}:{away_score}")
 
         serialized.append(
             {
@@ -709,6 +793,9 @@ def _serialize_dataset(
                 "venue": match.match.venue,
                 "season": match.match.season,
                 "result": match.match.result_label,
+                "home_code": home_code,
+                "away_code": away_code,
+                "set_scores": set_score_labels,
                 "pdf_url": match.pdf_url,
                 "team_codes": match.team_names,
                 "usc_code": usc_code,
