@@ -50,6 +50,12 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Zwischenspeicher für heruntergeladene PDF-Dateien (Standard: data/lineups).",
     )
+    parser.add_argument(
+        "--roster-dir",
+        type=Path,
+        default=None,
+        help="Zwischenspeicher für offizielle Kaderexporte (Standard: data/rosters).",
+    )
     return parser
 
 
@@ -66,6 +72,7 @@ def main() -> int:
         schedule_page_url=args.schedule_page_url or lineups.SCHEDULE_PAGE_URL,
         output_path=args.output or lineups.DEFAULT_OUTPUT_PATH,
         pdf_cache_dir=args.cache_dir or lineups.PDF_CACHE_DIR,
+        roster_cache_dir=args.roster_dir or lineups.ROSTER_CACHE_DIR,
     )
 
     print(

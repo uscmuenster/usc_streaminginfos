@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-10-20T09:33:17.395222+02:00",
+  "generated_at": "2025-10-20T10:03:01.046440+02:00",
   "usc_team": "USC Münster",
   "opponent_team": "ETV Hamburger Volksbank Volleys",
   "matches": [
@@ -29,14 +29,22 @@
           "name": "Binder Blaubären TSV Flacht",
           "is_focus": false,
           "is_usc": false,
-          "is_opponent": false
+          "is_opponent": false,
+          "setters": [
+            "1",
+            "13"
+          ]
         },
         {
           "code": "B",
           "name": "USC Münster",
           "is_focus": true,
           "is_usc": true,
-          "is_opponent": false
+          "is_opponent": false,
+          "setters": [
+            "8",
+            "9"
+          ]
         }
       ],
       "sets": [
@@ -311,14 +319,22 @@
           "name": "USC Münster",
           "is_focus": true,
           "is_usc": true,
-          "is_opponent": false
+          "is_opponent": false,
+          "setters": [
+            "8",
+            "9"
+          ]
         },
         {
           "code": "A",
           "name": "SSC Palmberg Schwerin",
           "is_focus": false,
           "is_usc": false,
-          "is_opponent": false
+          "is_opponent": false,
+          "setters": [
+            "12",
+            "17"
+          ]
         }
       ],
       "sets": [
@@ -755,14 +771,22 @@
           "name": "SSC Palmberg Schwerin",
           "is_focus": false,
           "is_usc": false,
-          "is_opponent": false
+          "is_opponent": false,
+          "setters": [
+            "12",
+            "17"
+          ]
         },
         {
           "code": "B",
           "name": "ETV Hamburger Volksbank Volleys",
           "is_focus": true,
           "is_usc": false,
-          "is_opponent": true
+          "is_opponent": true,
+          "setters": [
+            "8",
+            "9"
+          ]
         }
       ],
       "sets": [
@@ -1037,14 +1061,23 @@
           "name": "ETV Hamburger Volksbank Volleys",
           "is_focus": true,
           "is_usc": false,
-          "is_opponent": true
+          "is_opponent": true,
+          "setters": [
+            "8",
+            "9"
+          ]
         },
         {
           "code": "B",
           "name": "Allianz MTV Stuttgart",
           "is_focus": false,
           "is_usc": false,
-          "is_opponent": false
+          "is_opponent": false,
+          "setters": [
+            "10",
+            "15",
+            "19"
+          ]
         }
       ],
       "sets": [

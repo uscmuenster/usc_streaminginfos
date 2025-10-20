@@ -9,8 +9,9 @@ Dieser Workflow beschreibt, wie die Startaufstellungen der beiden letzten Bundes
 3. **PDF-Links bestimmen:** Die öffentliche Spielplan-Seite der VBL wird geparst, um zu jeder Spielnummer den Link auf den offiziellen Spielberichtsbogen (`scoresheet/pdf/.../<Matchnummer>`) zu ermitteln.
 4. **Spielberichtsbögen laden:** Die betreffenden PDF-Dateien werden heruntergeladen und lokal unter `data/lineups/<Matchnummer>.pdf` abgelegt.
 5. **Startaufstellungen extrahieren:** Mit `pdfplumber` werden aus jedem Spielbericht pro Satz die sechs Startpositionen von USC und Gegner identifiziert. Satz 5 besitzt eine leicht abweichende Tabellenstruktur – hierfür greift eine speziell angepasste Ausleselogik.
-6. **Datensatz schreiben:** Sämtliche Informationen werden als JSON nach `docs/data/aufstellungen.json` exportiert. Zusätzlich werden Metadaten wie Wettbewerb, Spielort, Ergebnis und Zeitpunkt der Datengenerierung festgehalten.
-7. **Frontend aktualisieren:** Die Seite `docs/aufstellungen.html` lädt das JSON und rendert die Startaufstellungen dynamisch.
+6. **Kaderdaten ergänzen:** Für alle beteiligten Teams lädt der Generator die offiziellen Kader-CSV-Exporte (Caching unter `data/rosters/`). Aus den Rollenangaben wird automatisch erkannt, welche Rückennummer(n) als Zuspielerinnen geführt werden.
+7. **Datensatz schreiben:** Sämtliche Informationen werden als JSON nach `docs/data/aufstellungen.json` exportiert. Zusätzlich werden Metadaten wie Wettbewerb, Spielort, Ergebnis und Zeitpunkt der Datengenerierung festgehalten.
+8. **Frontend aktualisieren:** Die Seite `docs/aufstellungen.html` lädt das JSON und rendert die Startaufstellungen dynamisch.
 
 ## Skripte & Automatisierung
 
@@ -22,7 +23,7 @@ Für lokale Aktualisierungen steht das Hilfsskript `scripts/update_lineups.py` z
 python scripts/update_lineups.py
 ```
 
-Optional lassen sich Parameter wie die Anzahl der Spiele (`--limit`), alternative Datenquellen oder ein anderer Ausgabeort übergeben. Das Skript wertet standardmäßig die beiden letzten USC-Partien **und** die zwei jüngsten Begegnungen des kommenden Gegners aus und erzeugt daraus einen gemeinsamen Datensatz mit Trennung nach Fokus-Team.
+Optional lassen sich Parameter wie die Anzahl der Spiele (`--limit`), alternative Datenquellen oder ein anderer Ausgabeort übergeben. Mit `--cache-dir` und `--roster-dir` können die Ablageorte für Spielberichtsbögen (`data/lineups/`) bzw. Kaderexporte (`data/rosters/`) überschrieben werden. Das Skript wertet standardmäßig die beiden letzten USC-Partien **und** die zwei jüngsten Begegnungen des kommenden Gegners aus und erzeugt daraus einen gemeinsamen Datensatz mit Trennung nach Fokus-Team.
 
 ### Tägliche Ausführung via GitHub Actions
 
@@ -42,4 +43,5 @@ Die benötigten Pakete sind in `requirements.txt` hinterlegt.
 - Die PDF-Auswertung enthält Fallback-Logik für abweichende Tabellenlayouts (insbesondere für Satz 5).
 - Das JSON enthält ausschließlich Startaufstellungen. Wechselinformationen stehen derzeit nicht zur Verfügung und werden in der Darstellung mit `–` markiert.
 - Für jede Startformation werden neben den Rückennummern auch die im Spielbericht geführten Namen (gekürzt auf den Nachnamen) gespeichert, sodass die HTML-Ansicht Feldaufstellungen wie im Screenshot rendern kann.
+- Die Markierung der Zuspielerin basiert auf den offiziellen Kaderrollen. Falls ein Team ohne abrufbaren Kader exportiert wird, entfällt die Hervorhebung automatisch.
 

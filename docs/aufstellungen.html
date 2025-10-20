@@ -30,7 +30,7 @@
       margin: 0 auto;
       padding: clamp(0.75rem, 3vw, 1.5rem) clamp(1rem, 4vw, 3rem);
       display: grid;
-      gap: clamp(1.5rem, 4vw, 2.75rem);
+      gap: clamp(1.1rem, 3vw, 2rem);
     }
     header h1 {
       margin: 0 0 0.75rem 0;
@@ -64,9 +64,9 @@
     }
     section {
       background: #ffffff;
-      border-radius: 1rem;
-      padding: clamp(1rem, 3vw, 1.5rem) clamp(1rem, 4vw, 1.75rem);
-      box-shadow: 0 20px 45px var(--card-shadow);
+      border-radius: 0.85rem;
+      padding: clamp(0.85rem, 2.5vw, 1.25rem) clamp(0.85rem, 3vw, 1.5rem);
+      box-shadow: 0 12px 32px var(--card-shadow);
     }
     section h2 {
       margin: 0 0 0.75rem 0;
@@ -96,83 +96,119 @@
       margin: 0;
       padding: 0;
       display: grid;
-      gap: 1.25rem;
+      gap: 0.9rem;
+    }
+    .match-list > li {
+      margin: 0;
+      list-style: none;
     }
     .match-card {
-      border-radius: 1rem;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      padding: clamp(1rem, 3vw, 1.5rem);
-      display: grid;
-      gap: 1rem;
-    }
-    .match-card header {
-      display: grid;
-      gap: 0.35rem;
-    }
-    .match-card header h3 {
-      margin: 0;
-      font-size: calc(var(--font-scale) * clamp(1.1rem, 3.2vw, 1.4rem));
-    }
-    .match-card header .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem 1rem;
-      font-size: calc(var(--font-scale) * 0.85rem);
-      color: #475569;
-    }
-    details {
-      border-radius: 0.85rem;
+      border-radius: 0.75rem;
       background: #ffffff;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #dbeafe;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
       overflow: hidden;
     }
-    summary {
+    .match-card > summary {
       list-style: none;
       cursor: pointer;
-      padding: 0.85rem 1.1rem;
-      font-weight: 600;
+      padding: 0.9rem 1.15rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: calc(var(--font-scale) * 1rem);
+      gap: 1.4rem;
     }
-    summary::marker,
-    summary::-webkit-details-marker {
+    .match-card > summary::-webkit-details-marker,
+    .match-card > summary::marker {
       display: none;
     }
-    summary::after {
+    .match-card > summary::after {
       content: "▾";
       font-size: 0.9em;
       transition: transform 0.2s ease;
     }
-    details[open] summary::after {
+    .match-card[open] > summary::after {
       transform: rotate(180deg);
     }
-    .set-grid {
-      padding: 0 1.1rem 1.1rem;
-      display: grid;
-      gap: 1rem;
-    }
-    .set-header {
+    .match-summary {
       display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      flex-direction: column;
+      gap: 0.2rem;
+      min-width: 0;
+    }
+    .match-summary-title {
+      font-size: calc(var(--font-scale) * clamp(1.05rem, 3vw, 1.3rem));
+      font-weight: 600;
+      color: #0f172a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .match-summary-subtitle {
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #64748b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .match-summary-result {
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * 0.95rem);
+      font-weight: 600;
+      color: #0f766e;
+    }
+    .match-body {
+      border-top: 1px solid #e2e8f0;
+      padding: 0.85rem 1.15rem 1.15rem;
+      display: grid;
+      gap: 0.75rem;
+    }
+    .match-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.75rem;
+      font-size: calc(var(--font-scale) * 0.85rem);
       color: #475569;
+    }
+    .match-meta a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .match-meta a:hover,
+    .match-meta a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+    .sets {
+      display: grid;
+      gap: 0.75rem;
+    }
+    .set-block {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.7rem;
+      padding: 0.75rem;
+      display: grid;
+      gap: 0.6rem;
+    }
+    .set-block h4 {
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.95rem);
+      font-weight: 600;
+      color: #0f172a;
     }
     .boards {
       display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+      gap: 0.6rem;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
     }
     .lineup-board {
       border: 1px solid #dbeafe;
-      border-radius: 0.9rem;
-      padding: 0.85rem;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
       background: #f8fafc;
       display: grid;
-      gap: 0.75rem;
+      gap: 0.6rem;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .lineup-board.is-focus {
@@ -189,40 +225,41 @@
     }
     .lineup-board h4 {
       margin: 0;
-      font-size: calc(var(--font-scale) * 1rem);
+      font-size: calc(var(--font-scale) * 0.95rem);
       color: #0f172a;
+      font-weight: 600;
     }
     .board-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(4.5rem, 1fr));
-      gap: 0.55rem;
+      grid-template-columns: repeat(3, minmax(4rem, 1fr));
+      gap: 0.45rem;
     }
     .board-cell {
       background: #ffffff;
-      border-radius: 0.75rem;
+      border-radius: 0.65rem;
       border: 1px solid #e2e8f0;
-      padding: 0.75rem 0.5rem;
+      padding: 0.6rem 0.4rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 0.2rem;
       text-align: center;
-      min-height: 4.25rem;
+      min-height: 3.5rem;
       font-weight: 600;
       color: #1f2933;
     }
     .board-cell.is-setter {
       border-color: var(--accent);
       box-shadow: inset 0 0 0 1px var(--accent);
-      background: rgba(14, 116, 144, 0.08);
+      background: rgba(14, 116, 144, 0.12);
     }
     .player-number {
       font-size: calc(var(--font-scale) * 1rem);
       line-height: 1.1;
     }
     .player-name {
-      font-size: calc(var(--font-scale) * 0.85rem);
+      font-size: calc(var(--font-scale) * 0.8rem);
       font-weight: 500;
       color: #475569;
     }
@@ -286,23 +323,28 @@
   </main>
 
   <template id="matchTemplate">
-    <li class="match-card">
-      <header>
-        <h3></h3>
-        <div class="meta"></div>
-      </header>
-      <div class="sets"></div>
+    <li>
+      <details class="match-card">
+        <summary>
+          <div class="match-summary">
+            <span class="match-summary-title"></span>
+            <span class="match-summary-subtitle"></span>
+          </div>
+          <span class="match-summary-result"></span>
+        </summary>
+        <div class="match-body">
+          <div class="match-meta"></div>
+          <div class="sets"></div>
+        </div>
+      </details>
     </li>
   </template>
 
   <template id="setTemplate">
-    <details>
-      <summary></summary>
-      <div class="set-grid">
-        <div class="set-header"></div>
-        <div class="boards"></div>
-      </div>
-    </details>
+    <article class="set-block">
+      <h4></h4>
+      <div class="boards"></div>
+    </article>
   </template>
 
   <script>
@@ -312,6 +354,25 @@
       ["V", "IV", "III"],
       ["VI", "I", "II"],
     ];
+
+    const normalizeNumber = (value) => {
+      if (value === null || value === undefined) {
+        return "";
+      }
+      const text = String(value).trim();
+      if (!text) {
+        return "";
+      }
+      const digits = text.replace(/[^0-9]/g, "");
+      if (digits) {
+        const parsed = Number.parseInt(digits, 10);
+        if (!Number.isNaN(parsed)) {
+          return String(parsed);
+        }
+        return digits;
+      }
+      return text;
+    };
 
     const updateStatusEl = document.getElementById("updateStatus");
     const uscStatusEl = document.getElementById("uscStatus");
@@ -373,16 +434,22 @@
       grid.className = "board-grid";
       const slots = Array.isArray(positions) ? positions : [];
       const slotMap = new Map(slots.map((item) => [item.slot, item]));
+      const setterNumbers = new Set(
+        (Array.isArray(team?.setters) ? team.setters : [])
+          .map((value) => normalizeNumber(value))
+          .filter(Boolean),
+      );
 
       BOARD_LAYOUT.forEach((row) => {
         row.forEach((slot) => {
           const cell = document.createElement("div");
           cell.className = "board-cell";
-          if (slot === "I") {
-            cell.classList.add("is-setter");
-          }
           const entry = slotMap.get(slot);
           if (entry && (entry.number || entry.short_name || entry.full_name)) {
+            const jerseyNumber = normalizeNumber(entry.number);
+            if (jerseyNumber && setterNumbers.has(jerseyNumber)) {
+              cell.classList.add("is-setter");
+            }
             const number = document.createElement("span");
             number.className = "player-number";
             number.textContent = entry.number || "–";
@@ -406,36 +473,42 @@
 
     const renderMatchCard = (match) => {
       const node = matchTemplate.content.cloneNode(true);
-      const title = node.querySelector("h3");
-      const meta = node.querySelector(".meta");
-      const setsContainer = node.querySelector(".sets");
+      const details = node.querySelector("details.match-card");
+      const title = details.querySelector(".match-summary-title");
+      const subtitle = details.querySelector(".match-summary-subtitle");
+      const resultLabel = details.querySelector(".match-summary-result");
+      const meta = details.querySelector(".match-meta");
+      const setsContainer = details.querySelector(".sets");
 
       const matchup = `${match.home_team} vs. ${match.away_team}`;
-      title.textContent = match.date_label ? `${match.date_label} · ${matchup}` : matchup;
+      title.textContent = matchup;
+
+      const subtitleParts = [match.date_label, match.venue].filter(Boolean);
+      subtitle.textContent = subtitleParts.join(" · ");
+      subtitle.hidden = subtitle.textContent.trim() === "";
+
+      resultLabel.textContent = match.result || "–";
 
       const metaSegments = [
         match.kickoff ? `<span>Anpfiff: ${parseKickoff(match.kickoff)}</span>` : null,
-        match.result ? `<span>Ergebnis: ${match.result}</span>` : `<span>Ergebnis: –</span>`,
+        match.competition ? `<span>Wettbewerb: ${match.competition}</span>` : null,
+        match.match_number ? `<span>Spielnummer: ${match.match_number}</span>` : null,
         match.pdf_url
           ? `<span>PDF: <a href="${match.pdf_url}" target="_blank" rel="noopener">öffnen</a></span>`
           : null,
-        match.competition ? `<span>Wettbewerb: ${match.competition}</span>` : null,
-        match.venue ? `<span>Spielort: ${match.venue}</span>` : null,
-        match.match_number ? `<span>Spielnummer: ${match.match_number}</span>` : null,
       ].filter(Boolean);
       meta.innerHTML = metaSegments.join("\n");
+      meta.hidden = metaSegments.length === 0;
 
       const teams = Array.isArray(match.teams) ? match.teams : [];
       const lineupOrder = teams.map((team) => team.code);
 
       (match.sets || []).forEach((set) => {
         const setNode = setTemplate.content.cloneNode(true);
-        const summary = setNode.querySelector("summary");
-        const setHeader = setNode.querySelector(".set-header");
+        const heading = setNode.querySelector("h4");
         const boardsWrapper = setNode.querySelector(".boards");
 
-        summary.textContent = `Satz ${set.number}`;
-        setHeader.textContent = "Aufstellung zu Satzbeginn";
+        heading.textContent = `Satz ${set.number}`;
 
         const appended = new Set();
         lineupOrder.forEach((code) => {
@@ -457,6 +530,7 @@
             is_focus: false,
             is_usc: false,
             is_opponent: false,
+            setters: [],
           };
           boardsWrapper.appendChild(createBoard(fallbackTeam, positions));
         });

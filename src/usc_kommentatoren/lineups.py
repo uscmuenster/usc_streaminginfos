@@ -19,6 +19,7 @@ from .report import (
     DEFAULT_SCHEDULE_URL,
     REQUEST_HEADERS,
     USC_CANONICAL_NAME,
+    collect_team_roster,
     parse_kickoff,
 )
 
@@ -29,6 +30,7 @@ SCHEDULE_PAGE_URL = (
 
 PDF_CACHE_DIR = Path("data/lineups")
 DEFAULT_OUTPUT_PATH = Path("docs/data/aufstellungen.json")
+ROSTER_CACHE_DIR = Path("data/rosters")
 
 POSITION_SLOTS = ["I", "II", "III", "IV", "V", "VI"]
 
@@ -459,6 +461,15 @@ def _split_names(value: Optional[str]) -> List[str]:
     return names
 
 
+def _extract_number_from_label(label: Optional[str]) -> Optional[str]:
+    if not label:
+        return None
+    match = re.search(r"\b(\d{1,2})\b", label)
+    if match:
+        return match.group(1)
+    return None
+
+
 def _normalize_cell(value: Optional[str], *, collapse_spaces: bool = True) -> str:
     if value is None:
         return ""
@@ -493,6 +504,46 @@ def _short_display_name(full_name: Optional[str]) -> Optional[str]:
     return parts[-1] if parts else None
 
 
+def _resolve_setter_numbers(
+    team_name: str,
+    *,
+    roster_dir: Path,
+    cache: Dict[str, List[str]],
+) -> List[str]:
+    key = _simplify(team_name)
+    if not key:
+        return []
+    if key in cache:
+        return cache[key]
+
+    try:
+        roster = collect_team_roster(team_name, roster_dir)
+    except Exception:
+        cache[key] = []
+        return cache[key]
+
+    setter_numbers: set[str] = set()
+    for member in roster:
+        if member.is_official:
+            continue
+        role = (member.role or "").lower()
+        if "zuspiel" not in role and "setter" not in role:
+            continue
+        number: Optional[str] = None
+        if member.number_value is not None:
+            number = str(member.number_value)
+        else:
+            number = _extract_number_from_label(member.number_label)
+        if number:
+            setter_numbers.add(number)
+
+    cache[key] = sorted(
+        setter_numbers,
+        key=lambda value: (0, int(value)) if value.isdigit() else (1, value),
+    )
+    return cache[key]
+
+
 def merge_schedule_details(
     schedule_row: ScheduleRow,
     pdf_url: str,
@@ -514,6 +565,7 @@ def build_lineup_dataset(
     schedule_page_url: str = SCHEDULE_PAGE_URL,
     output_path: Path = DEFAULT_OUTPUT_PATH,
     pdf_cache_dir: Path = PDF_CACHE_DIR,
+    roster_cache_dir: Path = ROSTER_CACHE_DIR,
 ) -> Dict[str, object]:
     csv_text = fetch_schedule_csv(schedule_csv_url)
     schedule_rows = parse_schedule(csv_text)
@@ -553,10 +605,16 @@ def build_lineup_dataset(
         pdf_lineups = cache[row.match_number]
         matches.append((focus, merge_schedule_details(row, pdf_url, pdf_lineups)))
 
+    setter_cache: Dict[str, List[str]] = {}
+    for _focus, match in matches:
+        for name in match.team_names.values():
+            _resolve_setter_numbers(name, roster_dir=roster_cache_dir, cache=setter_cache)
+
     dataset = _serialize_dataset(
         matches,
         usc_team=USC_CANONICAL_NAME,
         opponent_team=opponent_name,
+        setter_lookup=setter_cache,
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(dataset, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -568,6 +626,7 @@ def _serialize_dataset(
     *,
     usc_team: str,
     opponent_team: str,
+    setter_lookup: Dict[str, List[str]],
 ) -> Dict[str, object]:
     serialized: List[Dict[str, object]] = []
     for focus, match in matches:
@@ -589,12 +648,14 @@ def _serialize_dataset(
         teams_meta: Dict[str, Dict[str, object]] = {}
         for code, name in match.team_names.items():
             normalized = name or ""
+            setters = setter_lookup.get(_simplify(normalized), [])
             teams_meta[code] = {
                 "code": code,
                 "name": normalized,
                 "is_focus": focus_code is not None and code == focus_code,
                 "is_usc": usc_code is not None and code == usc_code,
                 "is_opponent": bool(opponent_team and _simplify(normalized) == _simplify(opponent_team)),
+                "setters": list(setters),
             }
 
         serialized_sets: List[Dict[str, object]] = []
