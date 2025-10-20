@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Startaufstellungen USC Münster</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --font-scale: 1;
+      --card-shadow: rgba(15, 23, 42, 0.08);
+      --accent: #0f766e;
+      --accent-soft: #ccfbf1;
+      --usc: #047857;
+      --opponent: #1d4ed8;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      font-size: calc(var(--font-scale) * clamp(0.95rem, 1.8vw, 1.05rem));
+      line-height: 1.6;
+      background: #f5f7f9;
+      color: #1f2933;
+    }
+    main {
+      max-width: 70rem;
+      margin: 0 auto;
+      padding: clamp(0.75rem, 3vw, 1.5rem) clamp(1rem, 4vw, 3rem);
+      display: grid;
+      gap: clamp(1.5rem, 4vw, 2.75rem);
+    }
+    header h1 {
+      margin: 0 0 0.75rem 0;
+      font-size: calc(var(--font-scale) * clamp(1.65rem, 4.5vw, 2.5rem));
+      color: #004c54;
+    }
+    header p {
+      margin: 0.35rem 0 0 0;
+      max-width: 55ch;
+    }
+    header nav {
+      margin-top: clamp(0.75rem, 2.5vw, 1.2rem);
+    }
+    header nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+      background: #ecfdf5;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    header nav a:hover,
+    header nav a:focus-visible {
+      background: var(--accent);
+      color: #ffffff;
+      outline: none;
+    }
+    section {
+      background: #ffffff;
+      border-radius: 1rem;
+      padding: clamp(1rem, 3vw, 1.5rem) clamp(1rem, 4vw, 1.75rem);
+      box-shadow: 0 20px 45px var(--card-shadow);
+    }
+    section h2 {
+      margin: 0 0 0.75rem 0;
+      font-size: calc(var(--font-scale) * clamp(1.25rem, 3.5vw, 1.7rem));
+    }
+    .meta-list,
+    .status-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.35rem;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.65rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: calc(var(--font-scale) * 0.85rem);
+      font-weight: 600;
+    }
+    .match-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 1.25rem;
+    }
+    .match-card {
+      border-radius: 1rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: clamp(1rem, 3vw, 1.5rem);
+      display: grid;
+      gap: 1rem;
+    }
+    .match-card header {
+      display: grid;
+      gap: 0.35rem;
+    }
+    .match-card header h3 {
+      margin: 0;
+      font-size: calc(var(--font-scale) * clamp(1.1rem, 3.2vw, 1.4rem));
+    }
+    .match-card header .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #475569;
+    }
+    details {
+      border-radius: 0.85rem;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+    }
+    summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 0.85rem 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: calc(var(--font-scale) * 1rem);
+    }
+    summary::marker,
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    summary::after {
+      content: "▾";
+      font-size: 0.9em;
+      transition: transform 0.2s ease;
+    }
+    details[open] summary::after {
+      transform: rotate(180deg);
+    }
+    .set-grid {
+      padding: 0 1.1rem 1.1rem;
+      display: grid;
+      gap: 0.9rem;
+    }
+    .set-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #475569;
+    }
+    .lineup-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #f8fafc;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      font-size: calc(var(--font-scale) * 0.9rem);
+    }
+    .lineup-table thead {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .lineup-table th,
+    .lineup-table td {
+      padding: 0.65rem 0.85rem;
+      text-align: left;
+      border-bottom: 1px solid #cbd5f5;
+    }
+    .lineup-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .team-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.8em;
+      font-weight: 600;
+      background: #dbeafe;
+      color: var(--opponent);
+    }
+    .team-chip.usc {
+      background: #dcfce7;
+      color: var(--usc);
+    }
+    .placeholder {
+      padding: 1.1rem;
+      border-radius: 0.85rem;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: calc(var(--font-scale) * 0.95rem);
+    }
+    @media (max-width: 720px) {
+      .match-card header .meta {
+        flex-direction: column;
+        gap: 0.3rem;
+        align-items: flex-start;
+      }
+      .lineup-table th,
+      .lineup-table td {
+        padding: 0.55rem 0.65rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Startaufstellungen USC Münster</h1>
+      <p>Hier findest du die Startaufstellungen der letzten beiden Bundesliga-Partien des USC Münster – Satz für Satz und für beide Teams direkt aus den offiziellen Spielberichtsbögen.</p>
+      <nav aria-label="Navigation">
+        <a href="index.html">⟵ zurück zur Übersicht</a>
+      </nav>
+    </header>
+
+    <section aria-labelledby="workflow">
+      <h2 id="workflow">Aktueller Datenstand</h2>
+      <ul class="meta-list">
+        <li class="status-badge" id="updateStatus">📥 Daten werden geladen …</li>
+      </ul>
+      <p>Die Startaufstellungen werden automatisch aus den offiziellen Spielberichtsbögen (<abbr title="Score Sheets">PDF</abbr>) extrahiert. Grundlage ist der Spielplan der Volleyball Bundesliga – die dortige Spielnummer identifiziert jeweils den passenden Spielberichtsbogen.</p>
+    </section>
+
+    <section aria-labelledby="lineup-section">
+      <h2 id="lineup-section">Startaufstellungen der letzten Begegnungen</h2>
+      <div id="lineupStatus" class="placeholder" role="status">Lade Startaufstellungen …</div>
+      <ul id="matchList" class="match-list" hidden></ul>
+    </section>
+  </main>
+
+  <template id="matchTemplate">
+    <li class="match-card">
+      <header>
+        <h3></h3>
+        <div class="meta"></div>
+      </header>
+      <div class="sets"></div>
+    </li>
+  </template>
+
+  <template id="setTemplate">
+    <details>
+      <summary></summary>
+      <div class="set-grid">
+        <div class="set-header"></div>
+        <table class="lineup-table">
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>Position I</th>
+              <th>Position II</th>
+              <th>Position III</th>
+              <th>Position IV</th>
+              <th>Position V</th>
+              <th>Position VI</th>
+              <th>Wechsel</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </details>
+  </template>
+
+  <script>
+    const DATA_URL = "data/aufstellungen.json";
+
+    const statusEl = document.getElementById("lineupStatus");
+    const updateStatusEl = document.getElementById("updateStatus");
+    const listEl = document.getElementById("matchList");
+    const matchTemplate = document.getElementById("matchTemplate");
+    const setTemplate = document.getElementById("setTemplate");
+
+    const formatDateTime = (isoString) => {
+      if (!isoString) {
+        return null;
+      }
+      const date = new Date(isoString);
+      if (Number.isNaN(date.getTime())) {
+        return null;
+      }
+      return new Intl.DateTimeFormat("de-DE", {
+        dateStyle: "full",
+        timeStyle: "short",
+      }).format(date);
+    };
+
+    const transformMatches = (data) => {
+      if (!data || !Array.isArray(data.matches)) {
+        return [];
+      }
+      return data.matches.map((match) => {
+        const uscCode = match.usc_code;
+        const opponentCode = match.opponent_code;
+        const teamCodes = match.team_codes || {};
+        const uscName = teamCodes[uscCode] || "USC Münster";
+        const opponentName = teamCodes[opponentCode]
+          || (match.home_team && match.home_team.includes("USC") ? match.away_team : match.home_team)
+          || "Gegner";
+
+        return {
+          matchId: match.match_number,
+          dateLabel: match.date_label,
+          kickoff: formatDateTime(match.kickoff),
+          result: match.result,
+          competition: match.competition || "1. Bundesliga Frauen",
+          venue: match.venue || "–",
+          pdfUrl: match.pdf_url,
+          homeTeam: match.home_team,
+          awayTeam: match.away_team,
+          uscName,
+          opponentName,
+          sets: (match.sets || []).map((set) => ({
+            number: set.number,
+            usc: set.lineups?.usc || (uscCode && set.lineups?.[uscCode]) || [],
+            opponent:
+              set.lineups?.opponent || (opponentCode && set.lineups?.[opponentCode]) || [],
+          })),
+        };
+      });
+    };
+
+    const renderLineups = (matches) => {
+      if (!Array.isArray(matches) || matches.length === 0) {
+        statusEl.textContent = "Keine Startaufstellungen gefunden.";
+        listEl.hidden = true;
+        return;
+      }
+
+      statusEl.remove();
+      listEl.hidden = false;
+      listEl.innerHTML = "";
+
+      matches.forEach((match) => {
+        const matchNode = matchTemplate.content.cloneNode(true);
+        const title = matchNode.querySelector("h3");
+        const meta = matchNode.querySelector(".meta");
+        const setsContainer = matchNode.querySelector(".sets");
+
+        const matchup = `${match.homeTeam} vs. ${match.awayTeam}`;
+        title.textContent = `${match.dateLabel} · ${matchup}`;
+
+        const metaSegments = [
+          match.kickoff ? `<span>Anpfiff: ${match.kickoff}</span>` : null,
+          match.result ? `<span>Ergebnis: ${match.result}</span>` : `<span>Ergebnis: –</span>`,
+          match.pdfUrl
+            ? `<span>PDF: <a href="${match.pdfUrl}" target="_blank" rel="noopener">öffnen</a></span>`
+            : null,
+          `<span>Wettbewerb: ${match.competition}</span>`,
+          `<span>Spielort: ${match.venue}</span>`,
+          `<span>Spielnummer: ${match.matchId}</span>`,
+        ].filter(Boolean);
+        meta.innerHTML = metaSegments.join("\n");
+
+        match.sets.forEach((set) => {
+          const setNode = setTemplate.content.cloneNode(true);
+          const summary = setNode.querySelector("summary");
+          const setHeader = setNode.querySelector(".set-header");
+          const tbody = setNode.querySelector("tbody");
+
+          summary.textContent = `Satz ${set.number}`;
+          setHeader.textContent = "Aufstellung zu Satzbeginn";
+
+          const renderRow = (teamLabel, positions, isUsc) => {
+            const row = document.createElement("tr");
+            const teamCell = document.createElement("td");
+            const chip = document.createElement("span");
+            chip.className = `team-chip ${isUsc ? "usc" : ""}`;
+            chip.textContent = teamLabel;
+            teamCell.appendChild(chip);
+            row.appendChild(teamCell);
+
+            const filledPositions = Array.isArray(positions) && positions.length
+              ? positions
+              : Array(6).fill("–");
+            filledPositions.slice(0, 6).forEach((pos) => {
+              const cell = document.createElement("td");
+              cell.textContent = pos || "–";
+              row.appendChild(cell);
+            });
+
+            const subsCell = document.createElement("td");
+            subsCell.textContent = "–";
+            row.appendChild(subsCell);
+
+            tbody.appendChild(row);
+          };
+
+          renderRow(match.uscName, set.usc, true);
+          renderRow(match.opponentName, set.opponent, false);
+
+          setsContainer.appendChild(setNode);
+        });
+
+        listEl.appendChild(matchNode);
+      });
+    };
+
+    const handleError = () => {
+      updateStatusEl.textContent = "⚠️ Daten konnten nicht geladen werden.";
+      statusEl.textContent = "Beim Laden der Startaufstellungen ist ein Fehler aufgetreten.";
+    };
+
+    fetch(DATA_URL)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Unexpected status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const matches = transformMatches(data);
+        if (data.generated_at) {
+          const generatedLabel = formatDateTime(data.generated_at) || data.generated_at;
+          updateStatusEl.textContent = `📅 Aktualisiert am ${generatedLabel}`;
+        } else {
+          updateStatusEl.textContent = "📁 Datengrundlage ohne Zeitstempel";
+        }
+        renderLineups(matches);
+      })
+      .catch(() => handleError());
+  </script>
+</body>
+</html>
