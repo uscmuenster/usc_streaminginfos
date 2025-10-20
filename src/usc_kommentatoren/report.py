@@ -3,7 +3,7 @@ from __future__ import annotations
 import base64
 import csv
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import re
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -20,8 +20,13 @@ import requests
 from bs4 import BeautifulSoup, Tag
 
 DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
+SCHEDULE_PAGE_URL = (
+    "https://www.volleyball-bundesliga.de/cms/home/"
+    "1_bundesliga_frauen/statistik/hauptrunde/spielplan.xhtml?playingScheduleMode=full"
+)
 TABLE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml"
 VBL_NEWS_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml"
+VBL_BASE_URL = "https://www.volleyball-bundesliga.de/"
 VBL_PRESS_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/pressespiegel.xhtml"
 WECHSELBOERSE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/wechselboerse.xhtml"
 TEAM_PAGE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml"
@@ -125,6 +130,13 @@ class Match:
     host: str
     location: str
     result: Optional[MatchResult]
+    match_number: Optional[str] = None
+    match_id: Optional[str] = None
+    info_url: Optional[str] = None
+    stats_url: Optional[str] = None
+    scoresheet_url: Optional[str] = None
+    referees: Tuple[str, ...] = ()
+    attendance: Optional[str] = None
 
     @property
     def is_finished(self) -> bool:
@@ -382,6 +394,158 @@ def download_schedule(
     return destination
 
 
+def fetch_schedule_match_metadata(
+    url: str = SCHEDULE_PAGE_URL,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> Dict[str, Dict[str, Optional[str]]]:
+    response = _http_get(
+        url,
+        retries=retries,
+        delay_seconds=delay_seconds,
+    )
+    soup = BeautifulSoup(response.text, "html.parser")
+    metadata: Dict[str, Dict[str, Optional[str]]] = {}
+    current_match_id: Optional[str] = None
+
+    rows = soup.select("table tr")
+    for row in rows:
+        id_cell = row.find("td", id=re.compile(r"^match_(\d+)$"))
+        if id_cell and id_cell.has_attr("id"):
+            match = re.search(r"match_(\d+)", id_cell["id"])
+            if match:
+                current_match_id = match.group(1)
+
+        cells = row.find_all("td")
+        if len(cells) < 2:
+            continue
+        number_text = cells[1].get_text(strip=True)
+        if not number_text or not number_text.isdigit():
+            continue
+
+        match_number = number_text
+        entry = metadata.setdefault(
+            match_number,
+            {
+                "match_id": None,
+                "info_url": None,
+                "stats_url": None,
+                "scoresheet_url": None,
+            },
+        )
+        if current_match_id:
+            entry["match_id"] = current_match_id
+
+        for anchor in row.select("a[href]"):
+            href = anchor["href"]
+            full_href = urljoin(VBL_BASE_URL, href)
+            title = (anchor.get("title") or "").lower()
+            if "matchdetails" in href.lower():
+                entry["info_url"] = full_href
+            elif "scoresheet" in href.lower():
+                entry["scoresheet_url"] = full_href
+            elif "statistik" in title or "uploads" in href.lower():
+                entry["stats_url"] = full_href
+
+    return metadata
+
+
+def build_match_details_url(match_id: str) -> str:
+    return (
+        "https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml"
+        f"?matchId={match_id}&hideHistoryBackButton=true"
+    )
+
+
+def fetch_match_details(
+    match_id: str,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> Dict[str, object]:
+    url = build_match_details_url(match_id)
+    response = _http_get(
+        url,
+        retries=retries,
+        delay_seconds=delay_seconds,
+    )
+    soup = BeautifulSoup(response.text, "html.parser")
+    referees: List[str] = []
+    attendance: Optional[str] = None
+
+    for table in soup.select("table"):
+        for row in table.select("tr"):
+            cells = [
+                cell.get_text(" ", strip=True)
+                for cell in row.find_all(["th", "td"])
+            ]
+            if len(cells) < 2:
+                continue
+            label = cells[0].lower()
+            value = _normalize_schedule_field(cells[1])
+            if not value:
+                continue
+            if "schiedsrichter" in label and "linienrichter" not in label:
+                referees.append(value)
+            elif "zuschauer" in label:
+                attendance = value
+
+    return {
+        "referees": tuple(referees),
+        "attendance": attendance,
+    }
+
+
+def enrich_match(
+    match: Match,
+    metadata: Dict[str, Dict[str, Optional[str]]],
+    detail_cache: Dict[str, Dict[str, object]],
+) -> Match:
+    match_number = match.match_number
+    meta = metadata.get(match_number) if match_number else None
+
+    match_id = match.match_id or (meta.get("match_id") if meta else None)
+    info_url = match.info_url or (meta.get("info_url") if meta else None)
+    stats_url = match.stats_url or (meta.get("stats_url") if meta else None)
+    scoresheet_url = match.scoresheet_url or (meta.get("scoresheet_url") if meta else None)
+
+    referees = tuple(match.referees) if match.referees else ()
+    attendance = match.attendance
+
+    if match_id:
+        detail = detail_cache.get(match_id)
+        if detail is None:
+            detail = fetch_match_details(match_id)
+            detail_cache[match_id] = detail
+        fetched_referees = detail.get("referees") or ()
+        if fetched_referees:
+            referees = tuple(fetched_referees)
+        fetched_attendance = detail.get("attendance")
+        if fetched_attendance:
+            attendance = fetched_attendance
+
+    return replace(
+        match,
+        match_number=match_number,
+        match_id=match_id,
+        info_url=info_url,
+        stats_url=stats_url,
+        scoresheet_url=scoresheet_url,
+        referees=referees,
+        attendance=attendance,
+    )
+
+
+def enrich_matches(
+    matches: Sequence[Match],
+    metadata: Dict[str, Dict[str, Optional[str]]],
+    detail_cache: Optional[Dict[str, Dict[str, object]]] = None,
+) -> List[Match]:
+    cache = detail_cache if detail_cache is not None else {}
+    return [enrich_match(match, metadata, cache) for match in matches]
+
+
 def _download_roster_text(
     url: str,
     *,
@@ -501,6 +665,9 @@ def parse_schedule(csv_text: str) -> List[Match]:
         host = row.get("Gastgeber", "").strip()
         location = row.get("Austragungsort", "").strip()
         result = build_match_result(row)
+        match_number = (row.get("#") or "").strip() or None
+        attendance = _normalize_schedule_field(row.get("Zuschauerzahl"))
+        referee_entries = _parse_referee_field(row.get("Schiedsgericht"))
 
         matches.append(
             Match(
@@ -510,9 +677,29 @@ def parse_schedule(csv_text: str) -> List[Match]:
                 host=host,
                 location=location,
                 result=result,
+                match_number=match_number,
+                referees=referee_entries,
+                attendance=attendance,
             )
         )
     return matches
+
+
+def _normalize_schedule_field(raw: Optional[str]) -> Optional[str]:
+    if raw is None:
+        return None
+    value = raw.strip()
+    if not value or value in {"-", "–"}:
+        return None
+    return value
+
+
+def _parse_referee_field(raw: Optional[str]) -> Tuple[str, ...]:
+    value = _normalize_schedule_field(raw)
+    if not value:
+        return ()
+    parts = [segment.strip() for segment in re.split(r"[;,/]", value) if segment.strip()]
+    return tuple(parts)
 
 
 def parse_kickoff(date_str: str, time_str: str) -> datetime:
@@ -1385,11 +1572,29 @@ def format_match_line(match: Match) -> str:
     result_block = ""
     if match.is_finished:
         result_block = f"<div class=\"match-result\">Ergebnis: {escape(result)}</div>"
+    extras: List[str] = []
+    if match.referees:
+        referee_label = ", ".join(escape(referee) for referee in match.referees)
+        extras.append(f"<span>Schiedsrichter: {referee_label}</span>")
+    if match.attendance and match.is_finished:
+        extras.append(f"<span>Zuschauer: {escape(match.attendance)}</span>")
+
+    links: List[str] = []
+    if match.info_url:
+        links.append(f"<a href=\"{escape(match.info_url)}\" target=\"_blank\" rel=\"noopener\">Spielinfos</a>")
+    if match.stats_url and match.is_finished:
+        links.append(f"<a href=\"{escape(match.stats_url)}\" target=\"_blank\" rel=\"noopener\">Statistik (PDF)</a>")
+
+    meta_html = ""
+    if extras or links:
+        combined = extras + links
+        meta_html = f"<div class=\"match-meta\">{' · '.join(combined)}</div>"
     return (
         "<li>"
         "<div class=\"match-line\">"
         f"<div class=\"match-header\"><strong>{escape(kickoff_label)}</strong> – {escape(teams)}</div>"
         f"{result_block}"
+        f"{meta_html}"
         "</div>"
         "</li>"
     )
@@ -1697,8 +1902,21 @@ def build_html_report(
     meta_lines = [
         f"<p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>",
         f"<p><strong>Austragungsort:</strong> {escape(location)}</p>",
-        f"<p><a class=\"meta-link\" href=\"{escape(TABLE_URL)}\">Tabelle der Volleyball Bundesliga</a></p>",
     ]
+
+    referees = list(next_home.referees)
+    for idx in range(1, 3):
+        if idx <= len(referees):
+            referee_name = referees[idx - 1]
+        else:
+            referee_name = "noch nicht veröffentlicht"
+        meta_lines.append(
+            f"<p><strong>{idx}. Schiedsrichter*in:</strong> {escape(referee_name)}</p>"
+        )
+
+    meta_lines.append(
+        f"<p><a class=\"meta-link\" href=\"{escape(TABLE_URL)}\">Tabelle der Volleyball Bundesliga</a></p>"
+    )
     if usc_url:
         meta_lines.append(
             f"<p><a class=\"meta-link\" href=\"{escape(usc_url)}\">Homepage USC Münster</a></p>"
@@ -1799,6 +2017,30 @@ def build_html_report(
       padding: 1rem clamp(1rem, 3vw, 1.5rem);
       box-shadow: 0 10px 30px rgba(0, 76, 84, 0.08);
     }}
+    .lineup-link {{
+      margin-top: clamp(1rem, 3vw, 1.75rem);
+      display: flex;
+      justify-content: center;
+    }}
+    .lineup-link a {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      background: #0f766e;
+      color: #ffffff;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.25);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }}
+    .lineup-link a:hover,
+    .lineup-link a:focus-visible {{
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(15, 118, 110, 0.3);
+      outline: none;
+    }}
     .match-line {{
       display: flex;
       flex-direction: column;
@@ -1812,6 +2054,29 @@ def build_html_report(
       font-family: \"Fira Mono\", \"SFMono-Regular\", Menlo, Consolas, monospace;
       font-size: calc(var(--font-scale) * 0.9rem);
       color: #0f766e;
+    }}
+    .match-meta {{
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #475569;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem 0.75rem;
+      align-items: center;
+    }}
+    .match-meta span {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }}
+    .match-meta a {{
+      color: #1d4ed8;
+      font-weight: 600;
+      text-decoration: none;
+    }}
+    .match-meta a:hover,
+    .match-meta a:focus-visible {{
+      text-decoration: underline;
+      outline: none;
     }}
     .news-group,
     .roster-group,
@@ -2000,6 +2265,15 @@ def build_html_report(
     a:focus {{
       text-decoration: underline;
     }}
+    .match-meta a {{
+      color: #1d4ed8;
+      font-weight: 600;
+    }}
+    .match-meta a:hover,
+    .match-meta a:focus-visible {{
+      text-decoration: underline;
+      outline: none;
+    }}
     @media (max-width: 40rem) {{
       body {{
         font-size: calc(var(--font-scale) * 0.9rem);
@@ -2044,6 +2318,11 @@ def build_html_report(
       .match-list li {{
         background: #132a30;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      }}
+      .lineup-link a {{
+        background: #14b8a6;
+        color: #022c22;
+        box-shadow: 0 16px 32px rgba(20, 184, 166, 0.35);
       }}
       .accordion {{
         background: var(--accordion-opponent-bg);
@@ -2112,6 +2391,9 @@ def build_html_report(
       <ul class=\"match-list\">
         {usc_items}
       </ul>
+    </section>
+    <section class=\"lineup-link\">
+      <a href=\"aufstellungen.html\">Startaufstellungen der letzten Begegnungen</a>
     </section>
     <section class=\"roster-group\">
       <details class=\"accordion\">

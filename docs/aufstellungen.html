@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Startaufstellungen der letzten Begegnungen</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --font-scale: 1;
+      --card-shadow: rgba(15, 23, 42, 0.08);
+      --accent: #0f766e;
+      --accent-soft: #ccfbf1;
+      --usc: #047857;
+      --opponent: #1d4ed8;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      font-size: calc(var(--font-scale) * clamp(0.95rem, 1.8vw, 1.05rem));
+      line-height: 1.6;
+      background: #f5f7f9;
+      color: #1f2933;
+    }
+    main {
+      max-width: 68rem;
+      margin: 0 auto;
+      padding: clamp(0.75rem, 3vw, 1.25rem) clamp(1rem, 4vw, 2.25rem);
+      display: grid;
+      gap: clamp(0.9rem, 2.4vw, 1.75rem);
+    }
+    header h1 {
+      margin: 0 0 0.75rem 0;
+      font-size: calc(var(--font-scale) * clamp(1.65rem, 4.5vw, 2.5rem));
+      color: #004c54;
+    }
+    header nav {
+      margin-bottom: clamp(0.6rem, 2vw, 1rem);
+    }
+    header nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+      background: #ecfdf5;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    header nav a:hover,
+    header nav a:focus-visible {
+      background: var(--accent);
+      color: #ffffff;
+      outline: none;
+    }
+    .status-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: clamp(0.75rem, 2.2vw, 1.1rem);
+    }
+    section {
+      background: #ffffff;
+      border-radius: 0.85rem;
+      padding: clamp(0.75rem, 2.3vw, 1.15rem) clamp(0.75rem, 2.6vw, 1.2rem);
+      box-shadow: 0 12px 32px var(--card-shadow);
+    }
+    section h2 {
+      margin: 0 0 0.6rem 0;
+      font-size: calc(var(--font-scale) * clamp(1.25rem, 3.5vw, 1.7rem));
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.65rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: calc(var(--font-scale) * 0.85rem);
+      font-weight: 600;
+    }
+    .match-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: clamp(0.65rem, 1.8vw, 1rem);
+    }
+    .match-list > li {
+      margin: 0;
+      list-style: none;
+    }
+    .match-card {
+      border-radius: 0.75rem;
+      background: #ffffff;
+      border: 1px solid #dbeafe;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }
+    .match-card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem 1rem;
+      flex-wrap: wrap;
+    }
+    .match-card > summary::-webkit-details-marker,
+    .match-card > summary::marker {
+      display: none;
+    }
+    .match-card > summary::after {
+      content: "▾";
+      font-size: 0.9em;
+      transition: transform 0.2s ease;
+    }
+    .match-card[open] > summary::after {
+      transform: rotate(180deg);
+    }
+    .match-summary {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      min-width: 0;
+      flex: 1 1 14rem;
+    }
+    .match-summary-title {
+      font-size: calc(var(--font-scale) * clamp(1.05rem, 3vw, 1.3rem));
+      font-weight: 600;
+      color: #0f172a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .match-summary-subtitle {
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #64748b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .match-summary-result {
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      font-weight: 600;
+      color: #0f766e;
+      white-space: nowrap;
+    }
+    .match-body {
+      border-top: 1px solid #e2e8f0;
+      padding: 0.75rem 1rem 1rem;
+      display: grid;
+      gap: 0.6rem;
+    }
+    .match-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.6rem;
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #475569;
+    }
+    .match-meta a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .match-meta a:hover,
+    .match-meta a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+    .sets {
+      display: grid;
+      gap: 0.6rem;
+    }
+    .set-block {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.7rem;
+      padding: 0.65rem;
+      display: grid;
+      gap: 0.5rem;
+    }
+    .set-block h4 {
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.95rem);
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .boards {
+      display: grid;
+      gap: 0.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    }
+    .lineup-board {
+      border: 1px solid #dbeafe;
+      border-radius: 0.75rem;
+      padding: 0.65rem;
+      background: #f8fafc;
+      display: grid;
+      gap: 0.5rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .lineup-board.is-focus {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 35px rgba(15, 23, 42, 0.12);
+    }
+    .lineup-board.usc.is-focus {
+      border-color: #bbf7d0;
+      background: linear-gradient(180deg, #ecfdf5 0%, #ffffff 100%);
+    }
+    .lineup-board.opponent.is-focus {
+      border-color: #bfdbfe;
+      background: linear-gradient(180deg, #e0f2fe 0%, #ffffff 100%);
+    }
+    .lineup-board h4 {
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.95rem);
+      color: #0f172a;
+      font-weight: 600;
+    }
+    .board-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(3.8rem, 1fr));
+      gap: 0.4rem;
+    }
+    .board-cell {
+      background: #ffffff;
+      border-radius: 0.65rem;
+      border: 1px solid #e2e8f0;
+      padding: 0.5rem 0.35rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.15rem;
+      text-align: center;
+      min-height: 3.1rem;
+      font-weight: 600;
+      color: #1f2933;
+    }
+    .board-cell.is-setter {
+      border-color: var(--accent);
+      box-shadow: inset 0 0 0 1px var(--accent);
+      background: rgba(14, 116, 144, 0.12);
+    }
+    .player-number {
+      font-size: calc(var(--font-scale) * 0.95rem);
+      line-height: 1.1;
+    }
+    .player-name {
+      font-size: calc(var(--font-scale) * 0.78rem);
+      font-weight: 500;
+      color: #475569;
+    }
+    .player-placeholder {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+    .placeholder {
+      padding: 1rem;
+      border-radius: 0.75rem;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: calc(var(--font-scale) * 0.9rem);
+    }
+    @media (max-width: 720px) {
+      .match-card > summary {
+        align-items: flex-start;
+      }
+      .match-summary-title,
+      .match-summary-subtitle {
+        white-space: normal;
+      }
+      .match-summary-result {
+        white-space: normal;
+      }
+      .board-grid {
+        grid-template-columns: repeat(3, minmax(3.2rem, 1fr));
+      }
+    }
+    @media (max-width: 540px) {
+      .boards {
+        grid-template-columns: 1fr;
+      }
+      .lineup-board {
+        padding: 0.55rem;
+      }
+      .board-grid {
+        grid-template-columns: repeat(3, minmax(3rem, 1fr));
+        gap: 0.35rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <nav aria-label="Navigation">
+        <a href="index.html">⟵ zurück zur Übersicht</a>
+      </nav>
+      <h1>Startaufstellungen der letzten Begegnungen</h1>
+      <div class="status-strip">
+        <span class="status-badge" id="updateStatus">📥 Daten werden geladen …</span>
+      </div>
+    </header>
+
+    <section aria-labelledby="usc-heading">
+      <h2 id="usc-heading">USC Münster – letzte Spiele</h2>
+      <div id="uscStatus" class="placeholder" role="status">Lade USC-Spiele …</div>
+      <ul id="uscMatchList" class="match-list" hidden></ul>
+    </section>
+
+    <section aria-labelledby="opponent-heading">
+      <h2 id="opponent-heading">Nächster Gegner – letzte Spiele</h2>
+      <div id="opponentStatus" class="placeholder" role="status">Lade Gegner-Spiele …</div>
+      <ul id="opponentMatchList" class="match-list" hidden></ul>
+    </section>
+  </main>
+
+  <template id="matchTemplate">
+    <li>
+      <details class="match-card">
+        <summary>
+          <div class="match-summary">
+            <span class="match-summary-title"></span>
+            <span class="match-summary-subtitle"></span>
+          </div>
+          <span class="match-summary-result"></span>
+        </summary>
+        <div class="match-body">
+          <div class="match-meta"></div>
+          <div class="sets"></div>
+        </div>
+      </details>
+    </li>
+  </template>
+
+  <template id="setTemplate">
+    <article class="set-block">
+      <h4></h4>
+      <div class="boards"></div>
+    </article>
+  </template>
+
+  <script>
+    const DATA_URL = "data/aufstellungen.json";
+
+    const BOARD_LAYOUT = [
+      ["IV", "III", "II"],
+      ["V", "VI", "I"],
+    ];
+
+    const normalizeNumber = (value) => {
+      if (value === null || value === undefined) {
+        return "";
+      }
+      const text = String(value).trim();
+      if (!text) {
+        return "";
+      }
+      const digits = text.replace(/[^0-9]/g, "");
+      if (digits) {
+        const parsed = Number.parseInt(digits, 10);
+        if (!Number.isNaN(parsed)) {
+          return String(parsed);
+        }
+        return digits;
+      }
+      return text;
+    };
+
+    const updateStatusEl = document.getElementById("updateStatus");
+    const uscStatusEl = document.getElementById("uscStatus");
+    const opponentStatusEl = document.getElementById("opponentStatus");
+    const uscListEl = document.getElementById("uscMatchList");
+    const opponentListEl = document.getElementById("opponentMatchList");
+    const opponentHeadingEl = document.getElementById("opponent-heading");
+    const matchTemplate = document.getElementById("matchTemplate");
+    const setTemplate = document.getElementById("setTemplate");
+
+    const formatSetScore = (match, set) => {
+      if (set && typeof set.score_label === "string" && set.score_label.trim()) {
+        return set.score_label.trim();
+      }
+      const scores = set && set.scores ? set.scores : null;
+      if (!scores) {
+        return null;
+      }
+      const homeCode = match?.home_code;
+      const awayCode = match?.away_code;
+      if (homeCode && awayCode && scores[homeCode] && scores[awayCode]) {
+        return `${scores[homeCode]}:${scores[awayCode]}`;
+      }
+      const entries = Object.entries(scores).filter(([, value]) => typeof value === "string" && value.trim());
+      if (entries.length === 2) {
+        return `${entries[0][1]}:${entries[1][1]}`;
+      }
+      return null;
+    };
+
+    const formatDateTime = (isoString) => {
+      if (!isoString) {
+        return null;
+      }
+      const date = new Date(isoString);
+      if (Number.isNaN(date.getTime())) {
+        return null;
+      }
+      return new Intl.DateTimeFormat("de-DE", {
+        dateStyle: "full",
+        timeStyle: "short",
+      }).format(date);
+    };
+
+    const parseKickoff = (isoString) => {
+      const value = formatDateTime(isoString);
+      return value;
+    };
+
+    const kickoffToTimestamp = (isoString) => {
+      if (!isoString) {
+        return 0;
+      }
+      const value = new Date(isoString);
+      if (Number.isNaN(value.getTime())) {
+        return 0;
+      }
+      return value.getTime();
+    };
+
+    const createBoard = (team, positions) => {
+      const board = document.createElement("article");
+      board.className = "lineup-board";
+      if (team?.is_focus) {
+        board.classList.add("is-focus");
+      }
+      if (team?.is_usc) {
+        board.classList.add("usc");
+      }
+      if (team?.is_opponent) {
+        board.classList.add("opponent");
+      }
+
+      const heading = document.createElement("h4");
+      heading.textContent = team?.name || "Team";
+      board.appendChild(heading);
+
+      const grid = document.createElement("div");
+      grid.className = "board-grid";
+      const slots = Array.isArray(positions) ? positions : [];
+      const slotMap = new Map(slots.map((item) => [item.slot, item]));
+      const setterNumbers = new Set(
+        (Array.isArray(team?.setters) ? team.setters : [])
+          .map((value) => normalizeNumber(value))
+          .filter(Boolean),
+      );
+
+      BOARD_LAYOUT.forEach((row) => {
+        row.forEach((slot) => {
+          const cell = document.createElement("div");
+          cell.className = "board-cell";
+          const entry = slotMap.get(slot);
+          if (entry && (entry.number || entry.short_name || entry.full_name)) {
+            const jerseyNumber = normalizeNumber(entry.number);
+            if (jerseyNumber && setterNumbers.has(jerseyNumber)) {
+              cell.classList.add("is-setter");
+            }
+            const number = document.createElement("span");
+            number.className = "player-number";
+            number.textContent = entry.number || "–";
+            const name = document.createElement("span");
+            name.className = "player-name";
+            name.textContent = entry.short_name || entry.full_name || "–";
+            cell.append(number, name);
+          } else {
+            const placeholder = document.createElement("span");
+            placeholder.className = "player-placeholder";
+            placeholder.textContent = "–";
+            cell.appendChild(placeholder);
+          }
+          grid.appendChild(cell);
+        });
+      });
+
+      board.appendChild(grid);
+      return board;
+    };
+
+    const renderMatchCard = (match) => {
+      const node = matchTemplate.content.cloneNode(true);
+      const details = node.querySelector("details.match-card");
+      const title = details.querySelector(".match-summary-title");
+      const subtitle = details.querySelector(".match-summary-subtitle");
+      const resultLabel = details.querySelector(".match-summary-result");
+      const meta = details.querySelector(".match-meta");
+      const setsContainer = details.querySelector(".sets");
+
+      const matchup = `${match.home_team} vs. ${match.away_team}`;
+      title.textContent = matchup;
+
+      const subtitleParts = [match.date_label, match.venue].filter(Boolean);
+      subtitle.textContent = subtitleParts.join(" · ");
+      subtitle.hidden = subtitle.textContent.trim() === "";
+
+      const setScores = Array.isArray(match.set_scores)
+        ? match.set_scores.filter((value) => typeof value === "string" && value.trim())
+        : [];
+      const baseResult = match.result && String(match.result).trim() ? match.result.trim() : "–";
+      const combinedResult = setScores.length ? `${baseResult} (${setScores.join(", ")})` : baseResult;
+      resultLabel.textContent = combinedResult;
+
+      const metaSegments = [
+        match.kickoff ? `<span>Anpfiff: ${parseKickoff(match.kickoff)}</span>` : null,
+        match.competition ? `<span>Wettbewerb: ${match.competition}</span>` : null,
+        match.match_number ? `<span>Spielnummer: ${match.match_number}</span>` : null,
+        match.pdf_url
+          ? `<span>PDF: <a href="${match.pdf_url}" target="_blank" rel="noopener">öffnen</a></span>`
+          : null,
+      ].filter(Boolean);
+      meta.innerHTML = metaSegments.join("\n");
+      meta.hidden = metaSegments.length === 0;
+
+      const teams = Array.isArray(match.teams) ? match.teams : [];
+      const lineupOrder = teams.map((team) => team.code);
+
+      (match.sets || []).forEach((set) => {
+        const setNode = setTemplate.content.cloneNode(true);
+        const heading = setNode.querySelector("h4");
+        const boardsWrapper = setNode.querySelector(".boards");
+
+        const setScoreLabel = formatSetScore(match, set);
+        heading.textContent = setScoreLabel ? `Satz ${set.number} · ${setScoreLabel}` : `Satz ${set.number}`;
+
+        const appended = new Set();
+        lineupOrder.forEach((code) => {
+          if (!set.lineups?.[code]) {
+            return;
+          }
+          const team = teams.find((item) => item.code === code);
+          boardsWrapper.appendChild(createBoard(team, set.lineups[code]));
+          appended.add(code);
+        });
+
+        Object.entries(set.lineups || {}).forEach(([code, positions]) => {
+          if (appended.has(code)) {
+            return;
+          }
+          const fallbackTeam = teams.find((item) => item.code === code) || {
+            code,
+            name: match.team_codes?.[code] || code,
+            is_focus: false,
+            is_usc: false,
+            is_opponent: false,
+            setters: [],
+          };
+          boardsWrapper.appendChild(createBoard(fallbackTeam, positions));
+        });
+
+        if (!boardsWrapper.childElementCount) {
+          const fallback = document.createElement("p");
+          fallback.className = "placeholder";
+          fallback.textContent = "Keine Startaufstellung vorhanden.";
+          boardsWrapper.appendChild(fallback);
+        }
+
+        setsContainer.appendChild(setNode);
+      });
+
+      return node;
+    };
+
+    const renderMatchesForSection = (matches, { listEl, statusEl, emptyMessage }) => {
+      if (!Array.isArray(matches) || matches.length === 0) {
+        if (statusEl) {
+          statusEl.textContent = emptyMessage || "Keine Startaufstellungen gefunden.";
+          statusEl.hidden = false;
+        }
+        if (listEl) {
+          listEl.hidden = true;
+        }
+        return;
+      }
+
+      if (statusEl) {
+        statusEl.hidden = true;
+      }
+
+      if (listEl) {
+        listEl.hidden = false;
+        listEl.innerHTML = "";
+        matches.forEach((match) => {
+          listEl.appendChild(renderMatchCard(match));
+        });
+      }
+    };
+
+    const handleError = () => {
+      updateStatusEl.textContent = "⚠️ Daten konnten nicht geladen werden.";
+      uscStatusEl.textContent = "Beim Laden der USC-Spiele ist ein Fehler aufgetreten.";
+      opponentStatusEl.textContent = "Beim Laden der Gegner-Spiele ist ein Fehler aufgetreten.";
+    };
+
+    fetch(DATA_URL)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Unexpected status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const matches = Array.isArray(data?.matches) ? data.matches : [];
+        const prepared = matches.map((match) => ({
+          ...match,
+          kickoff_label: parseKickoff(match.kickoff),
+          kickoff_ts: kickoffToTimestamp(match.kickoff),
+        }));
+
+        if (data?.opponent_team) {
+          opponentHeadingEl.textContent = `${data.opponent_team} – letzte Spiele`;
+        }
+
+        const grouped = {
+          usc: [],
+          opponent: [],
+        };
+
+        prepared.forEach((match) => {
+          if (match.focus === "opponent") {
+            grouped.opponent.push(match);
+          } else {
+            grouped.usc.push(match);
+          }
+        });
+
+        const sorter = (a, b) => (b.kickoff_ts || 0) - (a.kickoff_ts || 0);
+        grouped.usc.sort(sorter);
+        grouped.opponent.sort(sorter);
+
+        if (data.generated_at) {
+          const generatedLabel = formatDateTime(data.generated_at) || data.generated_at;
+          updateStatusEl.textContent = `📅 Aktualisiert am ${generatedLabel}`;
+        } else {
+          updateStatusEl.textContent = "📁 Datengrundlage ohne Zeitstempel";
+        }
+
+        renderMatchesForSection(grouped.usc, {
+          listEl: uscListEl,
+          statusEl: uscStatusEl,
+          emptyMessage: "Keine USC-Spiele gefunden.",
+        });
+
+        renderMatchesForSection(grouped.opponent, {
+          listEl: opponentListEl,
+          statusEl: opponentStatusEl,
+          emptyMessage: "Keine Spiele des nächsten Gegners gefunden.",
+        });
+      })
+      .catch(() => handleError());
+  </script>
+</body>
+</html>
