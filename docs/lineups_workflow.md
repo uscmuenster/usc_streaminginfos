@@ -12,15 +12,21 @@ Dieser Workflow beschreibt, wie die Startaufstellungen der beiden letzten Bundes
 6. **Datensatz schreiben:** Sämtliche Informationen werden als JSON nach `docs/data/aufstellungen.json` exportiert. Zusätzlich werden Metadaten wie Wettbewerb, Spielort, Ergebnis und Zeitpunkt der Datengenerierung festgehalten.
 7. **Frontend aktualisieren:** Die Seite `docs/aufstellungen.html` lädt das JSON und rendert die Startaufstellungen dynamisch.
 
-## Skript ausführen
+## Skripte & Automatisierung
 
-Das gesamte Vorgehen ist im Modul `src/usc_kommentatoren/lineups.py` implementiert. Der Standardaufruf lautet:
+### Manuelle Aktualisierung
+
+Für lokale Aktualisierungen steht das Hilfsskript `scripts/update_lineups.py` zur Verfügung. Es kümmert sich um die korrekte `PYTHONPATH`-Konfiguration und ruft das Lineup-Modul mit den passenden Standardpfaden auf.
 
 ```bash
-python -m src.usc_kommentatoren.lineups
+python scripts/update_lineups.py
 ```
 
-Der Befehl lädt die neuesten Daten, aktualisiert die PDF-Cache-Dateien und erzeugt `docs/data/aufstellungen.json`. Der Abschluss wird auf der Konsole bestätigt.
+Optional lassen sich Parameter wie die Anzahl der Spiele (`--limit`), alternative Datenquellen oder ein anderer Ausgabeort übergeben. Das Skript bestätigt am Ende, welcher Datensatz erzeugt wurde.
+
+### Tägliche Ausführung via GitHub Actions
+
+Der Workflow `.github/workflows/update-lineups.yml` startet täglich um 04:30 Uhr (UTC) sowie auf manuellen Workflow-Dispatch. Er installiert die Python-Abhängigkeiten, führt `python scripts/update_lineups.py` aus und erstellt bei Änderungen automatisch einen Pull Request mit dem aktualisierten Datensatz `docs/data/aufstellungen.json`.
 
 ## Abhängigkeiten
 

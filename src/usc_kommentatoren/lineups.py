@@ -348,6 +348,7 @@ def build_lineup_dataset(
     schedule_csv_url: str = DEFAULT_SCHEDULE_URL,
     schedule_page_url: str = SCHEDULE_PAGE_URL,
     output_path: Path = DEFAULT_OUTPUT_PATH,
+    pdf_cache_dir: Path = PDF_CACHE_DIR,
 ) -> Dict[str, object]:
     csv_text = fetch_schedule_csv(schedule_csv_url)
     schedule_rows = parse_schedule(csv_text)
@@ -362,7 +363,7 @@ def build_lineup_dataset(
         pdf_url = pdf_links.get(row.match_number)
         if not pdf_url:
             raise RuntimeError(f"Kein PDF-Link für Spiel {row.match_number} gefunden.")
-        pdf_path = PDF_CACHE_DIR / f"{row.match_number}.pdf"
+        pdf_path = pdf_cache_dir / f"{row.match_number}.pdf"
         download_pdf(pdf_url, pdf_path)
         pdf_lineups = extract_lineups_from_pdf(pdf_path)
         matches.append(merge_schedule_details(row, pdf_url, pdf_lineups))
