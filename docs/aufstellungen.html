@@ -152,7 +152,7 @@
     .set-grid {
       padding: 0 1.1rem 1.1rem;
       display: grid;
-      gap: 0.9rem;
+      gap: 1rem;
     }
     .set-header {
       display: flex;
@@ -161,41 +161,74 @@
       font-size: calc(var(--font-scale) * 0.9rem);
       color: #475569;
     }
-    .lineup-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #f8fafc;
-      border-radius: 0.75rem;
-      overflow: hidden;
-      font-size: calc(var(--font-scale) * 0.9rem);
+    .boards {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
     }
-    .lineup-table thead {
-      background: #e2e8f0;
+    .lineup-board {
+      border: 1px solid #dbeafe;
+      border-radius: 0.9rem;
+      padding: 0.85rem;
+      background: #f8fafc;
+      display: grid;
+      gap: 0.75rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .lineup-board.is-focus {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 35px rgba(15, 23, 42, 0.12);
+    }
+    .lineup-board.usc.is-focus {
+      border-color: #bbf7d0;
+      background: linear-gradient(180deg, #ecfdf5 0%, #ffffff 100%);
+    }
+    .lineup-board.opponent.is-focus {
+      border-color: #bfdbfe;
+      background: linear-gradient(180deg, #e0f2fe 0%, #ffffff 100%);
+    }
+    .lineup-board h4 {
+      margin: 0;
+      font-size: calc(var(--font-scale) * 1rem);
       color: #0f172a;
     }
-    .lineup-table th,
-    .lineup-table td {
-      padding: 0.65rem 0.85rem;
-      text-align: left;
-      border-bottom: 1px solid #cbd5f5;
+    .board-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(4.5rem, 1fr));
+      gap: 0.55rem;
     }
-    .lineup-table tbody tr:last-child td {
-      border-bottom: none;
-    }
-    .team-chip {
-      display: inline-flex;
+    .board-cell {
+      background: #ffffff;
+      border-radius: 0.75rem;
+      border: 1px solid #e2e8f0;
+      padding: 0.75rem 0.5rem;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 0.4rem;
-      padding: 0.2rem 0.55rem;
-      border-radius: 999px;
-      font-size: 0.8em;
+      justify-content: center;
+      gap: 0.2rem;
+      text-align: center;
+      min-height: 4.25rem;
       font-weight: 600;
-      background: #dbeafe;
-      color: var(--opponent);
+      color: #1f2933;
     }
-    .team-chip.usc {
-      background: #dcfce7;
-      color: var(--usc);
+    .board-cell.is-setter {
+      border-color: var(--accent);
+      box-shadow: inset 0 0 0 1px var(--accent);
+      background: rgba(14, 116, 144, 0.08);
+    }
+    .player-number {
+      font-size: calc(var(--font-scale) * 1rem);
+      line-height: 1.1;
+    }
+    .player-name {
+      font-size: calc(var(--font-scale) * 0.85rem);
+      font-weight: 500;
+      color: #475569;
+    }
+    .player-placeholder {
+      color: #94a3b8;
+      font-weight: 500;
     }
     .placeholder {
       padding: 1.1rem;
@@ -210,9 +243,8 @@
         gap: 0.3rem;
         align-items: flex-start;
       }
-      .lineup-table th,
-      .lineup-table td {
-        padding: 0.55rem 0.65rem;
+      .board-grid {
+        grid-template-columns: repeat(3, minmax(3.5rem, 1fr));
       }
     }
   </style>
@@ -221,7 +253,7 @@
   <main>
     <header>
       <h1>Startaufstellungen USC Münster</h1>
-      <p>Hier findest du die Startaufstellungen der letzten beiden Bundesliga-Partien des USC Münster – Satz für Satz und für beide Teams direkt aus den offiziellen Spielberichtsbögen.</p>
+      <p>Hier findest du die Startaufstellungen der letzten Bundesliga-Partien des USC Münster sowie der jüngsten Begegnungen des kommenden Gegners – jeweils Satz für Satz und basierend auf den offiziellen Spielberichtsbögen.</p>
       <nav aria-label="Navigation">
         <a href="index.html">⟵ zurück zur Übersicht</a>
       </nav>
@@ -237,8 +269,19 @@
 
     <section aria-labelledby="lineup-section">
       <h2 id="lineup-section">Startaufstellungen der letzten Begegnungen</h2>
-      <div id="lineupStatus" class="placeholder" role="status">Lade Startaufstellungen …</div>
-      <ul id="matchList" class="match-list" hidden></ul>
+      <p>Die folgenden Abschnitte listen getrennt die jüngsten Begegnungen des USC Münster und die letzten beiden Spiele des nächsten Gegners auf. Für jede Partie werden die sechs Starterinnen pro Satz in einer Feldaufstellung dargestellt.</p>
+    </section>
+
+    <section aria-labelledby="usc-heading">
+      <h2 id="usc-heading">USC Münster – letzte Spiele</h2>
+      <div id="uscStatus" class="placeholder" role="status">Lade USC-Spiele …</div>
+      <ul id="uscMatchList" class="match-list" hidden></ul>
+    </section>
+
+    <section aria-labelledby="opponent-heading">
+      <h2 id="opponent-heading">Nächster Gegner – letzte Spiele</h2>
+      <div id="opponentStatus" class="placeholder" role="status">Lade Gegner-Spiele …</div>
+      <ul id="opponentMatchList" class="match-list" hidden></ul>
     </section>
   </main>
 
@@ -257,21 +300,7 @@
       <summary></summary>
       <div class="set-grid">
         <div class="set-header"></div>
-        <table class="lineup-table">
-          <thead>
-            <tr>
-              <th>Team</th>
-              <th>Position I</th>
-              <th>Position II</th>
-              <th>Position III</th>
-              <th>Position IV</th>
-              <th>Position V</th>
-              <th>Position VI</th>
-              <th>Wechsel</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="boards"></div>
       </div>
     </details>
   </template>
@@ -279,9 +308,17 @@
   <script>
     const DATA_URL = "data/aufstellungen.json";
 
-    const statusEl = document.getElementById("lineupStatus");
+    const BOARD_LAYOUT = [
+      ["V", "IV", "III"],
+      ["VI", "I", "II"],
+    ];
+
     const updateStatusEl = document.getElementById("updateStatus");
-    const listEl = document.getElementById("matchList");
+    const uscStatusEl = document.getElementById("uscStatus");
+    const opponentStatusEl = document.getElementById("opponentStatus");
+    const uscListEl = document.getElementById("uscMatchList");
+    const opponentListEl = document.getElementById("opponentMatchList");
+    const opponentHeadingEl = document.getElementById("opponent-heading");
     const matchTemplate = document.getElementById("matchTemplate");
     const setTemplate = document.getElementById("setTemplate");
 
@@ -299,120 +336,173 @@
       }).format(date);
     };
 
-    const transformMatches = (data) => {
-      if (!data || !Array.isArray(data.matches)) {
-        return [];
-      }
-      return data.matches.map((match) => {
-        const uscCode = match.usc_code;
-        const opponentCode = match.opponent_code;
-        const teamCodes = match.team_codes || {};
-        const uscName = teamCodes[uscCode] || "USC Münster";
-        const opponentName = teamCodes[opponentCode]
-          || (match.home_team && match.home_team.includes("USC") ? match.away_team : match.home_team)
-          || "Gegner";
-
-        return {
-          matchId: match.match_number,
-          dateLabel: match.date_label,
-          kickoff: formatDateTime(match.kickoff),
-          result: match.result,
-          competition: match.competition || "1. Bundesliga Frauen",
-          venue: match.venue || "–",
-          pdfUrl: match.pdf_url,
-          homeTeam: match.home_team,
-          awayTeam: match.away_team,
-          uscName,
-          opponentName,
-          sets: (match.sets || []).map((set) => ({
-            number: set.number,
-            usc: set.lineups?.usc || (uscCode && set.lineups?.[uscCode]) || [],
-            opponent:
-              set.lineups?.opponent || (opponentCode && set.lineups?.[opponentCode]) || [],
-          })),
-        };
-      });
+    const parseKickoff = (isoString) => {
+      const value = formatDateTime(isoString);
+      return value;
     };
 
-    const renderLineups = (matches) => {
+    const kickoffToTimestamp = (isoString) => {
+      if (!isoString) {
+        return 0;
+      }
+      const value = new Date(isoString);
+      if (Number.isNaN(value.getTime())) {
+        return 0;
+      }
+      return value.getTime();
+    };
+
+    const createBoard = (team, positions) => {
+      const board = document.createElement("article");
+      board.className = "lineup-board";
+      if (team?.is_focus) {
+        board.classList.add("is-focus");
+      }
+      if (team?.is_usc) {
+        board.classList.add("usc");
+      }
+      if (team?.is_opponent) {
+        board.classList.add("opponent");
+      }
+
+      const heading = document.createElement("h4");
+      heading.textContent = team?.name || "Team";
+      board.appendChild(heading);
+
+      const grid = document.createElement("div");
+      grid.className = "board-grid";
+      const slots = Array.isArray(positions) ? positions : [];
+      const slotMap = new Map(slots.map((item) => [item.slot, item]));
+
+      BOARD_LAYOUT.forEach((row) => {
+        row.forEach((slot) => {
+          const cell = document.createElement("div");
+          cell.className = "board-cell";
+          if (slot === "I") {
+            cell.classList.add("is-setter");
+          }
+          const entry = slotMap.get(slot);
+          if (entry && (entry.number || entry.short_name || entry.full_name)) {
+            const number = document.createElement("span");
+            number.className = "player-number";
+            number.textContent = entry.number || "–";
+            const name = document.createElement("span");
+            name.className = "player-name";
+            name.textContent = entry.short_name || entry.full_name || "–";
+            cell.append(number, name);
+          } else {
+            const placeholder = document.createElement("span");
+            placeholder.className = "player-placeholder";
+            placeholder.textContent = "–";
+            cell.appendChild(placeholder);
+          }
+          grid.appendChild(cell);
+        });
+      });
+
+      board.appendChild(grid);
+      return board;
+    };
+
+    const renderMatchCard = (match) => {
+      const node = matchTemplate.content.cloneNode(true);
+      const title = node.querySelector("h3");
+      const meta = node.querySelector(".meta");
+      const setsContainer = node.querySelector(".sets");
+
+      const matchup = `${match.home_team} vs. ${match.away_team}`;
+      title.textContent = match.date_label ? `${match.date_label} · ${matchup}` : matchup;
+
+      const metaSegments = [
+        match.kickoff ? `<span>Anpfiff: ${parseKickoff(match.kickoff)}</span>` : null,
+        match.result ? `<span>Ergebnis: ${match.result}</span>` : `<span>Ergebnis: –</span>`,
+        match.pdf_url
+          ? `<span>PDF: <a href="${match.pdf_url}" target="_blank" rel="noopener">öffnen</a></span>`
+          : null,
+        match.competition ? `<span>Wettbewerb: ${match.competition}</span>` : null,
+        match.venue ? `<span>Spielort: ${match.venue}</span>` : null,
+        match.match_number ? `<span>Spielnummer: ${match.match_number}</span>` : null,
+      ].filter(Boolean);
+      meta.innerHTML = metaSegments.join("\n");
+
+      const teams = Array.isArray(match.teams) ? match.teams : [];
+      const lineupOrder = teams.map((team) => team.code);
+
+      (match.sets || []).forEach((set) => {
+        const setNode = setTemplate.content.cloneNode(true);
+        const summary = setNode.querySelector("summary");
+        const setHeader = setNode.querySelector(".set-header");
+        const boardsWrapper = setNode.querySelector(".boards");
+
+        summary.textContent = `Satz ${set.number}`;
+        setHeader.textContent = "Aufstellung zu Satzbeginn";
+
+        const appended = new Set();
+        lineupOrder.forEach((code) => {
+          if (!set.lineups?.[code]) {
+            return;
+          }
+          const team = teams.find((item) => item.code === code);
+          boardsWrapper.appendChild(createBoard(team, set.lineups[code]));
+          appended.add(code);
+        });
+
+        Object.entries(set.lineups || {}).forEach(([code, positions]) => {
+          if (appended.has(code)) {
+            return;
+          }
+          const fallbackTeam = teams.find((item) => item.code === code) || {
+            code,
+            name: match.team_codes?.[code] || code,
+            is_focus: false,
+            is_usc: false,
+            is_opponent: false,
+          };
+          boardsWrapper.appendChild(createBoard(fallbackTeam, positions));
+        });
+
+        if (!boardsWrapper.childElementCount) {
+          const fallback = document.createElement("p");
+          fallback.className = "placeholder";
+          fallback.textContent = "Keine Startaufstellung vorhanden.";
+          boardsWrapper.appendChild(fallback);
+        }
+
+        setsContainer.appendChild(setNode);
+      });
+
+      return node;
+    };
+
+    const renderMatchesForSection = (matches, { listEl, statusEl, emptyMessage }) => {
       if (!Array.isArray(matches) || matches.length === 0) {
-        statusEl.textContent = "Keine Startaufstellungen gefunden.";
-        listEl.hidden = true;
+        if (statusEl) {
+          statusEl.textContent = emptyMessage || "Keine Startaufstellungen gefunden.";
+          statusEl.hidden = false;
+        }
+        if (listEl) {
+          listEl.hidden = true;
+        }
         return;
       }
 
-      statusEl.remove();
-      listEl.hidden = false;
-      listEl.innerHTML = "";
+      if (statusEl) {
+        statusEl.hidden = true;
+      }
 
-      matches.forEach((match) => {
-        const matchNode = matchTemplate.content.cloneNode(true);
-        const title = matchNode.querySelector("h3");
-        const meta = matchNode.querySelector(".meta");
-        const setsContainer = matchNode.querySelector(".sets");
-
-        const matchup = `${match.homeTeam} vs. ${match.awayTeam}`;
-        title.textContent = `${match.dateLabel} · ${matchup}`;
-
-        const metaSegments = [
-          match.kickoff ? `<span>Anpfiff: ${match.kickoff}</span>` : null,
-          match.result ? `<span>Ergebnis: ${match.result}</span>` : `<span>Ergebnis: –</span>`,
-          match.pdfUrl
-            ? `<span>PDF: <a href="${match.pdfUrl}" target="_blank" rel="noopener">öffnen</a></span>`
-            : null,
-          `<span>Wettbewerb: ${match.competition}</span>`,
-          `<span>Spielort: ${match.venue}</span>`,
-          `<span>Spielnummer: ${match.matchId}</span>`,
-        ].filter(Boolean);
-        meta.innerHTML = metaSegments.join("\n");
-
-        match.sets.forEach((set) => {
-          const setNode = setTemplate.content.cloneNode(true);
-          const summary = setNode.querySelector("summary");
-          const setHeader = setNode.querySelector(".set-header");
-          const tbody = setNode.querySelector("tbody");
-
-          summary.textContent = `Satz ${set.number}`;
-          setHeader.textContent = "Aufstellung zu Satzbeginn";
-
-          const renderRow = (teamLabel, positions, isUsc) => {
-            const row = document.createElement("tr");
-            const teamCell = document.createElement("td");
-            const chip = document.createElement("span");
-            chip.className = `team-chip ${isUsc ? "usc" : ""}`;
-            chip.textContent = teamLabel;
-            teamCell.appendChild(chip);
-            row.appendChild(teamCell);
-
-            const filledPositions = Array.isArray(positions) && positions.length
-              ? positions
-              : Array(6).fill("–");
-            filledPositions.slice(0, 6).forEach((pos) => {
-              const cell = document.createElement("td");
-              cell.textContent = pos || "–";
-              row.appendChild(cell);
-            });
-
-            const subsCell = document.createElement("td");
-            subsCell.textContent = "–";
-            row.appendChild(subsCell);
-
-            tbody.appendChild(row);
-          };
-
-          renderRow(match.uscName, set.usc, true);
-          renderRow(match.opponentName, set.opponent, false);
-
-          setsContainer.appendChild(setNode);
+      if (listEl) {
+        listEl.hidden = false;
+        listEl.innerHTML = "";
+        matches.forEach((match) => {
+          listEl.appendChild(renderMatchCard(match));
         });
-
-        listEl.appendChild(matchNode);
-      });
+      }
     };
 
     const handleError = () => {
       updateStatusEl.textContent = "⚠️ Daten konnten nicht geladen werden.";
-      statusEl.textContent = "Beim Laden der Startaufstellungen ist ein Fehler aufgetreten.";
+      uscStatusEl.textContent = "Beim Laden der USC-Spiele ist ein Fehler aufgetreten.";
+      opponentStatusEl.textContent = "Beim Laden der Gegner-Spiele ist ein Fehler aufgetreten.";
     };
 
     fetch(DATA_URL)
@@ -423,14 +513,52 @@
         return response.json();
       })
       .then((data) => {
-        const matches = transformMatches(data);
+        const matches = Array.isArray(data?.matches) ? data.matches : [];
+        const prepared = matches.map((match) => ({
+          ...match,
+          kickoff_label: parseKickoff(match.kickoff),
+          kickoff_ts: kickoffToTimestamp(match.kickoff),
+        }));
+
+        if (data?.opponent_team) {
+          opponentHeadingEl.textContent = `${data.opponent_team} – letzte Spiele`;
+        }
+
+        const grouped = {
+          usc: [],
+          opponent: [],
+        };
+
+        prepared.forEach((match) => {
+          if (match.focus === "opponent") {
+            grouped.opponent.push(match);
+          } else {
+            grouped.usc.push(match);
+          }
+        });
+
+        const sorter = (a, b) => (b.kickoff_ts || 0) - (a.kickoff_ts || 0);
+        grouped.usc.sort(sorter);
+        grouped.opponent.sort(sorter);
+
         if (data.generated_at) {
           const generatedLabel = formatDateTime(data.generated_at) || data.generated_at;
           updateStatusEl.textContent = `📅 Aktualisiert am ${generatedLabel}`;
         } else {
           updateStatusEl.textContent = "📁 Datengrundlage ohne Zeitstempel";
         }
-        renderLineups(matches);
+
+        renderMatchesForSection(grouped.usc, {
+          listEl: uscListEl,
+          statusEl: uscStatusEl,
+          emptyMessage: "Keine USC-Spiele gefunden.",
+        });
+
+        renderMatchesForSection(grouped.opponent, {
+          listEl: opponentListEl,
+          statusEl: opponentStatusEl,
+          emptyMessage: "Keine Spiele des nächsten Gegners gefunden.",
+        });
       })
       .catch(() => handleError());
   </script>

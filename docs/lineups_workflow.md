@@ -22,7 +22,7 @@ Für lokale Aktualisierungen steht das Hilfsskript `scripts/update_lineups.py` z
 python scripts/update_lineups.py
 ```
 
-Optional lassen sich Parameter wie die Anzahl der Spiele (`--limit`), alternative Datenquellen oder ein anderer Ausgabeort übergeben. Das Skript bestätigt am Ende, welcher Datensatz erzeugt wurde.
+Optional lassen sich Parameter wie die Anzahl der Spiele (`--limit`), alternative Datenquellen oder ein anderer Ausgabeort übergeben. Das Skript wertet standardmäßig die beiden letzten USC-Partien **und** die zwei jüngsten Begegnungen des kommenden Gegners aus und erzeugt daraus einen gemeinsamen Datensatz mit Trennung nach Fokus-Team.
 
 ### Tägliche Ausführung via GitHub Actions
 
@@ -40,5 +40,6 @@ Die benötigten Pakete sind in `requirements.txt` hinterlegt.
 
 - Liefert die VBL-Seite noch keinen Spielberichtsbogen (fehlender Link), bricht das Skript mit einem Hinweis auf die betroffene Spielnummer ab.
 - Die PDF-Auswertung enthält Fallback-Logik für abweichende Tabellenlayouts (insbesondere für Satz 5).
-- Das JSON enthält ausschließlich Startaufstellungen. Wechselinformationen stehen derzeit nicht zur Verfügung und werden in der Tabelle mit `–` markiert.
+- Das JSON enthält ausschließlich Startaufstellungen. Wechselinformationen stehen derzeit nicht zur Verfügung und werden in der Darstellung mit `–` markiert.
+- Für jede Startformation werden neben den Rückennummern auch die im Spielbericht geführten Namen (gekürzt auf den Nachnamen) gespeichert, sodass die HTML-Ansicht Feldaufstellungen wie im Screenshot rendern kann.
 

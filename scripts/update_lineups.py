@@ -17,7 +17,10 @@ def _add_src_to_path() -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Lädt die letzten USC-Spielberichtsbögen und erzeugt den Lineup-Datensatz.",
+        description=(
+            "Lädt die letzten USC-Spielberichtsbögen sowie die jüngsten Partien des "
+            "nächsten Gegners und erzeugt den Lineup-Datensatz."
+        ),
     )
     parser.add_argument(
         "--limit",
