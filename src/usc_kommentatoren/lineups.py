@@ -47,6 +47,9 @@ class ScheduleRow:
     venue: str
     season: str
     result_label: str
+    score: Optional[str]
+    total_points: Optional[str]
+    set_scores: Tuple[str, ...]
 
     @property
     def is_finished(self) -> bool:
@@ -125,6 +128,17 @@ def parse_schedule(csv_text: str) -> List[ScheduleRow]:
         venue = (row.get("Austragungsort") or "").strip()
         season = (row.get("Saison") or "").strip()
         result_label = (row.get("Ergebnis") or "").strip()
+
+        score = (row.get("Satzpunkte") or "").strip() or None
+        total_points = (row.get("Ballpunkte") or "").strip() or None
+        set_scores: List[str] = []
+        for index in range(1, 6):
+            home_key = f"Satz {index} - Ballpunkte 1"
+            away_key = f"Satz {index} - Ballpunkte 2"
+            home_points = (row.get(home_key) or "").strip()
+            away_points = (row.get(away_key) or "").strip()
+            if home_points and away_points:
+                set_scores.append(f"{home_points}:{away_points}")
         rows.append(
             ScheduleRow(
                 match_number=match_number,
@@ -135,6 +149,9 @@ def parse_schedule(csv_text: str) -> List[ScheduleRow]:
                 venue=venue,
                 season=season,
                 result_label=result_label,
+                score=score,
+                total_points=total_points,
+                set_scores=tuple(set_scores),
             )
         )
     return rows
@@ -256,6 +273,9 @@ def extract_lineups_from_pdf(pdf_path: Path) -> MatchLineups:
         venue="",
         season="",
         result_label="",
+        score=None,
+        total_points=None,
+        set_scores=(),
     )
     return MatchLineups(
         match=dummy_match,
@@ -719,6 +739,7 @@ def _serialize_dataset(
                 "setters": list(setters),
             }
 
+        schedule_set_scores = list(match.match.set_scores)
         serialized_sets: List[Dict[str, object]] = []
         for set_lineup in match.sets:
             lineups: Dict[str, List[Dict[str, Optional[str]]]] = {}
@@ -760,6 +781,15 @@ def _serialize_dataset(
                 away_score = set_lineup.scores.get(away_code)
                 if home_score is not None and away_score is not None:
                     score_label = f"{home_score}:{away_score}"
+                elif 0 < set_lineup.number <= len(schedule_set_scores):
+                    fallback_label = schedule_set_scores[set_lineup.number - 1]
+                    score_label = fallback_label
+                    parts = fallback_label.split(":", 1)
+                    if len(parts) == 2:
+                        score_entries = {
+                            home_code: parts[0],
+                            away_code: parts[1],
+                        }
 
             serialized_sets.append(
                 {
@@ -771,13 +801,22 @@ def _serialize_dataset(
             )
 
         set_score_labels: List[str] = []
-        if home_code and away_code:
+        if schedule_set_scores:
+            set_score_labels.extend(schedule_set_scores)
+        elif home_code and away_code:
             for set_lineup in match.sets:
                 home_score = set_lineup.scores.get(home_code)
                 away_score = set_lineup.scores.get(away_code)
                 if home_score is None or away_score is None:
                     continue
                 set_score_labels.append(f"{home_score}:{away_score}")
+
+        result_value = match.match.score
+        if not result_value:
+            if match.match.result_label:
+                result_value = match.match.result_label.split("/")[0].strip()
+            else:
+                result_value = ""
 
         serialized.append(
             {
@@ -792,7 +831,7 @@ def _serialize_dataset(
                 "competition": match.match.competition,
                 "venue": match.match.venue,
                 "season": match.match.season,
-                "result": match.match.result_label,
+                "result": result_value,
                 "home_code": home_code,
                 "away_code": away_code,
                 "set_scores": set_score_labels,

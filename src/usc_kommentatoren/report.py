@@ -476,7 +476,10 @@ def fetch_match_details(
 
     for table in soup.select("table"):
         for row in table.select("tr"):
-            cells = [cell.get_text(" ", strip=True) for cell in row.find_all("td")]
+            cells = [
+                cell.get_text(" ", strip=True)
+                for cell in row.find_all(["th", "td"])
+            ]
             if len(cells) < 2:
                 continue
             label = cells[0].lower()
@@ -1899,8 +1902,21 @@ def build_html_report(
     meta_lines = [
         f"<p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>",
         f"<p><strong>Austragungsort:</strong> {escape(location)}</p>",
-        f"<p><a class=\"meta-link\" href=\"{escape(TABLE_URL)}\">Tabelle der Volleyball Bundesliga</a></p>",
     ]
+
+    referees = list(next_home.referees)
+    for idx in range(1, 3):
+        if idx <= len(referees):
+            referee_name = referees[idx - 1]
+        else:
+            referee_name = "noch nicht veröffentlicht"
+        meta_lines.append(
+            f"<p><strong>{idx}. Schiedsrichter*in:</strong> {escape(referee_name)}</p>"
+        )
+
+    meta_lines.append(
+        f"<p><a class=\"meta-link\" href=\"{escape(TABLE_URL)}\">Tabelle der Volleyball Bundesliga</a></p>"
+    )
     if usc_url:
         meta_lines.append(
             f"<p><a class=\"meta-link\" href=\"{escape(usc_url)}\">Homepage USC Münster</a></p>"
@@ -2000,6 +2016,30 @@ def build_html_report(
       border-radius: 0.85rem;
       padding: 1rem clamp(1rem, 3vw, 1.5rem);
       box-shadow: 0 10px 30px rgba(0, 76, 84, 0.08);
+    }}
+    .lineup-link {{
+      margin-top: clamp(1rem, 3vw, 1.75rem);
+      display: flex;
+      justify-content: center;
+    }}
+    .lineup-link a {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      background: #0f766e;
+      color: #ffffff;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.25);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }}
+    .lineup-link a:hover,
+    .lineup-link a:focus-visible {{
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(15, 118, 110, 0.3);
+      outline: none;
     }}
     .match-line {{
       display: flex;
@@ -2279,6 +2319,11 @@ def build_html_report(
         background: #132a30;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
       }}
+      .lineup-link a {{
+        background: #14b8a6;
+        color: #022c22;
+        box-shadow: 0 16px 32px rgba(20, 184, 166, 0.35);
+      }}
       .accordion {{
         background: var(--accordion-opponent-bg);
         box-shadow: 0 18px 40px var(--accordion-opponent-shadow);
@@ -2346,6 +2391,9 @@ def build_html_report(
       <ul class=\"match-list\">
         {usc_items}
       </ul>
+    </section>
+    <section class=\"lineup-link\">
+      <a href=\"aufstellungen.html\">Startaufstellungen der letzten Begegnungen</a>
     </section>
     <section class=\"roster-group\">
       <details class=\"accordion\">

@@ -60,6 +60,30 @@
       padding: 1rem clamp(1rem, 3vw, 1.5rem);
       box-shadow: 0 10px 30px rgba(0, 76, 84, 0.08);
     }
+    .lineup-link {
+      margin-top: clamp(1rem, 3vw, 1.75rem);
+      display: flex;
+      justify-content: center;
+    }
+    .lineup-link a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      background: #0f766e;
+      color: #ffffff;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.25);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .lineup-link a:hover,
+    .lineup-link a:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(15, 118, 110, 0.3);
+      outline: none;
+    }
     .match-line {
       display: flex;
       flex-direction: column;
@@ -338,6 +362,11 @@
         background: #132a30;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
       }
+      .lineup-link a {
+        background: #14b8a6;
+        color: #022c22;
+        box-shadow: 0 16px 32px rgba(20, 184, 166, 0.35);
+      }
       .accordion {
         background: var(--accordion-opponent-bg);
         box-shadow: 0 18px 40px var(--accordion-opponent-shadow);
@@ -394,6 +423,8 @@
     <div class="meta">
       <p><strong>Spieltermin:</strong> 26.10.2025 16:00 Uhr</p>
       <p><strong>Austragungsort:</strong> Sporthalle Berg Fidel (48153 Münster)</p>
+      <p><strong>1. Schiedsrichter*in:</strong> Becker, Lea (Osnabrück)</p>
+      <p><strong>2. Schiedsrichter*in:</strong> Witte, Sabine (Dormagen)</p>
       <p><a class="meta-link" href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml">Tabelle der Volleyball Bundesliga</a></p>
       <p><a class="meta-link" href="https://www.usc-muenster.de/">Homepage USC Münster</a></p>
       <p><a class="meta-link" href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys/">Homepage ETV Hamburger Volksbank Volleys</a></p>
@@ -401,18 +432,21 @@
     <section>
       <h2>Spiele: ETV Hamburger Volksbank Volleys</h2>
       <ul class="match-list">
-        <li><div class="match-line"><div class="match-header"><strong>29.10.2025 (Mi) 20:00 Uhr</strong> – ETV Hamburger Volksbank Volleys vs. Ladies in Black Aachen</div><div class="match-meta"><a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480124&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a></div></div></li>
-      <li><div class="match-line"><div class="match-header"><strong>18.10.2025 (Sa) 18:00 Uhr</strong> – SSC Palmberg Schwerin vs. ETV Hamburger Volksbank Volleys</div><div class="match-result">Ergebnis: 3:0 / 75:41 (25:16 25:11 25:14)</div><div class="match-meta"><span>Zuschauer: 1857</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480001&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/831866c1-9e16-46f8-827c-4b0dd011928b" target="_blank" rel="noopener">Statistik (PDF)</a></div></div></li>
-      <li><div class="match-line"><div class="match-header"><strong>11.10.2025 (Sa) 19:30 Uhr</strong> – ETV Hamburger Volksbank Volleys vs. Allianz MTV Stuttgart</div><div class="match-result">Ergebnis: 0:3 / 51:75 (14:25 20:25 17:25)</div><div class="match-meta"><span>Zuschauer: 1018</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777479964&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/eb523e7a-332e-481d-a2ad-a6f9d1615c3e" target="_blank" rel="noopener">Statistik (PDF)</a></div></div></li>
+        <li><div class="match-line"><div class="match-header"><strong>29.10.2025 (Mi) 20:00 Uhr</strong> – ETV Hamburger Volksbank Volleys vs. Ladies in Black Aachen</div><div class="match-meta"><span>Schiedsrichter: Barnick, Björn (Barkelsby), Gierke, Stefan (Pampow)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480124&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a></div></div></li>
+      <li><div class="match-line"><div class="match-header"><strong>18.10.2025 (Sa) 18:00 Uhr</strong> – SSC Palmberg Schwerin vs. ETV Hamburger Volksbank Volleys</div><div class="match-result">Ergebnis: 3:0 / 75:41 (25:16 25:11 25:14)</div><div class="match-meta"><span>Schiedsrichter: Lachmann, Erik (Hohen Neuendorf), Dames, Alexander (Brandenburg an der Havel)</span> · <span>Zuschauer: 1857</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480001&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/831866c1-9e16-46f8-827c-4b0dd011928b" target="_blank" rel="noopener">Statistik (PDF)</a></div></div></li>
+      <li><div class="match-line"><div class="match-header"><strong>11.10.2025 (Sa) 19:30 Uhr</strong> – ETV Hamburger Volksbank Volleys vs. Allianz MTV Stuttgart</div><div class="match-result">Ergebnis: 0:3 / 51:75 (14:25 20:25 17:25)</div><div class="match-meta"><span>Schiedsrichter: Zyber, Markus (Essen), Freund, Torben (Norderstedt)</span> · <span>Zuschauer: 1018</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777479964&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/eb523e7a-332e-481d-a2ad-a6f9d1615c3e" target="_blank" rel="noopener">Statistik (PDF)</a></div></div></li>
       </ul>
     </section>
     <section>
       <h2>Spiele: USC Münster</h2>
       <ul class="match-list">
-        <li><div class="match-line"><div class="match-header"><strong>01.11.2025 (Sa) 19:30 Uhr</strong> – USC Münster vs. Ladies in Black Aachen</div><div class="match-meta"><a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480186&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a></div></div></li>
-      <li><div class="match-line"><div class="match-header"><strong>15.10.2025 (Mi) 19:30 Uhr</strong> – Binder Blaubären TSV Flacht vs. USC Münster</div><div class="match-result">Ergebnis: 0:3 / 49:75 (14:25 15:25 20:25)</div><div class="match-meta"><span>Zuschauer: 433</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777479989&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/19bb6c96-f1cc-4867-9058-0864849ec964" target="_blank" rel="noopener">Statistik (PDF)</a></div></div></li>
-      <li><div class="match-line"><div class="match-header"><strong>12.10.2025 (So) 16:00 Uhr</strong> – USC Münster vs. SSC Palmberg Schwerin</div><div class="match-result">Ergebnis: 3:2 / 106:106 (20:25 25:22 21:25 25:21 15:13)</div><div class="match-meta"><span>Zuschauer: 2124</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777479976&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/70a7c2ba-97bc-4478-8e8e-e55ec764d2e6" target="_blank" rel="noopener">Statistik (PDF)</a></div></div></li>
+        <li><div class="match-line"><div class="match-header"><strong>01.11.2025 (Sa) 19:30 Uhr</strong> – USC Münster vs. Ladies in Black Aachen</div><div class="match-meta"><span>Schiedsrichter: Hesse, Jennifer (Oberursel), Adick, Marvin (Aurich)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480186&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a></div></div></li>
+      <li><div class="match-line"><div class="match-header"><strong>15.10.2025 (Mi) 19:30 Uhr</strong> – Binder Blaubären TSV Flacht vs. USC Münster</div><div class="match-result">Ergebnis: 0:3 / 49:75 (14:25 15:25 20:25)</div><div class="match-meta"><span>Schiedsrichter: Apanowicz, Daniel (Wissembourg), Springer, Armin (Oberderdingen)</span> · <span>Zuschauer: 433</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777479989&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/19bb6c96-f1cc-4867-9058-0864849ec964" target="_blank" rel="noopener">Statistik (PDF)</a></div></div></li>
+      <li><div class="match-line"><div class="match-header"><strong>12.10.2025 (So) 16:00 Uhr</strong> – USC Münster vs. SSC Palmberg Schwerin</div><div class="match-result">Ergebnis: 3:2 / 106:106 (20:25 25:22 21:25 25:21 15:13)</div><div class="match-meta"><span>Schiedsrichter: Schaper, Timo (Hiddenhausen), Rottmann, Theresa (Werne)</span> · <span>Zuschauer: 2124</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777479976&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/70a7c2ba-97bc-4478-8e8e-e55ec764d2e6" target="_blank" rel="noopener">Statistik (PDF)</a></div></div></li>
       </ul>
+    </section>
+    <section class="lineup-link">
+      <a href="aufstellungen.html">Startaufstellungen der letzten Begegnungen</a>
     </section>
     <section class="roster-group">
       <details class="accordion">
@@ -581,6 +615,11 @@
           <h3>ETV Hamburger Volksbank Volleys</h3>
           <ul class="instagram-list">
             <li><a href="https://www.instagram.com/etv.hamburgervolksbank.volleys">@etv.hamburgervolksbank.volleys</a></li>
+          <li><a href="https://www.instagram.com/etv.hamburgervolksbank.volleys/reels">Reels-Übersicht</a></li>
+          <li><a href="https://www.instagram.com/p/DL7ZgrWqfE2">Beitrag DL7ZgrWqfE2</a></li>
+          <li><a href="https://www.instagram.com/p/DG3jn31Kq4w">Beitrag DG3jn31Kq4w</a></li>
+          <li><a href="https://www.instagram.com/p/DG2shjpqmFy">Beitrag DG2shjpqmFy</a></li>
+          <li><a href="https://www.instagram.com/etv.hamburgervolksbank.volleys/reel/DNP_1J1selF">Reel DNP_1J1selF</a></li>
           </ul>
         </article>
         <article class="instagram-card">
