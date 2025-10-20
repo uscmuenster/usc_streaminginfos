@@ -4,6 +4,7 @@ import argparse
 import sys
 from datetime import timedelta
 from pathlib import Path
+from typing import Dict
 
 from .report import (
     DEFAULT_SCHEDULE_URL,
@@ -15,6 +16,9 @@ from .report import (
     collect_team_news,
     collect_team_photo,
     collect_team_transfers,
+    enrich_match,
+    enrich_matches,
+    fetch_schedule_match_metadata,
     download_schedule,
     find_last_matches_for_team,
     find_next_match_for_team,
@@ -97,6 +101,14 @@ def main() -> int:
         url=args.schedule_url,
     )
     matches = load_schedule_from_file(args.schedule_path)
+    try:
+        schedule_metadata = fetch_schedule_match_metadata()
+    except Exception as exc:  # pragma: no cover - network failure
+        print(
+            f"Warnung: Match-Metadaten konnten nicht geladen werden: {exc}",
+            file=sys.stderr,
+        )
+        schedule_metadata = {}
     next_home = find_next_usc_home_match(matches)
     if not next_home:
         raise SystemExit("Kein zukünftiges Heimspiel des USC Münster gefunden.")
@@ -174,6 +186,15 @@ def main() -> int:
             file=sys.stderr,
         )
         opponent_photo = None
+
+    detail_cache: Dict[str, Dict[str, object]] = {}
+    next_home = enrich_match(next_home, schedule_metadata, detail_cache)
+    usc_recent = enrich_matches(usc_recent, schedule_metadata, detail_cache)
+    opponent_recent = enrich_matches(opponent_recent, schedule_metadata, detail_cache)
+    if usc_next:
+        usc_next = enrich_match(usc_next, schedule_metadata, detail_cache)
+    if opponent_next:
+        opponent_next = enrich_match(opponent_next, schedule_metadata, detail_cache)
 
     report_kwargs = dict(
         next_home=next_home,
