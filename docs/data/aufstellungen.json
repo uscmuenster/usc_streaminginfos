@@ -1,0 +1,192 @@
+{
+  "generated_at": "2025-10-20T08:26:03.876493+02:00",
+  "matches": [
+    {
+      "match_number": "2011",
+      "kickoff": "2025-10-15T19:30:00+02:00",
+      "date_label": "15.10.2025",
+      "home_team": "Binder Blaubären TSV Flacht",
+      "away_team": "USC Münster",
+      "competition": "1. Bundesliga Frauen",
+      "venue": "Heckengäusporthalle II (71287 Weissach)",
+      "season": "2025/26",
+      "result": "0:3 / 49:75",
+      "pdf_url": "https://distributor.sams-score.de/scoresheet/pdf/ab4891bf-921b-4fe1-8aaa-97f2b9acb6d9/2011",
+      "team_codes": {
+        "A": "Binder Blaubären TSV Flacht",
+        "B": "USC Münster"
+      },
+      "usc_code": "B",
+      "opponent_code": "A",
+      "sets": [
+        {
+          "number": 2,
+          "lineups": {
+            "usc": [
+              "9",
+              "5",
+              "18",
+              "14",
+              "17",
+              "3"
+            ],
+            "opponent": [
+              "13",
+              "16",
+              "7",
+              "11",
+              "9",
+              "15"
+            ]
+          }
+        },
+        {
+          "number": 3,
+          "lineups": {
+            "usc": [
+              "9",
+              "17",
+              "18",
+              "14",
+              "10",
+              "3"
+            ],
+            "opponent": [
+              "7",
+              "11",
+              "9",
+              "15",
+              "13",
+              "16"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "match_number": "2001",
+      "kickoff": "2025-10-12T16:00:00+02:00",
+      "date_label": "12.10.2025",
+      "home_team": "USC Münster",
+      "away_team": "SSC Palmberg Schwerin",
+      "competition": "1. Bundesliga Frauen",
+      "venue": "Sporthalle Berg Fidel (48153 Münster)",
+      "season": "2025/26",
+      "result": "3:2 / 106:106",
+      "pdf_url": "https://distributor.sams-score.de/scoresheet/pdf/e58c59f9-6b0f-4d2b-b725-6205fd7aaf65/2001",
+      "team_codes": {
+        "B": "USC Münster",
+        "A": "SSC Palmberg Schwerin"
+      },
+      "usc_code": "B",
+      "opponent_code": "A",
+      "sets": [
+        {
+          "number": 1,
+          "lineups": {
+            "usc": [
+              "5",
+              "18",
+              "14",
+              "17",
+              "3",
+              "9"
+            ],
+            "opponent": [
+              "12",
+              "11",
+              "5",
+              "15",
+              "20",
+              "8"
+            ]
+          }
+        },
+        {
+          "number": 2,
+          "lineups": {
+            "usc": [
+              "5",
+              "18",
+              "14",
+              "17",
+              "3",
+              "9"
+            ],
+            "opponent": [
+              "8",
+              "12",
+              "11",
+              "5",
+              "15",
+              "20"
+            ]
+          }
+        },
+        {
+          "number": 3,
+          "lineups": {
+            "usc": [
+              "5",
+              "18",
+              "14",
+              "17",
+              "3",
+              "9"
+            ],
+            "opponent": [
+              "12",
+              "11",
+              "5",
+              "15",
+              "9",
+              "8"
+            ]
+          }
+        },
+        {
+          "number": 4,
+          "lineups": {
+            "usc": [
+              "5",
+              "18",
+              "14",
+              "17",
+              "3",
+              "9"
+            ],
+            "opponent": [
+              "12",
+              "11",
+              "5",
+              "15",
+              "20",
+              "8"
+            ]
+          }
+        },
+        {
+          "number": 5,
+          "lineups": {
+            "usc": [
+              "5",
+              "12",
+              "14",
+              "17",
+              "3",
+              "9"
+            ],
+            "opponent": [
+              "12",
+              "11",
+              "5",
+              "15",
+              "6",
+              "8"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
