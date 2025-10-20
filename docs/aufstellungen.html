@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Startaufstellungen USC Münster II</title>
+  <title>Startaufstellungen USC Münster</title>
   <style>
     :root {
       color-scheme: light dark;
@@ -220,25 +220,24 @@
 <body>
   <main>
     <header>
-      <h1>Startaufstellungen USC Münster II</h1>
-      <p>Auf dieser Seite bündeln wir zukünftig die Startaufstellungen aus den offiziellen Spielberichtsbögen. Die Ansicht ist speziell für die letzten beiden Partien vorbereitet und zeigt pro Satz die Aufstellungen des USC und der jeweiligen Gegnerinnen.</p>
+      <h1>Startaufstellungen USC Münster</h1>
+      <p>Hier findest du die Startaufstellungen der letzten beiden Bundesliga-Partien des USC Münster – Satz für Satz und für beide Teams direkt aus den offiziellen Spielberichtsbögen.</p>
       <nav aria-label="Navigation">
         <a href="index.html">⟵ zurück zur Übersicht</a>
       </nav>
     </header>
 
     <section aria-labelledby="workflow">
-      <h2 id="workflow">Arbeitsstand &amp; nächste Schritte</h2>
+      <h2 id="workflow">Aktueller Datenstand</h2>
       <ul class="meta-list">
-        <li class="status-badge">🛠️ Extraktion der Startaufstellungen wird vorbereitet</li>
+        <li class="status-badge" id="updateStatus">📥 Daten werden geladen …</li>
       </ul>
-      <p>Die PDFs werden über die Spielplan-CSV identifiziert. Die dort hinterlegte Spielnummer (Spalte „#“) bildet den letzten Teil des PDF-Links, beispielsweise <code>/2011</code> oder <code>/2001</code>. Sobald die Extraktion implementiert ist, erscheinen hier automatisch die Startaufstellungen für den USC und den jeweiligen Gegner, Satz für Satz.</p>
-      <p>Für manuelle Tests kannst du bereits jetzt die öffentlichen PDF-Links verwenden, etwa <a href="https://distributor.sams-score.de/scoresheet/pdf/ab4891bf-921b-4fe1-8aaa-97f2b9acb6d9/2011" target="_blank" rel="noopener">Spiel 2011</a> oder <a href="https://distributor.sams-score.de/scoresheet/pdf/e58c59f9-6b0f-4d2b-b725-6205fd7aaf65/2001" target="_blank" rel="noopener">Spiel 2001</a>.</p>
+      <p>Die Startaufstellungen werden automatisch aus den offiziellen Spielberichtsbögen (<abbr title="Score Sheets">PDF</abbr>) extrahiert. Grundlage ist der Spielplan der Volleyball Bundesliga – die dortige Spielnummer identifiziert jeweils den passenden Spielberichtsbogen.</p>
     </section>
 
     <section aria-labelledby="lineup-section">
       <h2 id="lineup-section">Startaufstellungen der letzten Begegnungen</h2>
-      <div id="lineupStatus" class="placeholder" role="status">Noch keine Startaufstellungen geladen.</div>
+      <div id="lineupStatus" class="placeholder" role="status">Lade Startaufstellungen …</div>
       <ul id="matchList" class="match-list" hidden></ul>
     </section>
   </main>
@@ -278,16 +277,66 @@
   </template>
 
   <script>
-    const sampleMatches = [];
+    const DATA_URL = "data/aufstellungen.json";
 
     const statusEl = document.getElementById("lineupStatus");
+    const updateStatusEl = document.getElementById("updateStatus");
     const listEl = document.getElementById("matchList");
     const matchTemplate = document.getElementById("matchTemplate");
     const setTemplate = document.getElementById("setTemplate");
 
+    const formatDateTime = (isoString) => {
+      if (!isoString) {
+        return null;
+      }
+      const date = new Date(isoString);
+      if (Number.isNaN(date.getTime())) {
+        return null;
+      }
+      return new Intl.DateTimeFormat("de-DE", {
+        dateStyle: "full",
+        timeStyle: "short",
+      }).format(date);
+    };
+
+    const transformMatches = (data) => {
+      if (!data || !Array.isArray(data.matches)) {
+        return [];
+      }
+      return data.matches.map((match) => {
+        const uscCode = match.usc_code;
+        const opponentCode = match.opponent_code;
+        const teamCodes = match.team_codes || {};
+        const uscName = teamCodes[uscCode] || "USC Münster";
+        const opponentName = teamCodes[opponentCode]
+          || (match.home_team && match.home_team.includes("USC") ? match.away_team : match.home_team)
+          || "Gegner";
+
+        return {
+          matchId: match.match_number,
+          dateLabel: match.date_label,
+          kickoff: formatDateTime(match.kickoff),
+          result: match.result,
+          competition: match.competition || "1. Bundesliga Frauen",
+          venue: match.venue || "–",
+          pdfUrl: match.pdf_url,
+          homeTeam: match.home_team,
+          awayTeam: match.away_team,
+          uscName,
+          opponentName,
+          sets: (match.sets || []).map((set) => ({
+            number: set.number,
+            usc: set.lineups?.usc || (uscCode && set.lineups?.[uscCode]) || [],
+            opponent:
+              set.lineups?.opponent || (opponentCode && set.lineups?.[opponentCode]) || [],
+          })),
+        };
+      });
+    };
+
     const renderLineups = (matches) => {
       if (!Array.isArray(matches) || matches.length === 0) {
-        statusEl.textContent = "Noch keine Startaufstellungen verfügbar. Sobald die Daten aus den PDFs extrahiert sind, werden sie hier automatisch angezeigt.";
+        statusEl.textContent = "Keine Startaufstellungen gefunden.";
         listEl.hidden = true;
         return;
       }
@@ -302,12 +351,20 @@
         const meta = matchNode.querySelector(".meta");
         const setsContainer = matchNode.querySelector(".sets");
 
-        title.textContent = `${match.date} · USC Münster II vs. ${match.opponent}`;
-        meta.innerHTML = `
-          <span>Spielfolge: ${match.matchId}</span>
-          <span>PDF: <a href="${match.pdfUrl}" target="_blank" rel="noopener">öffnen</a></span>
-          <span>Wettbewerb: ${match.competition}</span>
-        `;
+        const matchup = `${match.homeTeam} vs. ${match.awayTeam}`;
+        title.textContent = `${match.dateLabel} · ${matchup}`;
+
+        const metaSegments = [
+          match.kickoff ? `<span>Anpfiff: ${match.kickoff}</span>` : null,
+          match.result ? `<span>Ergebnis: ${match.result}</span>` : `<span>Ergebnis: –</span>`,
+          match.pdfUrl
+            ? `<span>PDF: <a href="${match.pdfUrl}" target="_blank" rel="noopener">öffnen</a></span>`
+            : null,
+          `<span>Wettbewerb: ${match.competition}</span>`,
+          `<span>Spielort: ${match.venue}</span>`,
+          `<span>Spielnummer: ${match.matchId}</span>`,
+        ].filter(Boolean);
+        meta.innerHTML = metaSegments.join("\n");
 
         match.sets.forEach((set) => {
           const setNode = setTemplate.content.cloneNode(true);
@@ -316,34 +373,35 @@
           const tbody = setNode.querySelector("tbody");
 
           summary.textContent = `Satz ${set.number}`;
-          setHeader.textContent = set.score ? `Ergebnis: ${set.score}` : "Ergebnis folgt";
+          setHeader.textContent = "Aufstellung zu Satzbeginn";
 
-          const renderRow = (teamLabel, teamKey) => {
+          const renderRow = (teamLabel, positions, isUsc) => {
             const row = document.createElement("tr");
-            const lineup = set.lineups[teamKey];
             const teamCell = document.createElement("td");
             const chip = document.createElement("span");
-            chip.className = `team-chip ${teamKey === "usc" ? "usc" : ""}`;
+            chip.className = `team-chip ${isUsc ? "usc" : ""}`;
             chip.textContent = teamLabel;
             teamCell.appendChild(chip);
             row.appendChild(teamCell);
 
-            const positions = lineup?.positions ?? Array(6).fill("–");
-            positions.slice(0, 6).forEach((pos) => {
+            const filledPositions = Array.isArray(positions) && positions.length
+              ? positions
+              : Array(6).fill("–");
+            filledPositions.slice(0, 6).forEach((pos) => {
               const cell = document.createElement("td");
               cell.textContent = pos || "–";
               row.appendChild(cell);
             });
 
             const subsCell = document.createElement("td");
-            subsCell.textContent = lineup?.substitutions?.length ? lineup.substitutions.join(", ") : "–";
+            subsCell.textContent = "–";
             row.appendChild(subsCell);
 
             tbody.appendChild(row);
           };
 
-          renderRow("USC Münster II", "usc");
-          renderRow(match.opponent, "opponent");
+          renderRow(match.uscName, set.usc, true);
+          renderRow(match.opponentName, set.opponent, false);
 
           setsContainer.appendChild(setNode);
         });
@@ -352,7 +410,29 @@
       });
     };
 
-    renderLineups(sampleMatches);
+    const handleError = () => {
+      updateStatusEl.textContent = "⚠️ Daten konnten nicht geladen werden.";
+      statusEl.textContent = "Beim Laden der Startaufstellungen ist ein Fehler aufgetreten.";
+    };
+
+    fetch(DATA_URL)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Unexpected status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const matches = transformMatches(data);
+        if (data.generated_at) {
+          const generatedLabel = formatDateTime(data.generated_at) || data.generated_at;
+          updateStatusEl.textContent = `📅 Aktualisiert am ${generatedLabel}`;
+        } else {
+          updateStatusEl.textContent = "📁 Datengrundlage ohne Zeitstempel";
+        }
+        renderLineups(matches);
+      })
+      .catch(() => handleError());
   </script>
 </body>
 </html>
