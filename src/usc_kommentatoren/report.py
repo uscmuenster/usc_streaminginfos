@@ -137,6 +137,7 @@ class Match:
     scoresheet_url: Optional[str] = None
     referees: Tuple[str, ...] = ()
     attendance: Optional[str] = None
+    mvps: Tuple[Tuple[str, str], ...] = ()
 
     @property
     def is_finished(self) -> bool:
@@ -458,6 +459,137 @@ def build_match_details_url(match_id: str) -> str:
     )
 
 
+MVP_NAME_PART = r"[A-ZÄÖÜÀ-ÖØ-Þ][A-Za-zÄÖÜÖÄÜà-öø-ÿß'`´\-]*"
+MVP_PAREN_PATTERN = re.compile(
+    rf"({MVP_NAME_PART}(?:\s+{MVP_NAME_PART})*)\s*\((Gold|Silber|Silver)\)",
+    re.IGNORECASE,
+)
+MVP_COLON_PATTERN = re.compile(
+    r"MVP\s*(Gold|Silber|Silver)\s*[:\-]\s*([^,;.()]+)",
+    re.IGNORECASE,
+)
+MVP_SUFFIX_PATTERN = re.compile(
+    r"(Gold|Silber|Silver)[-\s]*MVP\s*[:\-]?\s*([^,;.()]+)",
+    re.IGNORECASE,
+)
+MVP_KEYWORD_PATTERN = re.compile(r"MVP", re.IGNORECASE)
+MVP_LOWERCASE_PARTS = {
+    "de",
+    "da",
+    "del",
+    "van",
+    "von",
+    "der",
+    "den",
+    "la",
+    "le",
+    "di",
+    "dos",
+    "das",
+    "du",
+}
+
+
+def _normalize_medal_label(label: str) -> Optional[str]:
+    normalized = label.strip().lower()
+    if not normalized:
+        return None
+    if normalized == "silver":
+        normalized = "silber"
+    if normalized == "gold":
+        return "Gold"
+    if normalized == "silber":
+        return "Silber"
+    return None
+
+
+def _clean_mvp_name(value: str) -> Optional[str]:
+    tokens = [token for token in re.split(r"\s+", value.strip()) if token]
+    if not tokens:
+        return None
+    collected: List[str] = []
+    for token in reversed(tokens):
+        cleaned = token.strip(",;:-")
+        if not cleaned:
+            continue
+        lower = cleaned.lower()
+        if not collected:
+            collected.append(cleaned)
+            continue
+        if cleaned[0].isupper() or lower in MVP_LOWERCASE_PARTS:
+            collected.append(cleaned)
+        else:
+            break
+    collected.reverse()
+    if not collected:
+        return None
+    return " ".join(collected)
+
+
+def _extract_mvp_entries_from_text(text: str) -> Dict[str, str]:
+    compact = " ".join(text.split())
+    if not compact or "mvp" not in compact.lower():
+        return {}
+    winners: Dict[str, str] = {}
+    for pattern in (MVP_PAREN_PATTERN,):
+        for match in pattern.finditer(compact):
+            medal = _normalize_medal_label(match.group(2))
+            name = _clean_mvp_name(match.group(1))
+            if medal and name and medal not in winners:
+                winners[medal] = name
+    for pattern in (MVP_COLON_PATTERN, MVP_SUFFIX_PATTERN):
+        for match in pattern.finditer(compact):
+            medal = _normalize_medal_label(match.group(1))
+            name = _clean_mvp_name(match.group(2))
+            if medal and name and medal not in winners:
+                winners[medal] = name
+    return winners
+
+
+def _parse_match_mvps(soup: BeautifulSoup) -> Tuple[Tuple[str, str], ...]:
+    collected: Dict[str, str] = {}
+    seen_texts: set[str] = set()
+    candidates: List[str] = []
+
+    for element in soup.select(".hint"):
+        text = element.get_text(" ", strip=True)
+        compact = " ".join(text.split())
+        if compact and compact not in seen_texts and MVP_KEYWORD_PATTERN.search(compact):
+            candidates.append(compact)
+            seen_texts.add(compact)
+
+    for node in soup.find_all(string=MVP_KEYWORD_PATTERN):
+        text = str(node)
+        compact = " ".join(text.split())
+        if compact and compact not in seen_texts:
+            candidates.append(compact)
+            seen_texts.add(compact)
+
+    for text in candidates:
+        entries = _extract_mvp_entries_from_text(text)
+        for medal in ("Gold", "Silber"):
+            if medal in entries and medal not in collected:
+                collected[medal] = entries[medal]
+        for medal, name in entries.items():
+            if medal not in collected:
+                collected[medal] = name
+        if len(collected) >= 2:
+            break
+
+    if not collected:
+        return ()
+
+    ordered: List[Tuple[str, str]] = []
+    for medal in ("Gold", "Silber"):
+        name = collected.get(medal)
+        if name:
+            ordered.append((medal, name))
+    for medal, name in collected.items():
+        if medal not in {"Gold", "Silber"}:
+            ordered.append((medal, name))
+    return tuple(ordered)
+
+
 def fetch_match_details(
     match_id: str,
     *,
@@ -491,9 +623,12 @@ def fetch_match_details(
             elif "zuschauer" in label:
                 attendance = value
 
+    mvps = _parse_match_mvps(soup)
+
     return {
         "referees": tuple(referees),
         "attendance": attendance,
+        "mvps": mvps,
     }
 
 
@@ -512,6 +647,7 @@ def enrich_match(
 
     referees = tuple(match.referees) if match.referees else ()
     attendance = match.attendance
+    mvps = tuple(match.mvps) if match.mvps else ()
 
     if match_id:
         detail = detail_cache.get(match_id)
@@ -524,6 +660,9 @@ def enrich_match(
         fetched_attendance = detail.get("attendance")
         if fetched_attendance:
             attendance = fetched_attendance
+        fetched_mvps = detail.get("mvps") or ()
+        if fetched_mvps:
+            mvps = tuple((str(medal), str(name)) for medal, name in fetched_mvps)
 
     return replace(
         match,
@@ -534,6 +673,7 @@ def enrich_match(
         scoresheet_url=scoresheet_url,
         referees=referees,
         attendance=attendance,
+        mvps=mvps,
     )
 
 
@@ -1578,6 +1718,14 @@ def format_match_line(match: Match) -> str:
         extras.append(f"<span>Schiedsrichter: {referee_label}</span>")
     if match.attendance and match.is_finished:
         extras.append(f"<span>Zuschauer: {escape(match.attendance)}</span>")
+    if match.mvps and match.is_finished:
+        mvp_parts = [
+            f"{escape(medal)} – {escape(name)}"
+            for medal, name in match.mvps
+            if medal and name
+        ]
+        if mvp_parts:
+            extras.append(f"<span>MVP: {' / '.join(mvp_parts)}</span>")
 
     links: List[str] = []
     if match.info_url:
