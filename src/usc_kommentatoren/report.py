@@ -1573,7 +1573,7 @@ def format_match_line(match: Match) -> str:
     if match.is_finished:
         result_block = f"<div class=\"match-result\">Ergebnis: {escape(result)}</div>"
     extras: List[str] = []
-    if match.referees:
+    if match.referees and not match.is_finished:
         referee_label = ", ".join(escape(referee) for referee in match.referees)
         extras.append(f"<span>Schiedsrichter: {referee_label}</span>")
     if match.attendance and match.is_finished:
@@ -1840,7 +1840,12 @@ def build_html_report(
 ) -> str:
     heading = pretty_name(next_home.away_team)
     kickoff_dt = next_home.kickoff.astimezone(BERLIN_TZ)
-    kickoff = kickoff_dt.strftime("%d.%m.%Y %H:%M")
+    kickoff_date = kickoff_dt.strftime("%d.%m.%Y")
+    kickoff_weekday = GERMAN_WEEKDAYS.get(
+        kickoff_dt.weekday(), kickoff_dt.strftime("%a")
+    )
+    kickoff_time = kickoff_dt.strftime("%H:%M")
+    kickoff = f"{kickoff_date} ({kickoff_weekday}) {kickoff_time}"
     match_day = kickoff_dt.date()
     location = pretty_name(next_home.location)
     usc_url = get_team_homepage(USC_CANONICAL_NAME) or USC_HOMEPAGE
