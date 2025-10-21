@@ -2272,10 +2272,12 @@ def build_html_report(
     if generated_at:
         generated_label = format_generation_timestamp(generated_at)
         update_note_html = (
-            "    <div class=\"update-note\" role=\"status\">\n"
-            "      <span aria-hidden=\"true\">📅</span>\n"
-            f"      <span><strong>Aktualisiert am</strong> {escape(generated_label)}</span>\n"
-            "    </div>\n"
+            "    <footer class=\"page-footer\">\n"
+            "      <p class=\"update-note\" role=\"status\">\n"
+            "        <span aria-hidden=\"true\">📅</span>\n"
+            f"        <span><strong>Aktualisiert am</strong> {escape(generated_label)}</span>\n"
+            "      </p>\n"
+            "    </footer>\n"
             "\n"
         )
 
@@ -2336,20 +2338,24 @@ def build_html_report(
     .update-note {{
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      background: #d1fae5;
-      color: #065f46;
+      gap: 0.25rem;
+      padding: 0.25rem 0.6rem;
+      background: #ecfdf5;
+      color: #047857;
       border-radius: 999px;
-      padding: 0.55rem 1.1rem;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      font-size: calc(var(--font-scale) * 0.7rem);
       font-weight: 600;
-      box-shadow: 0 10px 24px rgba(16, 185, 129, 0.25);
-      margin-bottom: 1.5rem;
+      border: 1px solid #bbf7d0;
     }}
     .update-note span {{
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.25rem;
+    }}
+    .page-footer {{
+      margin-top: clamp(1.75rem, 4vw, 2.75rem);
+      display: flex;
+      justify-content: center;
     }}
     .match-list {{
       list-style: none;
@@ -2716,9 +2722,9 @@ def build_html_report(
         color: #cbd5f5;
       }}
       .update-note {{
-        background: rgba(45, 212, 191, 0.18);
-        color: #a7f3d0;
-        box-shadow: 0 16px 36px rgba(15, 118, 110, 0.3);
+        background: rgba(15, 118, 110, 0.16);
+        color: #ccfbf1;
+        border-color: rgba(45, 212, 191, 0.35);
       }}
       .notice-list li {{
         background: linear-gradient(135deg, #7c2d12, #a16207);
@@ -2740,7 +2746,8 @@ def build_html_report(
     <div class=\"meta\">
       {meta_html}
     </div>
-{update_note_html}{notes_html}    <section>
+{notes_html}
+    <section>
       <h2>Spiele: {escape(heading)}</h2>
       <ul class=\"match-list\">
         {opponent_items}
@@ -2826,6 +2833,7 @@ def build_html_report(
         </article>
       </div>
     </section>
+{update_note_html}
   </main>
 </body>
 </html>
