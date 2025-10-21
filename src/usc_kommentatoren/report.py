@@ -1698,6 +1698,40 @@ GERMAN_WEEKDAYS = {
     6: "So",
 }
 
+GERMAN_WEEKDAYS_LONG = {
+    0: "Montag",
+    1: "Dienstag",
+    2: "Mittwoch",
+    3: "Donnerstag",
+    4: "Freitag",
+    5: "Samstag",
+    6: "Sonntag",
+}
+
+GERMAN_MONTHS = {
+    1: "Januar",
+    2: "Februar",
+    3: "März",
+    4: "April",
+    5: "Mai",
+    6: "Juni",
+    7: "Juli",
+    8: "August",
+    9: "September",
+    10: "Oktober",
+    11: "November",
+    12: "Dezember",
+}
+
+
+def format_generation_timestamp(value: datetime) -> str:
+    localized = value.astimezone(BERLIN_TZ)
+    weekday = GERMAN_WEEKDAYS_LONG.get(localized.weekday(), localized.strftime("%A"))
+    month = GERMAN_MONTHS.get(localized.month, localized.strftime("%B"))
+    day = localized.day
+    time_label = localized.strftime("%H:%M")
+    return f"{weekday}, {day:02d}. {month} {localized.year} um {time_label}"
+
 
 def format_match_line(match: Match) -> str:
     kickoff_local = match.kickoff.astimezone(BERLIN_TZ)
@@ -1984,6 +2018,7 @@ def build_html_report(
     opponent_transfers: Sequence[TransferItem],
     usc_photo: Optional[str],
     opponent_photo: Optional[str],
+    generated_at: Optional[datetime] = None,
     font_scale: float = 1.0,
 ) -> str:
     heading = pretty_name(next_home.away_team)
@@ -2103,6 +2138,17 @@ def build_html_report(
             "\n"
         )
 
+    update_note_html = ""
+    if generated_at:
+        generated_label = format_generation_timestamp(generated_at)
+        update_note_html = (
+            "    <div class=\"update-note\" role=\"status\">\n"
+            "      <span aria-hidden=\"true\">📅</span>\n"
+            f"      <span><strong>Aktualisiert am</strong> {escape(generated_label)}</span>\n"
+            "    </div>\n"
+            "\n"
+        )
+
     font_scale = max(0.3, min(font_scale, 3.0))
     scale_value = f"{font_scale:.4f}".rstrip("0").rstrip(".")
     if not scale_value:
@@ -2156,6 +2202,24 @@ def build_html_report(
     }}
     .meta p {{
       margin: 0;
+    }}
+    .update-note {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #d1fae5;
+      color: #065f46;
+      border-radius: 999px;
+      padding: 0.55rem 1.1rem;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      font-weight: 600;
+      box-shadow: 0 10px 24px rgba(16, 185, 129, 0.25);
+      margin-bottom: 1.5rem;
+    }}
+    .update-note span {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
     }}
     .match-list {{
       list-style: none;
@@ -2513,6 +2577,11 @@ def build_html_report(
       .roster-details {{
         color: #cbd5f5;
       }}
+      .update-note {{
+        background: rgba(45, 212, 191, 0.18);
+        color: #a7f3d0;
+        box-shadow: 0 16px 36px rgba(15, 118, 110, 0.3);
+      }}
       .notice-list li {{
         background: linear-gradient(135deg, #7c2d12, #a16207);
         color: #fef3c7;
@@ -2533,7 +2602,7 @@ def build_html_report(
     <div class=\"meta\">
       {meta_html}
     </div>
-{notes_html}    <section>
+{update_note_html}{notes_html}    <section>
       <h2>Spiele: {escape(heading)}</h2>
       <ul class=\"match-list\">
         {opponent_items}
@@ -2628,6 +2697,7 @@ def build_html_report(
 
 
 __all__ = [
+    "BERLIN_TZ",
     "DEFAULT_SCHEDULE_URL",
     "NEWS_LOOKBACK_DAYS",
     "NewsItem",
