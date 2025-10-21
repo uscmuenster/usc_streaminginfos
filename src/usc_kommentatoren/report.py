@@ -123,6 +123,13 @@ class MatchResult:
 
 
 @dataclass(frozen=True)
+class MVPSelection:
+    medal: Optional[str]
+    name: str
+    team: Optional[str] = None
+
+
+@dataclass(frozen=True)
 class Match:
     kickoff: datetime
     home_team: str
@@ -137,7 +144,7 @@ class Match:
     scoresheet_url: Optional[str] = None
     referees: Tuple[str, ...] = ()
     attendance: Optional[str] = None
-    mvps: Tuple[Tuple[str, str], ...] = ()
+    mvps: Tuple[MVPSelection, ...] = ()
 
     @property
     def is_finished(self) -> bool:
@@ -546,7 +553,7 @@ def _extract_mvp_entries_from_text(text: str) -> Dict[str, str]:
     return winners
 
 
-def _parse_match_mvps(soup: BeautifulSoup) -> Tuple[Tuple[str, str], ...]:
+def _parse_match_mvps_from_text(soup: BeautifulSoup) -> Tuple[MVPSelection, ...]:
     collected: Dict[str, str] = {}
     seen_texts: set[str] = set()
     candidates: List[str] = []
@@ -579,15 +586,106 @@ def _parse_match_mvps(soup: BeautifulSoup) -> Tuple[Tuple[str, str], ...]:
     if not collected:
         return ()
 
-    ordered: List[Tuple[str, str]] = []
+    ordered: List[MVPSelection] = []
     for medal in ("Gold", "Silber"):
         name = collected.get(medal)
         if name:
-            ordered.append((medal, name))
+            ordered.append(MVPSelection(medal=medal, name=name, team=None))
     for medal, name in collected.items():
         if medal not in {"Gold", "Silber"}:
-            ordered.append((medal, name))
+            ordered.append(MVPSelection(medal=medal, name=name, team=None))
     return tuple(ordered)
+
+
+def _parse_match_mvps_from_table(soup: BeautifulSoup) -> List[MVPSelection]:
+    header = soup.select_one(
+        ".samsContentBoxHeader:-soup-contains(\"Most Valuable Player\")"
+    )
+    if not header:
+        return []
+    container = header.find_next(class_="samsContentBoxContent")
+    if not container:
+        return []
+
+    team_names = [
+        cell.get_text(" ", strip=True)
+        for cell in soup.select(".samsMatchDetailsTeamName")
+        if cell.get_text(strip=True)
+    ]
+    teams_by_id: Dict[str, str] = {}
+    if team_names:
+        teams_by_id["mvpTeam1"] = team_names[0]
+        if len(team_names) > 1:
+            teams_by_id["mvpTeam2"] = team_names[1]
+
+    raw_entries: List[Dict[str, Optional[str]]] = []
+    for index, cell in enumerate(container.select("td")):
+        block = cell.select_one(".samsOutputMvp")
+        if not block:
+            continue
+        name_anchor = block.select_one(".samsOutputMvpPlayerName a")
+        if not name_anchor:
+            continue
+        name = name_anchor.get_text(strip=True)
+        if not name:
+            continue
+
+        medal: Optional[str] = None
+        medal_image = block.select_one(".samsOutputMvpMedalImage img[src]")
+        if medal_image:
+            source = medal_image["src"].lower()
+            if "gold" in source:
+                medal = "Gold"
+            elif "silber" in source or "silver" in source:
+                medal = "Silber"
+        if not medal:
+            extracted = _extract_mvp_entries_from_text(block.get_text(" ", strip=True))
+            if "Gold" in extracted:
+                medal = "Gold"
+            elif "Silber" in extracted:
+                medal = "Silber"
+            elif extracted:
+                medal = next(iter(extracted.keys()))
+
+        team: Optional[str] = None
+        cell_id = cell.get("id")
+        if cell_id and cell_id in teams_by_id:
+            team = teams_by_id[cell_id]
+        elif team_names and index < len(team_names):
+            team = team_names[index]
+
+        raw_entries.append({"medal": medal, "name": name, "team": team})
+
+    if not raw_entries:
+        return []
+
+    used_medals = {entry["medal"] for entry in raw_entries if entry.get("medal")}
+    for entry in raw_entries:
+        if entry.get("medal"):
+            continue
+        for candidate in ("Gold", "Silber"):
+            if candidate not in used_medals:
+                entry["medal"] = candidate
+                used_medals.add(candidate)
+                break
+
+    selections: List[MVPSelection] = []
+    for entry in raw_entries:
+        name = entry.get("name")
+        if not name:
+            continue
+        medal = entry.get("medal")
+        team = entry.get("team")
+        team_value = team.strip() if isinstance(team, str) and team.strip() else None
+        selections.append(MVPSelection(medal=medal, name=name, team=team_value))
+    return selections
+
+
+def _parse_match_mvps(soup: BeautifulSoup) -> Tuple[MVPSelection, ...]:
+    table_entries = _parse_match_mvps_from_table(soup)
+    if table_entries:
+        return tuple(table_entries)
+    return _parse_match_mvps_from_text(soup)
 
 
 def fetch_match_details(
@@ -662,7 +760,23 @@ def enrich_match(
             attendance = fetched_attendance
         fetched_mvps = detail.get("mvps") or ()
         if fetched_mvps:
-            mvps = tuple((str(medal), str(name)) for medal, name in fetched_mvps)
+            normalized: List[MVPSelection] = []
+            for entry in fetched_mvps:
+                if isinstance(entry, MVPSelection):
+                    normalized.append(entry)
+                elif isinstance(entry, (tuple, list)) and len(entry) >= 2:
+                    medal = entry[0] if entry[0] is not None else None
+                    name = str(entry[1])
+                    team = entry[2] if len(entry) > 2 else None
+                    normalized.append(
+                        MVPSelection(
+                            medal=str(medal) if medal not in {None, ""} else None,
+                            name=name,
+                            team=str(team) if team not in {None, ""} else None,
+                        )
+                    )
+            if normalized:
+                mvps = tuple(normalized)
 
     return replace(
         match,
@@ -1753,13 +1867,29 @@ def format_match_line(match: Match) -> str:
     if match.attendance and match.is_finished:
         extras.append(f"<span>Zuschauer: {escape(match.attendance)}</span>")
     if match.mvps and match.is_finished:
-        mvp_parts = [
-            f"{escape(medal)} – {escape(name)}"
-            for medal, name in match.mvps
-            if medal and name
-        ]
-        if mvp_parts:
-            extras.append(f"<span>MVP: {' / '.join(mvp_parts)}</span>")
+        mvp_labels: List[str] = []
+        for selection in match.mvps:
+            name = selection.name.strip() if selection.name else ""
+            if not name:
+                continue
+            raw_team = (
+                selection.team.strip()
+                if isinstance(selection.team, str)
+                else ""
+            )
+            team_label = pretty_name(raw_team) if raw_team else None
+            if team_label:
+                mvp_labels.append(f"{escape(name)} ({escape(team_label)})")
+            elif selection.medal:
+                mvp_labels.append(f"{escape(selection.medal)} – {escape(name)}")
+            else:
+                mvp_labels.append(escape(name))
+        if mvp_labels:
+            if len(mvp_labels) == 2:
+                rendered_mvp = " und ".join(mvp_labels)
+            else:
+                rendered_mvp = " / ".join(mvp_labels)
+            extras.append(f"<span>MVP: {rendered_mvp}</span>")
 
     links: List[str] = []
     if match.info_url:
