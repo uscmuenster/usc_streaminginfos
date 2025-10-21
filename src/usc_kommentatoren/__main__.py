@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import argparse
 import sys
-from datetime import timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict
 
@@ -10,6 +10,7 @@ from .report import (
     DEFAULT_SCHEDULE_URL,
     NEWS_LOOKBACK_DAYS,
     USC_CANONICAL_NAME,
+    BERLIN_TZ,
     build_html_report,
     collect_instagram_links,
     collect_team_roster,
@@ -196,6 +197,8 @@ def main() -> int:
     if opponent_next:
         opponent_next = enrich_match(opponent_next, schedule_metadata, detail_cache)
 
+    generated_at = datetime.now(tz=BERLIN_TZ)
+
     report_kwargs = dict(
         next_home=next_home,
         usc_recent=usc_recent,
@@ -212,6 +215,7 @@ def main() -> int:
         opponent_transfers=opponent_transfers,
         usc_photo=usc_photo,
         opponent_photo=opponent_photo,
+        generated_at=generated_at,
     )
 
     html = build_html_report(**report_kwargs)
