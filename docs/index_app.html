@@ -47,6 +47,24 @@
     .meta p {
       margin: 0;
     }
+    .update-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #d1fae5;
+      color: #065f46;
+      border-radius: 999px;
+      padding: 0.55rem 1.1rem;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      font-weight: 600;
+      box-shadow: 0 10px 24px rgba(16, 185, 129, 0.25);
+      margin-bottom: 1.5rem;
+    }
+    .update-note span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
     .match-list {
       list-style: none;
       padding: 0;
@@ -358,6 +376,11 @@
         background: #0e1b1f;
         color: #e6f1f3;
       }
+      h1,
+      h2,
+      h3 {
+        color: #f1f5f9;
+      }
       .match-list li {
         background: #132a30;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
@@ -384,6 +407,9 @@
       .match-result {
         color: #5eead4;
       }
+      .match-meta {
+        color: #cbd5f5;
+      }
       .transfer-line {
         color: #dbeafe;
       }
@@ -402,6 +428,11 @@
       }
       .roster-details {
         color: #cbd5f5;
+      }
+      .update-note {
+        background: rgba(45, 212, 191, 0.18);
+        color: #a7f3d0;
+        box-shadow: 0 16px 36px rgba(15, 118, 110, 0.3);
       }
       .notice-list li {
         background: linear-gradient(135deg, #7c2d12, #a16207);
@@ -428,6 +459,10 @@
       <p><a class="meta-link" href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml">Tabelle der Volleyball Bundesliga</a></p>
       <p><a class="meta-link" href="https://www.usc-muenster.de/">Homepage USC Münster</a></p>
       <p><a class="meta-link" href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys/">Homepage ETV Hamburger Volksbank Volleys</a></p>
+    </div>
+    <div class="update-note" role="status">
+      <span aria-hidden="true">📅</span>
+      <span><strong>Aktualisiert am</strong> Dienstag, 21. Oktober 2025 um 06:43</span>
     </div>
     <section>
       <h2>Spiele: ETV Hamburger Volksbank Volleys</h2>

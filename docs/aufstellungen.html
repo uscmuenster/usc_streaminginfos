@@ -58,11 +58,10 @@
       color: #ffffff;
       outline: none;
     }
-    .status-strip {
+    .page-footer {
+      margin-top: clamp(1.5rem, 4vw, 2.5rem);
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: clamp(0.75rem, 2.2vw, 1.1rem);
+      justify-content: center;
     }
     section {
       background: #ffffff;
@@ -74,16 +73,23 @@
       margin: 0 0 0.6rem 0;
       font-size: calc(var(--font-scale) * clamp(1.25rem, 3.5vw, 1.7rem));
     }
-    .status-badge {
+    .update-note {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      padding: 0.35rem 0.65rem;
-      background: var(--accent-soft);
-      color: var(--accent);
+      gap: 0.35rem;
+      padding: 0.35rem 0.85rem;
+      background: #ecfdf5;
+      color: #047857;
       border-radius: 999px;
-      font-size: calc(var(--font-scale) * 0.85rem);
+      font-size: calc(var(--font-scale) * 0.78rem);
       font-weight: 600;
+      border: 1px solid #a7f3d0;
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.18);
+    }
+    .update-note span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
     }
     .match-list {
       list-style: none;
@@ -298,6 +304,69 @@
         gap: 0.35rem;
       }
     }
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #0e1b1f;
+        color: #e6f1f3;
+      }
+      header h1,
+      section h2 {
+        color: #f1f5f9;
+      }
+      section {
+        background: #132a30;
+        box-shadow: 0 16px 42px rgba(0, 0, 0, 0.35);
+      }
+      .match-card {
+        background: #10252b;
+        border-color: rgba(148, 163, 184, 0.2);
+        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.4);
+      }
+      .match-card > summary {
+        color: #f8fafc;
+      }
+      .match-summary-title {
+        color: #f8fafc;
+      }
+      .match-summary-subtitle {
+        color: #cbd5f5;
+      }
+      .match-summary-result {
+        color: #5eead4;
+      }
+      .match-body {
+        border-color: rgba(148, 163, 184, 0.35);
+      }
+      .match-meta {
+        color: #cbd5f5;
+      }
+      .match-meta a {
+        color: #7dd3fc;
+      }
+      .set-block {
+        background: #0f172a;
+        border-color: rgba(148, 163, 184, 0.35);
+        color: #e2e8f0;
+      }
+      .board-cell {
+        background: rgba(15, 23, 42, 0.6);
+        border-color: rgba(148, 163, 184, 0.35);
+        color: #f8fafc;
+      }
+      .player-name {
+        color: #cbd5f5;
+      }
+      .placeholder {
+        background: rgba(15, 23, 42, 0.6);
+        color: #e2e8f0;
+      }
+      .update-note {
+        background: rgba(15, 118, 110, 0.25);
+        color: #99f6e4;
+        border-color: rgba(45, 212, 191, 0.4);
+        box-shadow: 0 6px 20px rgba(13, 148, 136, 0.3);
+      }
+    }
   </style>
 </head>
 <body>
@@ -307,9 +376,6 @@
         <a href="index.html">⟵ zurück zur Übersicht</a>
       </nav>
       <h1>Startaufstellungen der letzten Begegnungen</h1>
-      <div class="status-strip">
-        <span class="status-badge" id="updateStatus">📥 Daten werden geladen …</span>
-      </div>
     </header>
 
     <section aria-labelledby="usc-heading">
@@ -323,6 +389,12 @@
       <div id="opponentStatus" class="placeholder" role="status">Lade Gegner-Spiele …</div>
       <ul id="opponentMatchList" class="match-list" hidden></ul>
     </section>
+    <footer class="page-footer">
+      <p class="update-note" id="updateStatus" role="status">
+        <span aria-hidden="true">📥</span>
+        <span>Daten werden geladen …</span>
+      </p>
+    </footer>
   </main>
 
   <template id="matchTemplate">
