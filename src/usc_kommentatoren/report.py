@@ -2662,6 +2662,11 @@ def build_html_report(
         background: #0e1b1f;
         color: #e6f1f3;
       }}
+      h1,
+      h2,
+      h3 {{
+        color: #f1f5f9;
+      }}
       .match-list li {{
         background: #132a30;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
@@ -2687,6 +2692,9 @@ def build_html_report(
       }}
       .match-result {{
         color: #5eead4;
+      }}
+      .match-meta {{
+        color: #cbd5f5;
       }}
       .transfer-line {{
         color: #dbeafe;
