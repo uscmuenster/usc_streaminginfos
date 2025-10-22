@@ -320,6 +320,52 @@
       display: grid;
       gap: 0.35rem;
     }
+    .international-group {
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+      background: #f8fafc;
+      border-radius: 0.85rem;
+      padding: clamp(1rem, 3vw, 1.5rem);
+      box-shadow: 0 12px 28px rgba(0, 76, 84, 0.08);
+    }
+    .international-group h2 {
+      margin: 0 0 clamp(0.85rem, 2.5vw, 1.2rem) 0;
+      font-size: calc(var(--font-scale) * clamp(1.15rem, 3vw, 1.45rem));
+    }
+    .international-content {
+      display: grid;
+      gap: clamp(1rem, 3vw, 1.5rem);
+    }
+    .match-group {
+      display: grid;
+      gap: clamp(0.75rem, 2.4vw, 1.1rem);
+    }
+    .match-group h3,
+    .match-group h4 {
+      margin: 0;
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.8vw, 1.2rem));
+      color: #1f2937;
+    }
+    .match-card {
+      background: #ffffff;
+      border-radius: 0.85rem;
+      padding: clamp(0.85rem, 2.6vw, 1.25rem) clamp(0.95rem, 2.8vw, 1.5rem);
+      display: grid;
+      gap: 0.4rem;
+      box-shadow: 0 12px 28px rgba(0, 76, 84, 0.08);
+    }
+    .match-pairing {
+      font-weight: 500;
+    }
+    .match-score {
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #0f172a;
+    }
+    .group-empty {
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #475569;
+      margin: 0;
+    }
     .season-results {
       margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
     }
@@ -484,6 +530,24 @@
       .instagram-card {
         background: #132a30;
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }
+      .international-group {
+        background: #0f1f24;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }
+      .match-group h3,
+      .match-group h4 {
+        color: #f1f5f9;
+      }
+      .match-card {
+        background: #132a30;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      }
+      .match-score {
+        color: #cbd5f5;
+      }
+      .group-empty {
+        color: #94a3b8;
       }
       .season-results-card {
         background: #132a30;
@@ -766,6 +830,10 @@
         </article>
       </div>
     </section>
+    <section class="international-group" data-international-section hidden>
+      <h2 data-international-heading>Internationale Spiele</h2>
+      <div class="international-content" data-international-content></div>
+    </section>
     <section class="season-results">
       <div class="season-results-header">
         <h2>Ergebnis der Saison 2024/25</h2>
@@ -793,6 +861,77 @@
         </ul>
       </div>
     </section>
+    <script>
+      (function () {
+        const section = document.querySelector('[data-international-section]');
+        const heading = document.querySelector('[data-international-heading]');
+        const content = document.querySelector('[data-international-content]');
+        const opponentElement = document.querySelector('[data-next-opponent]');
+
+        if (!section || !heading || !content || !opponentElement) {
+          return;
+        }
+
+        const opponentName = opponentElement.textContent.trim();
+        if (!opponentName) {
+          return;
+        }
+
+        const normalize = (value) =>
+          value
+            .normalize('NFKC')
+            .toUpperCase()
+            .replace(/[^A-Z0-9ÄÖÜẞß ]+/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        fetch('internationale_spiele.html')
+          .then((response) => (response.ok ? response.text() : null))
+          .then((html) => {
+            if (!html) {
+              return;
+            }
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const summaries = doc.querySelectorAll('.team-section > summary');
+            const normalizedOpponent = normalize(opponentName);
+
+            for (const summary of summaries) {
+              const teamName = normalize(summary.textContent || '');
+              if (teamName !== normalizedOpponent) {
+                continue;
+              }
+
+              const details = summary.parentElement;
+              if (!details) {
+                continue;
+              }
+
+              const teamContent = details.querySelector('.team-content');
+              if (!teamContent) {
+                continue;
+              }
+
+              heading.textContent = `Internationale Spiele von ${opponentName}`;
+
+              const clones = Array.from(teamContent.children).map((node) => node.cloneNode(true));
+              if (typeof content.replaceChildren === 'function') {
+                content.replaceChildren(...clones);
+              } else {
+                content.innerHTML = '';
+                clones.forEach((node) => content.appendChild(node));
+              }
+
+              section.hidden = false;
+              break;
+            }
+          })
+          .catch(() => {
+            /* intentionally left blank */
+          });
+      })();
+    </script>
     <footer class="page-footer">
       <p class="update-note" role="status">
         <span aria-hidden="true">📅</span>
