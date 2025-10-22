@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict
 
+from .mvp import collect_mvp_rankings
 from .report import (
     DEFAULT_SCHEDULE_URL,
     NEWS_LOOKBACK_DAYS,
@@ -60,6 +61,17 @@ def build_parser() -> argparse.ArgumentParser:
         "--skip-app-output",
         action="store_true",
         help="App-optimierte HTML-Datei nicht erzeugen.",
+    )
+    parser.add_argument(
+        "--mvp-output",
+        type=Path,
+        default=Path("docs/data/mvp_rankings.json"),
+        help="Pfad zur JSON-Datei mit MVP-Rankings (Standard: docs/data/mvp_rankings.json).",
+    )
+    parser.add_argument(
+        "--skip-mvp-output",
+        action="store_true",
+        help="MVP-Ranking-Datei nicht erzeugen.",
     )
     parser.add_argument(
         "--schedule-path",
@@ -212,6 +224,21 @@ def main() -> int:
                 file=sys.stderr,
             )
             season_results_data = None
+
+    if args.mvp_output and not args.skip_mvp_output:
+        try:
+            mvp_rankings = collect_mvp_rankings(
+                [next_home.away_team, USC_CANONICAL_NAME]
+            )
+        except Exception as exc:  # pragma: no cover - network failure
+            print(
+                f"Warnung: MVP-Rankings konnten nicht geladen werden: {exc}",
+                file=sys.stderr,
+            )
+        else:
+            args.mvp_output.parent.mkdir(parents=True, exist_ok=True)
+            payload = json.dumps(mvp_rankings, ensure_ascii=False, indent=2)
+            args.mvp_output.write_text(payload + "\n", encoding="utf-8")
 
     detail_cache: Dict[str, Dict[str, object]] = {}
     next_home = enrich_match(next_home, schedule_metadata, detail_cache)
