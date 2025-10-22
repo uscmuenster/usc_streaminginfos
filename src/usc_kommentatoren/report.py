@@ -2070,11 +2070,15 @@ def format_mvp_rankings_section(
     return (
         "\n"
         "    <section class=\"mvp-group\">\n"
-        "      <h2>MVP-Rankings</h2>\n"
-        "      <p class=\"mvp-note\">Top-5-Platzierungen je Team aus dem offiziellen MVP-Ranking der Volleyball Bundesliga.</p>\n"
-        "      <div class=\"mvp-grid\">\n"
+        "      <details class=\"mvp-overview\">\n"
+        "        <summary>MVP-Rankings</summary>\n"
+        "        <div class=\"mvp-overview-content\">\n"
+        "          <p class=\"mvp-note\">Top-5-Platzierungen je Team aus dem offiziellen MVP-Ranking der Volleyball Bundesliga.</p>\n"
+        "          <div class=\"mvp-grid\">\n"
         f"{cards_html}\n"
-        "      </div>\n"
+        "          </div>\n"
+        "        </div>\n"
+        "      </details>\n"
         "    </section>\n"
         "\n"
     )
@@ -2785,8 +2789,39 @@ def build_html_report(
     }}
     .mvp-group {{
       margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+    }}
+    .mvp-overview {{
+      border-radius: 0.85rem;
+      border: none;
+      background: #ffffff;
+      box-shadow: 0 16px 36px rgba(15, 118, 110, 0.15);
+      overflow: hidden;
+    }}
+    .mvp-overview summary {{
+      cursor: pointer;
+      padding: 1rem 1.35rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.6vw, 1.2rem));
+    }}
+    .mvp-overview summary::-webkit-details-marker {{
+      display: none;
+    }}
+    .mvp-overview summary::after {{
+      content: "▾";
+      font-size: calc(var(--font-scale) * 1rem);
+      transition: transform 0.2s ease;
+    }}
+    .mvp-overview[open] summary::after {{
+      transform: rotate(180deg);
+    }}
+    .mvp-overview-content {{
+      padding: 0 1.35rem 1.35rem;
       display: grid;
-      gap: clamp(0.75rem, 2.5vw, 1.15rem);
+      gap: clamp(0.75rem, 2.5vw, 1.25rem);
     }}
     .mvp-note {{
       margin: 0;
@@ -3109,6 +3144,9 @@ def build_html_report(
       .accordion summary {{
         font-size: calc(var(--font-scale) * 1.05rem);
       }}
+      .mvp-overview summary {{
+        font-size: calc(var(--font-scale) * 1.05rem);
+      }}
       .roster-item {{
         grid-template-columns: minmax(3rem, auto) 1fr;
       }}
@@ -3148,6 +3186,23 @@ def build_html_report(
       .accordion {{
         background: var(--accordion-opponent-bg);
         box-shadow: 0 18px 40px var(--accordion-opponent-shadow);
+      }}
+      .mvp-overview {{
+        background: #132a30;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }}
+      .mvp-overview summary {{
+        color: #f1f5f9;
+      }}
+      .mvp-note {{
+        color: #cbd5f5;
+      }}
+      .mvp-card {{
+        background: #132a30;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }}
+      .mvp-card summary {{
+        color: #f1f5f9;
       }}
       .roster-group details:nth-of-type(2),
       .transfer-group details:nth-of-type(2),
