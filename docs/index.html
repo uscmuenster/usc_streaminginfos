@@ -84,8 +84,18 @@
     }
     .lineup-link {
       margin-top: clamp(1rem, 3vw, 1.75rem);
+    }
+    .lineup-link ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
+      gap: 0.75rem;
+    }
+    .lineup-link li {
+      margin: 0;
     }
     .lineup-link a {
       display: inline-flex;
@@ -585,7 +595,10 @@
       </ul>
     </section>
     <section class="lineup-link">
-      <a href="aufstellungen.html">Startaufstellungen der letzten Begegnungen</a>
+      <ul>
+        <li><a href="aufstellungen.html">Startaufstellungen der letzten Begegnungen</a></li>
+        <li><a href="internationale_spiele.html">Internationale Spiele 2025/26</a></li>
+      </ul>
     </section>
     <section class="roster-group">
       <details class="accordion">
