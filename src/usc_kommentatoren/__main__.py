@@ -5,7 +5,7 @@ import json
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List, Optional
 
 from .mvp import collect_mvp_rankings
 from .report import (
@@ -225,6 +225,8 @@ def main() -> int:
             )
             season_results_data = None
 
+    mvp_rankings_data: Optional[Dict[str, Dict[str, List[List[str]]]]] = None
+
     if args.mvp_output and not args.skip_mvp_output:
         try:
             mvp_rankings = collect_mvp_rankings(
@@ -236,6 +238,7 @@ def main() -> int:
                 file=sys.stderr,
             )
         else:
+            mvp_rankings_data = mvp_rankings
             args.mvp_output.parent.mkdir(parents=True, exist_ok=True)
             payload = json.dumps(mvp_rankings, ensure_ascii=False, indent=2)
             args.mvp_output.write_text(payload + "\n", encoding="utf-8")
@@ -269,6 +272,7 @@ def main() -> int:
         opponent_photo=opponent_photo,
         season_results=season_results_data,
         generated_at=generated_at,
+        mvp_rankings=mvp_rankings_data,
     )
 
     html = build_html_report(**report_kwargs)

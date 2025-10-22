@@ -1932,6 +1932,17 @@ def format_news_list(items: Sequence[NewsItem]) -> str:
     return "\n      ".join(rendered)
 
 
+MVP_DISPLAY_COLUMNS: Sequence[Tuple[str, str]] = (
+    ("Rang", "Rang"),
+    ("Name", "Name"),
+    ("Position", "Position"),
+    ("Mannschaft", "Team"),
+    ("Kennzahl", "Kennzahl"),
+    ("Spiele", "Spiele/Quote"),
+    ("Wertung", "Wertung"),
+)
+
+
 def format_instagram_list(links: Sequence[str]) -> str:
     if not links:
         return "<li>Keine Links gefunden.</li>"
@@ -1963,6 +1974,110 @@ def format_instagram_list(links: Sequence[str]) -> str:
             display = f"@{segments[0]}"
         rendered.append(f"<li><a href=\"{escape(link)}\">{escape(display)}</a></li>")
     return "\n          ".join(rendered)
+
+
+def format_mvp_rankings_section(
+    rankings: Optional[Mapping[str, Mapping[str, Any]]],
+    *,
+    usc_name: str,
+    opponent_name: str,
+) -> str:
+    if not rankings:
+        return ""
+
+    normalized_usc = normalize_name(usc_name)
+    normalized_opponent = normalize_name(opponent_name)
+
+    cards: List[str] = []
+    for indicator, payload in rankings.items():
+        headers = list((payload or {}).get("headers") or [])
+        rows = list((payload or {}).get("rows") or [])
+
+        indices: List[int] = []
+        display_headers: List[str] = []
+        for source, display in MVP_DISPLAY_COLUMNS:
+            try:
+                idx = headers.index(source)
+            except ValueError:
+                continue
+            indices.append(idx)
+            display_headers.append(display)
+
+        body_rows: List[str] = []
+        if rows and indices:
+            header_cells = "\n              ".join(
+                f"<th scope=\"col\">{escape(label)}</th>" for label in display_headers
+            )
+            for row in rows:
+                cells: List[str] = []
+                team_role: Optional[str] = None
+                for column_index, label in zip(indices, display_headers):
+                    value = row[column_index] if column_index < len(row) else ""
+                    display_value = escape(value or "–")
+                    data_label = escape(label)
+                    cells.append(
+                        f"<td data-label=\"{data_label}\">{display_value}</td>"
+                    )
+                    if headers[column_index] == "Mannschaft" and value:
+                        normalized_team = normalize_name(value)
+                        if normalized_team == normalized_usc:
+                            team_role = "usc"
+                        elif normalized_team == normalized_opponent:
+                            team_role = "opponent"
+                cell_html = "\n              ".join(cells)
+                attrs = ["class=\"mvp-row\""]
+                if team_role:
+                    attrs.append(f"data-team-role=\"{team_role}\"")
+                attr_text = " ".join(attrs)
+                body_rows.append(
+                    f"            <tr {attr_text}>\n"
+                    f"              {cell_html}\n"
+                    "            </tr>"
+                )
+            table_html = (
+                "          <div class=\"mvp-table-wrapper\">\n"
+                "            <table class=\"mvp-table\">\n"
+                "              <thead>\n"
+                "                <tr>\n"
+                f"                  {header_cells}\n"
+                "                </tr>\n"
+                "              </thead>\n"
+                "              <tbody>\n"
+                f"{'\n'.join(body_rows)}\n"
+                "              </tbody>\n"
+                "            </table>\n"
+                "          </div>\n"
+            )
+        else:
+            table_html = (
+                "          <p class=\"mvp-empty\">"
+                "Keine MVP-Rankings verfügbar.</p>\n"
+            )
+
+        cards.append(
+            "        <details class=\"mvp-card\">\n"
+            f"          <summary>{escape(indicator)}</summary>\n"
+            "          <div class=\"mvp-card-content\">\n"
+            f"{table_html}"
+            "          </div>\n"
+            "        </details>"
+        )
+
+    if not cards:
+        return ""
+
+    cards_html = "\n".join(cards)
+    return (
+        "\n"
+        "    <section class=\"mvp-group\">\n"
+        "      <h2>MVP-Rankings</h2>\n"
+        "      <p class=\"mvp-note\">Top-5-Platzierungen je Team aus dem offiziellen MVP-Ranking der Volleyball Bundesliga.</p>\n"
+        "      <div class=\"mvp-grid\">\n"
+        f"{cards_html}\n"
+        "      </div>\n"
+        "    </section>\n"
+        "\n"
+    )
 
 
 def calculate_age(birthdate: date, reference: date) -> Optional[int]:
@@ -2295,6 +2410,7 @@ def build_html_report(
     season_results: Optional[Mapping[str, Any]] = None,
     generated_at: Optional[datetime] = None,
     font_scale: float = 1.0,
+    mvp_rankings: Optional[Mapping[str, Mapping[str, Any]]] = None,
 ) -> str:
     heading = pretty_name(next_home.away_team)
     kickoff_dt = next_home.kickoff.astimezone(BERLIN_TZ)
@@ -2347,6 +2463,11 @@ def build_html_report(
     opponent_roster_items = format_roster_list(opponent_roster, match_date=match_day)
     usc_transfer_items = format_transfer_list(usc_transfers)
     opponent_transfer_items = format_transfer_list(opponent_transfers)
+    mvp_section_html = format_mvp_rankings_section(
+        mvp_rankings,
+        usc_name=USC_CANONICAL_NAME,
+        opponent_name=next_home.away_team,
+    )
 
     navigation_links = [
         ("aufstellungen.html", "Startaufstellungen der letzten Begegnungen"),
@@ -2661,6 +2782,89 @@ def build_html_report(
       font-size: calc(var(--font-scale) * 0.85rem);
       color: #64748b;
       margin-top: 0.2rem;
+    }}
+    .mvp-group {{
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+      display: grid;
+      gap: clamp(0.75rem, 2.5vw, 1.15rem);
+    }}
+    .mvp-note {{
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #475569;
+    }}
+    .mvp-grid {{
+      display: grid;
+      gap: clamp(0.75rem, 2.5vw, 1.25rem);
+    }}
+    .mvp-card {{
+      border-radius: 0.85rem;
+      border: none;
+      background: #ffffff;
+      box-shadow: 0 16px 36px rgba(15, 118, 110, 0.15);
+      overflow: hidden;
+    }}
+    .mvp-card summary {{
+      cursor: pointer;
+      padding: 1rem 1.35rem;
+      font-weight: 600;
+      list-style: none;
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.2rem));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }}
+    .mvp-card summary::-webkit-details-marker {{
+      display: none;
+    }}
+    .mvp-card summary::after {{
+      content: "▾";
+      font-size: calc(var(--font-scale) * 1rem);
+      transition: transform 0.2s ease;
+    }}
+    .mvp-card[open] summary::after {{
+      transform: rotate(180deg);
+    }}
+    .mvp-card-content {{
+      padding: 0 1.35rem 1.35rem;
+    }}
+    .mvp-table-wrapper {{
+      margin-top: 0.65rem;
+      overflow-x: auto;
+    }}
+    .mvp-table {{
+      width: 100%;
+      border-collapse: collapse;
+      font-size: calc(var(--font-scale) * 0.85rem);
+      min-width: 28rem;
+    }}
+    .mvp-table th,
+    .mvp-table td {{
+      text-align: left;
+      padding: 0.55rem 0.75rem;
+      border-bottom: 1px solid #e2e8f0;
+      white-space: nowrap;
+    }}
+    .mvp-table td[data-label] {{
+      white-space: nowrap;
+    }}
+    .mvp-table tbody tr:last-child td {{
+      border-bottom: none;
+    }}
+    .mvp-empty {{
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #475569;
+    }}
+    .mvp-row[data-team-role="usc"] td {{
+      font-weight: 600;
+      color: #065f46;
+      background: rgba(16, 185, 129, 0.12);
+    }}
+    .mvp-row[data-team-role="opponent"] td {{
+      font-weight: 600;
+      color: #1d4ed8;
+      background: rgba(59, 130, 246, 0.12);
     }}
     .transfer-list {{
       list-style: none;
@@ -3103,7 +3307,7 @@ def build_html_report(
         </div>
       </details>
     </section>
-    <section class=\"instagram-group\">
+{mvp_section_html}    <section class=\"instagram-group\">
       <h2>Instagram-Links</h2>
       <div class=\"instagram-grid\">
         <article class=\"instagram-card\">
