@@ -10,7 +10,7 @@ from pathlib import Path
 import mimetypes
 from html import escape
 from io import StringIO
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 from zoneinfo import ZoneInfo
 from urllib.parse import parse_qs, urljoin, urlparse
 from email.utils import parsedate_to_datetime
@@ -2131,6 +2131,150 @@ def format_transfer_list(items: Sequence[TransferItem]) -> str:
 
 
 
+def _format_season_results_section(
+    data: Optional[Mapping[str, Any]], opponent_name: str
+) -> str:
+    if not data or not isinstance(data, Mapping):
+        return ""
+
+    raw_title = data.get("title")
+    if isinstance(raw_title, str) and raw_title.strip():
+        title = raw_title.strip()
+    else:
+        title = "Ergebnis der Saison 2024/25"
+
+    teams_raw = data.get("teams")
+    teams_by_key: Dict[str, Dict[str, Any]] = {}
+    if isinstance(teams_raw, Sequence):
+        for entry in teams_raw:
+            if not isinstance(entry, Mapping):
+                continue
+            name = str(entry.get("name") or "").strip()
+            if not name:
+                continue
+            key = normalize_name(name)
+            if not key or key in teams_by_key:
+                continue
+            details_raw = entry.get("details")
+            details: List[str] = []
+            if isinstance(details_raw, Sequence):
+                for item in details_raw:
+                    if not item:
+                        continue
+                    details.append(str(item).strip())
+            teams_by_key[key] = {"name": name, "details": details}
+
+    if not teams_by_key:
+        links_raw = data.get("links")
+        has_links = bool(
+            isinstance(links_raw, Sequence)
+            and any(
+                isinstance(entry, Mapping)
+                and str(entry.get("label") or "").strip()
+                and str(entry.get("url") or "").strip()
+                for entry in links_raw
+            )
+        )
+        if not has_links:
+            return ""
+
+    normalized_opponent = normalize_name(opponent_name)
+    normalized_usc = normalize_name(USC_CANONICAL_NAME)
+
+    selected: List[Dict[str, Any]] = []
+    missing_opponent = False
+    if normalized_opponent and normalized_opponent in teams_by_key:
+        selected.append(teams_by_key[normalized_opponent])
+    elif normalized_opponent:
+        missing_opponent = True
+
+    usc_entry = teams_by_key.get(normalized_usc)
+    if usc_entry and (not selected or usc_entry["name"] != selected[0]["name"]):
+        selected.append(usc_entry)
+    elif not selected and usc_entry:
+        selected.append(usc_entry)
+
+    status_message = ""
+    if not selected:
+        status_message = "Keine Saisoninformationen verfügbar."
+    elif missing_opponent:
+        status_message = (
+            f"Für {pretty_name(opponent_name)} liegen keine Saisoninformationen vor."
+        )
+
+    cards_markup: List[str] = []
+    for team in selected:
+        name = team.get("name")
+        if not name:
+            continue
+        details = [detail for detail in team.get("details", []) if detail]
+        details_html = ""
+        if details:
+            detail_items = "".join(
+                f"\n              <li>{escape(str(detail))}</li>" for detail in details
+            )
+            details_html = (
+                "\n            <ul class=\"season-results-list\">"
+                f"{detail_items}\n            </ul>"
+            )
+        cards_markup.append(
+            "        <article class=\"season-results-card\">\n"
+            f"          <h3>{escape(str(name))}</h3>{details_html}\n"
+            "        </article>"
+        )
+
+    if not cards_markup:
+        cards_markup.append(
+            "        <p class=\"season-results-fallback\">Keine Saisoninformationen verfügbar.</p>"
+        )
+
+    links_raw = data.get("links")
+    link_block: List[str] = []
+    if isinstance(links_raw, Sequence):
+        link_items: List[str] = []
+        for entry in links_raw:
+            if not isinstance(entry, Mapping):
+                continue
+            label = str(entry.get("label") or "").strip()
+            url = str(entry.get("url") or "").strip()
+            if not label or not url:
+                continue
+            link_items.append(
+                f"          <li><a href=\"{escape(url)}\" rel=\"noopener\" target=\"_blank\">{escape(label)}</a></li>"
+            )
+        if link_items:
+            link_block = [
+                "      <div class=\"season-results-links\">",
+                "        <h3>Weitere Informationen</h3>",
+                "        <ul class=\"season-results-link-list\">",
+                *link_items,
+                "        </ul>",
+                "      </div>",
+            ]
+
+    header_lines = [
+        "      <div class=\"season-results-header\">",
+        f"        <h2>{escape(title)}</h2>",
+    ]
+    if status_message:
+        header_lines.append(
+            f"        <p class=\"season-results-status\">{escape(status_message)}</p>"
+        )
+    header_lines.append("      </div>")
+
+    section_lines = [
+        "    <section class=\"season-results\">",
+        *header_lines,
+        "      <div class=\"season-results-grid\">",
+        *cards_markup,
+        "      </div>",
+    ]
+    section_lines.extend(link_block)
+    section_lines.append("    </section>")
+
+    return "\n".join(section_lines)
+
+
 def build_html_report(
     *,
     next_home: Match,
@@ -2148,6 +2292,7 @@ def build_html_report(
     opponent_transfers: Sequence[TransferItem],
     usc_photo: Optional[str],
     opponent_photo: Optional[str],
+    season_results: Optional[Mapping[str, Any]] = None,
     generated_at: Optional[datetime] = None,
     font_scale: float = 1.0,
 ) -> str:
@@ -2195,6 +2340,9 @@ def build_html_report(
     opponent_news_items = format_news_list(opponent_news)
     usc_instagram_items = format_instagram_list(usc_instagram)
     opponent_instagram_items = format_instagram_list(opponent_instagram)
+    season_results_section = _format_season_results_section(
+        season_results, next_home.away_team
+    )
     usc_roster_items = format_roster_list(usc_roster, match_date=match_day)
     opponent_roster_items = format_roster_list(opponent_roster, match_date=match_day)
     usc_transfer_items = format_transfer_list(usc_transfers)
@@ -2608,6 +2756,83 @@ def build_html_report(
       display: grid;
       gap: 0.35rem;
     }}
+    .season-results {{
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+    }}
+    .season-results-header {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.25rem;
+      align-items: baseline;
+      margin-bottom: clamp(0.75rem, 2.5vw, 1.25rem);
+    }}
+    .season-results-header h2 {{
+      margin: 0;
+    }}
+    .season-results-status {{
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.8rem);
+      color: #475569;
+    }}
+    .season-results-grid {{
+      display: grid;
+      gap: clamp(1rem, 3vw, 1.5rem);
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }}
+    .season-results-card {{
+      background: #ffffff;
+      border-radius: 0.85rem;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.12);
+      display: grid;
+      gap: 0.6rem;
+    }}
+    .season-results-card h3 {{
+      margin: 0;
+      font-size: calc(var(--font-scale) * clamp(1.05rem, 3vw, 1.3rem));
+      color: #0f172a;
+    }}
+    .season-results-list {{
+      margin: 0;
+      padding-left: 1rem;
+      display: grid;
+      gap: 0.35rem;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #1f2933;
+    }}
+    .season-results-fallback {{
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #475569;
+    }}
+    .season-results-links {{
+      margin-top: clamp(1rem, 3vw, 1.75rem);
+      background: #f8fafc;
+      border-radius: 0.85rem;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.35);
+    }}
+    .season-results-links h3 {{
+      margin: 0 0 0.75rem 0;
+      font-size: calc(var(--font-scale) * clamp(0.95rem, 2.5vw, 1.1rem));
+      color: #1f2937;
+    }}
+    .season-results-link-list {{
+      margin: 0;
+      padding-left: 1rem;
+      display: grid;
+      gap: 0.4rem;
+    }}
+    .season-results-link-list a {{
+      color: #1d4ed8;
+      font-weight: 600;
+      text-decoration: none;
+    }}
+    .season-results-link-list a:hover,
+    .season-results-link-list a:focus-visible {{
+      text-decoration: underline;
+      outline: none;
+    }}
     .meta-link {{
       font-weight: 600;
     }}
@@ -2696,6 +2921,32 @@ def build_html_report(
         background: #132a30;
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
       }}
+      .season-results-card {{
+        background: #132a30;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }}
+      .season-results-card h3 {{
+        color: #f1f5f9;
+      }}
+      .season-results-list {{
+        color: #cbd5f5;
+      }}
+      .season-results-fallback {{
+        color: #94a3b8;
+      }}
+      .season-results-links {{
+        background: #0f1f24;
+        box-shadow: inset 0 0 0 1px rgba(94, 234, 212, 0.25);
+      }}
+      .season-results-links h3 {{
+        color: #e6f1f3;
+      }}
+      .season-results-link-list a {{
+        color: #93c5fd;
+      }}
+      .season-results-status {{
+        color: #94a3b8;
+      }}
       .match-result {{
         color: #5eead4;
       }}
@@ -2742,7 +2993,7 @@ def build_html_report(
 </head>
 <body>
   <main>
-    <h1>Nächster USC-Heimgegner:<br>{escape(heading)}</h1>
+    <h1>Nächster USC-Heimgegner:<br><span data-next-opponent>{escape(heading)}</span></h1>
     <div class=\"meta\">
       {meta_html}
     </div>
@@ -2833,6 +3084,7 @@ def build_html_report(
         </article>
       </div>
     </section>
+{season_results_section}
 {update_note_html}
   </main>
 </body>

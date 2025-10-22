@@ -49,6 +49,7 @@ jobs:
           path: |
             docs/index.html
             docs/index_app.html
+            docs/data/
           if-no-files-found: error
 
       - name: Upload GitHub Pages artifact

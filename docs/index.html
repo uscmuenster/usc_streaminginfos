@@ -320,6 +320,83 @@
       display: grid;
       gap: 0.35rem;
     }
+    .season-results {
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+    }
+    .season-results-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.25rem;
+      align-items: baseline;
+      margin-bottom: clamp(0.75rem, 2.5vw, 1.25rem);
+    }
+    .season-results-header h2 {
+      margin: 0;
+    }
+    .season-results-status {
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.8rem);
+      color: #475569;
+    }
+    .season-results-grid {
+      display: grid;
+      gap: clamp(1rem, 3vw, 1.5rem);
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+    .season-results-card {
+      background: #ffffff;
+      border-radius: 0.85rem;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.12);
+      display: grid;
+      gap: 0.6rem;
+    }
+    .season-results-card h3 {
+      margin: 0;
+      font-size: calc(var(--font-scale) * clamp(1.05rem, 3vw, 1.3rem));
+      color: #0f172a;
+    }
+    .season-results-list {
+      margin: 0;
+      padding-left: 1rem;
+      display: grid;
+      gap: 0.35rem;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #1f2933;
+    }
+    .season-results-fallback {
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #475569;
+    }
+    .season-results-links {
+      margin-top: clamp(1rem, 3vw, 1.75rem);
+      background: #f8fafc;
+      border-radius: 0.85rem;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.35);
+    }
+    .season-results-links h3 {
+      margin: 0 0 0.75rem 0;
+      font-size: calc(var(--font-scale) * clamp(0.95rem, 2.5vw, 1.1rem));
+      color: #1f2937;
+    }
+    .season-results-link-list {
+      margin: 0;
+      padding-left: 1rem;
+      display: grid;
+      gap: 0.4rem;
+    }
+    .season-results-link-list a {
+      color: #1d4ed8;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .season-results-link-list a:hover,
+    .season-results-link-list a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
     .meta-link {
       font-weight: 600;
     }
@@ -408,6 +485,32 @@
         background: #132a30;
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
       }
+      .season-results-card {
+        background: #132a30;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }
+      .season-results-card h3 {
+        color: #f1f5f9;
+      }
+      .season-results-list {
+        color: #cbd5f5;
+      }
+      .season-results-fallback {
+        color: #94a3b8;
+      }
+      .season-results-links {
+        background: #0f1f24;
+        box-shadow: inset 0 0 0 1px rgba(94, 234, 212, 0.25);
+      }
+      .season-results-links h3 {
+        color: #e6f1f3;
+      }
+      .season-results-link-list a {
+        color: #93c5fd;
+      }
+      .season-results-status {
+        color: #94a3b8;
+      }
       .match-result {
         color: #5eead4;
       }
@@ -454,7 +557,7 @@
 </head>
 <body>
   <main>
-    <h1>Nächster USC-Heimgegner:<br>ETV Hamburger Volksbank Volleys</h1>
+    <h1>Nächster USC-Heimgegner:<br><span data-next-opponent>ETV Hamburger Volksbank Volleys</span></h1>
     <div class="meta">
       <p><strong>Spieltermin:</strong> 26.10.2025 (So) 16:00 Uhr</p>
       <p><strong>Austragungsort:</strong> Sporthalle Berg Fidel (48153 Münster)</p>
@@ -653,6 +756,8 @@
           <h3>ETV Hamburger Volksbank Volleys</h3>
           <ul class="instagram-list">
             <li><a href="https://www.instagram.com/etv.hamburgervolksbank.volleys">@etv.hamburgervolksbank.volleys</a></li>
+          <li><a href="https://www.instagram.com/etv.hamburgervolksbank.volleys/reel/DNP_1J1selF">Reel DNP_1J1selF</a></li>
+          <li><a href="https://www.instagram.com/p/DG2shjpqmFy">Beitrag DG2shjpqmFy</a></li>
           </ul>
         </article>
         <article class="instagram-card">
@@ -663,10 +768,37 @@
         </article>
       </div>
     </section>
+    <section class="season-results">
+      <div class="season-results-header">
+        <h2>Ergebnis der Saison 2024/25</h2>
+      </div>
+      <div class="season-results-grid">
+        <article class="season-results-card">
+          <h3>ETV Hamburger Volksbank Volleys</h3>
+            <ul class="season-results-list">
+              <li>2. BL Pro: Platz 7 (15 Siege, 11 Niederlagen, Aufsteiger, 1 x 0:3)</li>
+            </ul>
+        </article>
+        <article class="season-results-card">
+          <h3>USC Münster</h3>
+            <ul class="season-results-list">
+              <li>Normalrunde: Platz 7 (7 Siege, 17 Niederlagen, 2 x 3:0)</li>
+              <li>Playoff Platz 5 (Stuttgart 0:2)</li>
+            </ul>
+        </article>
+      </div>
+      <div class="season-results-links">
+        <h3>Weitere Informationen</h3>
+        <ul class="season-results-link-list">
+          <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/archiv/ergebnisse.xhtml?LeaguePresenter.view=resultTable&amp;LeaguePresenter.matchSeriesId=770580199#samsCmsComponent_208408" rel="noopener" target="_blank">Normalrunde 2024/25</a></li>
+          <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/archiv/ergebnisse.xhtml?LeaguePresenter.view=matches&amp;LeaguePresenter.matchSeriesId=770580129#samsCmsComponent_208408" rel="noopener" target="_blank">Playoffs 2024/25</a></li>
+        </ul>
+      </div>
+    </section>
     <footer class="page-footer">
       <p class="update-note" role="status">
         <span aria-hidden="true">📅</span>
-        <span><strong>Aktualisiert am</strong> Mittwoch, 22. Oktober 2025 um 04:27</span>
+        <span><strong>Aktualisiert am</strong> Mittwoch, 22. Oktober 2025 um 12:18</span>
       </p>
     </footer>
 

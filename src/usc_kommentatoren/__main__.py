@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -77,6 +78,12 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=Path("data/team_photos"),
         help="Local directory to cache downloaded team photos (default: data/team_photos).",
+    )
+    parser.add_argument(
+        "--season-results",
+        type=Path,
+        default=Path("docs/data/season_results_2024_25.json"),
+        help="Pfad zur JSON-Datei mit den Saisonergebnissen (Standard: docs/data/season_results_2024_25.json).",
     )
     parser.add_argument(
         "--recent-limit",
@@ -188,6 +195,24 @@ def main() -> int:
         )
         opponent_photo = None
 
+    season_results_data = None
+    if args.season_results:
+        try:
+            season_results_data = json.loads(
+                args.season_results.read_text(encoding="utf-8")
+            )
+        except FileNotFoundError:
+            print(
+                f"Hinweis: Saisonübersicht {args.season_results} wurde nicht gefunden.",
+                file=sys.stderr,
+            )
+        except Exception as exc:  # pragma: no cover - invalid JSON
+            print(
+                f"Warnung: Saisonübersicht konnte nicht geladen werden: {exc}",
+                file=sys.stderr,
+            )
+            season_results_data = None
+
     detail_cache: Dict[str, Dict[str, object]] = {}
     next_home = enrich_match(next_home, schedule_metadata, detail_cache)
     usc_recent = enrich_matches(usc_recent, schedule_metadata, detail_cache)
@@ -215,6 +240,7 @@ def main() -> int:
         opponent_transfers=opponent_transfers,
         usc_photo=usc_photo,
         opponent_photo=opponent_photo,
+        season_results=season_results_data,
         generated_at=generated_at,
     )
 
