@@ -388,6 +388,89 @@
       padding: clamp(1rem, 3vw, 1.4rem);
       box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.35);
     }
+    .ranking-group {
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+      display: grid;
+      gap: 0.75rem;
+    }
+    .ranking-group h2 {
+      margin: 0;
+    }
+    .ranking-note {
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #475569;
+    }
+    .ranking-columns {
+      display: grid;
+      gap: clamp(0.75rem, 2.5vw, 1.2rem);
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    }
+    .ranking-columns article {
+      display: grid;
+      gap: 0.65rem;
+    }
+    .ranking-columns h3 {
+      margin: 0;
+      font-size: calc(var(--font-scale) * clamp(0.95rem, 2.6vw, 1.2rem));
+    }
+    .ranking-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.65rem;
+    }
+    .ranking-item {
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-start;
+      border-radius: 0.75rem;
+      padding: 0.75rem 0.95rem;
+      background: #ffffff;
+      box-shadow: 0 10px 24px rgba(15, 118, 110, 0.08);
+    }
+    .ranking-columns article:nth-child(1) .ranking-item {
+      background: var(--accordion-usc-bg);
+      box-shadow: 0 10px 28px var(--accordion-usc-shadow);
+    }
+    .ranking-columns article:nth-child(2) .ranking-item {
+      background: var(--accordion-opponent-bg);
+      box-shadow: 0 10px 28px var(--accordion-opponent-shadow);
+    }
+    .ranking-rank {
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-weight: 600;
+      min-width: 2.4rem;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      background: #0f766e;
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 0.2rem 0.55rem;
+    }
+    .ranking-columns article:nth-child(2) .ranking-rank {
+      background: #1d4ed8;
+    }
+    .ranking-player {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .ranking-name {
+      font-weight: 600;
+    }
+    .ranking-position {
+      font-weight: 500;
+      color: #0f172a;
+      margin-left: 0.25rem;
+    }
+    .ranking-meta {
+      font-size: calc(var(--font-scale) * 0.82rem);
+      color: #475569;
+      line-height: 1.35;
+    }
     .season-results-links h3 {
       margin: 0 0 0.75rem 0;
       font-size: calc(var(--font-scale) * clamp(0.95rem, 2.5vw, 1.1rem));
@@ -591,6 +674,7 @@
       <p><a class="meta-link" href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml">Tabelle der Volleyball Bundesliga</a></p>
       <p><a class="meta-link" href="https://www.usc-muenster.de/">Homepage USC Münster</a></p>
       <p><a class="meta-link" href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys/">Homepage ETV Hamburger Volksbank Volleys</a></p>
+      <p><a class="meta-link" href="#rankingindikatoren">Direkt zu den Rankingindikatoren</a></p>
     </div>
 
     <section>
@@ -774,6 +858,231 @@
       <li><a href="https://www.usc-muenster.de/erste-liga/spektakel-am-berg-fidel/">Spektakel am Berg Fidel</a><span class="news-meta">Homepage USC Münster – 12.10.2025 19:38</span></li>
       <li><a href="https://www.usc-muenster.de/erste-liga/auftaktkracher-gegen-den-meister-aus-schwerin/">Auftaktkracher gegen den Meister aus Schwerin</a><span class="news-meta">Homepage USC Münster – 10.10.2025 17:59</span></li>
           </ul>
+        </div>
+      </details>
+    </section>
+    <!-- Rankingindikatoren (VBL) -->
+    <section id="rankingindikatoren" class="ranking-group">
+      <h2>Rankingindikatoren (VBL-Spielerinnenranking)</h2>
+      <p class="ranking-note">Quelle: <a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/mvp_rankings/spielerinnenranking_hauptrunde.xhtml" target="_blank" rel="noopener">VBL-Spielerinnenranking Hauptrunde</a>, Stand 22.10.2025.</p>
+      <details class="accordion ranking-accordion" open>
+        <summary>alle Spielelemente / Top-Scorer</summary>
+        <div class="accordion-content">
+          <div class="ranking-columns">
+            <article>
+              <h3>USC Münster</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">6.</span><div class="ranking-player"><span class="ranking-name">Brianna Ford<span class="ranking-position">Diagonal</span></span><span class="ranking-meta">30 Aufschläge · 6 Aufschlagpunkte · 6 Fehler · Quote mit Wirkung 36,7&nbsp;% · Effizienz 41,7&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+                <li class="ranking-item"><span class="ranking-rank">7.</span><div class="ranking-player"><span class="ranking-name">Isabel Rebecca Martin<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">24 Aufschläge · 2 Aufschlagpunkte · 4 Fehler · Quote mit Wirkung 8,3&nbsp;% · Effizienz 38,3&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+            <article>
+              <h3>ETV Hamburger Volksbank Volleys</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">11.</span><div class="ranking-player"><span class="ranking-name">Svea Frobel<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">14 Aufschläge · 0 Aufschlagpunkte · 2 Fehler · Quote mit Wirkung 14,3&nbsp;% · Effizienz 31,1&nbsp;% · 6 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </details>
+      <details class="accordion ranking-accordion">
+        <summary>Aufschlag / Quote Aufschläge mit Wirkung</summary>
+        <div class="accordion-content">
+          <div class="ranking-columns">
+            <article>
+              <h3>USC Münster</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">6.</span><div class="ranking-player"><span class="ranking-name">Brianna Ford<span class="ranking-position">Diagonal</span></span><span class="ranking-meta">30 Aufschläge · 6 Aufschlagpunkte · 6 Fehler · Quote mit Wirkung 36,7&nbsp;% · Effizienz 41,7&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+                <li class="ranking-item"><span class="ranking-rank">7.</span><div class="ranking-player"><span class="ranking-name">Isabel Rebecca Martin<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">24 Aufschläge · 2 Aufschlagpunkte · 4 Fehler · Quote mit Wirkung 8,3&nbsp;% · Effizienz 38,3&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+            <article>
+              <h3>ETV Hamburger Volksbank Volleys</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">11.</span><div class="ranking-player"><span class="ranking-name">Svea Frobel<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">14 Aufschläge · 0 Aufschlagpunkte · 2 Fehler · Quote mit Wirkung 14,3&nbsp;% · Effizienz 31,1&nbsp;% · 6 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </details>
+      <details class="accordion ranking-accordion">
+        <summary>Annahme / Quote perfekte oder gute Annahme</summary>
+        <div class="accordion-content">
+          <div class="ranking-columns">
+            <article>
+              <h3>USC Münster</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">6.</span><div class="ranking-player"><span class="ranking-name">Brianna Ford<span class="ranking-position">Diagonal</span></span><span class="ranking-meta">30 Aufschläge · 6 Aufschlagpunkte · 6 Fehler · Quote mit Wirkung 36,7&nbsp;% · Effizienz 41,7&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+                <li class="ranking-item"><span class="ranking-rank">7.</span><div class="ranking-player"><span class="ranking-name">Isabel Rebecca Martin<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">24 Aufschläge · 2 Aufschlagpunkte · 4 Fehler · Quote mit Wirkung 8,3&nbsp;% · Effizienz 38,3&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+            <article>
+              <h3>ETV Hamburger Volksbank Volleys</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">11.</span><div class="ranking-player"><span class="ranking-name">Svea Frobel<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">14 Aufschläge · 0 Aufschlagpunkte · 2 Fehler · Quote mit Wirkung 14,3&nbsp;% · Effizienz 31,1&nbsp;% · 6 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </details>
+      <details class="accordion ranking-accordion">
+        <summary>Aufschlag / Quote Aufschlagpunkte</summary>
+        <div class="accordion-content">
+          <div class="ranking-columns">
+            <article>
+              <h3>USC Münster</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">6.</span><div class="ranking-player"><span class="ranking-name">Brianna Ford<span class="ranking-position">Diagonal</span></span><span class="ranking-meta">30 Aufschläge · 6 Aufschlagpunkte · 6 Fehler · Quote mit Wirkung 36,7&nbsp;% · Effizienz 41,7&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+                <li class="ranking-item"><span class="ranking-rank">7.</span><div class="ranking-player"><span class="ranking-name">Isabel Rebecca Martin<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">24 Aufschläge · 2 Aufschlagpunkte · 4 Fehler · Quote mit Wirkung 8,3&nbsp;% · Effizienz 38,3&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+            <article>
+              <h3>ETV Hamburger Volksbank Volleys</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">11.</span><div class="ranking-player"><span class="ranking-name">Svea Frobel<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">14 Aufschläge · 0 Aufschlagpunkte · 2 Fehler · Quote mit Wirkung 14,3&nbsp;% · Effizienz 31,1&nbsp;% · 6 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </details>
+      <details class="accordion ranking-accordion">
+        <summary>Annahme / Annahmeeffizienz</summary>
+        <div class="accordion-content">
+          <div class="ranking-columns">
+            <article>
+              <h3>USC Münster</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">6.</span><div class="ranking-player"><span class="ranking-name">Brianna Ford<span class="ranking-position">Diagonal</span></span><span class="ranking-meta">30 Aufschläge · 6 Aufschlagpunkte · 6 Fehler · Quote mit Wirkung 36,7&nbsp;% · Effizienz 41,7&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+                <li class="ranking-item"><span class="ranking-rank">7.</span><div class="ranking-player"><span class="ranking-name">Isabel Rebecca Martin<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">24 Aufschläge · 2 Aufschlagpunkte · 4 Fehler · Quote mit Wirkung 8,3&nbsp;% · Effizienz 38,3&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+            <article>
+              <h3>ETV Hamburger Volksbank Volleys</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">11.</span><div class="ranking-player"><span class="ranking-name">Svea Frobel<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">14 Aufschläge · 0 Aufschlagpunkte · 2 Fehler · Quote mit Wirkung 14,3&nbsp;% · Effizienz 31,1&nbsp;% · 6 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </details>
+      <details class="accordion ranking-accordion">
+        <summary>Angriff / Angriffseffizienz</summary>
+        <div class="accordion-content">
+          <div class="ranking-columns">
+            <article>
+              <h3>USC Münster</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">6.</span><div class="ranking-player"><span class="ranking-name">Brianna Ford<span class="ranking-position">Diagonal</span></span><span class="ranking-meta">30 Aufschläge · 6 Aufschlagpunkte · 6 Fehler · Quote mit Wirkung 36,7&nbsp;% · Effizienz 41,7&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+                <li class="ranking-item"><span class="ranking-rank">7.</span><div class="ranking-player"><span class="ranking-name">Isabel Rebecca Martin<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">24 Aufschläge · 2 Aufschlagpunkte · 4 Fehler · Quote mit Wirkung 8,3&nbsp;% · Effizienz 38,3&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+            <article>
+              <h3>ETV Hamburger Volksbank Volleys</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">11.</span><div class="ranking-player"><span class="ranking-name">Svea Frobel<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">14 Aufschläge · 0 Aufschlagpunkte · 2 Fehler · Quote mit Wirkung 14,3&nbsp;% · Effizienz 31,1&nbsp;% · 6 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </details>
+      <details class="accordion ranking-accordion">
+        <summary>Block / Blockpunkte</summary>
+        <div class="accordion-content">
+          <div class="ranking-columns">
+            <article>
+              <h3>USC Münster</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">6.</span><div class="ranking-player"><span class="ranking-name">Brianna Ford<span class="ranking-position">Diagonal</span></span><span class="ranking-meta">30 Aufschläge · 6 Aufschlagpunkte · 6 Fehler · Quote mit Wirkung 36,7&nbsp;% · Effizienz 41,7&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+                <li class="ranking-item"><span class="ranking-rank">7.</span><div class="ranking-player"><span class="ranking-name">Isabel Rebecca Martin<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">24 Aufschläge · 2 Aufschlagpunkte · 4 Fehler · Quote mit Wirkung 8,3&nbsp;% · Effizienz 38,3&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+            <article>
+              <h3>ETV Hamburger Volksbank Volleys</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">11.</span><div class="ranking-player"><span class="ranking-name">Svea Frobel<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">14 Aufschläge · 0 Aufschlagpunkte · 2 Fehler · Quote mit Wirkung 14,3&nbsp;% · Effizienz 31,1&nbsp;% · 6 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </details>
+      <details class="accordion ranking-accordion">
+        <summary>Aufschlag / Aufschlagpunkte</summary>
+        <div class="accordion-content">
+          <div class="ranking-columns">
+            <article>
+              <h3>USC Münster</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">6.</span><div class="ranking-player"><span class="ranking-name">Brianna Ford<span class="ranking-position">Diagonal</span></span><span class="ranking-meta">30 Aufschläge · 6 Aufschlagpunkte · 6 Fehler · Quote mit Wirkung 36,7&nbsp;% · Effizienz 41,7&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+                <li class="ranking-item"><span class="ranking-rank">7.</span><div class="ranking-player"><span class="ranking-name">Isabel Rebecca Martin<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">24 Aufschläge · 2 Aufschlagpunkte · 4 Fehler · Quote mit Wirkung 8,3&nbsp;% · Effizienz 38,3&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+            <article>
+              <h3>ETV Hamburger Volksbank Volleys</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">11.</span><div class="ranking-player"><span class="ranking-name">Svea Frobel<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">14 Aufschläge · 0 Aufschlagpunkte · 2 Fehler · Quote mit Wirkung 14,3&nbsp;% · Effizienz 31,1&nbsp;% · 6 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </details>
+      <details class="accordion ranking-accordion">
+        <summary>Angriff / Quote Angriffspunkte</summary>
+        <div class="accordion-content">
+          <div class="ranking-columns">
+            <article>
+              <h3>USC Münster</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">6.</span><div class="ranking-player"><span class="ranking-name">Brianna Ford<span class="ranking-position">Diagonal</span></span><span class="ranking-meta">30 Aufschläge · 6 Aufschlagpunkte · 6 Fehler · Quote mit Wirkung 36,7&nbsp;% · Effizienz 41,7&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+                <li class="ranking-item"><span class="ranking-rank">7.</span><div class="ranking-player"><span class="ranking-name">Isabel Rebecca Martin<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">24 Aufschläge · 2 Aufschlagpunkte · 4 Fehler · Quote mit Wirkung 8,3&nbsp;% · Effizienz 38,3&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+            <article>
+              <h3>ETV Hamburger Volksbank Volleys</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">11.</span><div class="ranking-player"><span class="ranking-name">Svea Frobel<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">14 Aufschläge · 0 Aufschlagpunkte · 2 Fehler · Quote mit Wirkung 14,3&nbsp;% · Effizienz 31,1&nbsp;% · 6 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </details>
+      <details class="accordion ranking-accordion">
+        <summary>Angriff / Angriffspunkte</summary>
+        <div class="accordion-content">
+          <div class="ranking-columns">
+            <article>
+              <h3>USC Münster</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">6.</span><div class="ranking-player"><span class="ranking-name">Brianna Ford<span class="ranking-position">Diagonal</span></span><span class="ranking-meta">30 Aufschläge · 6 Aufschlagpunkte · 6 Fehler · Quote mit Wirkung 36,7&nbsp;% · Effizienz 41,7&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+                <li class="ranking-item"><span class="ranking-rank">7.</span><div class="ranking-player"><span class="ranking-name">Isabel Rebecca Martin<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">24 Aufschläge · 2 Aufschlagpunkte · 4 Fehler · Quote mit Wirkung 8,3&nbsp;% · Effizienz 38,3&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+            <article>
+              <h3>ETV Hamburger Volksbank Volleys</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">11.</span><div class="ranking-player"><span class="ranking-name">Svea Frobel<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">14 Aufschläge · 0 Aufschlagpunkte · 2 Fehler · Quote mit Wirkung 14,3&nbsp;% · Effizienz 31,1&nbsp;% · 6 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </details>
+      <details class="accordion ranking-accordion">
+        <summary>Aufschlag / Aufschlageffizienz</summary>
+        <div class="accordion-content">
+          <div class="ranking-columns">
+            <article>
+              <h3>USC Münster</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">6.</span><div class="ranking-player"><span class="ranking-name">Brianna Ford<span class="ranking-position">Diagonal</span></span><span class="ranking-meta">30 Aufschläge · 6 Aufschlagpunkte · 6 Fehler · Quote mit Wirkung 36,7&nbsp;% · Effizienz 41,7&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+                <li class="ranking-item"><span class="ranking-rank">7.</span><div class="ranking-player"><span class="ranking-name">Isabel Rebecca Martin<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">24 Aufschläge · 2 Aufschlagpunkte · 4 Fehler · Quote mit Wirkung 8,3&nbsp;% · Effizienz 38,3&nbsp;% · 8 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+            <article>
+              <h3>ETV Hamburger Volksbank Volleys</h3>
+              <ul class="ranking-list">
+                <li class="ranking-item"><span class="ranking-rank">11.</span><div class="ranking-player"><span class="ranking-name">Svea Frobel<span class="ranking-position">Außenangriff</span></span><span class="ranking-meta">14 Aufschläge · 0 Aufschlagpunkte · 2 Fehler · Quote mit Wirkung 14,3&nbsp;% · Effizienz 31,1&nbsp;% · 6 Sätze aus 2 Spielen</span></div></li>
+              </ul>
+            </article>
+          </div>
         </div>
       </details>
     </section>
