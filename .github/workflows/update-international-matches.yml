@@ -1,0 +1,36 @@
+name: Update international matches overview
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '45 4 * * *'
+
+jobs:
+  refresh-international-matches:
+    name: Refresh international matches page
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate international matches page
+        run: python scripts/update_international_matches.py
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: 'chore: update international matches overview'
+          title: 'chore: update international matches overview'
+          body: 'Automated update of the international matches page.'
+          branch: automation/update-international-matches
+          add-paths: |
+            docs/internationale_spiele.html
