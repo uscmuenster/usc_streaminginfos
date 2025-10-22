@@ -217,6 +217,90 @@
       color: #64748b;
       margin-top: 0.2rem;
     }
+    .mvp-group {
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+      display: grid;
+      gap: clamp(0.75rem, 2.5vw, 1.15rem);
+    }
+    .mvp-note {
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #475569;
+    }
+    .mvp-grid {
+      display: grid;
+      gap: clamp(0.75rem, 2.5vw, 1.25rem);
+    }
+    .mvp-card {
+      border-radius: 0.85rem;
+      border: none;
+      background: #ffffff;
+      box-shadow: 0 16px 36px rgba(15, 118, 110, 0.15);
+      overflow: hidden;
+    }
+    .mvp-card summary {
+      cursor: pointer;
+      padding: 1rem 1.35rem;
+      font-weight: 600;
+      list-style: none;
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.2rem));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mvp-card summary::-webkit-details-marker {
+      display: none;
+    }
+    .mvp-card summary::after {
+      content: "▾";
+      font-size: calc(var(--font-scale) * 1rem);
+      transition: transform 0.2s ease;
+    }
+    .mvp-card[open] summary::after {
+      transform: rotate(180deg);
+    }
+    .mvp-card-content {
+      padding: 0 1.35rem 1.35rem;
+    }
+    .mvp-table-wrapper {
+      margin-top: 0.65rem;
+      overflow-x: auto;
+    }
+    .mvp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: calc(var(--font-scale) * 0.85rem);
+      min-width: 28rem;
+    }
+    .mvp-table th,
+    .mvp-table td {
+      text-align: left;
+      padding: 0.55rem 0.75rem;
+      border-bottom: 1px solid #e2e8f0;
+      white-space: nowrap;
+    }
+    .mvp-table td[data-label] {
+      white-space: nowrap;
+    }
+    .mvp-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .mvp-empty {
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #475569;
+    }
+    .mvp-row[data-team-role="usc"] td {
+      font-weight: 600;
+      color: #065f46;
+      background: rgba(16, 185, 129, 0.12);
+    }
+    .mvp-row[data-team-role="opponent"] td {
+      font-weight: 600;
+      color: #1d4ed8;
+      background: rgba(59, 130, 246, 0.12);
+    }
+
     .transfer-list {
       list-style: none;
       margin: 0;
@@ -777,6 +861,1246 @@
         </div>
       </details>
     </section>
+
+    <section class="mvp-group">
+      <h2>MVP-Rankings</h2>
+      <p class="mvp-note">Top-5-Platzierungen je Team aus dem offiziellen MVP-Ranking der Volleyball Bundesliga.</p>
+      <div class="mvp-grid">
+        <details class="mvp-card">
+          <summary>alle Spielelemente / Top-Scorer</summary>
+          <div class="mvp-card-content">
+          <div class="mvp-table-wrapper">
+            <table class="mvp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Rang</th>
+              <th scope="col">Name</th>
+              <th scope="col">Position</th>
+              <th scope="col">Team</th>
+              <th scope="col">Kennzahl</th>
+              <th scope="col">Spiele/Quote</th>
+              <th scope="col">Wertung</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr class="mvp-row">
+              <td data-label="Rang">16.</td>
+              <td data-label="Name">Hartig, Anna</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">6</td>
+              <td data-label="Spiele">9</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">36.</td>
+              <td data-label="Name">Körtzinger, Leonie</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">6</td>
+              <td data-label="Spiele">4</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">44.</td>
+              <td data-label="Name">Klein, Luise</td>
+              <td data-label="Position">Zuspiel</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">4</td>
+              <td data-label="Spiele">3</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">71.</td>
+              <td data-label="Name">Krams, Louisa</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">3</td>
+              <td data-label="Spiele">0</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">78.</td>
+              <td data-label="Name">Thaden, Alexa Sophie</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">4</td>
+              <td data-label="Spiele">-1</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">4.</td>
+              <td data-label="Name">Ford, Brianna</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">17</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">10.</td>
+              <td data-label="Name">Spöler, Esther</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">13</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">13.</td>
+              <td data-label="Name">Waelkens, Anke</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">7</td>
+              <td data-label="Spiele">10</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">29.</td>
+              <td data-label="Name">Martin, Isabel Rebecca</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">6</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">44.</td>
+              <td data-label="Name">Malm, Cecilia</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">7</td>
+              <td data-label="Spiele">3</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </details>
+        <details class="mvp-card">
+          <summary>Aufschlag / Quote Aufschläge mit Wirkung</summary>
+          <div class="mvp-card-content">
+          <div class="mvp-table-wrapper">
+            <table class="mvp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Rang</th>
+              <th scope="col">Name</th>
+              <th scope="col">Position</th>
+              <th scope="col">Team</th>
+              <th scope="col">Kennzahl</th>
+              <th scope="col">Spiele/Quote</th>
+              <th scope="col">Wertung</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr class="mvp-row">
+              <td data-label="Rang">8.</td>
+              <td data-label="Name">Thaden, Alexa Sophie</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">4</td>
+              <td data-label="Spiele">40,0%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">47.</td>
+              <td data-label="Name">Körtzinger, Leonie</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">6</td>
+              <td data-label="Spiele">19,0%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">56.</td>
+              <td data-label="Name">Frobel, Svea</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">6</td>
+              <td data-label="Spiele">14,3%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">11.</td>
+              <td data-label="Name">Waelkens, Anke</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">7</td>
+              <td data-label="Spiele">38,9%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">14.</td>
+              <td data-label="Name">Ford, Brianna</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">36,7%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">28.</td>
+              <td data-label="Name">Malm, Cecilia</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">7</td>
+              <td data-label="Spiele">25,0%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">28.</td>
+              <td data-label="Name">Spöler, Esther</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">25,0%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">36.</td>
+              <td data-label="Name">Jordan, Emilia</td>
+              <td data-label="Position">Zuspiel</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">22,2%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </details>
+        <details class="mvp-card">
+          <summary>Annahme / Quote perfekte oder gute Annahme</summary>
+          <div class="mvp-card-content">
+          <div class="mvp-table-wrapper">
+            <table class="mvp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Rang</th>
+              <th scope="col">Name</th>
+              <th scope="col">Position</th>
+              <th scope="col">Team</th>
+              <th scope="col">Kennzahl</th>
+              <th scope="col">Spiele/Quote</th>
+              <th scope="col">Wertung</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr class="mvp-row">
+              <td data-label="Rang">17.</td>
+              <td data-label="Name">Meiser, Jana-Marie</td>
+              <td data-label="Position">Libero</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">6,7</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">35,0%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">22.</td>
+              <td data-label="Name">Ammerman, Hannah</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">4,6</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">30,4%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">27.</td>
+              <td data-label="Name">Frobel, Svea</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">7,7</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">28,3%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">37.</td>
+              <td data-label="Name">Köster, Lina</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">4</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">20,8%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">12.</td>
+              <td data-label="Name">Martin, Isabel Rebecca</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">3,4</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">40,7%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">23.</td>
+              <td data-label="Name">Molenaar, Pippa</td>
+              <td data-label="Position">Libero</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">4,1</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">30,3%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">29.</td>
+              <td data-label="Name">Malm, Cecilia</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">6,3</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">27,3%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </details>
+        <details class="mvp-card">
+          <summary>Aufschlag / Quote Aufschlagpunkte</summary>
+          <div class="mvp-card-content">
+          <div class="mvp-table-wrapper">
+            <table class="mvp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Rang</th>
+              <th scope="col">Name</th>
+              <th scope="col">Position</th>
+              <th scope="col">Team</th>
+              <th scope="col">Kennzahl</th>
+              <th scope="col">Spiele/Quote</th>
+              <th scope="col">Wertung</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr class="mvp-row">
+              <td data-label="Rang">5.</td>
+              <td data-label="Name">Thaden, Alexa Sophie</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">20,0%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">7.</td>
+              <td data-label="Name">Körtzinger, Leonie</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">19,0%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">50.</td>
+              <td data-label="Name">Frobel, Svea</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">0,0%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">3.</td>
+              <td data-label="Name">Waelkens, Anke</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">22,2%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">5.</td>
+              <td data-label="Name">Ford, Brianna</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">20,0%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">17.</td>
+              <td data-label="Name">Malm, Cecilia</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">10,7%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">27.</td>
+              <td data-label="Name">Martin, Isabel Rebecca</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">8,3%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">33.</td>
+              <td data-label="Name">Jordan, Emilia</td>
+              <td data-label="Position">Zuspiel</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">7,4%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </details>
+        <details class="mvp-card">
+          <summary>Annahme / Annahmeeffizienz</summary>
+          <div class="mvp-card-content">
+          <div class="mvp-table-wrapper">
+            <table class="mvp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Rang</th>
+              <th scope="col">Name</th>
+              <th scope="col">Position</th>
+              <th scope="col">Team</th>
+              <th scope="col">Kennzahl</th>
+              <th scope="col">Spiele/Quote</th>
+              <th scope="col">Wertung</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr class="mvp-row">
+              <td data-label="Rang">21.</td>
+              <td data-label="Name">Meiser, Jana-Marie</td>
+              <td data-label="Position">Libero</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">6,7</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">15,0%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">28.</td>
+              <td data-label="Name">Ammerman, Hannah</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">4,6</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">4,3%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">28.</td>
+              <td data-label="Name">Frobel, Svea</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">7,7</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">4,3%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">39.</td>
+              <td data-label="Name">Köster, Lina</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">4</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">-12,5%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">14.</td>
+              <td data-label="Name">Molenaar, Pippa</td>
+              <td data-label="Position">Libero</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">4,1</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">24,2%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">16.</td>
+              <td data-label="Name">Martin, Isabel Rebecca</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">3,4</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">22,2%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">34.</td>
+              <td data-label="Name">Malm, Cecilia</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">6,3</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">-2,3%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </details>
+        <details class="mvp-card">
+          <summary>Angriff / Angriffseffizienz</summary>
+          <div class="mvp-card-content">
+          <div class="mvp-table-wrapper">
+            <table class="mvp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Rang</th>
+              <th scope="col">Name</th>
+              <th scope="col">Position</th>
+              <th scope="col">Team</th>
+              <th scope="col">Kennzahl</th>
+              <th scope="col">Spiele/Quote</th>
+              <th scope="col">Wertung</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr class="mvp-row">
+              <td data-label="Rang">10.</td>
+              <td data-label="Name">Frobel, Svea</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">6</td>
+              <td data-label="Spiele">4,9%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">7.</td>
+              <td data-label="Name">Ford, Brianna</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">23,6%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">8.</td>
+              <td data-label="Name">Martin, Isabel Rebecca</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">21,3%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </details>
+        <details class="mvp-card">
+          <summary>Block / Blockpunkte</summary>
+          <div class="mvp-card-content">
+          <div class="mvp-table-wrapper">
+            <table class="mvp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Rang</th>
+              <th scope="col">Name</th>
+              <th scope="col">Position</th>
+              <th scope="col">Team</th>
+              <th scope="col">Kennzahl</th>
+              <th scope="col">Spiele/Quote</th>
+              <th scope="col">Wertung</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr class="mvp-row">
+              <td data-label="Rang">7.</td>
+              <td data-label="Name">Hartig, Anna</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">5</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">21.</td>
+              <td data-label="Name">Ammerman, Hannah</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">37.</td>
+              <td data-label="Name">Krams, Louisa</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">1</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">37.</td>
+              <td data-label="Name">Körtzinger, Leonie</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">1</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">64.</td>
+              <td data-label="Name">Dittmann, Fiona</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">0</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">10.</td>
+              <td data-label="Name">Spöler, Esther</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">4</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">10.</td>
+              <td data-label="Name">Waelkens, Anke</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">4</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">18.</td>
+              <td data-label="Name">Malm, Cecilia</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">3</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">21.</td>
+              <td data-label="Name">Martin, Isabel Rebecca</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">21.</td>
+              <td data-label="Name">Seybering, Diane</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </details>
+        <details class="mvp-card">
+          <summary>Aufschlag / Aufschlagpunkte</summary>
+          <div class="mvp-card-content">
+          <div class="mvp-table-wrapper">
+            <table class="mvp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Rang</th>
+              <th scope="col">Name</th>
+              <th scope="col">Position</th>
+              <th scope="col">Team</th>
+              <th scope="col">Kennzahl</th>
+              <th scope="col">Spiele/Quote</th>
+              <th scope="col">Wertung</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr class="mvp-row">
+              <td data-label="Rang">6.</td>
+              <td data-label="Name">Körtzinger, Leonie</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">6</td>
+              <td data-label="Spiele">19,0%</td>
+              <td data-label="Wertung">4</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">17.</td>
+              <td data-label="Name">Thaden, Alexa Sophie</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">4</td>
+              <td data-label="Spiele">40,0%</td>
+              <td data-label="Wertung">2</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">34.</td>
+              <td data-label="Name">Konjer, Zoe</td>
+              <td data-label="Position">Zuspiel</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">4</td>
+              <td data-label="Spiele">12,5%</td>
+              <td data-label="Wertung">1</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">63.</td>
+              <td data-label="Name">Ammerman, Hannah</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">5</td>
+              <td data-label="Spiele">12,5%</td>
+              <td data-label="Wertung">0</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">63.</td>
+              <td data-label="Name">Frobel, Svea</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">6</td>
+              <td data-label="Spiele">14,3%</td>
+              <td data-label="Wertung">0</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">3.</td>
+              <td data-label="Name">Ford, Brianna</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">36,7%</td>
+              <td data-label="Wertung">6</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">6.</td>
+              <td data-label="Name">Waelkens, Anke</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">7</td>
+              <td data-label="Spiele">38,9%</td>
+              <td data-label="Wertung">4</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">10.</td>
+              <td data-label="Name">Malm, Cecilia</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">7</td>
+              <td data-label="Spiele">25,0%</td>
+              <td data-label="Wertung">3</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">17.</td>
+              <td data-label="Name">Jordan, Emilia</td>
+              <td data-label="Position">Zuspiel</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">22,2%</td>
+              <td data-label="Wertung">2</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">17.</td>
+              <td data-label="Name">Martin, Isabel Rebecca</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">8,3%</td>
+              <td data-label="Wertung">2</td>
+            </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </details>
+        <details class="mvp-card">
+          <summary>Angriff / Quote Angriffspunkte</summary>
+          <div class="mvp-card-content">
+          <div class="mvp-table-wrapper">
+            <table class="mvp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Rang</th>
+              <th scope="col">Name</th>
+              <th scope="col">Position</th>
+              <th scope="col">Team</th>
+              <th scope="col">Kennzahl</th>
+              <th scope="col">Spiele/Quote</th>
+              <th scope="col">Wertung</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr class="mvp-row">
+              <td data-label="Rang">11.</td>
+              <td data-label="Name">Frobel, Svea</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">31,1%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">6.</td>
+              <td data-label="Name">Ford, Brianna</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">41,7%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">7.</td>
+              <td data-label="Name">Martin, Isabel Rebecca</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">2</td>
+              <td data-label="Spiele">38,3%</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </details>
+        <details class="mvp-card">
+          <summary>Angriff / Angriffspunkte</summary>
+          <div class="mvp-card-content">
+          <div class="mvp-table-wrapper">
+            <table class="mvp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Rang</th>
+              <th scope="col">Name</th>
+              <th scope="col">Position</th>
+              <th scope="col">Team</th>
+              <th scope="col">Kennzahl</th>
+              <th scope="col">Spiele/Quote</th>
+              <th scope="col">Wertung</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr class="mvp-row">
+              <td data-label="Rang">10.</td>
+              <td data-label="Name">Frobel, Svea</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">6</td>
+              <td data-label="Spiele">19</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">31.</td>
+              <td data-label="Name">Hartig, Anna</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">6</td>
+              <td data-label="Spiele">8</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">39.</td>
+              <td data-label="Name">Körtzinger, Leonie</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">6</td>
+              <td data-label="Spiele">7</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">66.</td>
+              <td data-label="Name">Ammerman, Hannah</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">5</td>
+              <td data-label="Spiele">3</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">66.</td>
+              <td data-label="Name">Klein, Luise</td>
+              <td data-label="Position">Zuspiel</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">4</td>
+              <td data-label="Spiele">3</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">3.</td>
+              <td data-label="Name">Ford, Brianna</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">30</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">11.</td>
+              <td data-label="Name">Martin, Isabel Rebecca</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">18</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">15.</td>
+              <td data-label="Name">Spöler, Esther</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">8</td>
+              <td data-label="Spiele">14</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">19.</td>
+              <td data-label="Name">Malm, Cecilia</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">7</td>
+              <td data-label="Spiele">13</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">31.</td>
+              <td data-label="Name">Waelkens, Anke</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">7</td>
+              <td data-label="Spiele">8</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </details>
+        <details class="mvp-card">
+          <summary>Aufschlag / Aufschlageffizienz</summary>
+          <div class="mvp-card-content">
+          <div class="mvp-table-wrapper">
+            <table class="mvp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Rang</th>
+              <th scope="col">Name</th>
+              <th scope="col">Position</th>
+              <th scope="col">Team</th>
+              <th scope="col">Kennzahl</th>
+              <th scope="col">Spiele/Quote</th>
+              <th scope="col">Wertung</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr class="mvp-row">
+              <td data-label="Rang">21.</td>
+              <td data-label="Name">Thaden, Alexa Sophie</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">40,0%</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">0,0%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">60.</td>
+              <td data-label="Name">Körtzinger, Leonie</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">19,0%</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">-42,9%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">62.</td>
+              <td data-label="Name">Frobel, Svea</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">14,3%</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">-50,0%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">–</td>
+              <td data-label="Name">–</td>
+              <td data-label="Position">–</td>
+              <td data-label="Team">Hamburg</td>
+              <td data-label="Kennzahl">–</td>
+              <td data-label="Spiele">–</td>
+              <td data-label="Wertung">–</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">8.</td>
+              <td data-label="Name">Malm, Cecilia</td>
+              <td data-label="Position">Außenangriff</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">25,0%</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">21,4%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">11.</td>
+              <td data-label="Name">Ford, Brianna</td>
+              <td data-label="Position">Diagonal</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">36,7%</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">13,3%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">12.</td>
+              <td data-label="Name">Waelkens, Anke</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">38,9%</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">11,1%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">27.</td>
+              <td data-label="Name">Spöler, Esther</td>
+              <td data-label="Position">Mittelblock</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">25,0%</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">-7,1%</td>
+            </tr>
+            <tr class="mvp-row">
+              <td data-label="Rang">32.</td>
+              <td data-label="Name">Jordan, Emilia</td>
+              <td data-label="Position">Zuspiel</td>
+              <td data-label="Team">Münster</td>
+              <td data-label="Kennzahl">22,2%</td>
+              <td data-label="Spiele">2</td>
+              <td data-label="Wertung">-14,8%</td>
+            </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
     <section class="instagram-group">
       <h2>Instagram-Links</h2>
       <div class="instagram-grid">
