@@ -320,6 +320,89 @@
       display: grid;
       gap: 0.35rem;
     }
+    .season-results {
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+    }
+    .season-results-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.25rem;
+      align-items: baseline;
+      margin-bottom: clamp(0.75rem, 2.5vw, 1.25rem);
+    }
+    .season-results-header h2 {
+      margin: 0;
+    }
+    .season-results-status {
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.8rem);
+      color: #475569;
+    }
+    .season-results-status[hidden] {
+      display: none;
+    }
+    .season-results-grid {
+      display: grid;
+      gap: clamp(1rem, 3vw, 1.5rem);
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+    .season-results-card {
+      background: #ffffff;
+      border-radius: 0.85rem;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.12);
+      display: grid;
+      gap: 0.6rem;
+    }
+    .season-results-card h3 {
+      margin: 0;
+      font-size: calc(var(--font-scale) * clamp(1.05rem, 3vw, 1.3rem));
+      color: #0f172a;
+    }
+    .season-results-list {
+      margin: 0;
+      padding-left: 1rem;
+      display: grid;
+      gap: 0.35rem;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #1f2933;
+    }
+    .season-results-fallback {
+      margin: 0;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #475569;
+    }
+    .season-results-links {
+      margin-top: clamp(1rem, 3vw, 1.75rem);
+      background: #f8fafc;
+      border-radius: 0.85rem;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.35);
+    }
+    .season-results-links[hidden] {
+      display: none;
+    }
+    .season-results-links h3 {
+      margin: 0 0 0.75rem 0;
+      font-size: calc(var(--font-scale) * clamp(0.95rem, 2.5vw, 1.1rem));
+      color: #1f2937;
+    }
+    .season-results-link-list {
+      margin: 0;
+      padding-left: 1rem;
+      display: grid;
+      gap: 0.4rem;
+    }
+    .season-results-link-list a {
+      color: #1d4ed8;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .season-results-link-list a:hover,
+    .season-results-link-list a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
     .meta-link {
       font-weight: 600;
     }
@@ -454,7 +537,7 @@
 </head>
 <body>
   <main>
-    <h1>Nächster USC-Heimgegner:<br>ETV Hamburger Volksbank Volleys</h1>
+    <h1>Nächster USC-Heimgegner:<br><span data-next-opponent>ETV Hamburger Volksbank Volleys</span></h1>
     <div class="meta">
       <p><strong>Spieltermin:</strong> 26.10.2025 (So) 16:00 Uhr</p>
       <p><strong>Austragungsort:</strong> Sporthalle Berg Fidel (48153 Münster)</p>
@@ -663,14 +746,399 @@
         </article>
       </div>
     </section>
+    <section class="season-results" data-season-results>
+      <div class="season-results-header">
+        <h2 id="season-results-title">Ergebnis der Saison 2024/25</h2>
+        <p class="season-results-status" data-season-results-status>Wird geladen …</p>
+      </div>
+      <div class="season-results-grid" data-season-results-grid aria-live="polite" aria-busy="true">
+        <p class="season-results-fallback">Die Saisonübersicht wird geladen.</p>
+      </div>
+      <div class="season-results-links" data-season-results-links hidden>
+        <h3>Weitere Informationen</h3>
+        <ul class="season-results-link-list" data-season-results-link-list></ul>
+      </div>
+      <noscript>
+        <p class="season-results-fallback">Bitte aktivieren Sie JavaScript, um die Saisonergebnisse zu sehen.</p>
+      </noscript>
+      <script type="application/json" data-season-results-inline>
+        {
+          "title": "Ergebnis der Saison 2024/25",
+          "teams": [
+            {
+              "name": "Allianz MTV Stuttgart",
+              "details": [
+                "Normalrunde: Platz 2 (21 Siege, 3 Niederlagen, 11 x 3:0)",
+                "Playoff Platz 3 (Münster 2:0, Dresden 1:2)"
+              ]
+            },
+            {
+              "name": "USC Münster",
+              "details": [
+                "Normalrunde: Platz 7 (7 Siege, 17 Niederlagen, 2 x 3:0)",
+                "Playoff Platz 5 (Stuttgart 0:2)"
+              ]
+            },
+            {
+              "name": "SSC Palmberg Schwerin",
+              "details": [
+                "Normalrunde: Platz 1 (20 Siege, 4 Niederlagen, 15 x 3:0)",
+                "Deutscher Meister (Aachen 2:0, Suhl 2:0, Dresden 3:0)"
+              ]
+            },
+            {
+              "name": "VC Wiesbaden",
+              "details": [
+                "Normalrunde: Platz 6 (8 Siege, 16 Niederlagen, 10 x 0:3)",
+                "Playoff Platz 5 (Dresden 0:2)"
+              ]
+            },
+            {
+              "name": "VfB Suhl LOTTO Thüringen",
+              "details": [
+                "Normalrunde: Platz 5 (12 Siege, 12 Niederlagen, 5 x 3:0)",
+                "Playoff Platz 3 (Potsdam 2:0, Schwerin 0:2)"
+              ]
+            },
+            {
+              "name": "Schwarz-Weiß Erfurt",
+              "details": [
+                "Normalrunde: Platz 9 (1 Sieg, 23 Niederlagen, 17 x 0:3)"
+              ]
+            },
+            {
+              "name": "Dresdner SC",
+              "details": [
+                "Normalrunde: Platz 3 (19 Siege, 5 Niederlagen, 10 x 3:0)",
+                "Vizemeister (Wiesbaden 2:0, Stuttgart 2:1, Schwerin 0:3)"
+              ]
+            },
+            {
+              "name": "Ladies in Black Aachen",
+              "details": [
+                "Normalrunde: Platz 8 (5 Siege, 19 Niederlagen, 7 x 2:3)",
+                "Playoff Platz 5 (Schwerin 0:2)"
+              ]
+            },
+            {
+              "name": "Skurios Volleys Borken",
+              "details": [
+                "2. BL Pro: Platz 1 (24 Siege, 2 Niederlagen, 12 x 3:0, Aufsteiger)"
+              ]
+            },
+            {
+              "name": "Binder Blaubären TSV Flacht",
+              "details": [
+                "2. BL Pro: Platz 6 (15 Siege, 11 Niederlagen, 7 x 3:0, Aufsteiger)"
+              ]
+            },
+            {
+              "name": "ETV Hamburger Volksbank Volleys",
+              "details": [
+                "2. BL Pro: Platz 7 (15 Siege, 11 Niederlagen, Aufsteiger, 1 x 0:3)"
+              ]
+            }
+          ],
+          "links": [
+            {
+              "label": "Normalrunde 2024/25",
+              "url": "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/archiv/ergebnisse.xhtml?LeaguePresenter.view=resultTable&LeaguePresenter.matchSeriesId=770580199#samsCmsComponent_208408"
+            },
+            {
+              "label": "Playoffs 2024/25",
+              "url": "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/archiv/ergebnisse.xhtml?LeaguePresenter.view=matches&LeaguePresenter.matchSeriesId=770580129#samsCmsComponent_208408"
+            }
+          ]
+        }
+      </script>
+    </section>
     <footer class="page-footer">
       <p class="update-note" role="status">
         <span aria-hidden="true">📅</span>
         <span><strong>Aktualisiert am</strong> Mittwoch, 22. Oktober 2025 um 11:58</span>
       </p>
     </footer>
+    <script>
+      (function () {
+        const section = document.querySelector('[data-season-results]');
+        if (!section) {
+          return;
+        }
 
+        const titleEl = section.querySelector('#season-results-title');
+        const grid = section.querySelector('[data-season-results-grid]');
+        const statusEl = section.querySelector('[data-season-results-status]');
+        const linksContainer = section.querySelector('[data-season-results-links]');
+        const linkList = section.querySelector('[data-season-results-link-list]');
+        const dataUrl = section.dataset.seasonResultsSrc || './data/season_results_2024_25.json';
+        const inlineDataScript = section.querySelector('[data-season-results-inline]');
 
+        let inlineData = null;
+        if (inlineDataScript && inlineDataScript.textContent) {
+          try {
+            inlineData = JSON.parse(inlineDataScript.textContent);
+          } catch (error) {
+            console.error('Konnte Inline-Saisoninformationen nicht lesen:', error);
+          }
+        }
+
+        let inlineDataRendered = false;
+        const USC_TEAM_NAME = 'USC Münster';
+
+        const canNormalize = typeof String.prototype.normalize === 'function';
+
+        const normalizeName = (value) => {
+          if (typeof value !== 'string') {
+            return '';
+          }
+
+          let result = value;
+
+          if (canNormalize) {
+            try {
+              result = result.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            } catch (error) {
+              // Ignorieren und mit dem unveränderten Wert fortfahren.
+            }
+          }
+
+          return result.toLowerCase().trim();
+        };
+
+        const normalizedUscName = normalizeName(USC_TEAM_NAME);
+
+        const getOpponentName = () => {
+          const opponentEl = document.querySelector('[data-next-opponent]');
+          if (!opponentEl) {
+            return '';
+          }
+
+          const text = opponentEl.textContent;
+          if (typeof text !== 'string') {
+            return '';
+          }
+
+          return text.trim();
+        };
+
+        const opponentName = getOpponentName();
+        const normalizedOpponentName = normalizeName(opponentName);
+
+        const selectRelevantTeams = (teams) => {
+          if (!Array.isArray(teams)) {
+            return [];
+          }
+
+          const teamsByName = typeof Map === 'function' ? new Map() : Object.create(null);
+          teams.forEach((team) => {
+            if (!team || typeof team.name !== 'string') {
+              return;
+            }
+
+            const key = normalizeName(team.name);
+            if (!key) {
+              return;
+            }
+
+            if (teamsByName instanceof Map) {
+              if (teamsByName.has(key)) {
+                return;
+              }
+              teamsByName.set(key, team);
+            } else if (!(key in teamsByName)) {
+              teamsByName[key] = team;
+            }
+          });
+
+          const selected = [];
+
+          const getTeamByName = (key) => {
+            if (!key) {
+              return undefined;
+            }
+
+            if (teamsByName instanceof Map) {
+              return teamsByName.get(key);
+            }
+
+            return teamsByName[key];
+          };
+
+          if (normalizedOpponentName) {
+            const opponentTeam = getTeamByName(normalizedOpponentName);
+            if (opponentTeam) {
+              selected.push(opponentTeam);
+            }
+          }
+
+          const uscTeam = getTeamByName(normalizedUscName);
+          if (uscTeam && normalizeName(uscTeam.name) !== normalizedOpponentName) {
+            selected.push(uscTeam);
+          } else if (!selected.length && uscTeam) {
+            selected.push(uscTeam);
+          }
+
+          return selected;
+        };
+
+        const setStatus = (message, options) => {
+          if (!statusEl) {
+            return;
+          }
+
+          const hide = options && options.hide;
+
+          if (hide || !message) {
+            statusEl.textContent = '';
+            statusEl.hidden = true;
+          } else {
+            statusEl.textContent = message;
+            statusEl.hidden = false;
+          }
+        };
+
+        const renderFallback = (message) => {
+          if (!grid) {
+            return;
+          }
+
+          grid.innerHTML = '';
+          const fallback = document.createElement('p');
+          fallback.className = 'season-results-fallback';
+          fallback.textContent = message;
+          grid.appendChild(fallback);
+        };
+
+        const render = (data) => {
+          if (!grid) {
+            return;
+          }
+
+          grid.setAttribute('aria-busy', 'false');
+
+          if (data && data.title && titleEl) {
+            titleEl.textContent = data.title;
+          }
+
+          const teamsToShow = selectRelevantTeams(data && data.teams);
+
+          if (teamsToShow.length) {
+            grid.innerHTML = '';
+            teamsToShow.forEach((team) => {
+              if (!team || !team.name) {
+                return;
+              }
+
+              const card = document.createElement('article');
+              card.className = 'season-results-card';
+
+              const heading = document.createElement('h3');
+              heading.textContent = team.name;
+              card.appendChild(heading);
+
+              if (Array.isArray(team.details) && team.details.length) {
+                const list = document.createElement('ul');
+                list.className = 'season-results-list';
+                team.details.forEach((item) => {
+                  if (!item) {
+                    return;
+                  }
+
+                  const listItem = document.createElement('li');
+                  listItem.textContent = item;
+                  list.appendChild(listItem);
+                });
+                card.appendChild(list);
+              }
+
+              grid.appendChild(card);
+            });
+          } else {
+            renderFallback('Keine Saisoninformationen verfügbar.');
+          }
+
+          if (Array.isArray(data && data.links) && data.links.length && linksContainer && linkList) {
+            linkList.innerHTML = '';
+            data.links.forEach((entry) => {
+              if (!entry || !entry.url || !entry.label) {
+                return;
+              }
+
+              const listItem = document.createElement('li');
+              const anchor = document.createElement('a');
+              anchor.href = entry.url;
+              anchor.textContent = entry.label;
+              anchor.rel = 'noopener';
+              anchor.target = '_blank';
+              listItem.appendChild(anchor);
+              linkList.appendChild(listItem);
+            });
+            linksContainer.hidden = false;
+          } else if (linksContainer) {
+            linksContainer.hidden = true;
+          }
+
+          let statusMessage = '';
+          let hideStatus = true;
+
+          if (!teamsToShow.length) {
+            statusMessage = 'Keine Saisoninformationen verfügbar.';
+            hideStatus = false;
+          }
+
+          if (
+            normalizedOpponentName &&
+            !teamsToShow.some(function (team) {
+              return normalizeName(team.name) === normalizedOpponentName;
+            })
+          ) {
+            statusMessage = 'Für ' + opponentName + ' liegen keine Saisoninformationen vor.';
+            hideStatus = false;
+          }
+
+          setStatus(statusMessage, { hide: hideStatus });
+        };
+
+        const handleError = () => {
+          if (grid) {
+            grid.setAttribute('aria-busy', 'false');
+          }
+
+          renderFallback('Die Saisoninformationen konnten nicht geladen werden.');
+          setStatus('Aktuelle Saisoninformationen konnten nicht geladen werden.');
+        };
+
+        if (inlineData) {
+          render(inlineData);
+          inlineDataRendered = true;
+        }
+
+        if (typeof window.fetch !== 'function') {
+          return;
+        }
+
+        fetch(dataUrl)
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error('Fehler beim Laden der Saisoninformationen (' + response.status + ')');
+            }
+
+            return response.json();
+          })
+          .then(function (data) {
+            render(data);
+            inlineDataRendered = true;
+          })
+          .catch(function (error) {
+            console.error(error);
+            if (!inlineDataRendered) {
+              handleError();
+            } else {
+              setStatus('', { hide: true });
+            }
+          });
+      })();
+    </script>
   </main>
 </body>
 </html>
