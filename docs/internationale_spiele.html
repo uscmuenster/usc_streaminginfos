@@ -78,6 +78,32 @@
       padding-top: 0;
       margin-top: 0;
     }
+    .team-section summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: calc(var(--font-scale) * clamp(1.1rem, 2.8vw, 1.45rem));
+      font-weight: 600;
+      margin: 0;
+      padding: clamp(0.35rem, 1vw, 0.6rem) 0;
+    }
+    .team-section summary::-webkit-details-marker {
+      display: none;
+    }
+    .team-section summary::after {
+      content: "▾";
+      font-size: calc(var(--font-scale) * 1.2rem);
+      color: var(--accent);
+      transition: transform 0.2s ease;
+    }
+    .team-section[open] summary::after {
+      transform: rotate(180deg);
+    }
+    .team-content {
+      margin-top: clamp(0.85rem, 2.4vw, 1.3rem);
+    }
     .match-group {
       margin-top: clamp(0.75rem, 2vw, 1.25rem);
     }
@@ -138,13 +164,14 @@
 <body>
   <main>
     <h1>Internationale Spiele deutscher Frauen-Teams</h1>
-    <p class="meta">Letzte Aktualisierung: 22.10.2025 10:41 Uhr</p>
-    <p class="footnote">Alle Angaben stammen aus den offiziellen Ergebnis-Feeds der CEV. Anstoßzeiten werden ohne Zeitzonenangabe veröffentlicht und entsprechen der dort ausgewiesenen Ortszeit.</p>
+    <p class="meta">Letzte Aktualisierung: 22.10.2025 10:37 Uhr</p>
+    <p class="footnote">Alle Angaben stammen aus den offiziellen Ergebnis-Feeds der CEV. Startzeiten werden ohne Zeitzonenangabe veröffentlicht und entsprechen der dort ausgewiesenen Ortszeit.</p>
   <section class="competition">
     <h2>CEV Champions League Volley 2025/26 (Frauen)</h2>
     <p class="competition-source">Quelle: <a href="https://championsleague.cev.eu/en/women/" rel="noopener" target="_blank">Offizielle CEV-Wettbewerbsseite</a></p>
-  <section class="team-section">
-    <h3>DRESDNER SC</h3>
+  <details class="team-section" open>
+    <summary>DRESDNER SC</summary>
+    <div class="team-content">
     <section class="match-group">
       <h4>Anstehende Spiele</h4>
       <ul class="match-list">
@@ -190,9 +217,11 @@
       <h4>Abgeschlossene Spiele</h4>
       <p class="group-empty">Keine Einträge vorhanden.</p>
     </section>
-  </section>
-  <section class="team-section">
-    <h3>SSC Palmberg SCHWERIN</h3>
+    </div>
+  </details>
+  <details class="team-section" open>
+    <summary>SSC Palmberg SCHWERIN</summary>
+    <div class="team-content">
     <section class="match-group">
       <h4>Anstehende Spiele</h4>
       <ul class="match-list">
@@ -238,13 +267,15 @@
       <h4>Abgeschlossene Spiele</h4>
       <p class="group-empty">Keine Einträge vorhanden.</p>
     </section>
-  </section>
+    </div>
+  </details>
   </section>
   <section class="competition">
     <h2>CEV Volleyball Cup 2025/26 (Frauen)</h2>
     <p class="competition-source">Quelle: <a href="https://www.cev.eu/club/volleyball-cup/2026/women/" rel="noopener" target="_blank">Offizielle CEV-Wettbewerbsseite</a></p>
-  <section class="team-section">
-    <h3>Allianz MTV STUTTGART</h3>
+  <details class="team-section" open>
+    <summary>Allianz MTV STUTTGART</summary>
+    <div class="team-content">
     <section class="match-group">
       <h4>Anstehende Spiele</h4>
       <ul class="match-list">
@@ -278,9 +309,11 @@
       <h4>Abgeschlossene Spiele</h4>
       <p class="group-empty">Keine Einträge vorhanden.</p>
     </section>
-  </section>
-  <section class="team-section">
-    <h3>VfB SUHL Thüringen</h3>
+    </div>
+  </details>
+  <details class="team-section" open>
+    <summary>VfB SUHL Thüringen</summary>
+    <div class="team-content">
     <section class="match-group">
       <h4>Anstehende Spiele</h4>
       <ul class="match-list">
@@ -302,13 +335,15 @@
       <h4>Abgeschlossene Spiele</h4>
       <p class="group-empty">Keine Einträge vorhanden.</p>
     </section>
-  </section>
+    </div>
+  </details>
   </section>
   <section class="competition">
     <h2>CEV Volleyball Challenge Cup 2025/26 (Frauen)</h2>
     <p class="competition-source">Quelle: <a href="https://www.cev.eu/club/volleyball-challenge-cup/2026/women/" rel="noopener" target="_blank">Offizielle CEV-Wettbewerbsseite</a></p>
-  <section class="team-section">
-    <h3>SC POTSDAM</h3>
+  <details class="team-section" open>
+    <summary>SC POTSDAM</summary>
+    <div class="team-content">
     <section class="match-group">
       <h4>Anstehende Spiele</h4>
       <ul class="match-list">
@@ -330,7 +365,8 @@
       <h4>Abgeschlossene Spiele</h4>
       <p class="group-empty">Keine Einträge vorhanden.</p>
     </section>
-  </section>
+    </div>
+  </details>
   </section>
   </main>
 </body>
