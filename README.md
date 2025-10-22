@@ -1,9 +1,47 @@
 # USC Streaminginfos
 
-Dieses Repository erzeugt täglich eine schlanke HTML-Seite zum Frauen-Bundesligateam des USC Münster. Die Seite zeigt den
-nächsten Heimgegner des USC als Überschrift, listet die letzten vier Ergebnisse sowohl des USC als auch des kommenden Gegners
-auf und sammelt aktuelle Artikel von den Team-Homepages sowie der Volleyball Bundesliga. Alle Spielinformationen stammen aus dem
-öffentlichen CSV-Spielplan der Volleyball Bundesliga – es wird kein API-Schlüssel benötigt.
+Dieses Repository erzeugt täglich eine schlanke HTML-Seite zum Frauen-Bundesligateam des USC Münster und stellt zusätzliche Datensichten für Streams oder Social-Media-Betreuung bereit. Alle Informationen werden aus frei zugänglichen Quellen geladen – der Spielplan kommt aus dem öffentlichen CSV-Export der Volleyball Bundesliga, News werden von den Vereinsseiten sowie den VBL-Portalen geholt und internationale Partien direkt von der CEV aggregiert.
+
+## Funktionsumfang
+
+### Spieltagsbericht (`docs/index.html` / `docs/index_app.html`)
+
+Der Kern des Projekts ist der automatisch erzeugte Spieltagsbericht. Er liefert alle relevanten Informationen zum nächsten USC-Heimspiel in einem responsiven Layout (inklusive App-optimierter Variante mit skalierter Schrift). Enthalten sind unter anderem:
+
+* Überschrift mit dem nächsten Heimgegner des USC Münster inklusive Datum, Uhrzeit und Austragungsort.
+* Verlinkungen auf die offiziellen Vereinsseiten, die Tabellenübersicht der Volleyball Bundesliga sowie veröffentlichte Spielinfos/Statistiken der VBL, sobald verfügbar. 【F:src/usc_kommentatoren/report.py†L2336-L2388】【F:src/usc_kommentatoren/report.py†L1893-L1900】
+* Die letzten Ergebnisse und das jeweils nächste Spiel sowohl des USC als auch des kommenden Gegners – inklusive Satzergebnisse, Ballpunkte, MVP-Ehrungen, Schiedsrichter*innen und Zuschauerzahlen, sofern die VBL diese Daten liefert. 【F:src/usc_kommentatoren/report.py†L1850-L1905】【F:src/usc_kommentatoren/report.py†L2331-L2344】【F:src/usc_kommentatoren/__main__.py†L73-L213】
+* Geburtstags-Hinweise für Spielerinnen in einem sieben­tägigen Fenster rund um den Spieltag. 【F:src/usc_kommentatoren/report.py†L2052-L2128】
+* Aufklappbare Kaderübersichten beider Teams mit inline eingebundenem Mannschaftsfoto, Positions- und Größenangaben sowie separaten Blöcken für Trainer*innen/Staff. 【F:src/usc_kommentatoren/report.py†L2294-L2330】
+* Wechselbörse-Sektionen je Team, die Zu- und Abgänge aus der offiziellen VBL-Wechselbörse sammeln. 【F:src/usc_kommentatoren/report.py†L2279-L2330】【F:src/usc_kommentatoren/report.py†L1736-L1848】
+* News-, Instagram- und Saisonrückblick-Abschnitte, die aktuelle Artikel, Social-Media-Links und optional externe Saisonzusammenfassungen bündeln. 【F:src/usc_kommentatoren/report.py†L1945-L2068】【F:src/usc_kommentatoren/report.py†L2134-L2245】
+
+Die App-Ansicht wird automatisch erzeugt (Schriftfaktor standardmäßig 0,75), kann aber über die CLI-Optionen skaliert oder deaktiviert werden.
+
+### Aufstellungs-Datensatz (`docs/data/aufstellungen.json`)
+
+Das Skript `scripts/update_lineups.py` lädt PDF-Spielberichtsbögen des USC sowie der jüngsten Partien des nächsten Gegners, extrahiert Startaufstellungen je Satz und schreibt alles als JSON. Der Datensatz enthält pro Spiel:
+
+* Metadaten (Matchnummer, Datum, Wettbewerb, Spielort) aus dem offiziellen Spielplan. 【F:scripts/update_lineups.py†L33-L58】【F:src/usc_kommentatoren/lineups.py†L24-L121】
+* Verlinkungen zu den Original-PDFs sowie die Positionscodes der VBL. 【F:src/usc_kommentatoren/lineups.py†L640-L706】
+* Startsechs, Satzstände und zugehörige Kaderinformationen zur schnellen Wiederverwendung in Streams oder Social Posts. 【F:src/usc_kommentatoren/lineups.py†L744-L825】
+
+Aufrufbeispiel:
+
+```bash
+python scripts/update_lineups.py --limit 3
+```
+
+Die PDFs werden standardmäßig unter `data/lineups/` gecacht, Kaderexporte in `data/rosters/` gespeichert und das JSON nach `docs/data/aufstellungen.json` geschrieben.
+
+### Internationale Spiele (`docs/internationale_spiele.html`)
+
+Mit `scripts/update_international_matches.py` aggregierst du Champions-League-, Cup- und Challenge-Cup-Partien deutscher Teams direkt von der CEV. Das Ergebnis ist eine eigenständige HTML-Seite mit:
+
+* Wettbewerbsübersichten inklusive Quellenlink zur jeweiligen CEV-Landingpage.
+* Auflistungen kommender und abgeschlossener Spiele pro Team, inklusive Terminangaben, Austragungsort, Match-Centre-Links und Satzergebnissen. 【F:scripts/update_international_matches.py†L91-L226】【F:scripts/update_international_matches.py†L228-L324】
+
+Standardmäßig landet die Datei unter `docs/internationale_spiele.html` und kann ebenso über GitHub Pages bereitgestellt werden.
 
 ## Voraussetzungen
 
@@ -12,24 +50,13 @@ auf und sammelt aktuelle Artikel von den Team-Homepages sowie der Volleyball Bun
 
 ## Manuelle Ausführung
 
-Das Paket stellt einen kleinen Helfer bereit, der den offiziellen Spielplan lädt, aktuelle Vereins- und VBL-Meldungen sammelt
-und die HTML-Datei erzeugt. Standardmäßig schreibt der Befehl sowohl `docs/index.html` (normale Ansicht) als auch
-`docs/index_app.html` (Schriftgrößen ca. 75 % für die App-Einbindung), damit beide Varianten direkt von GitHub Pages oder einem
-anderen statischen Hoster ausgeliefert werden können. Beispiel:
+Das Paket stellt einen kleinen Helfer bereit, der den offiziellen Spielplan lädt, aktuelle Vereins- und VBL-Meldungen sammelt und die HTML-Dateien erzeugt. Standardmäßig schreibt der Befehl sowohl `docs/index.html` (normale Ansicht) als auch `docs/index_app.html` (Schriftgrößen ca. 75 % für die App-Einbindung), damit beide Varianten direkt von GitHub Pages oder einem anderen statischen Hoster ausgeliefert werden können. Beispiel:
 
 ```bash
 PYTHONPATH=src python -m usc_kommentatoren
 ```
 
-Beim ersten Aufruf (und bei jeder späteren Aktualisierung) lädt das Skript den CSV-Spielplan herunter und speichert ihn unter
-`data/schedule.csv`. Wenn bereits eine lokale Kopie existiert, wird sie überschrieben. Der Pfad kann mit `--schedule-path`
-angepasst werden. Zusätzlich lädt der Generator die offiziellen Teamkader als CSV-Export in `data/rosters/`, cacht Mannschafts-
-fotos im Verzeichnis `data/team_photos/`, bindet sie inline in den Bericht ein, sortiert Spielerinnen nach Rückennummern und
-ergänzt Offizielle direkt darunter. Auch die Wechselbörse wird ausgewertet; alle Zu- und Abgänge der beiden Teams landen als
-eigene Accordion-Sektion im Bericht. Die Speicherorte lassen sich mit `--roster-dir`, `--photo-dir` sowie `--schedule-path`
-anpassen. Über `--app-output`, `--app-scale` und `--skip-app-output` steuerst du bei Bedarf, wohin die App-Variante geschrieben
-wird, wie stark die Schrift verkleinert werden soll oder ob sie komplett entfallen darf. Optional kannst du außerdem Zielpfad,
-Quelle, Anzahl der vergangenen Partien sowie den News-Zeitraum ändern:
+Beim ersten Aufruf (und bei jeder späteren Aktualisierung) lädt das Skript den CSV-Spielplan herunter und speichert ihn unter `data/schedule.csv`. Wenn bereits eine lokale Kopie existiert, wird sie überschrieben. Der Pfad kann mit `--schedule-path` angepasst werden. Zusätzlich lädt der Generator die offiziellen Teamkader als CSV-Export in `data/rosters/`, cacht Mannschaftsfotos im Verzeichnis `data/team_photos/`, ergänzt Saisonstatistiken aus `docs/data/season_results_2024_25.json` und wertet die Wechselbörse aus. Über `--app-output`, `--app-scale` und `--skip-app-output` steuerst du bei Bedarf, wohin die App-Variante geschrieben wird, wie stark die Schrift verkleinert werden soll oder ob sie komplett entfallen darf. Optional kannst du außerdem Zielpfad, Quelle, Anzahl der vergangenen Partien sowie den News-Zeitraum ändern:
 
 ```bash
 PYTHONPATH=src python -m usc_kommentatoren \
@@ -41,36 +68,36 @@ PYTHONPATH=src python -m usc_kommentatoren \
   --news-lookback 10 \
   --output docs/custom_report.html \
   --app-output docs/custom_app.html \
-  --app-scale 0.7
+  --app-scale 0.7 \
+  --season-results docs/data/season_results_2024_25.json
 ```
 
-Die HTML-Datei enthält:
+### CLI-Optionen im Überblick
 
-* Überschrift mit dem nächsten Heimgegner des USC Münster
-* Spieltermin und Austragungsort
-* Die letzten vier Ergebnisse des USC Münster inklusive Gesamt- und Satzergebnissen (sofern vorhanden)
-* Die letzten vier Ergebnisse des anstehenden Gegners inklusive Gesamt- und Satzergebnissen (sofern vorhanden)
-* Einen direkten Link auf die offizielle Bundesligatabelle
-* Eine "Bemerkungen"-Rubrik, die Spielerinnen mit Geburtstagen am Spieltag sowie aus den sieben Tagen davor hervorhebt – inklusive Datum und Alter
-* Aufklappbare Kaderübersichten beider Teams inklusive lokal eingebundenem Mannschaftsfoto, sortierten Rückennummern sowie allen Spielerinnen-Details (Größe, Geburtstag inklusive Alter am Spieltag, Nation, Position) und den Offiziellen direkt darunter
-* Eine zusätzliche Wechselbörse-Sektion pro Team mit den jüngsten Zu- und Abgängen aus der offiziellen VBL-Wechselbörse
-* Verlinkungen auf die Vereins-Homepages des USC Münster und des kommenden Gegners mit sprechenden Linktexten (z. B. "Homepage USC Münster")
-* Einen News-Block je Team unterhalb der Ergebnislisten – als aufklappbare Accordion-Sektion mit Artikeln der letzten zwei Wochen von den Vereinsseiten sowie den VBL-News- und Pressespiegel-Seiten, gefiltert auf Beiträge zu den beiden Teams
-* Eine Instagram-Sektion mit Links zu den offiziellen Accounts und weiteren Treffern aus der Websuche für beide Mannschaften
-* Ein responsives Layout, das sich auf Smartphones und großen Displays gut lesen lässt
+* `--schedule-url`: CSV-Quelle des Spielplans (Standard: offizieller VBL-Export). 【F:src/usc_kommentatoren/__main__.py†L34-L41】
+* `--schedule-path`: Lokale Datei für den Spielplan-Cache (`data/schedule.csv`). 【F:src/usc_kommentatoren/__main__.py†L52-L58】
+* `--roster-dir`, `--photo-dir`: Zwischenspeicher für Kaderexporte und Teamfotos (Standard: `data/rosters/`, `data/team_photos/`). 【F:src/usc_kommentatoren/__main__.py†L59-L77】
+* `--season-results`: Optionaler JSON-Pfad für Saisonrückblicke. 【F:src/usc_kommentatoren/__main__.py†L78-L115】【F:src/usc_kommentatoren/report.py†L2134-L2245】
+* `--recent-limit`, `--news-lookback`: Anzahl berücksichtigter Spiele und News-Tage. 【F:src/usc_kommentatoren/__main__.py†L88-L103】
+* `--app-output`, `--app-scale`, `--skip-app-output`: Steuerung der App-optimierten HTML-Version. 【F:src/usc_kommentatoren/__main__.py†L42-L51】【F:src/usc_kommentatoren/__main__.py†L216-L233】
+
+Weitere Optionen lassen sich über `PYTHONPATH=src python -m usc_kommentatoren --help` einsehen.
+
+## Datenablage & Cache-Verzeichnisse
+
+* `data/schedule.csv`: aktueller Spielplan-Export der VBL.
+* `data/rosters/`: CSV-Kaderexporte der Teams (werden bei Bedarf aktualisiert).
+* `data/team_photos/`: lokal eingebettete Teamfotos zur schnelleren Auslieferung.
+* `data/lineups/`: gespeicherte PDF-Spielberichtsbögen für den Aufstellungs-Datensatz.
+
+Alle Pfade lassen sich über die jeweiligen CLI-Argumente anpassen.
 
 ## Automatisierung mit GitHub Actions
 
-Der Workflow `.github/workflows/ci.yml` kann manuell gestartet werden (`workflow_dispatch`) und läuft zusätzlich jede Nacht um
-03:00 Uhr deutscher Zeit (`cron: "0 1 * * *"` in UTC). Bei jedem Lauf werden die Abhängigkeiten installiert, der aktuelle
-CSV-Spielplan nach `data/schedule.csv` heruntergeladen, das Modul kompiliert und anschließend der HTML-Bericht erzeugt. Das
-Ergebnis wird als Artefakt `usc-report` bereitgestellt, in `docs/index.html` geschrieben, bei Änderungen automatisch in den
-`main`-Branch eingecheckt **und** direkt über GitHub Pages veröffentlicht.
+Der Workflow `.github/workflows/ci.yml` kann manuell gestartet werden (`workflow_dispatch`) und läuft zusätzlich jede Nacht um 03:00 Uhr deutscher Zeit (`cron: "0 1 * * *"` in UTC). Bei jedem Lauf werden die Abhängigkeiten installiert, der aktuelle CSV-Spielplan nach `data/schedule.csv` heruntergeladen, das Modul kompiliert und anschließend der HTML-Bericht erzeugt. Das Ergebnis wird als Artefakt `usc-report` bereitgestellt, in `docs/index.html` geschrieben, bei Änderungen automatisch in den `main`-Branch eingecheckt **und** direkt über GitHub Pages veröffentlicht.
 
-Nach dem ersten erfolgreichen Workflow-Lauf ist der Bericht unter
-`https://<dein-account>.github.io/<repository-name>/` öffentlich abrufbar. Eine separate Aktivierung von GitHub Pages ist nicht mehr nötig; das Deployment erledigt der Workflow.
+Nach dem ersten erfolgreichen Workflow-Lauf ist der Bericht unter `https://<dein-account>.github.io/<repository-name>/` öffentlich abrufbar. Eine separate Aktivierung von GitHub Pages ist nicht mehr nötig; das Deployment erledigt der Workflow.
 
 ## Nächste Schritte
 
-Der Bericht bündelt bereits Spielplan, Ergebnisse und aktuelle Artikel. Wenn du mehr brauchst, kannst du darauf aufbauend
-weitere Auswertungen ergänzen – etwa zusätzliche Statistiken, alternative Layouts oder tiefergehende Analysen einzelner Teams.
+Der Bericht bündelt bereits Spielplan, Ergebnisse, Kader, News und internationale Auftritte. Wenn du mehr brauchst, kannst du darauf aufbauend weitere Auswertungen ergänzen – etwa zusätzliche Statistiken, alternative Layouts oder tiefergehende Analysen einzelner Teams.

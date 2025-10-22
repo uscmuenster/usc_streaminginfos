@@ -87,6 +87,18 @@
       display: flex;
       justify-content: center;
     }
+    .lineup-link ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(0.6rem, 2vw, 1rem);
+    }
+    .lineup-link li {
+      display: flex;
+    }
     .lineup-link a {
       display: inline-flex;
       align-items: center;
@@ -512,6 +524,19 @@
       .match-list li {
         padding: 0.85rem 1rem;
       }
+      .lineup-link ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .lineup-link li {
+        width: 100%;
+        justify-content: center;
+      }
+      .lineup-link a {
+        width: min(22rem, 100%);
+        justify-content: center;
+      }
       .match-result {
         font-size: calc(var(--font-scale) * 0.85rem);
       }
@@ -669,7 +694,10 @@
       </ul>
     </section>
     <section class="lineup-link">
-      <a href="aufstellungen.html">Startaufstellungen der letzten Begegnungen</a>
+      <ul>
+        <li><a href="aufstellungen.html">Startaufstellungen der letzten Begegnungen</a></li>
+        <li><a href="internationale_spiele.html">Internationale Spiele 2025/26</a></li>
+      </ul>
     </section>
     <section class="roster-group">
       <details class="accordion">
@@ -821,14 +849,14 @@
         <summary>News von USC Münster</summary>
         <div class="accordion-content">
           <ul class="news-list">
-            <li><a href="https://www.usc-muenster.de/zweite-liga/spannung-pur-usc2-setzt-sich-nach-fuenf-saetzen-gegen-bonn-durch/">Spannung pur: USC2 setzt sich nach fünf Sätzen gegen Bonn durch</a><span class="news-meta">Homepage USC Münster – 20.10.2025 08:44</span></li>
+            <li><a href="https://www.usc-muenster.de/erste-liga/alles-begann-im-regen-wie-kultfan-bibo-taktgeber-beim-usc-wurde/">Alles begann im Regen: Wie Kultfan „Bibo“ Taktgeber beim USC wurde</a><span class="news-meta">Homepage USC Münster – 22.10.2025 16:32</span></li>
+      <li><a href="https://www.usc-muenster.de/zweite-liga/spannung-pur-usc2-setzt-sich-nach-fuenf-saetzen-gegen-bonn-durch/">Spannung pur: USC2 setzt sich nach fünf Sätzen gegen Bonn durch</a><span class="news-meta">Homepage USC Münster – 20.10.2025 08:44</span></li>
       <li><a href="https://www.usc-muenster.de/jugend/voller-erfolg-beim-jugendcheck-2025/">Voller Erfolg beim Jugendcheck 2025!</a><span class="news-meta">Homepage USC Münster – 20.10.2025 08:39</span></li>
       <li><a href="https://www.usc-muenster.de/erste-liga/usc-muenster-feiert-ersten-auswaertssieg/">USC Münster feiert ersten Auswärtssieg</a><span class="news-meta">Homepage USC Münster – 15.10.2025 21:30</span></li>
       <li><a href="https://www.usc-muenster.de/erste-liga/usc-muenster-reist-zum-aufsteiger-nach-flacht/">USC Münster reist zum Aufsteiger nach Flacht</a><span class="news-meta">Homepage USC Münster – 14.10.2025 15:37</span></li>
       <li><a href="https://www.usc-muenster.de/usc/heimsieg-gegen-den-deutschen-meister-und-ein-extra-fuer-alle-fans/">Heimsieg gegen den Deutschen Meister – und ein Extra für alle Fans!</a><span class="news-meta">Homepage USC Münster – 13.10.2025 15:24</span></li>
       <li><a href="https://www.usc-muenster.de/erste-liga/spektakel-am-berg-fidel/">Spektakel am Berg Fidel</a><span class="news-meta">Homepage USC Münster – 12.10.2025 19:38</span></li>
       <li><a href="https://www.usc-muenster.de/erste-liga/auftaktkracher-gegen-den-meister-aus-schwerin/">Auftaktkracher gegen den Meister aus Schwerin</a><span class="news-meta">Homepage USC Münster – 10.10.2025 17:59</span></li>
-      <li><a href="https://www.usc-muenster.de/erste-liga/saisonstart-am-berg-fidel/">Saisonstart am Berg Fidel</a><span class="news-meta">Homepage USC Münster – 08.10.2025 14:57</span></li>
           </ul>
         </div>
       </details>
@@ -1117,7 +1145,7 @@
     <footer class="page-footer">
       <p class="update-note" role="status">
         <span aria-hidden="true">📅</span>
-        <span><strong>Aktualisiert am</strong> Mittwoch, 22. Oktober 2025 um 13:14</span>
+        <span><strong>Aktualisiert am</strong> Mittwoch, 22. Oktober 2025 um 20:32</span>
       </p>
     </footer>
 

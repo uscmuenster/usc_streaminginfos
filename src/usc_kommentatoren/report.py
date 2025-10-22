@@ -2348,6 +2348,15 @@ def build_html_report(
     usc_transfer_items = format_transfer_list(usc_transfers)
     opponent_transfer_items = format_transfer_list(opponent_transfers)
 
+    navigation_links = [
+        ("aufstellungen.html", "Startaufstellungen der letzten Begegnungen"),
+        ("internationale_spiele.html", "Internationale Spiele 2025/26"),
+    ]
+    lineup_link_items = "\n        ".join(
+        f"<li><a href=\"{escape(url)}\">{escape(label)}</a></li>"
+        for url, label in navigation_links
+    )
+
     opponent_photo_block = ""
     if opponent_photo:
         opponent_photo_block = (
@@ -2522,6 +2531,18 @@ def build_html_report(
       margin-top: clamp(1rem, 3vw, 1.75rem);
       display: flex;
       justify-content: center;
+    }}
+    .lineup-link ul {{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(0.6rem, 2vw, 1rem);
+    }}
+    .lineup-link li {{
+      display: flex;
     }}
     .lineup-link a {{
       display: inline-flex;
@@ -2865,6 +2886,19 @@ def build_html_report(
       .match-list li {{
         padding: 0.85rem 1rem;
       }}
+      .lineup-link ul {{
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+      }}
+      .lineup-link li {{
+        width: 100%;
+        justify-content: center;
+      }}
+      .lineup-link a {{
+        width: min(22rem, 100%);
+        justify-content: center;
+      }}
       .match-result {{
         font-size: calc(var(--font-scale) * 0.85rem);
       }}
@@ -3011,7 +3045,9 @@ def build_html_report(
       </ul>
     </section>
     <section class=\"lineup-link\">
-      <a href=\"aufstellungen.html\">Startaufstellungen der letzten Begegnungen</a>
+      <ul>
+        {lineup_link_items}
+      </ul>
     </section>
     <section class=\"roster-group\">
       <details class=\"accordion\">
