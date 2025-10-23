@@ -2884,7 +2884,6 @@ def format_mvp_rankings_section(
             f"          <details class=\"mvp-category\"{open_attr}>\n"
             "            <summary>\n"
             f"              <span class=\"mvp-category-title\">{escape(indicator)}</span>\n"
-            "              <span class=\"mvp-category-badge\">Top 3 je Team</span>\n"
             "            </summary>\n"
             f"{category_body}"
             "          </details>"
