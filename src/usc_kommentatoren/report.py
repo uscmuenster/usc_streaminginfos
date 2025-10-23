@@ -2806,9 +2806,25 @@ def format_mvp_rankings_section(
             team_raw = (values.get("Mannschaft") or values.get("Team") or "").strip()
             team_label = get_team_short_label(team_raw) if team_raw else ""
             position_raw = (values.get("Position") or "").strip()
+            sets_raw = (values.get("Sätze") or "").strip()
             games_raw = (values.get("Spiele") or "").strip()
-            metric_raw = (values.get("Wertung") or values.get("Kennzahl") or "").strip()
-            score_value = escape(metric_raw or "–")
+
+            metric_columns = ("Wert1", "Wert2", "Wert3", "Kennzahl", "Wertung")
+            metric_values: List[str] = []
+            for key in metric_columns:
+                raw_value = (values.get(key) or "").strip()
+                if raw_value:
+                    metric_values.append(raw_value)
+
+            if metric_values:
+                first_metric = escape(metric_values[0])
+                last_metric = escape(metric_values[-1])
+                if len(metric_values) == 1 or first_metric == last_metric:
+                    score_value = first_metric
+                else:
+                    score_value = f"{first_metric} | {last_metric}"
+            else:
+                score_value = "–"
 
             if team_raw:
                 normalized_team = normalize_name(team_raw)
@@ -2828,7 +2844,9 @@ def format_mvp_rankings_section(
             if team_label:
                 meta_parts.append(escape(team_label))
             if games_raw:
-                meta_parts.append(escape(games_raw))
+                meta_parts.append(f"{escape(games_raw)} Spiele")
+            if sets_raw:
+                meta_parts.append(f"{escape(sets_raw)} Sätze")
             meta_text = " • ".join(meta_parts)
 
             entry: Dict[str, str] = {
