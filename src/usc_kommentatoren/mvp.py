@@ -31,6 +31,8 @@ MVP_HEADERS: Sequence[str] = (
     "Rang",
     "",
     "Name",
+    "Sätze",
+    "Spiele",
     "Position",
     "Mannschaft",
     "Nation",
@@ -38,8 +40,6 @@ MVP_HEADERS: Sequence[str] = (
     "Wert2",
     "Wert3",
     "Kennzahl",
-    "Sätze",
-    "Spiele",
     "Wertung",
 )
 
@@ -179,8 +179,26 @@ def _extract_table_rows(table_html: str) -> List[List[str]]:
     for row in soup.select("tr"):
         columns = [col.get_text(" ", strip=True) for col in row.select("td")]
         if columns:
-            rows.append(columns)
+            rows.append(_reorder_row(columns))
     return rows
+
+
+def _reorder_row(columns: List[str]) -> List[str]:
+    """Move set and game counts directly behind the name column."""
+
+    if len(columns) < 5:
+        # Nothing to reorder (e.g. placeholder rows from the website)
+        return columns
+
+    # The third- and second-last values represent the set and game counts.
+    set_count = columns[-3]
+    game_count = columns[-2]
+
+    before_metrics = columns[:3]
+    metric_values = columns[3:-3]
+    trailing_value = columns[-1:]
+
+    return before_metrics + [set_count, game_count] + metric_values + trailing_value
 
 
 def _resolve_team_filter(team_name: str) -> Optional[str]:
@@ -206,8 +224,8 @@ def _ensure_row_limit(
 def _build_placeholder_row(team_label: str) -> List[str]:
     row = ["–", ""]
     row.extend(["–"] * (len(MVP_HEADERS) - 2))
-    # position 4 corresponds to Mannschaft
-    row[4] = team_label
+    # position 6 corresponds to Mannschaft
+    row[6] = team_label
     return row
 
 
