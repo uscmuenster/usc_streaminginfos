@@ -72,16 +72,51 @@ def _resolve_team_label(team_name: str) -> str:
 def _rows_to_dicts(headers: Sequence[str], rows: Sequence[Sequence[str]]) -> List[MutableMapping[str, str]]:
     cleaned_headers: List[str] = []
     for index, header in enumerate(headers):
-        if header:
-            cleaned_headers.append(header)
-        else:
-            cleaned_headers.append(f"column_{index}")
+        cleaned_headers.append(header if header else f"column_{index}")
+
+    max_columns = max((len(row) for row in rows), default=len(cleaned_headers))
+    while len(cleaned_headers) < max_columns:
+        cleaned_headers.append(f"column_{len(cleaned_headers)}")
 
     data: List[MutableMapping[str, str]] = []
     for row in rows:
-        row_map = {header: value for header, value in zip(cleaned_headers, row)}
+        values = list(row) + [""] * (len(cleaned_headers) - len(row))
+        row_map: MutableMapping[str, str] = {
+            header: value for header, value in zip(cleaned_headers, values)
+        }
+
+        ranking_value = _format_ranking(row_map, cleaned_headers, row)
+        if ranking_value:
+            row_map["ranking"] = ranking_value
+
         data.append(row_map)
     return data
+
+
+def _format_ranking(
+    row_map: Mapping[str, str],
+    headers: Sequence[str],
+    original_row: Sequence[str],
+) -> str:
+    header_index = {header: idx for idx, header in enumerate(headers)}
+
+    def value_for(header: str) -> str:
+        value = row_map.get(header)
+        if value is not None and value.strip():
+            return value.strip()
+        index = header_index.get(header)
+        if index is not None and index < len(original_row):
+            return original_row[index].strip()
+        return ""
+
+    wert1 = value_for("Wert1")
+    wertung = value_for("Wertung")
+
+    if wert1 and wertung:
+        return f"{wert1} | {wertung}"
+    if wert1:
+        return wert1
+    return wertung
 
 
 def _select_team_rows(
