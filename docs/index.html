@@ -260,152 +260,38 @@
     }
     .mvp-grid {
       display: grid;
-      gap: clamp(0.85rem, 2.5vw, 1.4rem);
-      grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+      gap: clamp(0.75rem, 2.5vw, 1.25rem);
     }
     .mvp-card {
-      border-radius: 1rem;
-      border: 1px solid rgba(15, 118, 110, 0.12);
-      background: linear-gradient(145deg, rgba(240, 253, 250, 0.65), #ffffff);
-      box-shadow: 0 18px 34px rgba(15, 118, 110, 0.16);
+      border-radius: 0.85rem;
+      border: none;
+      background: #ffffff;
+      box-shadow: 0 16px 36px rgba(15, 118, 110, 0.15);
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
     }
     .mvp-card summary {
       cursor: pointer;
-      padding: 1.1rem 1.4rem;
-      font-weight: 700;
+      padding: 1rem 1.35rem;
+      font-weight: 600;
       list-style: none;
-      font-size: calc(var(--font-scale) * clamp(1.05rem, 2.4vw, 1.25rem));
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.2rem));
       display: flex;
       align-items: center;
       justify-content: space-between;
-      color: #0f4c75;
-      background: rgba(15, 118, 110, 0.1);
-      backdrop-filter: blur(6px);
     }
     .mvp-card summary::-webkit-details-marker {
       display: none;
     }
     .mvp-card summary::after {
       content: "▾";
-      font-size: calc(var(--font-scale) * 1.05rem);
+      font-size: calc(var(--font-scale) * 1rem);
       transition: transform 0.2s ease;
-      color: inherit;
     }
     .mvp-card[open] summary::after {
       transform: rotate(180deg);
     }
     .mvp-card-content {
-      padding: 1.1rem 1.4rem 1.4rem;
-      display: grid;
-      gap: 1rem;
-    }
-    .mvp-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-    }
-    .mvp-card-title {
-      margin: 0;
-      font-size: calc(var(--font-scale) * clamp(1rem, 2.1vw, 1.2rem));
-      color: #023047;
-    }
-    .mvp-card-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      padding: 0.35rem 0.7rem;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #0f766e, #0ea5e9);
-      color: #ffffff;
-      font-weight: 700;
-      font-size: calc(var(--font-scale) * 0.75rem);
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
-    }
-    .mvp-top-list {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-    .mvp-top-item {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 0.75rem;
-      align-items: center;
-      padding: 0.65rem 0.75rem;
-      border-radius: 0.75rem;
-      background: rgba(2, 48, 71, 0.05);
-      box-shadow: inset 0 0 0 1px rgba(2, 48, 71, 0.08);
-    }
-    .mvp-top-item:nth-child(1) {
-      background: rgba(20, 184, 166, 0.15);
-      box-shadow: inset 0 0 0 1px rgba(13, 148, 136, 0.28);
-    }
-    .mvp-top-item:nth-child(2) {
-      background: rgba(14, 165, 233, 0.12);
-      box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.2);
-    }
-    .mvp-top-item:nth-child(3) {
-      background: rgba(244, 114, 182, 0.12);
-      box-shadow: inset 0 0 0 1px rgba(236, 72, 153, 0.2);
-    }
-    .mvp-rank {
-      font-weight: 800;
-      font-size: calc(var(--font-scale) * 1.1rem);
-      color: #0f172a;
-      min-width: 2.8rem;
-    }
-    .mvp-top-content {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-    .mvp-name {
-      font-weight: 600;
-      color: #111827;
-      font-size: calc(var(--font-scale) * 0.95rem);
-    }
-    .mvp-meta {
-      font-size: calc(var(--font-scale) * 0.75rem);
-      color: #475569;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-    .mvp-score {
-      font-weight: 700;
-      font-size: calc(var(--font-scale) * 0.95rem);
-      color: #0f766e;
-    }
-    @media (max-width: 38rem) {
-      .mvp-card {
-        border-radius: 0.9rem;
-      }
-      .mvp-card summary {
-        font-size: calc(var(--font-scale) * 1rem);
-      }
-      .mvp-top-item {
-        grid-template-columns: auto 1fr;
-        grid-template-areas: "rank score" "content content";
-        row-gap: 0.4rem;
-      }
-      .mvp-rank {
-        grid-area: rank;
-      }
-      .mvp-score {
-        grid-area: score;
-        justify-self: end;
-      }
-      .mvp-top-content {
-        grid-area: content;
-      }
+      padding: 0 1.35rem 1.35rem;
     }
     .mvp-table-wrapper {
       margin-top: 0.65rem;
@@ -1436,7 +1322,7 @@
     <footer class="page-footer">
       <p class="update-note" role="status">
         <span aria-hidden="true">📅</span>
-        <span><strong>Aktualisiert am</strong> Donnerstag, 23. Oktober 2025 um 07:57</span>
+        <span><strong>Aktualisiert am</strong> Donnerstag, 23. Oktober 2025 um 08:07</span>
       </p>
     </footer>
 
