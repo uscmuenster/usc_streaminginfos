@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import base64
 import csv
-import json
 import time
 from dataclasses import dataclass, replace
 import re
@@ -1105,6 +1104,124 @@ def _build_team_homepages() -> Dict[str, str]:
 TEAM_HOMEPAGES = _build_team_homepages()
 
 
+_MANUAL_STATS_TOTALS_DATA: Dict[str, Any] = {
+    "matches": [
+        {
+            "stats_url": "https://www.volleyball-bundesliga.de/uploads/831866c1-9e16-46f8-827c-4b0dd011928b",
+            "teams": [
+                {
+                    "name": "SSC Palmberg Schwerin",
+                    "serve": {
+                        "attempts": 74,
+                        "errors": 6,
+                        "points": 10,
+                    },
+                    "reception": {
+                        "attempts": 37,
+                        "errors": 3,
+                        "positive_pct": "51%",
+                        "perfect_pct": "24%",
+                    },
+                    "attack": {
+                        "attempts": 78,
+                        "errors": 10,
+                        "blocked": 3,
+                        "points": 37,
+                        "success_pct": "47%",
+                    },
+                    "block": {
+                        "points": 11,
+                    },
+                },
+                {
+                    "name": "ETV Hamburger Volksbank Volleys",
+                    "aliases": [
+                        "ETV Hamburger Volksbank V.",
+                    ],
+                    "serve": {
+                        "attempts": 42,
+                        "errors": 5,
+                        "points": 3,
+                    },
+                    "reception": {
+                        "attempts": 68,
+                        "errors": 10,
+                        "positive_pct": "29%",
+                        "perfect_pct": "12%",
+                    },
+                    "attack": {
+                        "attempts": 81,
+                        "errors": 9,
+                        "blocked": 11,
+                        "points": 19,
+                        "success_pct": "23%",
+                    },
+                    "block": {
+                        "points": 3,
+                    },
+                },
+            ],
+        },
+        {
+            "stats_url": "https://www.volleyball-bundesliga.de/uploads/19bb6c96-f1cc-4867-9058-0864849ec964",
+            "teams": [
+                {
+                    "name": "Binder Blaubären Flacht",
+                    "aliases": [
+                        "Binder Blaubären TSV Flacht",
+                    ],
+                    "serve": {
+                        "attempts": 50,
+                        "errors": 13,
+                        "points": 2,
+                    },
+                    "reception": {
+                        "attempts": 61,
+                        "errors": 5,
+                        "positive_pct": "21%",
+                        "perfect_pct": "8%",
+                    },
+                    "attack": {
+                        "attempts": 72,
+                        "errors": 9,
+                        "blocked": 7,
+                        "points": 19,
+                        "success_pct": "26%",
+                    },
+                    "block": {
+                        "points": 6,
+                    },
+                },
+                {
+                    "name": "USC Münster",
+                    "serve": {
+                        "attempts": 74,
+                        "errors": 13,
+                        "points": 5,
+                    },
+                    "reception": {
+                        "attempts": 37,
+                        "errors": 2,
+                        "positive_pct": "35%",
+                        "perfect_pct": "14%",
+                    },
+                    "attack": {
+                        "attempts": 82,
+                        "errors": 7,
+                        "blocked": 6,
+                        "points": 40,
+                        "success_pct": "49%",
+                    },
+                    "block": {
+                        "points": 7,
+                    },
+                },
+            ],
+        },
+    ],
+}
+
+
 _MANUAL_STATS_TOTALS: Optional[
     Dict[str, List[Tuple[Tuple[str, ...], str, MatchStatsMetrics]]]
 ] = None
@@ -1115,18 +1232,7 @@ def _load_manual_stats_totals() -> Dict[str, List[Tuple[Tuple[str, ...], str, Ma
     if _MANUAL_STATS_TOTALS is not None:
         return _MANUAL_STATS_TOTALS
 
-    data_path = Path(__file__).with_name("data") / "match_stats_totals.json"
-    if not data_path.exists():
-        _MANUAL_STATS_TOTALS = {}
-        return _MANUAL_STATS_TOTALS
-
-    try:
-        with data_path.open("r", encoding="utf-8") as handle:
-            payload = json.load(handle)
-    except (OSError, json.JSONDecodeError):
-        _MANUAL_STATS_TOTALS = {}
-        return _MANUAL_STATS_TOTALS
-
+    payload = _MANUAL_STATS_TOTALS_DATA
     manual: Dict[str, List[Tuple[Tuple[str, ...], str, MatchStatsMetrics]]] = {}
     matches = payload.get("matches", []) if isinstance(payload, dict) else []
     for match_entry in matches:
