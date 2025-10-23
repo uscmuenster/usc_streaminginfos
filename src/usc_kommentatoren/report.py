@@ -38,6 +38,11 @@ BERLIN_TZ = ZoneInfo("Europe/Berlin")
 USC_CANONICAL_NAME = "USC Münster"
 USC_HOMEPAGE = "https://www.usc-muenster.de/"
 
+INTERNATIONAL_MATCHES_LINK: tuple[str, str] = (
+    "internationale_spiele.html",
+    "Internationale Spiele 2025/26",
+)
+
 REQUEST_HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; usc-kommentatoren/1.0; +https://github.com/)"
 }
@@ -2889,8 +2894,8 @@ def _format_season_results_section(
 
     links_raw = data.get("links")
     link_block: List[str] = []
+    link_items: List[str] = []
     if isinstance(links_raw, Sequence):
-        link_items: List[str] = []
         for entry in links_raw:
             if not isinstance(entry, Mapping):
                 continue
@@ -2901,15 +2906,21 @@ def _format_season_results_section(
             link_items.append(
                 f"          <li><a href=\"{escape(url)}\" rel=\"noopener\" target=\"_blank\">{escape(label)}</a></li>"
             )
-        if link_items:
-            link_block = [
-                "      <div class=\"season-results-links\">",
-                "        <h3>Weitere Informationen</h3>",
-                "        <ul class=\"season-results-link-list\">",
-                *link_items,
-                "        </ul>",
-                "      </div>",
-            ]
+
+    internal_link_url, internal_link_label = INTERNATIONAL_MATCHES_LINK
+    link_items.append(
+        f"          <li><a href=\"{escape(internal_link_url)}\">{escape(internal_link_label)}</a></li>"
+    )
+
+    if link_items:
+        link_block = [
+            "      <div class=\"season-results-links\">",
+            "        <h3>Weitere Informationen</h3>",
+            "        <ul class=\"season-results-link-list\">",
+            *link_items,
+            "        </ul>",
+            "      </div>",
+        ]
 
     header_lines = [
         "      <div class=\"season-results-header\">",
@@ -3022,7 +3033,6 @@ def build_html_report(
 
     navigation_links = [
         ("aufstellungen.html", "Startaufstellungen der letzten Begegnungen"),
-        ("internationale_spiele.html", "Internationale Spiele 2025/26"),
     ]
     lineup_link_items = "\n        ".join(
         f"<li><a href=\"{escape(url)}\">{escape(label)}</a></li>"
