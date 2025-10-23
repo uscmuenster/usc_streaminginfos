@@ -1553,6 +1553,11 @@ def _build_team_canonical_lookup() -> Dict[str, str]:
             continue
         for alias in synonyms:
             lookup[normalize_name(alias)] = canonical
+    for normalized_name, short_label in TEAM_SHORT_NAMES.items():
+        canonical = TEAM_CANONICAL_NAMES.get(normalized_name)
+        if not canonical:
+            continue
+        lookup[normalize_name(short_label)] = canonical
     return lookup
 
 
@@ -2552,18 +2557,28 @@ def format_match_line(
     stats_html = ""
     if stats:
         normalized_usc = normalize_name(USC_CANONICAL_NAME)
+        canonical_usc = TEAM_CANONICAL_LOOKUP.get(normalized_usc)
+        if canonical_usc:
+            normalized_usc = normalize_name(canonical_usc)
         highlight_map: Dict[str, str] = {}
         if highlight_teams:
             for role, name in highlight_teams.items():
                 if not name:
                     continue
-                highlight_map[role] = normalize_name(name)
+                normalized_focus = normalize_name(name)
+                canonical_focus = TEAM_CANONICAL_LOOKUP.get(normalized_focus)
+                if canonical_focus:
+                    normalized_focus = normalize_name(canonical_focus)
+                highlight_map[role] = normalized_focus
         fallback_cards: List[str] = []
         table_entries: List[Tuple[str, Optional[str], MatchStatsMetrics]] = []
         tables_available = True
         for entry in stats:
             team_label = get_team_short_label(entry.team_name)
             normalized_team = normalize_name(entry.team_name)
+            canonical_team = TEAM_CANONICAL_LOOKUP.get(normalized_team)
+            if canonical_team:
+                normalized_team = normalize_name(canonical_team)
             team_role: Optional[str] = None
             if normalized_team == normalized_usc:
                 team_role = "usc"
