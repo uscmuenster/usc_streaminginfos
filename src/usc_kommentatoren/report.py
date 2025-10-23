@@ -3484,11 +3484,18 @@ def build_html_report(
   <meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\">
   <meta http-equiv=\"Pragma\" content=\"no-cache\">
   <meta http-equiv=\"Expires\" content=\"0\">
+  <meta name=\"theme-color\" content=\"{THEME_COLORS['mvp_overview_summary_bg']}\">
+  <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"favicon.png\">
+  <link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"favicon.png\">
+  <link rel=\"apple-touch-icon\" href=\"favicon.png\">
+  <link rel=\"manifest\" href=\"manifest.webmanifest\">
   <title>Nächster USC-Heimgegner</title>
   <style>
     :root {{
       color-scheme: light dark;
       --font-scale: {scale_value};
+      --font-context-scale: 1;
+      --theme-color: {THEME_COLORS['mvp_overview_summary_bg']};
       --accordion-opponent-bg: {HIGHLIGHT_COLORS['opponent']['accordion_bg']};
       --accordion-opponent-shadow: {HIGHLIGHT_COLORS['opponent']['accordion_shadow']};
       --accordion-usc-bg: {HIGHLIGHT_COLORS['usc']['accordion_bg']};
@@ -3511,11 +3518,16 @@ def build_html_report(
       --opponent-highlight-legend-dot: {HIGHLIGHT_COLORS['opponent']['legend_dot']};
       --mvp-overview-summary-bg: {THEME_COLORS['mvp_overview_summary_bg']};
     }}
+    @media (display-mode: standalone), (display-mode: fullscreen) {{
+      :root {{
+        --font-context-scale: 1.25;
+      }}
+    }}
     body {{
       margin: 0;
       font-family: \"Inter\", \"Segoe UI\", -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Arial, sans-serif;
       line-height: 1.6;
-      font-size: calc(var(--font-scale) * clamp(0.95rem, 1.8vw, 1.05rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.95rem, 1.8vw, 1.05rem));
       background: #f5f7f9;
       color: #1f2933;
     }}
@@ -3526,11 +3538,11 @@ def build_html_report(
     }}
     h1 {{
       color: #004c54;
-      font-size: calc(var(--font-scale) * clamp(1.55rem, 4.5vw, 2.35rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.55rem, 4.5vw, 2.35rem));
       margin: 0 0 1.25rem 0;
     }}
     h2 {{
-      font-size: calc(var(--font-scale) * clamp(1.15rem, 3.6vw, 1.6rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.15rem, 3.6vw, 1.6rem));
       margin-bottom: 1rem;
     }}
     section {{
@@ -3553,7 +3565,7 @@ def build_html_report(
       background: #ecfdf5;
       color: #047857;
       border-radius: 999px;
-      font-size: calc(var(--font-scale) * 0.7rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.7rem);
       font-weight: 600;
       border: 1px solid #bbf7d0;
     }}
@@ -3627,11 +3639,11 @@ def build_html_report(
     }}
     .match-result {{
       font-family: \"Fira Mono\", \"SFMono-Regular\", Menlo, Consolas, monospace;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       color: #0f766e;
     }}
     .match-meta {{
-      font-size: calc(var(--font-scale) * 0.85rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
       color: #475569;
       display: flex;
       flex-wrap: wrap;
@@ -3667,7 +3679,7 @@ def build_html_report(
       align-items: center;
       gap: 0.45rem;
       font-weight: 600;
-      font-size: calc(var(--font-scale) * 0.92rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.92rem);
     }}
     .match-stats summary::-webkit-details-marker {{
       display: none;
@@ -3675,7 +3687,7 @@ def build_html_report(
     .match-stats summary::after {{
       content: "▾";
       margin-left: auto;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       transition: transform 0.2s ease;
     }}
     .match-stats[open] summary::after {{
@@ -3702,7 +3714,7 @@ def build_html_report(
     .match-stats-table thead th {{
       background: rgba(15, 118, 110, 0.12);
       color: #0f766e;
-      font-size: calc(var(--font-scale) * 0.8rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.02em;
@@ -3715,14 +3727,14 @@ def build_html_report(
     .match-stats-table tbody th {{
       text-align: left;
       padding: 0.65rem 0.85rem;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       font-weight: 600;
       color: #0f172a;
     }}
     .match-stats-table tbody td {{
       text-align: center;
       padding: 0.65rem 0.7rem;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       font-weight: 500;
       color: #1f2937;
     }}
@@ -3763,14 +3775,14 @@ def build_html_report(
     }}
     .match-stats-card h4 {{
       margin: 0 0 0.5rem 0;
-      font-size: calc(var(--font-scale) * 0.95rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
       font-weight: 600;
       color: #0f172a;
     }}
     .match-stats-card pre {{
       margin: 0;
       font-family: \"Fira Mono\", \"SFMono-Regular\", Menlo, Consolas, monospace;
-      font-size: calc(var(--font-scale) * 0.75rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.75rem);
       line-height: 1.4;
       white-space: pre;
       overflow-x: auto;
@@ -3807,14 +3819,14 @@ def build_html_report(
       align-items: center;
       justify-content: space-between;
       list-style: none;
-      font-size: calc(var(--font-scale) * clamp(1rem, 2.6vw, 1.2rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1rem, 2.6vw, 1.2rem));
     }}
     .accordion summary::-webkit-details-marker {{
       display: none;
     }}
     .accordion summary::after {{
       content: \"▾\";
-      font-size: calc(var(--font-scale) * 1rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
       transition: transform 0.2s ease;
     }}
     .accordion[open] summary::after {{
@@ -3837,7 +3849,7 @@ def build_html_report(
     }}
     .news-meta {{
       display: block;
-      font-size: calc(var(--font-scale) * 0.85rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
       color: #64748b;
       margin-top: 0.2rem;
     }}
@@ -3859,16 +3871,17 @@ def build_html_report(
       align-items: center;
       justify-content: space-between;
       list-style: none;
-      font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.15rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1rem, 2.4vw, 1.15rem));
       background: var(--mvp-overview-summary-bg);
       border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      color: #ffffff;
     }}
     .mvp-overview summary::-webkit-details-marker {{
       display: none;
     }}
     .mvp-overview summary::after {{
       content: "▾";
-      font-size: calc(var(--font-scale) * 1rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
       transition: transform 0.2s ease;
     }}
     .mvp-overview[open] summary::after {{
@@ -3881,7 +3894,7 @@ def build_html_report(
     }}
     .mvp-note {{
       margin: 0;
-      font-size: calc(var(--font-scale) * 0.85rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
       color: #475569;
     }}
     .mvp-legend {{
@@ -3896,7 +3909,7 @@ def build_html_report(
       gap: 0.35rem;
       padding: 0.35rem 0.75rem;
       border-radius: 999px;
-      font-size: calc(var(--font-scale) * 0.75rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.75rem);
       font-weight: 600;
       background: rgba(15, 23, 42, 0.05);
       color: #0f172a;
@@ -3928,7 +3941,7 @@ def build_html_report(
       align-items: center;
       justify-content: space-between;
       list-style: none;
-      font-size: calc(var(--font-scale) * clamp(0.95rem, 2.2vw, 1.1rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.95rem, 2.2vw, 1.1rem));
       gap: 0.6rem;
       background: rgba(15, 118, 110, 0.08);
     }}
@@ -3937,7 +3950,7 @@ def build_html_report(
     }}
     .mvp-category summary::after {{
       content: "▾";
-      font-size: calc(var(--font-scale) * 0.95rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
       transition: transform 0.2s ease;
       color: inherit;
     }}
@@ -3956,7 +3969,7 @@ def build_html_report(
       background: rgba(15, 118, 110, 0.14);
       color: #0f4c75;
       font-weight: 700;
-      font-size: calc(var(--font-scale) * 0.7rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.7rem);
       letter-spacing: 0.02em;
       text-transform: uppercase;
     }}
@@ -3984,7 +3997,7 @@ def build_html_report(
     }}
     .mvp-entry-rank {{
       font-weight: 700;
-      font-size: calc(var(--font-scale) * 0.95rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
       color: #0f172a;
     }}
     .mvp-entry-info {{
@@ -3995,17 +4008,17 @@ def build_html_report(
     .mvp-entry-name {{
       font-weight: 600;
       color: #0f172a;
-      font-size: calc(var(--font-scale) * 0.95rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
     }}
     .mvp-entry-meta {{
-      font-size: calc(var(--font-scale) * 0.78rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.78rem);
       color: #475569;
       letter-spacing: 0.02em;
       text-transform: uppercase;
     }}
     .mvp-entry-score {{
       font-weight: 700;
-      font-size: calc(var(--font-scale) * 0.95rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
       color: #0f4c75;
       justify-self: end;
     }}
@@ -4046,24 +4059,24 @@ def build_html_report(
     }}
     @media (max-width: 30rem) {{
       .match-stats summary {{
-        font-size: calc(var(--font-scale) * 0.82rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
       }}
       .match-stats-table {{
         min-width: min(16rem, 100%);
       }}
       .match-stats-table thead th {{
-        font-size: calc(var(--font-scale) * 0.62rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.62rem);
         padding: 0.3rem 0.35rem;
       }}
       .match-stats-table tbody th,
       .match-stats-table tbody td {{
-        font-size: calc(var(--font-scale) * 0.7rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.7rem);
         padding: 0.35rem 0.35rem;
       }}
     }}
     .mvp-empty {{
       margin: 0;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       color: #475569;
     }}
     .transfer-list {{
@@ -4080,7 +4093,7 @@ def build_html_report(
       margin: 0;
     }}
     .transfer-line {{
-      font-size: calc(var(--font-scale) * 0.95rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
       font-weight: 500;
       color: inherit;
       word-break: break-word;
@@ -4094,7 +4107,7 @@ def build_html_report(
       display: block;
     }}
     .team-photo figcaption {{
-      font-size: calc(var(--font-scale) * 0.85rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
       color: #64748b;
       margin-top: 0.35rem;
       text-align: center;
@@ -4115,7 +4128,7 @@ def build_html_report(
     .roster-number {{
       font-family: \"Fira Mono\", \"SFMono-Regular\", Menlo, Consolas, monospace;
       font-weight: 600;
-      font-size: calc(var(--font-scale) * 0.95rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
       background: #bae6fd;
       color: #1f2933;
       border-radius: 0.65rem;
@@ -4132,10 +4145,10 @@ def build_html_report(
     }}
     .roster-name {{
       font-weight: 600;
-      font-size: calc(var(--font-scale) * 1rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
     }}
     .roster-details {{
-      font-size: calc(var(--font-scale) * 0.82rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
       color: #475569;
       line-height: 1.35;
     }}
@@ -4172,7 +4185,7 @@ def build_html_report(
     }}
     .instagram-card h3 {{
       margin: 0 0 0.75rem 0;
-      font-size: calc(var(--font-scale) * clamp(1.05rem, 3vw, 1.3rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.05rem, 3vw, 1.3rem));
     }}
     .instagram-list {{
       list-style: none;
@@ -4196,7 +4209,7 @@ def build_html_report(
     }}
     .season-results-status {{
       margin: 0;
-      font-size: calc(var(--font-scale) * 0.8rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
       color: #475569;
     }}
     .season-results-grid {{
@@ -4214,7 +4227,7 @@ def build_html_report(
     }}
     .season-results-card h3 {{
       margin: 0;
-      font-size: calc(var(--font-scale) * clamp(1.05rem, 3vw, 1.3rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.05rem, 3vw, 1.3rem));
       color: #0f172a;
     }}
     .season-results-list {{
@@ -4222,12 +4235,12 @@ def build_html_report(
       padding-left: 1rem;
       display: grid;
       gap: 0.35rem;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       color: #1f2933;
     }}
     .season-results-fallback {{
       margin: 0;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       color: #475569;
     }}
     .season-results-links {{
@@ -4239,7 +4252,7 @@ def build_html_report(
     }}
     .season-results-links h3 {{
       margin: 0 0 0.75rem 0;
-      font-size: calc(var(--font-scale) * clamp(0.95rem, 2.5vw, 1.1rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.95rem, 2.5vw, 1.1rem));
       color: #1f2937;
     }}
     .season-results-link-list {{
@@ -4279,13 +4292,13 @@ def build_html_report(
     }}
     @media (max-width: 40rem) {{
       body {{
-        font-size: calc(var(--font-scale) * 0.85rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
       }}
       h1 {{
-        font-size: calc(var(--font-scale) * 1.6rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.6rem);
       }}
       h2 {{
-        font-size: calc(var(--font-scale) * 1.1rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.1rem);
       }}
       .match-list li {{
         padding: 0.85rem 1rem;
@@ -4304,34 +4317,34 @@ def build_html_report(
         justify-content: center;
       }}
       .match-result {{
-        font-size: calc(var(--font-scale) * 0.8rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
       }}
       .match-stats summary {{
-        font-size: calc(var(--font-scale) * 0.9rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       }}
       .match-stats-table {{
         min-width: min(18rem, 100%);
       }}
       .match-stats-table thead th {{
-        font-size: calc(var(--font-scale) * 0.68rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.68rem);
         padding: 0.35rem 0.45rem;
       }}
       .match-stats-table tbody th,
       .match-stats-table tbody td {{
-        font-size: calc(var(--font-scale) * 0.78rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.78rem);
         padding: 0.4rem 0.45rem;
       }}
       .accordion summary {{
-        font-size: calc(var(--font-scale) * 1.05rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.05rem);
       }}
       .mvp-overview summary {{
-        font-size: calc(var(--font-scale) * 1.05rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.05rem);
       }}
       .roster-item {{
         grid-template-columns: minmax(3rem, auto) 1fr;
       }}
       .roster-number {{
-        font-size: calc(var(--font-scale) * 0.8rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
         padding: 0.3rem 0.5rem;
       }}
       .team-photo {{
@@ -4349,6 +4362,7 @@ def build_html_report(
         --opponent-highlight-row-bg: {HIGHLIGHT_COLORS['opponent']['dark_row_bg']};
         --opponent-highlight-row-text: {HIGHLIGHT_COLORS['opponent']['dark_row_text']};
         --mvp-overview-summary-bg: {THEME_COLORS['dark_mvp_overview_summary_bg']};
+        --theme-color: {THEME_COLORS['dark_mvp_overview_summary_bg']};
       }}
       body {{
         background: #0e1b1f;
@@ -4613,6 +4627,24 @@ def build_html_report(
 {season_results_section}
 {update_note_html}
   </main>
+  <script>
+    (() => {{
+      const themeColor = "{THEME_COLORS['mvp_overview_summary_bg']}";
+      if ("serviceWorker" in navigator) {{
+        window.addEventListener("load", () => {{
+          navigator.serviceWorker.register("sw.js").catch((error) => {{
+            console.error("Service worker registration failed", error);
+          }});
+        }});
+      }}
+
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeMeta) {{
+        themeMeta.setAttribute("content", themeColor);
+      }}
+
+    }})();
+  </script>
 </body>
 </html>
 """
