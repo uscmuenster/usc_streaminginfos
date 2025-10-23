@@ -1069,7 +1069,33 @@ def build_match_result(row: Dict[str, str]) -> Optional[MatchResult]:
 
 def normalize_name(value: str) -> str:
     normalized = value.lower()
-    normalized = normalized.replace("ü", "u").replace("mnster", "munster")
+    replacements = {
+        "ä": "ae",
+        "ö": "oe",
+        "ü": "ue",
+        "ß": "ss",
+        "á": "a",
+        "à": "a",
+        "â": "a",
+        "é": "e",
+        "è": "e",
+        "ê": "e",
+        "í": "i",
+        "ì": "i",
+        "î": "i",
+        "ó": "o",
+        "ò": "o",
+        "ô": "o",
+        "ú": "u",
+        "ù": "u",
+        "û": "u",
+    }
+    for source, target in replacements.items():
+        normalized = normalized.replace(source, target)
+    normalized = normalized.replace("muenster", "munster")
+    normalized = normalized.replace("mnster", "munster")
+    normalized = re.sub(r"[^a-z0-9]+", " ", normalized)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
     return normalized
 
 
@@ -2002,6 +2028,7 @@ def _normalize_stats_totals_line(line: str) -> str:
     stripped = re.sub(r"\(\s*", "(", stripped)
     stripped = re.sub(r"\s*\)", ")", stripped)
     stripped = re.sub(r"\s+", " ", stripped)
+    stripped = re.sub(r"(\d+\+\d{1,2})(\d+)", r"\1 \2", stripped)
     stripped = stripped.replace("%(", "% (")
     stripped = re.sub(r"%(?=\d)", "% ", stripped)
     return stripped
@@ -2045,9 +2072,39 @@ def _split_compound_value(
 
 
 def _parse_match_stats_metrics(line: str) -> Optional[MatchStatsMetrics]:
-    match = _MATCH_STATS_LINE_PATTERN.search(line)
+    normalized_line = _normalize_stats_totals_line(line)
+    match = _MATCH_STATS_LINE_PATTERN.search(normalized_line)
     if not match:
-        return None
+        tokens = re.findall(r"\d+%|\d+\+\d+|\d+", normalized_line)
+        if len(tokens) > 13 and "+" in tokens[1]:
+            prefix, suffix = tokens[1].split("+", 1)
+            if suffix.isdigit() and len(suffix) == 1 and tokens[2].isdigit():
+                tokens[1] = f"{tokens[1]}{tokens[2]}"
+                tokens.pop(2)
+        if len(tokens) < 13 or "+" not in tokens[1]:
+            return None
+        serve_split = _split_compound_value(tokens[3], first_max=60, second_max=60)
+        attack_split = _split_compound_value(tokens[10], first_max=40, second_max=150)
+        if not serve_split or not attack_split:
+            return None
+        try:
+            return MatchStatsMetrics(
+                serves_attempts=int(tokens[2]),
+                serves_errors=serve_split[0],
+                serves_points=serve_split[1],
+                receptions_attempts=int(tokens[4]),
+                receptions_errors=int(tokens[5]),
+                receptions_positive_pct=tokens[6],
+                receptions_perfect_pct=tokens[7],
+                attacks_attempts=int(tokens[8]),
+                attacks_errors=int(tokens[9]),
+                attacks_blocked=attack_split[0],
+                attacks_points=attack_split[1],
+                attacks_success_pct=tokens[11],
+                blocks_points=int(tokens[12]),
+            )
+        except ValueError:
+            return None
     groups = match.groupdict()
     serve_split = _split_compound_value(
         groups["serve_combo"], first_max=150, second_max=60
