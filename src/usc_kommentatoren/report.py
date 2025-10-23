@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import csv
+import json
 import time
 from dataclasses import dataclass, replace
 import re
@@ -9,12 +10,15 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 import mimetypes
 from html import escape
-from io import StringIO
+from io import BytesIO, StringIO
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 from zoneinfo import ZoneInfo
 from urllib.parse import parse_qs, urljoin, urlparse
 from email.utils import parsedate_to_datetime
 import xml.etree.ElementTree as ET
+
+from PyPDF2 import PdfReader
+from PyPDF2.errors import PdfReadError
 
 import requests
 from bs4 import BeautifulSoup, Tag
@@ -162,6 +166,7 @@ class RosterMember:
     birthdate_label: Optional[str]
     nationality: Optional[str]
 
+
     @property
     def formatted_birthdate(self) -> Optional[str]:
         parsed = self.birthdate_value
@@ -186,6 +191,31 @@ class RosterMember:
                 continue
             return parsed.date()
         return None
+
+
+@dataclass(frozen=True)
+class MatchStatsTotals:
+    team_name: str
+    header_lines: Tuple[str, ...]
+    totals_line: str
+    metrics: Optional["MatchStatsMetrics"] = None
+
+
+@dataclass(frozen=True)
+class MatchStatsMetrics:
+    serves_attempts: int
+    serves_errors: int
+    serves_points: int
+    receptions_attempts: int
+    receptions_errors: int
+    receptions_positive_pct: str
+    receptions_perfect_pct: str
+    attacks_attempts: int
+    attacks_errors: int
+    attacks_blocked: int
+    attacks_points: int
+    attacks_success_pct: str
+    blocks_points: int
 
 
 @dataclass(frozen=True)
@@ -1070,6 +1100,83 @@ def _build_team_homepages() -> Dict[str, str]:
 TEAM_HOMEPAGES = _build_team_homepages()
 
 
+_MANUAL_STATS_TOTALS: Optional[
+    Dict[str, List[Tuple[Tuple[str, ...], str, MatchStatsMetrics]]]
+] = None
+
+
+def _load_manual_stats_totals() -> Dict[str, List[Tuple[Tuple[str, ...], str, MatchStatsMetrics]]]:
+    global _MANUAL_STATS_TOTALS
+    if _MANUAL_STATS_TOTALS is not None:
+        return _MANUAL_STATS_TOTALS
+
+    data_path = Path(__file__).with_name("data") / "match_stats_totals.json"
+    if not data_path.exists():
+        _MANUAL_STATS_TOTALS = {}
+        return _MANUAL_STATS_TOTALS
+
+    try:
+        with data_path.open("r", encoding="utf-8") as handle:
+            payload = json.load(handle)
+    except (OSError, json.JSONDecodeError):
+        _MANUAL_STATS_TOTALS = {}
+        return _MANUAL_STATS_TOTALS
+
+    manual: Dict[str, List[Tuple[Tuple[str, ...], str, MatchStatsMetrics]]] = {}
+    matches = payload.get("matches", []) if isinstance(payload, dict) else []
+    for match_entry in matches:
+        if not isinstance(match_entry, dict):
+            continue
+        stats_url = match_entry.get("stats_url")
+        if not stats_url:
+            continue
+        teams_entries: List[Tuple[Tuple[str, ...], str, MatchStatsMetrics]] = []
+        for team_entry in match_entry.get("teams", []) or []:
+            if not isinstance(team_entry, dict):
+                continue
+            name = team_entry.get("name")
+            if not name:
+                continue
+            serve = team_entry.get("serve") or {}
+            reception = team_entry.get("reception") or {}
+            attack = team_entry.get("attack") or {}
+            block = team_entry.get("block") or {}
+            try:
+                metrics = MatchStatsMetrics(
+                    serves_attempts=int(serve["attempts"]),
+                    serves_errors=int(serve["errors"]),
+                    serves_points=int(serve["points"]),
+                    receptions_attempts=int(reception["attempts"]),
+                    receptions_errors=int(reception["errors"]),
+                    receptions_positive_pct=str(reception["positive_pct"]),
+                    receptions_perfect_pct=str(reception["perfect_pct"]),
+                    attacks_attempts=int(attack["attempts"]),
+                    attacks_errors=int(attack["errors"]),
+                    attacks_blocked=int(attack["blocked"]),
+                    attacks_points=int(attack["points"]),
+                    attacks_success_pct=str(attack["success_pct"]),
+                    blocks_points=int(block["points"]),
+                )
+            except (KeyError, TypeError, ValueError):
+                continue
+            normalized_keys: List[str] = []
+            primary_key = normalize_name(name)
+            normalized_keys.append(primary_key)
+            for alias in team_entry.get("aliases", []) or []:
+                alias_name = str(alias).strip()
+                if not alias_name:
+                    continue
+                normalized_alias = normalize_name(alias_name)
+                if normalized_alias not in normalized_keys:
+                    normalized_keys.append(normalized_alias)
+            teams_entries.append((tuple(normalized_keys), name, metrics))
+        if teams_entries:
+            manual[stats_url] = teams_entries
+
+    _MANUAL_STATS_TOTALS = manual
+    return manual
+
+
 def get_team_homepage(team_name: str) -> Optional[str]:
     return TEAM_HOMEPAGES.get(normalize_name(team_name))
 
@@ -1738,6 +1845,260 @@ def collect_team_transfers(team_name: str) -> List[TransferItem]:
     return list(cache.get(normalize_name(team_name), ()))
 
 
+_STATS_TOTALS_CACHE: Dict[str, Tuple[MatchStatsTotals, ...]] = {}
+
+
+def _normalize_stats_header_line(line: str) -> str:
+    stripped = line.strip()
+    if not stripped:
+        return ""
+    if "Satz" in stripped:
+        stripped = stripped[stripped.index("Satz") :]
+    return re.sub(r"\s+", " ", stripped)
+
+
+def _normalize_stats_totals_line(line: str) -> str:
+    stripped = re.sub(r"-\s+", "-", line.strip())
+    stripped = re.sub(r"\(\s*", "(", stripped)
+    stripped = re.sub(r"\s*\)", ")", stripped)
+    stripped = re.sub(r"\s+", " ", stripped)
+    stripped = stripped.replace("%(", "% (")
+    stripped = re.sub(r"%(?=\d)", "% ", stripped)
+    return stripped
+
+
+_MATCH_STATS_LINE_PATTERN = re.compile(
+    r"(?P<serve_attempts>\d+)\s+"
+    r"(?P<serve_combo>\d+)\s+"
+    r"(?P<reception_attempts>\d+)\s+"
+    r"(?P<reception_errors>\d+)\s+"
+    r"(?P<reception_pos>\d+%)\s+\("
+    r"(?P<reception_perf>\d+%)\)\s+"
+    r"(?P<attack_attempts>\d+)\s+"
+    r"(?P<attack_errors>\d+)\s+"
+    r"(?P<attack_combo>\d+)\s+"
+    r"(?P<attack_pct>\d+%)\s+"
+    r"(?P<block_points>\d+)"
+)
+
+
+def _split_compound_value(
+    value: str,
+    *,
+    first_max: int,
+    second_max: int,
+) -> Optional[Tuple[int, int]]:
+    digits = re.sub(r"\D+", "", value)
+    if not digits:
+        return None
+    max_second_len = min(3, len(digits))
+    for second_len in range(1, max_second_len + 1):
+        first_digits = digits[:-second_len]
+        second_digits = digits[-second_len:]
+        if not second_digits:
+            continue
+        first_value = int(first_digits) if first_digits else 0
+        second_value = int(second_digits)
+        if first_value <= first_max and second_value <= second_max:
+            return first_value, second_value
+    return None
+
+
+def _parse_match_stats_metrics(line: str) -> Optional[MatchStatsMetrics]:
+    match = _MATCH_STATS_LINE_PATTERN.search(line)
+    if not match:
+        return None
+    groups = match.groupdict()
+    serve_split = _split_compound_value(
+        groups["serve_combo"], first_max=150, second_max=60
+    )
+    attack_split = _split_compound_value(
+        groups["attack_combo"], first_max=60, second_max=150
+    )
+    if not serve_split or not attack_split:
+        return None
+    serves_errors, serves_points = serve_split
+    attacks_blocked, attacks_points = attack_split
+    try:
+        return MatchStatsMetrics(
+            serves_attempts=int(groups["serve_attempts"]),
+            serves_errors=serves_errors,
+            serves_points=serves_points,
+            receptions_attempts=int(groups["reception_attempts"]),
+            receptions_errors=int(groups["reception_errors"]),
+            receptions_positive_pct=groups["reception_pos"],
+            receptions_perfect_pct=groups["reception_perf"],
+            attacks_attempts=int(groups["attack_attempts"]),
+            attacks_errors=int(groups["attack_errors"]),
+            attacks_blocked=attacks_blocked,
+            attacks_points=attacks_points,
+            attacks_success_pct=groups["attack_pct"],
+            blocks_points=int(groups["block_points"]),
+        )
+    except ValueError:
+        return None
+
+
+def _extract_stats_team_names(lines: Sequence[str]) -> List[str]:
+    names: List[str] = []
+    team_pattern = re.compile(r"(?:Spielbericht\s+)?(.+?)\s+\d+\s*$")
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            continue
+        match = team_pattern.match(stripped)
+        if not match:
+            continue
+        candidate = match.group(1).strip()
+        if not candidate or candidate.lower() == "spielbericht":
+            continue
+        names.append(candidate)
+        if len(names) >= 2:
+            break
+    return names
+
+
+def _parse_stats_totals_pdf(data: bytes) -> Tuple[MatchStatsTotals, ...]:
+    try:
+        reader = PdfReader(BytesIO(data))
+    except PdfReadError:
+        return ()
+    except Exception:
+        return ()
+    if not reader.pages:
+        return ()
+    raw_text = reader.pages[0].extract_text() or ""
+    cleaned = raw_text.replace("\x00", "")
+    lines = cleaned.splitlines()
+    if not lines:
+        return ()
+    markers = [idx for idx, line in enumerate(lines) if line.strip() == "Spieler insgesamt"]
+    if not markers:
+        return ()
+    team_names = _extract_stats_team_names(lines)
+    summaries: List[MatchStatsTotals] = []
+    for marker_index, marker in enumerate(markers):
+        header_lines: List[str] = []
+        cursor = marker - 1
+        while cursor >= 0 and len(header_lines) < 3:
+            candidate = lines[cursor].strip()
+            if candidate:
+                header_lines.append(_normalize_stats_header_line(candidate))
+            cursor -= 1
+        header_lines.reverse()
+        totals_line: Optional[str] = None
+        for probe in range(marker + 1, len(lines)):
+            candidate = lines[probe].strip()
+            if not candidate:
+                continue
+            if candidate.startswith("Satz"):
+                break
+            if re.search(r"[A-Za-zÄÖÜäöüß]", candidate):
+                continue
+            if re.search(r"\d", candidate):
+                totals_line = candidate
+        if not totals_line:
+            continue
+        normalized_totals = _normalize_stats_totals_line(totals_line)
+        team_name = team_names[marker_index] if marker_index < len(team_names) else f"Team {marker_index + 1}"
+        summaries.append(
+            MatchStatsTotals(
+                team_name=team_name,
+                header_lines=tuple(header_lines),
+                totals_line=normalized_totals,
+            )
+        )
+    return tuple(summaries)
+
+
+def fetch_match_stats_totals(
+    stats_url: str,
+    *,
+    retries: int = 3,
+    delay_seconds: float = 2.0,
+) -> Tuple[MatchStatsTotals, ...]:
+    cached = _STATS_TOTALS_CACHE.get(stats_url)
+    if cached is not None:
+        return cached
+    manual_entries = _load_manual_stats_totals().get(stats_url)
+    try:
+        response = _http_get(
+            stats_url,
+            retries=retries,
+            delay_seconds=delay_seconds,
+        )
+    except requests.RequestException:
+        if manual_entries:
+            summaries = tuple(
+                MatchStatsTotals(
+                    team_name=team_name,
+                    header_lines=(),
+                    totals_line="",
+                    metrics=metrics,
+                )
+                for _, team_name, metrics in manual_entries
+            )
+            _STATS_TOTALS_CACHE[stats_url] = summaries
+            return summaries
+        _STATS_TOTALS_CACHE[stats_url] = ()
+        return ()
+    summaries = list(_parse_stats_totals_pdf(response.content))
+    if manual_entries:
+        index_lookup: Dict[str, int] = {}
+        for idx, (keys, _, _) in enumerate(manual_entries):
+            for key in keys:
+                index_lookup[key] = idx
+        updated: List[MatchStatsTotals] = []
+        matched_indices: set[int] = set()
+        for entry in summaries:
+            normalized_team = normalize_name(entry.team_name)
+            match_idx = index_lookup.get(normalized_team)
+            if match_idx is not None:
+                matched_indices.add(match_idx)
+                _, _, metrics = manual_entries[match_idx]
+                updated.append(
+                    MatchStatsTotals(
+                        team_name=entry.team_name,
+                        header_lines=entry.header_lines,
+                        totals_line=entry.totals_line,
+                        metrics=metrics,
+                    )
+                )
+            else:
+                updated.append(entry)
+        for idx, (_keys, team_name, metrics) in enumerate(manual_entries):
+            if idx in matched_indices:
+                continue
+            updated.append(
+                MatchStatsTotals(
+                    team_name=team_name,
+                    header_lines=(),
+                    totals_line="",
+                    metrics=metrics,
+                )
+            )
+        summaries = updated
+    summaries_tuple = tuple(summaries)
+    _STATS_TOTALS_CACHE[stats_url] = summaries_tuple
+    return summaries_tuple
+
+
+def collect_match_stats_totals(
+    matches: Iterable[Match],
+) -> Dict[str, Tuple[MatchStatsTotals, ...]]:
+    collected: Dict[str, Tuple[MatchStatsTotals, ...]] = {}
+    for match in matches:
+        if not match.is_finished or not match.stats_url:
+            continue
+        stats_url = match.stats_url
+        if stats_url in collected:
+            continue
+        summaries = fetch_match_stats_totals(stats_url)
+        if summaries:
+            collected[stats_url] = summaries
+    return collected
+
+
 def pretty_name(name: str) -> str:
     if is_usc(name):
         return USC_CANONICAL_NAME
@@ -1847,7 +2208,11 @@ def format_generation_timestamp(value: datetime) -> str:
     return f"{weekday}, {day:02d}. {month} {localized.year} um {time_label}"
 
 
-def format_match_line(match: Match) -> str:
+def format_match_line(
+    match: Match,
+    *,
+    stats: Optional[Sequence[MatchStatsTotals]] = None,
+) -> str:
     kickoff_local = match.kickoff.astimezone(BERLIN_TZ)
     date_label = kickoff_local.strftime("%d.%m.%Y")
     weekday = GERMAN_WEEKDAYS.get(kickoff_local.weekday(), kickoff_local.strftime("%a"))
@@ -1901,15 +2266,155 @@ def format_match_line(match: Match) -> str:
     if extras or links:
         combined = extras + links
         meta_html = f"<div class=\"match-meta\">{' · '.join(combined)}</div>"
-    return (
-        "<li>"
-        "<div class=\"match-line\">"
-        f"<div class=\"match-header\"><strong>{escape(kickoff_label)}</strong> – {escape(teams)}</div>"
-        f"{result_block}"
-        f"{meta_html}"
-        "</div>"
-        "</li>"
-    )
+    stats_html = ""
+    if stats:
+        normalized_home = normalize_name(match.home_team)
+        normalized_away = normalize_name(match.away_team)
+        normalized_usc = normalize_name(USC_CANONICAL_NAME)
+        fallback_cards: List[str] = []
+        table_entries: List[Tuple[str, Optional[str], MatchStatsMetrics]] = []
+        tables_available = True
+        for entry in stats:
+            team_label = pretty_name(entry.team_name)
+            normalized_team = normalize_name(entry.team_name)
+            team_role: Optional[str] = None
+            if normalized_team == normalized_usc:
+                team_role = "usc"
+            elif normalized_team == normalized_home:
+                team_role = "home"
+            elif normalized_team == normalized_away:
+                team_role = "away"
+            metrics = entry.metrics or _parse_match_stats_metrics(entry.totals_line)
+            if metrics is None:
+                tables_available = False
+            else:
+                table_entries.append((team_label, team_role, metrics))
+            content_lines = [line for line in entry.header_lines if line]
+            content_lines.append(entry.totals_line)
+            content_text = "\n".join(content_lines)
+            attrs: List[str] = ["class=\"match-stats-card\""]
+            if team_role:
+                attrs.append(f"data-team-role=\"{team_role}\"")
+            attr_text = " ".join(attrs)
+            card_lines = [
+                f"        <article {attr_text}>",
+                f"          <h4>{escape(team_label)}</h4>",
+                f"          <pre>{escape(content_text)}</pre>",
+                "        </article>",
+            ]
+            fallback_cards.append("\n".join(card_lines))
+        if tables_available and table_entries:
+            serve_rows: List[str] = []
+            attack_rows: List[str] = []
+            for team_label, team_role, metrics in table_entries:
+                row_attr = f" data-team-role=\"{team_role}\"" if team_role else ""
+                serve_rows.append(
+                    "\n".join(
+                        [
+                            f"              <tr{row_attr}>",
+                            f"                <th scope=\"row\">{escape(team_label)}</th>",
+                            f"                <td>{metrics.serves_attempts}</td>",
+                            f"                <td>{metrics.serves_errors}</td>",
+                            f"                <td>{metrics.serves_points}</td>",
+                            f"                <td>{metrics.receptions_attempts}</td>",
+                            f"                <td>{metrics.receptions_errors}</td>",
+                            f"                <td>{escape(metrics.receptions_positive_pct)} ({escape(metrics.receptions_perfect_pct)})</td>",
+                            "              </tr>",
+                        ]
+                    )
+                )
+                attack_rows.append(
+                    "\n".join(
+                        [
+                            f"              <tr{row_attr}>",
+                            f"                <th scope=\"row\">{escape(team_label)}</th>",
+                            f"                <td>{metrics.attacks_attempts}</td>",
+                            f"                <td>{metrics.attacks_errors}</td>",
+                            f"                <td>{metrics.attacks_blocked}</td>",
+                            f"                <td>{metrics.attacks_points}</td>",
+                            f"                <td>{escape(metrics.attacks_success_pct)}</td>",
+                            f"                <td>{metrics.blocks_points}</td>",
+                            "              </tr>",
+                        ]
+                    )
+                )
+            serve_rows_html = "\n".join(serve_rows)
+            attack_rows_html = "\n".join(attack_rows)
+            stats_html = (
+                "    <details class=\"match-stats\">\n"
+                "      <summary>Teamstatistik</summary>\n"
+                "      <div class=\"match-stats-content\">\n"
+                "        <div class=\"match-stats-table-wrapper\">\n"
+                "          <table class=\"match-stats-table\">\n"
+                "            <thead>\n"
+                "              <tr>\n"
+                "                <th scope=\"col\" rowspan=\"2\">Team</th>\n"
+                "                <th scope=\"colgroup\" colspan=\"3\">Aufschlag</th>\n"
+                "                <th scope=\"colgroup\" colspan=\"3\">Annahme</th>\n"
+                "              </tr>\n"
+                "              <tr>\n"
+                "                <th scope=\"col\">Ges.</th>\n"
+                "                <th scope=\"col\">Fhl</th>\n"
+                "                <th scope=\"col\">Pkt</th>\n"
+                "                <th scope=\"col\">Ges.</th>\n"
+                "                <th scope=\"col\">Fhl</th>\n"
+                "                <th scope=\"col\">Pos (Prf)</th>\n"
+                "              </tr>\n"
+                "            </thead>\n"
+                "            <tbody>\n"
+                f"{serve_rows_html}\n"
+                "            </tbody>\n"
+                "          </table>\n"
+                "        </div>\n"
+                "        <div class=\"match-stats-table-wrapper\">\n"
+                "          <table class=\"match-stats-table\">\n"
+                "            <thead>\n"
+                "              <tr>\n"
+                "                <th scope=\"col\" rowspan=\"2\">Team</th>\n"
+                "                <th scope=\"colgroup\" colspan=\"5\">Angriff</th>\n"
+                "                <th scope=\"colgroup\" colspan=\"1\">Block</th>\n"
+                "              </tr>\n"
+                "              <tr>\n"
+                "                <th scope=\"col\">Ges.</th>\n"
+                "                <th scope=\"col\">Fhl</th>\n"
+                "                <th scope=\"col\">Blo</th>\n"
+                "                <th scope=\"col\">Pkt</th>\n"
+                "                <th scope=\"col\">Pkt%</th>\n"
+                "                <th scope=\"col\">Pkt</th>\n"
+                "              </tr>\n"
+                "            </thead>\n"
+                "            <tbody>\n"
+                f"{attack_rows_html}\n"
+                "            </tbody>\n"
+                "          </table>\n"
+                "        </div>\n"
+                "      </div>\n"
+                "    </details>"
+            )
+        elif fallback_cards:
+            cards_html = "\n".join(fallback_cards)
+            stats_html = (
+                "    <details class=\"match-stats\">\n"
+                "      <summary>Teamstatistik</summary>\n"
+                "      <div class=\"match-stats-content\">\n"
+                f"{cards_html}\n"
+                "      </div>\n"
+                "    </details>"
+            )
+
+    segments: List[str] = [
+        "<li>",
+        "  <div class=\"match-line\">",
+        f"    <div class=\"match-header\"><strong>{escape(kickoff_label)}</strong> – {escape(teams)}</div>",
+    ]
+    if result_block:
+        segments.append(f"    {result_block}")
+    if meta_html:
+        segments.append(f"    {meta_html}")
+    if stats_html:
+        segments.append(stats_html)
+    segments.extend(["  </div>", "</li>"])
+    return "\n".join(segments)
 
 
 def format_news_list(items: Sequence[NewsItem]) -> str:
@@ -2424,6 +2929,7 @@ def build_html_report(
     season_results: Optional[Mapping[str, Any]] = None,
     generated_at: Optional[datetime] = None,
     font_scale: float = 1.0,
+    match_stats: Optional[Mapping[str, Sequence[MatchStatsTotals]]] = None,
     mvp_rankings: Optional[Mapping[str, Mapping[str, Any]]] = None,
 ) -> str:
     heading = pretty_name(next_home.away_team)
@@ -2439,7 +2945,10 @@ def build_html_report(
     usc_url = get_team_homepage(USC_CANONICAL_NAME) or USC_HOMEPAGE
     opponent_url = get_team_homepage(next_home.away_team)
 
-    def _combine_matches(next_match: Optional[Match], recent_matches: List[Match]) -> str:
+    def _combine_matches(
+        next_match: Optional[Match],
+        recent_matches: List[Match],
+    ) -> str:
         combined: List[str] = []
         seen: set[tuple[datetime, str, str]] = set()
 
@@ -2457,7 +2966,10 @@ def build_html_report(
             if signature in seen:
                 continue
             seen.add(signature)
-            combined.append(format_match_line(match))
+            stats_payload: Optional[Sequence[MatchStatsTotals]] = None
+            if match_stats and match.stats_url:
+                stats_payload = match_stats.get(match.stats_url)
+            combined.append(format_match_line(match, stats=stats_payload))
 
         if not combined:
             return "<li>Keine Daten verfügbar.</li>"
@@ -2734,6 +3246,135 @@ def build_html_report(
     .match-meta a:focus-visible {{
       text-decoration: underline;
       outline: none;
+    }}
+    .match-stats {{
+      margin-top: clamp(0.45rem, 1.4vw, 0.85rem);
+      border-radius: 0.85rem;
+      background: #f8fafc;
+      border: 1px solid rgba(15, 118, 110, 0.18);
+      padding: 0.75rem 1rem;
+    }}
+    .match-stats summary {{
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * 0.92rem);
+    }}
+    .match-stats summary::-webkit-details-marker {{
+      display: none;
+    }}
+    .match-stats summary::after {{
+      content: "▾";
+      margin-left: auto;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      transition: transform 0.2s ease;
+    }}
+    .match-stats[open] summary::after {{
+      transform: rotate(180deg);
+    }}
+    .match-stats-content {{
+      margin-top: 0.75rem;
+      display: grid;
+      gap: clamp(0.75rem, 2vw, 1.1rem);
+    }}
+    .match-stats-table-wrapper {{
+      overflow-x: auto;
+    }}
+    .match-stats-table {{
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #ffffff;
+      border-radius: 0.75rem;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      min-width: 22rem;
+    }}
+    .match-stats-table thead th {{
+      background: rgba(15, 118, 110, 0.12);
+      color: #0f766e;
+      font-size: calc(var(--font-scale) * 0.8rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      padding: 0.55rem 0.75rem;
+      text-align: center;
+    }}
+    .match-stats-table thead th:first-child {{
+      text-align: left;
+    }}
+    .match-stats-table tbody th {{
+      text-align: left;
+      padding: 0.65rem 0.85rem;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      font-weight: 600;
+      color: #0f172a;
+    }}
+    .match-stats-table tbody td {{
+      text-align: center;
+      padding: 0.65rem 0.7rem;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      font-weight: 500;
+      color: #1f2937;
+    }}
+    .match-stats-table tbody tr + tr th,
+    .match-stats-table tbody tr + tr td {{
+      border-top: 1px solid #e2e8f0;
+    }}
+    .match-stats-table tbody tr[data-team-role="usc"] {{
+      background: #dcfce7;
+      color: #047857;
+    }}
+    .match-stats-table tbody tr[data-team-role="usc"] th,
+    .match-stats-table tbody tr[data-team-role="usc"] td {{
+      color: inherit;
+    }}
+    .match-stats-table tbody tr[data-team-role="home"],
+    .match-stats-table tbody tr[data-team-role="away"] {{
+      background: #e0f2fe;
+      color: #1d4ed8;
+    }}
+    .match-stats-table tbody tr[data-team-role="home"] th,
+    .match-stats-table tbody tr[data-team-role="home"] td,
+    .match-stats-table tbody tr[data-team-role="away"] th,
+    .match-stats-table tbody tr[data-team-role="away"] td {{
+      color: inherit;
+    }}
+    .match-stats-card {{
+      border-radius: 0.75rem;
+      background: #ffffff;
+      padding: 0.75rem 0.95rem;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }}
+    .match-stats-card[data-team-role="usc"] {{
+      border-color: rgba(45, 212, 191, 0.55);
+      box-shadow: 0 14px 30px rgba(45, 212, 191, 0.16);
+    }}
+    .match-stats-card[data-team-role="home"],
+    .match-stats-card[data-team-role="away"] {{
+      border-color: rgba(59, 130, 246, 0.35);
+    }}
+    .match-stats-card h4 {{
+      margin: 0 0 0.5rem 0;
+      font-size: calc(var(--font-scale) * 0.95rem);
+      font-weight: 600;
+      color: #0f172a;
+    }}
+    .match-stats-card pre {{
+      margin: 0;
+      font-family: \"Fira Mono\", \"SFMono-Regular\", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * 0.75rem);
+      line-height: 1.4;
+      white-space: pre;
+      overflow-x: auto;
+      padding: 0.5rem 0.65rem;
+      background: rgba(15, 23, 42, 0.04);
+      border-radius: 0.6rem;
+      color: #1f2937;
     }}
     .news-group,
     .roster-group,
@@ -3151,6 +3792,18 @@ def build_html_report(
       .match-result {{
         font-size: calc(var(--font-scale) * 0.85rem);
       }}
+      .match-stats summary {{
+        font-size: calc(var(--font-scale) * 1rem);
+      }}
+      .match-stats-table thead th {{
+        font-size: calc(var(--font-scale) * 0.75rem);
+        padding: 0.45rem 0.55rem;
+      }}
+      .match-stats-table tbody th,
+      .match-stats-table tbody td {{
+        font-size: calc(var(--font-scale) * 0.85rem);
+        padding: 0.5rem 0.55rem;
+      }}
       .accordion summary {{
         font-size: calc(var(--font-scale) * 1.05rem);
       }}
@@ -3187,6 +3840,51 @@ def build_html_report(
       .match-list li {{
         background: #132a30;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      }}
+      .match-stats {{
+        background: #132a30;
+        border-color: rgba(45, 212, 191, 0.35);
+      }}
+      .match-stats summary {{
+        color: #e2f3f7;
+      }}
+      .match-stats-table {{
+        background: #0f1f24;
+        border-color: rgba(94, 234, 212, 0.25);
+        box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+      }}
+      .match-stats-table thead th {{
+        background: rgba(94, 234, 212, 0.16);
+        color: #5eead4;
+      }}
+      .match-stats-table tbody tr + tr th,
+      .match-stats-table tbody tr + tr td {{
+        border-color: rgba(148, 163, 184, 0.35);
+      }}
+      .match-stats-table tbody th,
+      .match-stats-table tbody td {{
+        color: #e2f3f7;
+      }}
+      .match-stats-table tbody tr[data-team-role="usc"] {{
+        background: rgba(22, 163, 74, 0.25);
+        color: #bbf7d0;
+      }}
+      .match-stats-table tbody tr[data-team-role="home"],
+      .match-stats-table tbody tr[data-team-role="away"] {{
+        background: rgba(59, 130, 246, 0.18);
+        color: #bfdbfe;
+      }}
+      .match-stats-card {{
+        background: #0f1f24;
+        border-color: rgba(94, 234, 212, 0.25);
+        box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+      }}
+      .match-stats-card h4 {{
+        color: #f0f9ff;
+      }}
+      .match-stats-card pre {{
+        background: rgba(15, 118, 110, 0.22);
+        color: #f1f5f9;
       }}
       .lineup-link a {{
         background: #14b8a6;
@@ -3407,6 +4105,7 @@ __all__ = [
     "Match",
     "MatchResult",
     "RosterMember",
+    "MatchStatsTotals",
     "TransferItem",
     "TEAM_HOMEPAGES",
     "TEAM_ROSTER_IDS",
@@ -3417,6 +4116,7 @@ __all__ = [
     "USC_HOMEPAGE",
     "collect_team_news",
     "collect_team_transfers",
+    "collect_match_stats_totals",
     "collect_instagram_links",
     "collect_team_roster",
     "collect_team_photo",
