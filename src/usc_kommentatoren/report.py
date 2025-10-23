@@ -1992,75 +1992,85 @@ def format_mvp_rankings_section(
     for indicator, payload in rankings.items():
         headers = list((payload or {}).get("headers") or [])
         rows = list((payload or {}).get("rows") or [])
+        header_index = {header: idx for idx, header in enumerate(headers)}
 
-        indices: List[int] = []
-        display_headers: List[str] = []
-        for source, display in MVP_DISPLAY_COLUMNS:
-            try:
-                idx = headers.index(source)
-            except ValueError:
-                continue
-            indices.append(idx)
-            display_headers.append(display)
+        trimmed_rows = rows[:3]
+        list_items: List[str] = []
+        for row in trimmed_rows:
+            values: Dict[str, str] = {}
+            for header, idx in header_index.items():
+                if idx < len(row):
+                    values[header] = row[idx]
 
-        body_rows: List[str] = []
-        if rows and indices:
-            header_cells = "\n              ".join(
-                f"<th scope=\"col\">{escape(label)}</th>" for label in display_headers
+            rank_value = escape((values.get("Rang") or "").strip() or "–")
+            name_value = escape((values.get("Name") or "").strip() or "–")
+            team_value_raw = (values.get("Mannschaft") or values.get("Team") or "").strip()
+            team_value = escape(team_value_raw) if team_value_raw else ""
+            position_value = escape((values.get("Position") or "").strip())
+            games_value = escape((values.get("Spiele") or "").strip())
+            metric_value = (values.get("Wertung") or values.get("Kennzahl") or "").strip()
+            metric_display = escape(metric_value or "–")
+
+            meta_parts: List[str] = []
+            if team_value:
+                meta_parts.append(team_value)
+            if position_value:
+                meta_parts.append(position_value)
+            if games_value:
+                meta_parts.append(games_value)
+            meta_text = " • ".join(part for part in meta_parts if part)
+
+            team_role: Optional[str] = None
+            if team_value_raw:
+                normalized_team = normalize_name(team_value_raw)
+                if normalized_team == normalized_usc:
+                    team_role = "usc"
+                elif normalized_team == normalized_opponent:
+                    team_role = "opponent"
+
+            attrs: List[str] = ["class=\"mvp-top-item\""]
+            if team_role:
+                attrs.append(f"data-team-role=\"{team_role}\"")
+            attr_text = " ".join(attrs)
+
+            meta_html = (
+                f"                <span class=\"mvp-meta\">{meta_text}</span>\n"
+                if meta_text
+                else ""
             )
-            for row in rows:
-                cells: List[str] = []
-                team_role: Optional[str] = None
-                for column_index, label in zip(indices, display_headers):
-                    value = row[column_index] if column_index < len(row) else ""
-                    display_value = escape(value or "–")
-                    data_label = escape(label)
-                    cells.append(
-                        f"<td data-label=\"{data_label}\">{display_value}</td>"
-                    )
-                    if headers[column_index] == "Mannschaft" and value:
-                        normalized_team = normalize_name(value)
-                        if normalized_team == normalized_usc:
-                            team_role = "usc"
-                        elif normalized_team == normalized_opponent:
-                            team_role = "opponent"
-                cell_html = "\n              ".join(cells)
-                attrs = ["class=\"mvp-row\""]
-                if team_role:
-                    attrs.append(f"data-team-role=\"{team_role}\"")
-                attr_text = " ".join(attrs)
-                body_rows.append(
-                    f"            <tr {attr_text}>\n"
-                    f"              {cell_html}\n"
-                    "            </tr>"
-                )
-            table_html = (
-                "          <div class=\"mvp-table-wrapper\">\n"
-                "            <table class=\"mvp-table\">\n"
-                "              <thead>\n"
-                "                <tr>\n"
-                f"                  {header_cells}\n"
-                "                </tr>\n"
-                "              </thead>\n"
-                "              <tbody>\n"
-                f"{'\n'.join(body_rows)}\n"
-                "              </tbody>\n"
-                "            </table>\n"
-                "          </div>\n"
+
+            list_items.append(
+                "            <li "
+                f"{attr_text}>\n"
+                f"              <span class=\"mvp-rank\">{rank_value}</span>\n"
+                "              <div class=\"mvp-top-content\">\n"
+                f"                <span class=\"mvp-name\">{name_value}</span>\n"
+                f"{meta_html}"
+                "              </div>\n"
+                f"              <span class=\"mvp-score\">{metric_display}</span>\n"
+                "            </li>"
+            )
+
+        if list_items:
+            entries_html = "\n".join(list_items)
+            card_body = (
+                "          <ol class=\"mvp-top-list\">\n"
+                f"{entries_html}\n"
+                "          </ol>\n"
             )
         else:
-            table_html = (
-                "          <p class=\"mvp-empty\">"
-                "Keine MVP-Rankings verfügbar.</p>\n"
+            card_body = (
+                "          <p class=\"mvp-empty\">Keine MVP-Rankings verfügbar.</p>\n"
             )
 
         cards.append(
-            "        <details class=\"mvp-card\">\n"
-            f"          <summary>{escape(indicator)}</summary>\n"
-            "          <div class=\"mvp-card-content\">\n"
-            f"{table_html}"
-            "          </div>\n"
-            "        </details>"
+            "        <article class=\"mvp-card\">\n"
+            "          <header class=\"mvp-card-header\">\n"
+            f"            <h3 class=\"mvp-card-title\">{escape(indicator)}</h3>\n"
+            "            <span class=\"mvp-card-badge\">Top&nbsp;3</span>\n"
+            "          </header>\n"
+            f"{card_body}"
+            "        </article>"
         )
 
     if not cards:
@@ -2070,11 +2080,15 @@ def format_mvp_rankings_section(
     return (
         "\n"
         "    <section class=\"mvp-group\">\n"
-        "      <h2>MVP-Rankings</h2>\n"
-        "      <p class=\"mvp-note\">Top-5-Platzierungen je Team aus dem offiziellen MVP-Ranking der Volleyball Bundesliga.</p>\n"
-        "      <div class=\"mvp-grid\">\n"
+        "      <details class=\"mvp-overview\">\n"
+        "        <summary>MVP-Rankings</summary>\n"
+        "        <div class=\"mvp-overview-content\">\n"
+        "          <p class=\"mvp-note\">Top-3-Platzierungen je Team aus dem offiziellen MVP-Ranking der Volleyball Bundesliga.</p>\n"
+        "          <div class=\"mvp-grid\">\n"
         f"{cards_html}\n"
-        "      </div>\n"
+        "          </div>\n"
+        "        </div>\n"
+        "      </details>\n"
         "    </section>\n"
         "\n"
     )
@@ -2785,8 +2799,39 @@ def build_html_report(
     }}
     .mvp-group {{
       margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+    }}
+    .mvp-overview {{
+      border-radius: 0.85rem;
+      border: none;
+      background: #ffffff;
+      box-shadow: 0 16px 36px rgba(15, 118, 110, 0.15);
+      overflow: hidden;
+    }}
+    .mvp-overview summary {{
+      cursor: pointer;
+      padding: 1rem 1.35rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.6vw, 1.2rem));
+    }}
+    .mvp-overview summary::-webkit-details-marker {{
+      display: none;
+    }}
+    .mvp-overview summary::after {{
+      content: "▾";
+      font-size: calc(var(--font-scale) * 1rem);
+      transition: transform 0.2s ease;
+    }}
+    .mvp-overview[open] summary::after {{
+      transform: rotate(180deg);
+    }}
+    .mvp-overview-content {{
+      padding: 0 1.35rem 1.35rem;
       display: grid;
-      gap: clamp(0.75rem, 2.5vw, 1.15rem);
+      gap: clamp(0.75rem, 2.5vw, 1.25rem);
     }}
     .mvp-note {{
       margin: 0;
@@ -3109,6 +3154,9 @@ def build_html_report(
       .accordion summary {{
         font-size: calc(var(--font-scale) * 1.05rem);
       }}
+      .mvp-overview summary {{
+        font-size: calc(var(--font-scale) * 1.05rem);
+      }}
       .roster-item {{
         grid-template-columns: minmax(3rem, auto) 1fr;
       }}
@@ -3148,6 +3196,23 @@ def build_html_report(
       .accordion {{
         background: var(--accordion-opponent-bg);
         box-shadow: 0 18px 40px var(--accordion-opponent-shadow);
+      }}
+      .mvp-overview {{
+        background: #132a30;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }}
+      .mvp-overview summary {{
+        color: #f1f5f9;
+      }}
+      .mvp-note {{
+        color: #cbd5f5;
+      }}
+      .mvp-card {{
+        background: #132a30;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }}
+      .mvp-card summary {{
+        color: #f1f5f9;
       }}
       .roster-group details:nth-of-type(2),
       .transfer-group details:nth-of-type(2),
