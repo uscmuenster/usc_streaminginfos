@@ -1479,6 +1479,20 @@ TEAM_SHORT_NAMES: Mapping[str, str] = {
 }
 
 
+def _build_team_short_name_lookup() -> Dict[str, str]:
+    lookup: Dict[str, str] = dict(TEAM_SHORT_NAMES)
+    for canonical, synonyms in TEAM_KEYWORD_SYNONYMS.items():
+        short = TEAM_SHORT_NAMES.get(canonical)
+        if not short:
+            continue
+        for alias in synonyms:
+            lookup[normalize_name(alias)] = short
+    return lookup
+
+
+TEAM_SHORT_NAME_LOOKUP = _build_team_short_name_lookup()
+
+
 def _build_team_news_config() -> Dict[str, Dict[str, str]]:
     return {
         normalize_name(USC_CANONICAL_NAME): {
@@ -2239,7 +2253,7 @@ def pretty_name(name: str) -> str:
 
 def get_team_short_label(name: str) -> str:
     normalized = normalize_name(name)
-    short = TEAM_SHORT_NAMES.get(normalized)
+    short = TEAM_SHORT_NAME_LOOKUP.get(normalized)
     if short:
         return short
     return pretty_name(name)
