@@ -200,6 +200,23 @@ class MatchStatsTotals:
 
 
 @dataclass(frozen=True)
+class MatchStatsMetrics:
+    serves_attempts: int
+    serves_errors: int
+    serves_points: int
+    receptions_attempts: int
+    receptions_errors: int
+    receptions_positive_pct: str
+    receptions_perfect_pct: str
+    attacks_attempts: int
+    attacks_errors: int
+    attacks_blocked: int
+    attacks_points: int
+    attacks_success_pct: str
+    blocks_points: int
+
+
+@dataclass(frozen=True)
 class NewsItem:
     title: str
     url: str
@@ -1771,6 +1788,78 @@ def _normalize_stats_totals_line(line: str) -> str:
     return stripped
 
 
+_MATCH_STATS_LINE_PATTERN = re.compile(
+    r"(?P<serve_attempts>\d+)\s+"
+    r"(?P<serve_combo>\d+)\s+"
+    r"(?P<reception_attempts>\d+)\s+"
+    r"(?P<reception_errors>\d+)\s+"
+    r"(?P<reception_pos>\d+%)\s+\("
+    r"(?P<reception_perf>\d+%)\)\s+"
+    r"(?P<attack_attempts>\d+)\s+"
+    r"(?P<attack_errors>\d+)\s+"
+    r"(?P<attack_combo>\d+)\s+"
+    r"(?P<attack_pct>\d+%)\s+"
+    r"(?P<block_points>\d+)"
+)
+
+
+def _split_compound_value(
+    value: str,
+    *,
+    first_max: int,
+    second_max: int,
+) -> Optional[Tuple[int, int]]:
+    digits = re.sub(r"\D+", "", value)
+    if not digits:
+        return None
+    max_second_len = min(3, len(digits))
+    for second_len in range(1, max_second_len + 1):
+        first_digits = digits[:-second_len]
+        second_digits = digits[-second_len:]
+        if not second_digits:
+            continue
+        first_value = int(first_digits) if first_digits else 0
+        second_value = int(second_digits)
+        if first_value <= first_max and second_value <= second_max:
+            return first_value, second_value
+    return None
+
+
+def _parse_match_stats_metrics(line: str) -> Optional[MatchStatsMetrics]:
+    match = _MATCH_STATS_LINE_PATTERN.search(line)
+    if not match:
+        return None
+    groups = match.groupdict()
+    serve_split = _split_compound_value(
+        groups["serve_combo"], first_max=150, second_max=60
+    )
+    attack_split = _split_compound_value(
+        groups["attack_combo"], first_max=60, second_max=150
+    )
+    if not serve_split or not attack_split:
+        return None
+    serves_errors, serves_points = serve_split
+    attacks_blocked, attacks_points = attack_split
+    try:
+        return MatchStatsMetrics(
+            serves_attempts=int(groups["serve_attempts"]),
+            serves_errors=serves_errors,
+            serves_points=serves_points,
+            receptions_attempts=int(groups["reception_attempts"]),
+            receptions_errors=int(groups["reception_errors"]),
+            receptions_positive_pct=groups["reception_pos"],
+            receptions_perfect_pct=groups["reception_perf"],
+            attacks_attempts=int(groups["attack_attempts"]),
+            attacks_errors=int(groups["attack_errors"]),
+            attacks_blocked=attacks_blocked,
+            attacks_points=attacks_points,
+            attacks_success_pct=groups["attack_pct"],
+            blocks_points=int(groups["block_points"]),
+        )
+    except ValueError:
+        return None
+
+
 def _extract_stats_team_names(lines: Sequence[str]) -> List[str]:
     names: List[str] = []
     team_pattern = re.compile(r"(?:Spielbericht\s+)?(.+?)\s+\d+\s*$")
@@ -2051,14 +2140,13 @@ def format_match_line(
         meta_html = f"<div class=\"match-meta\">{' · '.join(combined)}</div>"
     stats_html = ""
     if stats:
-        cards: List[str] = []
         normalized_home = normalize_name(match.home_team)
         normalized_away = normalize_name(match.away_team)
         normalized_usc = normalize_name(USC_CANONICAL_NAME)
+        fallback_cards: List[str] = []
+        table_entries: List[Tuple[str, Optional[str], MatchStatsMetrics]] = []
+        tables_available = True
         for entry in stats:
-            content_lines = [line for line in entry.header_lines if line]
-            content_lines.append(entry.totals_line)
-            content_text = "\n".join(content_lines)
             team_label = pretty_name(entry.team_name)
             normalized_team = normalize_name(entry.team_name)
             team_role: Optional[str] = None
@@ -2068,6 +2156,14 @@ def format_match_line(
                 team_role = "home"
             elif normalized_team == normalized_away:
                 team_role = "away"
+            metrics = _parse_match_stats_metrics(entry.totals_line)
+            if metrics is None:
+                tables_available = False
+            else:
+                table_entries.append((team_label, team_role, metrics))
+            content_lines = [line for line in entry.header_lines if line]
+            content_lines.append(entry.totals_line)
+            content_text = "\n".join(content_lines)
             attrs: List[str] = ["class=\"match-stats-card\""]
             if team_role:
                 attrs.append(f"data-team-role=\"{team_role}\"")
@@ -2078,9 +2174,97 @@ def format_match_line(
                 f"          <pre>{escape(content_text)}</pre>",
                 "        </article>",
             ]
-            cards.append("\n".join(card_lines))
-        if cards:
-            cards_html = "\n".join(cards)
+            fallback_cards.append("\n".join(card_lines))
+        if tables_available and table_entries:
+            serve_rows: List[str] = []
+            attack_rows: List[str] = []
+            for team_label, team_role, metrics in table_entries:
+                row_attr = f" data-team-role=\"{team_role}\"" if team_role else ""
+                serve_rows.append(
+                    "\n".join(
+                        [
+                            f"              <tr{row_attr}>",
+                            f"                <th scope=\"row\">{escape(team_label)}</th>",
+                            f"                <td>{metrics.serves_attempts}</td>",
+                            f"                <td>{metrics.serves_errors}</td>",
+                            f"                <td>{metrics.serves_points}</td>",
+                            f"                <td>{metrics.receptions_attempts}</td>",
+                            f"                <td>{metrics.receptions_errors}</td>",
+                            f"                <td>{escape(metrics.receptions_positive_pct)} ({escape(metrics.receptions_perfect_pct)})</td>",
+                            "              </tr>",
+                        ]
+                    )
+                )
+                attack_rows.append(
+                    "\n".join(
+                        [
+                            f"              <tr{row_attr}>",
+                            f"                <th scope=\"row\">{escape(team_label)}</th>",
+                            f"                <td>{metrics.attacks_attempts}</td>",
+                            f"                <td>{metrics.attacks_errors}</td>",
+                            f"                <td>{metrics.attacks_blocked}</td>",
+                            f"                <td>{metrics.attacks_points}</td>",
+                            f"                <td>{escape(metrics.attacks_success_pct)}</td>",
+                            f"                <td>{metrics.blocks_points}</td>",
+                            "              </tr>",
+                        ]
+                    )
+                )
+            serve_rows_html = "\n".join(serve_rows)
+            attack_rows_html = "\n".join(attack_rows)
+            stats_html = (
+                "    <details class=\"match-stats\">\n"
+                "      <summary>Teamstatistik</summary>\n"
+                "      <div class=\"match-stats-content\">\n"
+                "        <div class=\"match-stats-table-wrapper\">\n"
+                "          <table class=\"match-stats-table\">\n"
+                "            <thead>\n"
+                "              <tr>\n"
+                "                <th scope=\"col\" rowspan=\"2\">Team</th>\n"
+                "                <th scope=\"colgroup\" colspan=\"3\">Aufschlag</th>\n"
+                "                <th scope=\"colgroup\" colspan=\"3\">Annahme</th>\n"
+                "              </tr>\n"
+                "              <tr>\n"
+                "                <th scope=\"col\">Ges.</th>\n"
+                "                <th scope=\"col\">Fhl</th>\n"
+                "                <th scope=\"col\">Pkt</th>\n"
+                "                <th scope=\"col\">Ges.</th>\n"
+                "                <th scope=\"col\">Fhl</th>\n"
+                "                <th scope=\"col\">Pos (Prf)</th>\n"
+                "              </tr>\n"
+                "            </thead>\n"
+                "            <tbody>\n"
+                f"{serve_rows_html}\n"
+                "            </tbody>\n"
+                "          </table>\n"
+                "        </div>\n"
+                "        <div class=\"match-stats-table-wrapper\">\n"
+                "          <table class=\"match-stats-table\">\n"
+                "            <thead>\n"
+                "              <tr>\n"
+                "                <th scope=\"col\" rowspan=\"2\">Team</th>\n"
+                "                <th scope=\"colgroup\" colspan=\"5\">Angriff</th>\n"
+                "                <th scope=\"colgroup\" colspan=\"1\">Block</th>\n"
+                "              </tr>\n"
+                "              <tr>\n"
+                "                <th scope=\"col\">Ges.</th>\n"
+                "                <th scope=\"col\">Fhl</th>\n"
+                "                <th scope=\"col\">Blo</th>\n"
+                "                <th scope=\"col\">Pkt</th>\n"
+                "                <th scope=\"col\">Pkt%</th>\n"
+                "                <th scope=\"col\">Pkt</th>\n"
+                "              </tr>\n"
+                "            </thead>\n"
+                "            <tbody>\n"
+                f"{attack_rows_html}\n"
+                "            </tbody>\n"
+                "          </table>\n"
+                "        </div>\n"
+                "      </div>\n"
+                "    </details>"
+            )
+        elif fallback_cards:
+            cards_html = "\n".join(fallback_cards)
             stats_html = (
                 "    <details class=\"match-stats\">\n"
                 "      <summary>Teamstatistik</summary>\n"
@@ -2936,11 +3120,11 @@ def build_html_report(
       outline: none;
     }}
     .match-stats {{
-      margin-top: clamp(0.35rem, 1.1vw, 0.7rem);
+      margin-top: clamp(0.45rem, 1.4vw, 0.85rem);
       border-radius: 0.85rem;
       background: #f8fafc;
       border: 1px solid rgba(15, 118, 110, 0.18);
-      padding: 0.7rem 1rem;
+      padding: 0.75rem 1rem;
     }}
     .match-stats summary {{
       cursor: pointer;
@@ -2949,7 +3133,7 @@ def build_html_report(
       align-items: center;
       gap: 0.45rem;
       font-weight: 600;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      font-size: calc(var(--font-scale) * 0.92rem);
     }}
     .match-stats summary::-webkit-details-marker {{
       display: none;
@@ -2964,9 +3148,72 @@ def build_html_report(
       transform: rotate(180deg);
     }}
     .match-stats-content {{
-      margin-top: 0.65rem;
+      margin-top: 0.75rem;
       display: grid;
-      gap: 0.65rem;
+      gap: clamp(0.75rem, 2vw, 1.1rem);
+    }}
+    .match-stats-table-wrapper {{
+      overflow-x: auto;
+    }}
+    .match-stats-table {{
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #ffffff;
+      border-radius: 0.75rem;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      min-width: 22rem;
+    }}
+    .match-stats-table thead th {{
+      background: rgba(15, 118, 110, 0.12);
+      color: #0f766e;
+      font-size: calc(var(--font-scale) * 0.8rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      padding: 0.55rem 0.75rem;
+      text-align: center;
+    }}
+    .match-stats-table thead th:first-child {{
+      text-align: left;
+    }}
+    .match-stats-table tbody th {{
+      text-align: left;
+      padding: 0.65rem 0.85rem;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      font-weight: 600;
+      color: #0f172a;
+    }}
+    .match-stats-table tbody td {{
+      text-align: center;
+      padding: 0.65rem 0.7rem;
+      font-size: calc(var(--font-scale) * 0.9rem);
+      font-weight: 500;
+      color: #1f2937;
+    }}
+    .match-stats-table tbody tr + tr th,
+    .match-stats-table tbody tr + tr td {{
+      border-top: 1px solid #e2e8f0;
+    }}
+    .match-stats-table tbody tr[data-team-role="usc"] {{
+      background: #dcfce7;
+      color: #047857;
+    }}
+    .match-stats-table tbody tr[data-team-role="usc"] th,
+    .match-stats-table tbody tr[data-team-role="usc"] td {{
+      color: inherit;
+    }}
+    .match-stats-table tbody tr[data-team-role="home"],
+    .match-stats-table tbody tr[data-team-role="away"] {{
+      background: #e0f2fe;
+      color: #1d4ed8;
+    }}
+    .match-stats-table tbody tr[data-team-role="home"] th,
+    .match-stats-table tbody tr[data-team-role="home"] td,
+    .match-stats-table tbody tr[data-team-role="away"] th,
+    .match-stats-table tbody tr[data-team-role="away"] td {{
+      color: inherit;
     }}
     .match-stats-card {{
       border-radius: 0.75rem;
@@ -2979,7 +3226,8 @@ def build_html_report(
       border-color: rgba(45, 212, 191, 0.55);
       box-shadow: 0 14px 30px rgba(45, 212, 191, 0.16);
     }}
-    .match-stats-card[data-team-role="home"] {{
+    .match-stats-card[data-team-role="home"],
+    .match-stats-card[data-team-role="away"] {{
       border-color: rgba(59, 130, 246, 0.35);
     }}
     .match-stats-card h4 {{
@@ -3416,6 +3664,18 @@ def build_html_report(
       .match-result {{
         font-size: calc(var(--font-scale) * 0.85rem);
       }}
+      .match-stats summary {{
+        font-size: calc(var(--font-scale) * 1rem);
+      }}
+      .match-stats-table thead th {{
+        font-size: calc(var(--font-scale) * 0.75rem);
+        padding: 0.45rem 0.55rem;
+      }}
+      .match-stats-table tbody th,
+      .match-stats-table tbody td {{
+        font-size: calc(var(--font-scale) * 0.85rem);
+        padding: 0.5rem 0.55rem;
+      }}
       .accordion summary {{
         font-size: calc(var(--font-scale) * 1.05rem);
       }}
@@ -3459,6 +3719,32 @@ def build_html_report(
       }}
       .match-stats summary {{
         color: #e2f3f7;
+      }}
+      .match-stats-table {{
+        background: #0f1f24;
+        border-color: rgba(94, 234, 212, 0.25);
+        box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+      }}
+      .match-stats-table thead th {{
+        background: rgba(94, 234, 212, 0.16);
+        color: #5eead4;
+      }}
+      .match-stats-table tbody tr + tr th,
+      .match-stats-table tbody tr + tr td {{
+        border-color: rgba(148, 163, 184, 0.35);
+      }}
+      .match-stats-table tbody th,
+      .match-stats-table tbody td {{
+        color: #e2f3f7;
+      }}
+      .match-stats-table tbody tr[data-team-role="usc"] {{
+        background: rgba(22, 163, 74, 0.25);
+        color: #bbf7d0;
+      }}
+      .match-stats-table tbody tr[data-team-role="home"],
+      .match-stats-table tbody tr[data-team-role="away"] {{
+        background: rgba(59, 130, 246, 0.18);
+        color: #bfdbfe;
       }}
       .match-stats-card {{
         background: #0f1f24;
