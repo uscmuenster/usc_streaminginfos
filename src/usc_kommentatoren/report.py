@@ -1166,9 +1166,9 @@ _MANUAL_STATS_TOTALS_DATA: Dict[str, Any] = {
             "stats_url": "https://www.volleyball-bundesliga.de/uploads/19bb6c96-f1cc-4867-9058-0864849ec964",
             "teams": [
                 {
-                    "name": "Binder Blaubären Flacht",
+                    "name": "Binder Blaubären TSV Flacht",
                     "aliases": [
-                        "Binder Blaubären TSV Flacht",
+                        "Binder Blaubären Flacht",
                     ],
                     "serve": {
                         "attempts": 50,
