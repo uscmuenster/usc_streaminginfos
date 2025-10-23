@@ -13,6 +13,7 @@ from .report import (
     NEWS_LOOKBACK_DAYS,
     USC_CANONICAL_NAME,
     BERLIN_TZ,
+    THEME_COLORS,
     build_html_report,
     collect_instagram_links,
     collect_match_stats_totals,
@@ -283,13 +284,105 @@ def main() -> int:
     )
 
     html = build_html_report(**report_kwargs)
-    args.output.parent.mkdir(parents=True, exist_ok=True)
+    output_dir = args.output.parent
+    output_dir.mkdir(parents=True, exist_ok=True)
     args.output.write_text(html, encoding="utf-8")
 
+    app_relative: Optional[str] = None
     if not args.skip_app_output and args.app_output:
         app_html = build_html_report(font_scale=args.app_scale, **report_kwargs)
         args.app_output.parent.mkdir(parents=True, exist_ok=True)
         args.app_output.write_text(app_html, encoding="utf-8")
+        try:
+            app_relative = args.app_output.relative_to(output_dir).as_posix()
+        except ValueError:
+            app_relative = args.app_output.name
+
+    output_relative = args.output.relative_to(output_dir).as_posix()
+
+    manifest_path = output_dir / "manifest.webmanifest"
+    start_url = f"./{app_relative}" if app_relative else f"./{output_relative}"
+    manifest_payload = {
+        "name": "USC Streaminginfos",
+        "short_name": "USC Infos",
+        "description": "Aktuelle Informationen und Statistiken zu USC Münster.",
+        "lang": "de",
+        "start_url": start_url,
+        "scope": "./",
+        "display": "standalone",
+        "background_color": THEME_COLORS["mvp_overview_summary_bg"],
+        "theme_color": THEME_COLORS["mvp_overview_summary_bg"],
+        "orientation": "portrait-primary",
+        "icons": [
+            {
+                "src": "favicon.png",
+                "sizes": "192x192",
+                "type": "image/png",
+            },
+            {
+                "src": "favicon.png",
+                "sizes": "512x512",
+                "type": "image/png",
+                "purpose": "any maskable",
+            },
+        ],
+    }
+    manifest_path.write_text(
+        json.dumps(manifest_payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    offline_urls = [
+        "./",
+        f"./{output_relative}",
+        "./favicon.png",
+        "./manifest.webmanifest",
+    ]
+    if app_relative:
+        offline_urls.append(f"./{app_relative}")
+
+    offline_urls_literal = ",\n        ".join(f'"{item}"' for item in offline_urls)
+    sw_path = output_dir / "sw.js"
+    sw_script = f"""const CACHE_NAME = 'usc-streaminginfos-v1';
+const OFFLINE_URLS = [
+        {offline_urls_literal}
+];
+const FALLBACK_URL = './{output_relative}';
+
+self.addEventListener('install', (event) => {{
+  self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(OFFLINE_URLS))
+      .catch(() => undefined)
+  );
+}});
+
+self.addEventListener('activate', (event) => {{
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))
+    )
+  );
+}});
+
+self.addEventListener('fetch', (event) => {{
+  if (event.request.method !== 'GET') {{
+    return;
+  }}
+
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {{
+      if (cachedResponse) {{
+        return cachedResponse;
+      }}
+
+      return fetch(event.request).catch(() => caches.match(FALLBACK_URL));
+    }})
+  );
+}});
+"""
+    sw_path.write_text(sw_script, encoding="utf-8")
     return 0
 
 
