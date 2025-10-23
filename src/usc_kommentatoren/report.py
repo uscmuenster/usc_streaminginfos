@@ -2493,6 +2493,13 @@ def format_mvp_rankings_section(
     normalized_usc = normalize_name(usc_name)
     normalized_opponent = normalize_name(opponent_name)
 
+    def matches_team(team_normalized: str, target_normalized: str) -> bool:
+        if not team_normalized or not target_normalized:
+            return False
+        if team_normalized == target_normalized:
+            return True
+        return team_normalized in target_normalized or target_normalized in team_normalized
+
     categories: List[str] = []
     for index, (indicator, payload) in enumerate(rankings.items()):
         headers = list((payload or {}).get("headers") or [])
@@ -2519,9 +2526,9 @@ def format_mvp_rankings_section(
             else:
                 normalized_team = ""
 
-            if normalized_team == normalized_opponent:
+            if matches_team(normalized_team, normalized_opponent):
                 team_role = "opponent"
-            elif normalized_team == normalized_usc:
+            elif matches_team(normalized_team, normalized_usc):
                 team_role = "usc"
             else:
                 continue
