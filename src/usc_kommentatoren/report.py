@@ -1530,40 +1530,6 @@ def _build_team_keyword_synonyms() -> Dict[str, Sequence[str]]:
 TEAM_KEYWORD_SYNONYMS = _build_team_keyword_synonyms()
 
 
-TEAM_CANONICAL_NAMES: Mapping[str, str] = {
-    normalize_name("Allianz MTV Stuttgart"): "Allianz MTV Stuttgart",
-    normalize_name("Binder Blaubären TSV Flacht"): "Binder Blaubären TSV Flacht",
-    normalize_name("Dresdner SC"): "Dresdner SC",
-    normalize_name("ETV Hamburger Volksbank Volleys"): "ETV Hamburger Volksbank Volleys",
-    normalize_name("Ladies in Black Aachen"): "Ladies in Black Aachen",
-    normalize_name("SSC Palmberg Schwerin"): "SSC Palmberg Schwerin",
-    normalize_name("Schwarz-Weiß Erfurt"): "Schwarz-Weiß Erfurt",
-    normalize_name("Skurios Volleys Borken"): "Skurios Volleys Borken",
-    normalize_name("USC Münster"): USC_CANONICAL_NAME,
-    normalize_name("VC Wiesbaden"): "VC Wiesbaden",
-    normalize_name("VfB Suhl LOTTO Thüringen"): "VfB Suhl LOTTO Thüringen",
-}
-
-
-def _build_team_canonical_lookup() -> Dict[str, str]:
-    lookup: Dict[str, str] = dict(TEAM_CANONICAL_NAMES)
-    for normalized_name, synonyms in TEAM_KEYWORD_SYNONYMS.items():
-        canonical = TEAM_CANONICAL_NAMES.get(normalized_name)
-        if not canonical:
-            continue
-        for alias in synonyms:
-            lookup[normalize_name(alias)] = canonical
-    return lookup
-
-
-TEAM_CANONICAL_LOOKUP = _build_team_canonical_lookup()
-
-
-def get_team_keywords(team_name: str) -> KeywordSet:
-    synonyms = TEAM_KEYWORD_SYNONYMS.get(normalize_name(team_name), ())
-    return build_keywords(team_name, *synonyms)
-
-
 TEAM_SHORT_NAMES: Mapping[str, str] = {
     normalize_name("Allianz MTV Stuttgart"): "Stuttgart",
     normalize_name("Binder Blaubären TSV Flacht"): "Flacht",
@@ -1591,6 +1557,45 @@ def _build_team_short_name_lookup() -> Dict[str, str]:
 
 
 TEAM_SHORT_NAME_LOOKUP = _build_team_short_name_lookup()
+
+
+TEAM_CANONICAL_NAMES: Mapping[str, str] = {
+    normalize_name("Allianz MTV Stuttgart"): "Allianz MTV Stuttgart",
+    normalize_name("Binder Blaubären TSV Flacht"): "Binder Blaubären TSV Flacht",
+    normalize_name("Dresdner SC"): "Dresdner SC",
+    normalize_name("ETV Hamburger Volksbank Volleys"): "ETV Hamburger Volksbank Volleys",
+    normalize_name("Ladies in Black Aachen"): "Ladies in Black Aachen",
+    normalize_name("SSC Palmberg Schwerin"): "SSC Palmberg Schwerin",
+    normalize_name("Schwarz-Weiß Erfurt"): "Schwarz-Weiß Erfurt",
+    normalize_name("Skurios Volleys Borken"): "Skurios Volleys Borken",
+    normalize_name("USC Münster"): USC_CANONICAL_NAME,
+    normalize_name("VC Wiesbaden"): "VC Wiesbaden",
+    normalize_name("VfB Suhl LOTTO Thüringen"): "VfB Suhl LOTTO Thüringen",
+}
+
+
+def _build_team_canonical_lookup() -> Dict[str, str]:
+    lookup: Dict[str, str] = dict(TEAM_CANONICAL_NAMES)
+    for normalized_name, synonyms in TEAM_KEYWORD_SYNONYMS.items():
+        canonical = TEAM_CANONICAL_NAMES.get(normalized_name)
+        if not canonical:
+            continue
+        for alias in synonyms:
+            lookup[normalize_name(alias)] = canonical
+    for normalized_name, short_label in TEAM_SHORT_NAMES.items():
+        canonical = TEAM_CANONICAL_NAMES.get(normalized_name)
+        if not canonical:
+            continue
+        lookup[normalize_name(short_label)] = canonical
+    return lookup
+
+
+TEAM_CANONICAL_LOOKUP = _build_team_canonical_lookup()
+
+
+def get_team_keywords(team_name: str) -> KeywordSet:
+    synonyms = TEAM_KEYWORD_SYNONYMS.get(normalize_name(team_name), ())
+    return build_keywords(team_name, *synonyms)
 
 
 def _build_team_news_config() -> Dict[str, Dict[str, str]]:
@@ -2552,18 +2557,28 @@ def format_match_line(
     stats_html = ""
     if stats:
         normalized_usc = normalize_name(USC_CANONICAL_NAME)
+        canonical_usc = TEAM_CANONICAL_LOOKUP.get(normalized_usc)
+        if canonical_usc:
+            normalized_usc = normalize_name(canonical_usc)
         highlight_map: Dict[str, str] = {}
         if highlight_teams:
             for role, name in highlight_teams.items():
                 if not name:
                     continue
-                highlight_map[role] = normalize_name(name)
+                normalized_focus = normalize_name(name)
+                canonical_focus = TEAM_CANONICAL_LOOKUP.get(normalized_focus)
+                if canonical_focus:
+                    normalized_focus = normalize_name(canonical_focus)
+                highlight_map[role] = normalized_focus
         fallback_cards: List[str] = []
         table_entries: List[Tuple[str, Optional[str], MatchStatsMetrics]] = []
         tables_available = True
         for entry in stats:
             team_label = get_team_short_label(entry.team_name)
             normalized_team = normalize_name(entry.team_name)
+            canonical_team = TEAM_CANONICAL_LOOKUP.get(normalized_team)
+            if canonical_team:
+                normalized_team = normalize_name(canonical_team)
             team_role: Optional[str] = None
             if normalized_team == normalized_usc:
                 team_role = "usc"
