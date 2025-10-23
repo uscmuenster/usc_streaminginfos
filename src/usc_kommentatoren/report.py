@@ -2825,19 +2825,41 @@ def format_mvp_rankings_section(
             games_raw = (values.get("Spiele") or "").strip()
 
             metric_columns = ("Wert1", "Wert2", "Wert3", "Kennzahl", "Wertung")
-            metric_values: List[str] = []
+            metric_map: Dict[str, str] = {}
+            available_metrics: List[str] = []
             for key in metric_columns:
                 raw_value = (values.get(key) or "").strip()
                 if raw_value:
-                    metric_values.append(raw_value)
+                    metric_map[key] = raw_value
+                    available_metrics.append(raw_value)
 
-            if metric_values:
-                first_metric = escape(metric_values[0])
-                last_metric = escape(metric_values[-1])
-                if len(metric_values) == 1 or first_metric == last_metric:
-                    score_value = first_metric
+            primary_value: Optional[str]
+            secondary_value: Optional[str]
+
+            if metric_map:
+                primary_value = metric_map.get("Wert1")
+                if not primary_value and available_metrics:
+                    primary_value = available_metrics[0]
+
+                secondary_value = metric_map.get("Wertung")
+                if not secondary_value and available_metrics:
+                    fallback_candidates = list(available_metrics)
+                    if primary_value and fallback_candidates and fallback_candidates[-1] == primary_value:
+                        fallback_candidates.pop()
+                    secondary_value = fallback_candidates[-1] if fallback_candidates else None
+            else:
+                primary_value = None
+                secondary_value = None
+
+            if primary_value and secondary_value:
+                if primary_value == secondary_value:
+                    score_value = escape(primary_value)
                 else:
-                    score_value = f"{first_metric} | {last_metric}"
+                    score_value = f"{escape(primary_value)} | {escape(secondary_value)}"
+            elif primary_value:
+                score_value = escape(primary_value)
+            elif secondary_value:
+                score_value = escape(secondary_value)
             else:
                 score_value = "–"
 
