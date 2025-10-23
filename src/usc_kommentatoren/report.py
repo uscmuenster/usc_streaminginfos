@@ -75,7 +75,7 @@ HIGHLIGHT_COLORS: Dict[str, Dict[str, str]] = {
 }
 
 THEME_COLORS: Dict[str, str] = {
-    "mvp_overview_summary_bg": "#fde68a",
+    "mvp_overview_summary_bg": "#0f766e",
     "dark_mvp_overview_summary_bg": "rgba(253, 186, 116, 0.35)",
 }
 
