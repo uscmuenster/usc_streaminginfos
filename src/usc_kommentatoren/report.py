@@ -1530,6 +1530,35 @@ def _build_team_keyword_synonyms() -> Dict[str, Sequence[str]]:
 TEAM_KEYWORD_SYNONYMS = _build_team_keyword_synonyms()
 
 
+TEAM_SHORT_NAMES: Mapping[str, str] = {
+    normalize_name("Allianz MTV Stuttgart"): "Stuttgart",
+    normalize_name("Binder Blaubären TSV Flacht"): "Flacht",
+    normalize_name("Dresdner SC"): "Dresden",
+    normalize_name("ETV Hamburger Volksbank Volleys"): "Hamburg",
+    normalize_name("Ladies in Black Aachen"): "Aachen",
+    normalize_name("SSC Palmberg Schwerin"): "Schwerin",
+    normalize_name("Schwarz-Weiß Erfurt"): "Erfurt",
+    normalize_name("Skurios Volleys Borken"): "Borken",
+    normalize_name("USC Münster"): "Münster",
+    normalize_name("VC Wiesbaden"): "Wiesbaden",
+    normalize_name("VfB Suhl LOTTO Thüringen"): "Suhl",
+}
+
+
+def _build_team_short_name_lookup() -> Dict[str, str]:
+    lookup: Dict[str, str] = dict(TEAM_SHORT_NAMES)
+    for canonical, synonyms in TEAM_KEYWORD_SYNONYMS.items():
+        short = TEAM_SHORT_NAMES.get(canonical)
+        if not short:
+            continue
+        for alias in synonyms:
+            lookup[normalize_name(alias)] = short
+    return lookup
+
+
+TEAM_SHORT_NAME_LOOKUP = _build_team_short_name_lookup()
+
+
 TEAM_CANONICAL_NAMES: Mapping[str, str] = {
     normalize_name("Allianz MTV Stuttgart"): "Allianz MTV Stuttgart",
     normalize_name("Binder Blaubären TSV Flacht"): "Binder Blaubären TSV Flacht",
@@ -1567,35 +1596,6 @@ TEAM_CANONICAL_LOOKUP = _build_team_canonical_lookup()
 def get_team_keywords(team_name: str) -> KeywordSet:
     synonyms = TEAM_KEYWORD_SYNONYMS.get(normalize_name(team_name), ())
     return build_keywords(team_name, *synonyms)
-
-
-TEAM_SHORT_NAMES: Mapping[str, str] = {
-    normalize_name("Allianz MTV Stuttgart"): "Stuttgart",
-    normalize_name("Binder Blaubären TSV Flacht"): "Flacht",
-    normalize_name("Dresdner SC"): "Dresden",
-    normalize_name("ETV Hamburger Volksbank Volleys"): "Hamburg",
-    normalize_name("Ladies in Black Aachen"): "Aachen",
-    normalize_name("SSC Palmberg Schwerin"): "Schwerin",
-    normalize_name("Schwarz-Weiß Erfurt"): "Erfurt",
-    normalize_name("Skurios Volleys Borken"): "Borken",
-    normalize_name("USC Münster"): "Münster",
-    normalize_name("VC Wiesbaden"): "Wiesbaden",
-    normalize_name("VfB Suhl LOTTO Thüringen"): "Suhl",
-}
-
-
-def _build_team_short_name_lookup() -> Dict[str, str]:
-    lookup: Dict[str, str] = dict(TEAM_SHORT_NAMES)
-    for canonical, synonyms in TEAM_KEYWORD_SYNONYMS.items():
-        short = TEAM_SHORT_NAMES.get(canonical)
-        if not short:
-            continue
-        for alias in synonyms:
-            lookup[normalize_name(alias)] = short
-    return lookup
-
-
-TEAM_SHORT_NAME_LOOKUP = _build_team_short_name_lookup()
 
 
 def _build_team_news_config() -> Dict[str, Dict[str, str]]:
