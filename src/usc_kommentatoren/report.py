@@ -4012,6 +4012,7 @@ def build_html_report(
     }}
     .mvp-category-title {{
       flex: 1;
+      color: #0f766e;
     }}
     .mvp-category-badge {{
       display: inline-flex;
