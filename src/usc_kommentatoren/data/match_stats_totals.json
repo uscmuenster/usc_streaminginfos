@@ -1,0 +1,60 @@
+{
+  "matches": [
+    {
+      "stats_url": "https://www.volleyball-bundesliga.de/uploads/19bb6c96-f1cc-4867-9058-0864849ec964",
+      "teams": [
+        {
+          "name": "SSC Palmberg Schwerin",
+          "serve": {
+            "attempts": 74,
+            "errors": 6,
+            "points": 10
+          },
+          "reception": {
+            "attempts": 37,
+            "errors": 3,
+            "positive_pct": "51%",
+            "perfect_pct": "24%"
+          },
+          "attack": {
+            "attempts": 78,
+            "errors": 10,
+            "blocked": 3,
+            "points": 37,
+            "success_pct": "47%"
+          },
+          "block": {
+            "points": 11
+          }
+        },
+        {
+          "name": "ETV Hamburger Volksbank Volleys",
+          "aliases": [
+            "ETV Hamburger Volksbank V."
+          ],
+          "serve": {
+            "attempts": 42,
+            "errors": 5,
+            "points": 3
+          },
+          "reception": {
+            "attempts": 63,
+            "errors": 10,
+            "positive_pct": "29%",
+            "perfect_pct": "12%"
+          },
+          "attack": {
+            "attempts": 81,
+            "errors": 9,
+            "blocked": 13,
+            "points": 19,
+            "success_pct": "23%"
+          },
+          "block": {
+            "points": 6
+          }
+        }
+      ]
+    }
+  ]
+}

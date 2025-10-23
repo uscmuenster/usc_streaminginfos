@@ -1,4 +1,6 @@
 __pycache__/
 data/
+!src/usc_kommentatoren/data/
+!src/usc_kommentatoren/data/match_stats_totals.json
 !docs/data/
 report.html

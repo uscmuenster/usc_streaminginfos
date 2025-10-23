@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import csv
+import json
 import time
 from dataclasses import dataclass, replace
 import re
@@ -197,6 +198,7 @@ class MatchStatsTotals:
     team_name: str
     header_lines: Tuple[str, ...]
     totals_line: str
+    metrics: Optional["MatchStatsMetrics"] = None
 
 
 @dataclass(frozen=True)
@@ -1098,6 +1100,83 @@ def _build_team_homepages() -> Dict[str, str]:
 TEAM_HOMEPAGES = _build_team_homepages()
 
 
+_MANUAL_STATS_TOTALS: Optional[
+    Dict[str, List[Tuple[Tuple[str, ...], str, MatchStatsMetrics]]]
+] = None
+
+
+def _load_manual_stats_totals() -> Dict[str, List[Tuple[Tuple[str, ...], str, MatchStatsMetrics]]]:
+    global _MANUAL_STATS_TOTALS
+    if _MANUAL_STATS_TOTALS is not None:
+        return _MANUAL_STATS_TOTALS
+
+    data_path = Path(__file__).with_name("data") / "match_stats_totals.json"
+    if not data_path.exists():
+        _MANUAL_STATS_TOTALS = {}
+        return _MANUAL_STATS_TOTALS
+
+    try:
+        with data_path.open("r", encoding="utf-8") as handle:
+            payload = json.load(handle)
+    except (OSError, json.JSONDecodeError):
+        _MANUAL_STATS_TOTALS = {}
+        return _MANUAL_STATS_TOTALS
+
+    manual: Dict[str, List[Tuple[Tuple[str, ...], str, MatchStatsMetrics]]] = {}
+    matches = payload.get("matches", []) if isinstance(payload, dict) else []
+    for match_entry in matches:
+        if not isinstance(match_entry, dict):
+            continue
+        stats_url = match_entry.get("stats_url")
+        if not stats_url:
+            continue
+        teams_entries: List[Tuple[Tuple[str, ...], str, MatchStatsMetrics]] = []
+        for team_entry in match_entry.get("teams", []) or []:
+            if not isinstance(team_entry, dict):
+                continue
+            name = team_entry.get("name")
+            if not name:
+                continue
+            serve = team_entry.get("serve") or {}
+            reception = team_entry.get("reception") or {}
+            attack = team_entry.get("attack") or {}
+            block = team_entry.get("block") or {}
+            try:
+                metrics = MatchStatsMetrics(
+                    serves_attempts=int(serve["attempts"]),
+                    serves_errors=int(serve["errors"]),
+                    serves_points=int(serve["points"]),
+                    receptions_attempts=int(reception["attempts"]),
+                    receptions_errors=int(reception["errors"]),
+                    receptions_positive_pct=str(reception["positive_pct"]),
+                    receptions_perfect_pct=str(reception["perfect_pct"]),
+                    attacks_attempts=int(attack["attempts"]),
+                    attacks_errors=int(attack["errors"]),
+                    attacks_blocked=int(attack["blocked"]),
+                    attacks_points=int(attack["points"]),
+                    attacks_success_pct=str(attack["success_pct"]),
+                    blocks_points=int(block["points"]),
+                )
+            except (KeyError, TypeError, ValueError):
+                continue
+            normalized_keys: List[str] = []
+            primary_key = normalize_name(name)
+            normalized_keys.append(primary_key)
+            for alias in team_entry.get("aliases", []) or []:
+                alias_name = str(alias).strip()
+                if not alias_name:
+                    continue
+                normalized_alias = normalize_name(alias_name)
+                if normalized_alias not in normalized_keys:
+                    normalized_keys.append(normalized_alias)
+            teams_entries.append((tuple(normalized_keys), name, metrics))
+        if teams_entries:
+            manual[stats_url] = teams_entries
+
+    _MANUAL_STATS_TOTALS = manual
+    return manual
+
+
 def get_team_homepage(team_name: str) -> Optional[str]:
     return TEAM_HOMEPAGES.get(normalize_name(team_name))
 
@@ -1941,6 +2020,7 @@ def fetch_match_stats_totals(
     cached = _STATS_TOTALS_CACHE.get(stats_url)
     if cached is not None:
         return cached
+    manual_entries = _load_manual_stats_totals().get(stats_url)
     try:
         response = _http_get(
             stats_url,
@@ -1948,11 +2028,59 @@ def fetch_match_stats_totals(
             delay_seconds=delay_seconds,
         )
     except requests.RequestException:
+        if manual_entries:
+            summaries = tuple(
+                MatchStatsTotals(
+                    team_name=team_name,
+                    header_lines=(),
+                    totals_line="",
+                    metrics=metrics,
+                )
+                for _, team_name, metrics in manual_entries
+            )
+            _STATS_TOTALS_CACHE[stats_url] = summaries
+            return summaries
         _STATS_TOTALS_CACHE[stats_url] = ()
         return ()
-    summaries = _parse_stats_totals_pdf(response.content)
-    _STATS_TOTALS_CACHE[stats_url] = summaries
-    return summaries
+    summaries = list(_parse_stats_totals_pdf(response.content))
+    if manual_entries:
+        index_lookup: Dict[str, int] = {}
+        for idx, (keys, _, _) in enumerate(manual_entries):
+            for key in keys:
+                index_lookup[key] = idx
+        updated: List[MatchStatsTotals] = []
+        matched_indices: set[int] = set()
+        for entry in summaries:
+            normalized_team = normalize_name(entry.team_name)
+            match_idx = index_lookup.get(normalized_team)
+            if match_idx is not None:
+                matched_indices.add(match_idx)
+                _, _, metrics = manual_entries[match_idx]
+                updated.append(
+                    MatchStatsTotals(
+                        team_name=entry.team_name,
+                        header_lines=entry.header_lines,
+                        totals_line=entry.totals_line,
+                        metrics=metrics,
+                    )
+                )
+            else:
+                updated.append(entry)
+        for idx, (_keys, team_name, metrics) in enumerate(manual_entries):
+            if idx in matched_indices:
+                continue
+            updated.append(
+                MatchStatsTotals(
+                    team_name=team_name,
+                    header_lines=(),
+                    totals_line="",
+                    metrics=metrics,
+                )
+            )
+        summaries = updated
+    summaries_tuple = tuple(summaries)
+    _STATS_TOTALS_CACHE[stats_url] = summaries_tuple
+    return summaries_tuple
 
 
 def collect_match_stats_totals(
@@ -2156,7 +2284,7 @@ def format_match_line(
                 team_role = "home"
             elif normalized_team == normalized_away:
                 team_role = "away"
-            metrics = _parse_match_stats_metrics(entry.totals_line)
+            metrics = entry.metrics or _parse_match_stats_metrics(entry.totals_line)
             if metrics is None:
                 tables_available = False
             else:
