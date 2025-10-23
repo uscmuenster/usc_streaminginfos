@@ -3484,11 +3484,17 @@ def build_html_report(
   <meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\">
   <meta http-equiv=\"Pragma\" content=\"no-cache\">
   <meta http-equiv=\"Expires\" content=\"0\">
+  <meta name=\"theme-color\" content=\"{THEME_COLORS['mvp_overview_summary_bg']}\">
+  <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"favicon.png\">
+  <link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"favicon.png\">
+  <link rel=\"apple-touch-icon\" href=\"favicon.png\">
+  <link rel=\"manifest\" href=\"manifest.webmanifest\">
   <title>Nächster USC-Heimgegner</title>
   <style>
     :root {{
       color-scheme: light dark;
       --font-scale: {scale_value};
+      --theme-color: {THEME_COLORS['mvp_overview_summary_bg']};
       --accordion-opponent-bg: {HIGHLIGHT_COLORS['opponent']['accordion_bg']};
       --accordion-opponent-shadow: {HIGHLIGHT_COLORS['opponent']['accordion_shadow']};
       --accordion-usc-bg: {HIGHLIGHT_COLORS['usc']['accordion_bg']};
@@ -3862,6 +3868,7 @@ def build_html_report(
       font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.15rem));
       background: var(--mvp-overview-summary-bg);
       border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      color: #ffffff;
     }}
     .mvp-overview summary::-webkit-details-marker {{
       display: none;
@@ -3883,6 +3890,59 @@ def build_html_report(
       margin: 0;
       font-size: calc(var(--font-scale) * 0.85rem);
       color: #475569;
+    }}
+    .pwa-install-banner {{
+      position: fixed;
+      left: 50%;
+      bottom: 1.25rem;
+      transform: translateX(-50%);
+      width: min(90vw, 22rem);
+      background: var(--theme-color);
+      color: #ffffff;
+      border-radius: 1rem;
+      box-shadow: 0 18px 40px rgba(15, 118, 110, 0.28);
+      padding: 1rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      z-index: 1200;
+      font-size: calc(var(--font-scale) * 0.95rem);
+    }}
+    .pwa-install-content {{
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }}
+    .pwa-install-content strong {{
+      font-size: calc(var(--font-scale) * 1.05rem);
+    }}
+    .pwa-install-actions {{
+      display: flex;
+      gap: 0.6rem;
+      justify-content: flex-end;
+    }}
+    .pwa-install-button,
+    .pwa-install-dismiss {{
+      appearance: none;
+      border: none;
+      border-radius: 999px;
+      padding: 0.45rem 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: calc(var(--font-scale) * 0.85rem);
+    }}
+    .pwa-install-button {{
+      background: #ffffff;
+      color: var(--theme-color);
+      box-shadow: 0 8px 20px rgba(15, 118, 110, 0.25);
+    }}
+    .pwa-install-button:focus {{
+      outline: 2px solid rgba(255, 255, 255, 0.8);
+      outline-offset: 2px;
+    }}
+    .pwa-install-dismiss {{
+      background: rgba(255, 255, 255, 0.25);
+      color: #f8fafc;
     }}
     .mvp-legend {{
       display: flex;
@@ -4349,6 +4409,7 @@ def build_html_report(
         --opponent-highlight-row-bg: {HIGHLIGHT_COLORS['opponent']['dark_row_bg']};
         --opponent-highlight-row-text: {HIGHLIGHT_COLORS['opponent']['dark_row_text']};
         --mvp-overview-summary-bg: {THEME_COLORS['dark_mvp_overview_summary_bg']};
+        --theme-color: {THEME_COLORS['dark_mvp_overview_summary_bg']};
       }}
       body {{
         background: #0e1b1f;
@@ -4470,6 +4531,15 @@ def build_html_report(
       }}
       .season-results-status {{
         color: #94a3b8;
+      }}
+      .pwa-install-banner {{
+        box-shadow: 0 22px 44px rgba(8, 47, 73, 0.55);
+      }}
+      .pwa-install-button {{
+        color: {THEME_COLORS['mvp_overview_summary_bg']};
+      }}
+      .pwa-install-dismiss {{
+        color: #e2f3f7;
       }}
       .match-result {{
         color: #5eead4;
@@ -4613,6 +4683,90 @@ def build_html_report(
 {season_results_section}
 {update_note_html}
   </main>
+  <script>
+    (() => {{
+      const themeColor = "{THEME_COLORS['mvp_overview_summary_bg']}";
+      if ("serviceWorker" in navigator) {{
+        window.addEventListener("load", () => {{
+          navigator.serviceWorker.register("sw.js").catch((error) => {{
+            console.error("Service worker registration failed", error);
+          }});
+        }});
+      }}
+
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeMeta) {{
+        themeMeta.setAttribute("content", themeColor);
+      }}
+
+      let deferredPrompt;
+      const createBanner = () => {{
+        if (document.getElementById("pwa-install-banner")) {{
+          return;
+        }}
+        if (window.matchMedia("(display-mode: standalone)").matches) {{
+          return;
+        }}
+
+        const banner = document.createElement("div");
+        banner.id = "pwa-install-banner";
+        banner.className = "pwa-install-banner";
+
+        const content = document.createElement("div");
+        content.className = "pwa-install-content";
+        const title = document.createElement("strong");
+        title.textContent = "USC Streaminginfos als App?";
+        const hint = document.createElement("span");
+        hint.textContent = "Installiere die Seite auf deinem Homebildschirm.";
+        content.append(title, hint);
+
+        const actions = document.createElement("div");
+        actions.className = "pwa-install-actions";
+
+        const installButton = document.createElement("button");
+        installButton.type = "button";
+        installButton.className = "pwa-install-button";
+        installButton.textContent = "Installieren";
+
+        const dismissButton = document.createElement("button");
+        dismissButton.type = "button";
+        dismissButton.className = "pwa-install-dismiss";
+        dismissButton.textContent = "Schließen";
+
+        actions.append(installButton, dismissButton);
+        banner.append(content, actions);
+
+        dismissButton.addEventListener("click", () => {{
+          banner.remove();
+          deferredPrompt = undefined;
+        }});
+
+        installButton.addEventListener("click", async () => {{
+          if (!deferredPrompt) {{
+            banner.remove();
+            return;
+          }}
+          deferredPrompt.prompt();
+          try {{
+            await deferredPrompt.userChoice;
+          }} catch (error) {{
+            console.warn("PWA installation prompt dismissed", error);
+          }} finally {{
+            deferredPrompt = undefined;
+            banner.remove();
+          }}
+        }});
+
+        document.body.appendChild(banner);
+      }};
+
+      window.addEventListener("beforeinstallprompt", (event) => {{
+        event.preventDefault();
+        deferredPrompt = event;
+        window.setTimeout(createBanner, 1200);
+      }});
+    }})();
+  </script>
 </body>
 </html>
 """
