@@ -2809,6 +2809,12 @@ def format_mvp_rankings_section(
         rows = list((payload or {}).get("rows") or [])
         header_index = {header: idx for idx, header in enumerate(headers)}
 
+        def value_for(row: Sequence[str], header: str) -> str:
+            index = header_index.get(header)
+            if index is not None and index < len(row):
+                return row[index].strip()
+            return ""
+
         team_entries: Dict[str, List[Dict[str, str]]] = {"opponent": [], "usc": []}
         for row in rows:
             values: Dict[str, str] = {}
@@ -2816,30 +2822,38 @@ def format_mvp_rankings_section(
                 if idx < len(row):
                     values[header] = row[idx]
 
-            name_value = escape((values.get("Name") or "").strip() or "–")
-            rank_value = escape((values.get("Rang") or "").strip() or "–")
-            team_raw = (values.get("Mannschaft") or values.get("Team") or "").strip()
+            name_value = escape((values.get("Name") or value_for(row, "Name") or "–"))
+            rank_value = escape((values.get("Rang") or value_for(row, "Rang") or "–"))
+            team_raw = (
+                (values.get("Mannschaft") or values.get("Team") or value_for(row, "Mannschaft"))
+            ).strip()
             team_label = get_team_short_label(team_raw) if team_raw else ""
-            position_raw = (values.get("Position") or "").strip()
-            sets_raw = (values.get("Sätze") or "").strip()
-            games_raw = (values.get("Spiele") or "").strip()
+            position_raw = (values.get("Position") or value_for(row, "Position")).strip()
+            sets_raw = (values.get("Sätze") or value_for(row, "Sätze")).strip()
+            games_raw = (values.get("Spiele") or value_for(row, "Spiele")).strip()
 
-            metric_columns = ("Wert1", "Wert2", "Wert3", "Kennzahl", "Wertung")
-            metric_values: List[str] = []
-            for key in metric_columns:
-                raw_value = (values.get(key) or "").strip()
-                if raw_value:
-                    metric_values.append(raw_value)
+            wert1_raw = (values.get("Wert1") or value_for(row, "Wert1")).strip()
+            wertung_raw = (values.get("Wertung") or value_for(row, "Wertung")).strip()
 
-            if metric_values:
-                first_metric = escape(metric_values[0])
-                last_metric = escape(metric_values[-1])
-                if len(metric_values) == 1 or first_metric == last_metric:
-                    score_value = first_metric
-                else:
-                    score_value = f"{first_metric} | {last_metric}"
+            if wert1_raw and wertung_raw:
+                score_value = f"{escape(wert1_raw)} | {escape(wertung_raw)}"
             else:
-                score_value = "–"
+                metric_columns = ("Wert1", "Wert2", "Wert3", "Kennzahl", "Wertung")
+                metric_values: List[str] = []
+                for key in metric_columns:
+                    raw_value = (values.get(key) or value_for(row, key)).strip()
+                    if raw_value:
+                        metric_values.append(escape(raw_value))
+
+                if metric_values:
+                    first_metric = metric_values[0]
+                    last_metric = metric_values[-1]
+                    if len(metric_values) == 1 or first_metric == last_metric:
+                        score_value = first_metric
+                    else:
+                        score_value = f"{first_metric} | {last_metric}"
+                else:
+                    score_value = "–"
 
             if team_raw:
                 normalized_team = normalize_name(team_raw)
@@ -2858,10 +2872,10 @@ def format_mvp_rankings_section(
                 meta_parts.append(escape(position_raw))
             if team_label:
                 meta_parts.append(escape(team_label))
-            if games_raw:
-                meta_parts.append(f"{escape(games_raw)} Spiele")
             if sets_raw:
                 meta_parts.append(f"{escape(sets_raw)} Sätze")
+            if games_raw:
+                meta_parts.append(f"{escape(games_raw)} Spiele")
             meta_text = " • ".join(meta_parts)
 
             entry: Dict[str, str] = {

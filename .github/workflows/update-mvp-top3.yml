@@ -1,0 +1,36 @@
+name: Update MVP top 3 dataset
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 5 * * *'
+
+jobs:
+  build-mvp-top3:
+    name: Refresh MVP top 3 dataset
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate MVP top 3 dataset
+        run: python scripts/update_mvp_top3.py
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: 'chore: update MVP top 3 dataset'
+          title: 'chore: update MVP top 3 dataset'
+          body: 'Automated update of MVP top 3 dataset.'
+          branch: automation/update-mvp-top3
+          add-paths: |
+            docs/data/mvp_top3.json
