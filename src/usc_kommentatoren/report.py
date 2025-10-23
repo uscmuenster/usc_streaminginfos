@@ -1274,6 +1274,21 @@ def get_team_keywords(team_name: str) -> KeywordSet:
     return build_keywords(team_name, *synonyms)
 
 
+TEAM_SHORT_NAMES: Mapping[str, str] = {
+    normalize_name("Allianz MTV Stuttgart"): "Stuttgart",
+    normalize_name("Binder Blaubären TSV Flacht"): "Flacht",
+    normalize_name("Dresdner SC"): "Dresden",
+    normalize_name("ETV Hamburger Volksbank Volleys"): "Hamburg",
+    normalize_name("Ladies in Black Aachen"): "Aachen",
+    normalize_name("SSC Palmberg Schwerin"): "Schwerin",
+    normalize_name("Schwarz-Weiß Erfurt"): "Erfurt",
+    normalize_name("Skurios Volleys Borken"): "Borken",
+    normalize_name("USC Münster"): "Münster",
+    normalize_name("VC Wiesbaden"): "Wiesbaden",
+    normalize_name("VfB Suhl LOTTO Thüringen"): "Suhl",
+}
+
+
 def _build_team_news_config() -> Dict[str, Dict[str, str]]:
     return {
         normalize_name(USC_CANONICAL_NAME): {
@@ -1983,6 +1998,14 @@ def pretty_name(name: str) -> str:
     )
 
 
+def get_team_short_label(name: str) -> str:
+    normalized = normalize_name(name)
+    short = TEAM_SHORT_NAMES.get(normalized)
+    if short:
+        return short
+    return pretty_name(name)
+
+
 def find_next_usc_home_match(matches: Iterable[Match], *, reference: Optional[datetime] = None) -> Optional[Match]:
     now = reference or datetime.now(tz=BERLIN_TZ)
     future_home_games = [
@@ -2147,7 +2170,7 @@ def format_match_line(
         table_entries: List[Tuple[str, Optional[str], MatchStatsMetrics]] = []
         tables_available = True
         for entry in stats:
-            team_label = pretty_name(entry.team_name)
+            team_label = get_team_short_label(entry.team_name)
             normalized_team = normalize_name(entry.team_name)
             team_role: Optional[str] = None
             if normalized_team == normalized_usc:
@@ -2381,6 +2404,7 @@ def format_mvp_rankings_section(
             name_value = escape((values.get("Name") or "").strip() or "–")
             rank_value = escape((values.get("Rang") or "").strip() or "–")
             team_raw = (values.get("Mannschaft") or values.get("Team") or "").strip()
+            team_label = get_team_short_label(team_raw) if team_raw else ""
             position_raw = (values.get("Position") or "").strip()
             games_raw = (values.get("Spiele") or "").strip()
             metric_raw = (values.get("Wertung") or values.get("Kennzahl") or "").strip()
@@ -2401,8 +2425,8 @@ def format_mvp_rankings_section(
             meta_parts: List[str] = []
             if position_raw:
                 meta_parts.append(escape(position_raw))
-            if team_raw:
-                meta_parts.append(escape(team_raw))
+            if team_label:
+                meta_parts.append(escape(team_label))
             if games_raw:
                 meta_parts.append(escape(games_raw))
             meta_text = " • ".join(meta_parts)
@@ -2470,6 +2494,8 @@ def format_mvp_rankings_section(
         return ""
 
     categories_html = "\n".join(categories)
+    usc_label = get_team_short_label(usc_name)
+    opponent_label = get_team_short_label(opponent_name)
     return (
         "\n"
         "    <section class=\"mvp-group\">\n"
@@ -2478,8 +2504,8 @@ def format_mvp_rankings_section(
         "        <div class=\"mvp-overview-content\">\n"
         "          <p class=\"mvp-note\">Top-3-Platzierungen je Team aus dem offiziellen MVP-Ranking der Volleyball Bundesliga.</p>\n"
         "          <div class=\"mvp-legend\">\n"
-        f"            <span class=\"mvp-legend-item\" data-team=\"usc\">{escape(usc_name)}</span>\n"
-        f"            <span class=\"mvp-legend-item\" data-team=\"opponent\">{escape(opponent_name)}</span>\n"
+        f"            <span class=\"mvp-legend-item\" data-team=\"usc\">{escape(usc_label)}</span>\n"
+        f"            <span class=\"mvp-legend-item\" data-team=\"opponent\">{escape(opponent_label)}</span>\n"
         "          </div>\n"
         f"{categories_html}\n"
         "        </div>\n"
@@ -3747,7 +3773,7 @@ def build_html_report(
     }}
     @media (max-width: 40rem) {{
       body {{
-        font-size: calc(var(--font-scale) * 0.9rem);
+        font-size: calc(var(--font-scale) * 0.85rem);
       }}
       h1 {{
         font-size: calc(var(--font-scale) * 1.6rem);
@@ -3772,19 +3798,22 @@ def build_html_report(
         justify-content: center;
       }}
       .match-result {{
-        font-size: calc(var(--font-scale) * 0.85rem);
+        font-size: calc(var(--font-scale) * 0.8rem);
       }}
       .match-stats summary {{
-        font-size: calc(var(--font-scale) * 1rem);
+        font-size: calc(var(--font-scale) * 0.9rem);
+      }}
+      .match-stats-table {{
+        min-width: min(18rem, 100%);
       }}
       .match-stats-table thead th {{
-        font-size: calc(var(--font-scale) * 0.75rem);
-        padding: 0.45rem 0.55rem;
+        font-size: calc(var(--font-scale) * 0.68rem);
+        padding: 0.35rem 0.45rem;
       }}
       .match-stats-table tbody th,
       .match-stats-table tbody td {{
-        font-size: calc(var(--font-scale) * 0.85rem);
-        padding: 0.5rem 0.55rem;
+        font-size: calc(var(--font-scale) * 0.78rem);
+        padding: 0.4rem 0.45rem;
       }}
       .accordion summary {{
         font-size: calc(var(--font-scale) * 1.05rem);
