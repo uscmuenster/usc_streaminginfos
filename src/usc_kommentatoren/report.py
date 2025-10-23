@@ -1505,9 +1505,17 @@ def get_team_instagram(team_name: str) -> Optional[str]:
 def _build_team_keyword_synonyms() -> Dict[str, Sequence[str]]:
     pairs: Dict[str, Sequence[str]] = {
         "Allianz MTV Stuttgart": ("MTV Stuttgart",),
-        "Binder Blaubären TSV Flacht": ("Binder Blaubären", "TSV Flacht"),
+        "Binder Blaubären TSV Flacht": (
+            "Binder Blaubären",
+            "TSV Flacht",
+            "Binder Blaubären Flacht",
+        ),
         "Dresdner SC": ("DSC Volleys",),
-        "ETV Hamburger Volksbank Volleys": ("ETV Hamburg", "Hamburg Volleys"),
+        "ETV Hamburger Volksbank Volleys": (
+            "ETV Hamburg",
+            "Hamburg Volleys",
+            "ETV Hamburger Volksbank V.",
+        ),
         "Ladies in Black Aachen": ("Ladies in Black", "Aachen Ladies"),
         "SSC Palmberg Schwerin": ("SSC Schwerin", "Palmberg Schwerin"),
         "Schwarz-Weiß Erfurt": ("Schwarz Weiss Erfurt",),
@@ -1520,6 +1528,35 @@ def _build_team_keyword_synonyms() -> Dict[str, Sequence[str]]:
 
 
 TEAM_KEYWORD_SYNONYMS = _build_team_keyword_synonyms()
+
+
+TEAM_CANONICAL_NAMES: Mapping[str, str] = {
+    normalize_name("Allianz MTV Stuttgart"): "Allianz MTV Stuttgart",
+    normalize_name("Binder Blaubären TSV Flacht"): "Binder Blaubären TSV Flacht",
+    normalize_name("Dresdner SC"): "Dresdner SC",
+    normalize_name("ETV Hamburger Volksbank Volleys"): "ETV Hamburger Volksbank Volleys",
+    normalize_name("Ladies in Black Aachen"): "Ladies in Black Aachen",
+    normalize_name("SSC Palmberg Schwerin"): "SSC Palmberg Schwerin",
+    normalize_name("Schwarz-Weiß Erfurt"): "Schwarz-Weiß Erfurt",
+    normalize_name("Skurios Volleys Borken"): "Skurios Volleys Borken",
+    normalize_name("USC Münster"): USC_CANONICAL_NAME,
+    normalize_name("VC Wiesbaden"): "VC Wiesbaden",
+    normalize_name("VfB Suhl LOTTO Thüringen"): "VfB Suhl LOTTO Thüringen",
+}
+
+
+def _build_team_canonical_lookup() -> Dict[str, str]:
+    lookup: Dict[str, str] = dict(TEAM_CANONICAL_NAMES)
+    for normalized_name, synonyms in TEAM_KEYWORD_SYNONYMS.items():
+        canonical = TEAM_CANONICAL_NAMES.get(normalized_name)
+        if not canonical:
+            continue
+        for alias in synonyms:
+            lookup[normalize_name(alias)] = canonical
+    return lookup
+
+
+TEAM_CANONICAL_LOOKUP = _build_team_canonical_lookup()
 
 
 def get_team_keywords(team_name: str) -> KeywordSet:
@@ -2336,6 +2373,9 @@ def collect_match_stats_totals(
 def pretty_name(name: str) -> str:
     if is_usc(name):
         return USC_CANONICAL_NAME
+    canonical = TEAM_CANONICAL_LOOKUP.get(normalize_name(name))
+    if canonical:
+        return canonical
     return (
         name.replace("Mnster", "Münster")
         .replace("Munster", "Münster")
