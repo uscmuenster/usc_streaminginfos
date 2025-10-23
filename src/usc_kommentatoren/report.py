@@ -1988,95 +1988,111 @@ def format_mvp_rankings_section(
     normalized_usc = normalize_name(usc_name)
     normalized_opponent = normalize_name(opponent_name)
 
-    cards: List[str] = []
-    for indicator, payload in rankings.items():
+    categories: List[str] = []
+    for index, (indicator, payload) in enumerate(rankings.items()):
         headers = list((payload or {}).get("headers") or [])
         rows = list((payload or {}).get("rows") or [])
         header_index = {header: idx for idx, header in enumerate(headers)}
 
-        trimmed_rows = rows[:3]
-        list_items: List[str] = []
-        for row in trimmed_rows:
+        team_entries: Dict[str, List[Dict[str, str]]] = {"opponent": [], "usc": []}
+        for row in rows:
             values: Dict[str, str] = {}
             for header, idx in header_index.items():
                 if idx < len(row):
                     values[header] = row[idx]
 
-            rank_value = escape((values.get("Rang") or "").strip() or "–")
             name_value = escape((values.get("Name") or "").strip() or "–")
-            team_value_raw = (values.get("Mannschaft") or values.get("Team") or "").strip()
-            team_value = escape(team_value_raw) if team_value_raw else ""
-            position_value = escape((values.get("Position") or "").strip())
-            games_value = escape((values.get("Spiele") or "").strip())
-            metric_value = (values.get("Wertung") or values.get("Kennzahl") or "").strip()
-            metric_display = escape(metric_value or "–")
+            rank_value = escape((values.get("Rang") or "").strip() or "–")
+            team_raw = (values.get("Mannschaft") or values.get("Team") or "").strip()
+            position_raw = (values.get("Position") or "").strip()
+            games_raw = (values.get("Spiele") or "").strip()
+            metric_raw = (values.get("Wertung") or values.get("Kennzahl") or "").strip()
+            score_value = escape(metric_raw or "–")
+
+            if team_raw:
+                normalized_team = normalize_name(team_raw)
+            else:
+                normalized_team = ""
+
+            if normalized_team == normalized_opponent:
+                team_role = "opponent"
+            elif normalized_team == normalized_usc:
+                team_role = "usc"
+            else:
+                continue
 
             meta_parts: List[str] = []
-            if team_value:
-                meta_parts.append(team_value)
-            if position_value:
-                meta_parts.append(position_value)
-            if games_value:
-                meta_parts.append(games_value)
-            meta_text = " • ".join(part for part in meta_parts if part)
+            if position_raw:
+                meta_parts.append(escape(position_raw))
+            if team_raw:
+                meta_parts.append(escape(team_raw))
+            if games_raw:
+                meta_parts.append(escape(games_raw))
+            meta_text = " • ".join(meta_parts)
 
-            team_role: Optional[str] = None
-            if team_value_raw:
-                normalized_team = normalize_name(team_value_raw)
-                if normalized_team == normalized_usc:
-                    team_role = "usc"
-                elif normalized_team == normalized_opponent:
-                    team_role = "opponent"
+            entry: Dict[str, str] = {
+                "rank": rank_value,
+                "name": name_value,
+                "meta": meta_text,
+                "score": score_value,
+                "team": team_role,
+            }
+            team_entries[team_role].append(entry)
 
-            attrs: List[str] = ["class=\"mvp-top-item\""]
-            if team_role:
-                attrs.append(f"data-team-role=\"{team_role}\"")
-            attr_text = " ".join(attrs)
+        ordered_entries: List[Dict[str, str]] = []
+        for team_key in ("opponent", "usc"):
+            ordered_entries.extend(team_entries[team_key][:3])
 
+        list_items: List[str] = []
+        for entry in ordered_entries:
             meta_html = (
-                f"                <span class=\"mvp-meta\">{meta_text}</span>\n"
-                if meta_text
+                f"                    <span class=\"mvp-entry-meta\">{entry['meta']}</span>\n"
+                if entry["meta"]
                 else ""
             )
-
             list_items.append(
-                "            <li "
-                f"{attr_text}>\n"
-                f"              <span class=\"mvp-rank\">{rank_value}</span>\n"
-                "              <div class=\"mvp-top-content\">\n"
-                f"                <span class=\"mvp-name\">{name_value}</span>\n"
+                "                <li class=\"mvp-entry\" "
+                f"data-team=\"{entry['team']}\">\n"
+                f"                  <span class=\"mvp-entry-rank\">{entry['rank']}</span>\n"
+                "                  <div class=\"mvp-entry-info\">\n"
+                f"                    <span class=\"mvp-entry-name\">{entry['name']}</span>\n"
                 f"{meta_html}"
-                "              </div>\n"
-                f"              <span class=\"mvp-score\">{metric_display}</span>\n"
-                "            </li>"
+                "                  </div>\n"
+                f"                  <span class=\"mvp-entry-score\">{entry['score']}</span>\n"
+                "                </li>"
             )
 
         if list_items:
-            entries_html = "\n".join(list_items)
-            card_body = (
-                "          <ol class=\"mvp-top-list\">\n"
-                f"{entries_html}\n"
-                "          </ol>\n"
+            items_html = "\n".join(list_items)
+            category_body = (
+                "            <div class=\"mvp-category-content\">\n"
+                "              <ol class=\"mvp-list\">\n"
+                f"{items_html}\n"
+                "              </ol>\n"
+                "            </div>\n"
             )
         else:
-            card_body = (
-                "          <p class=\"mvp-empty\">Keine MVP-Rankings verfügbar.</p>\n"
+            category_body = (
+                "            <div class=\"mvp-category-content\">\n"
+                "              <p class=\"mvp-empty\">Keine MVP-Rankings für diese Kategorie verfügbar.</p>\n"
+                "            </div>\n"
             )
 
-        cards.append(
-            "        <article class=\"mvp-card\">\n"
-            "          <header class=\"mvp-card-header\">\n"
-            f"            <h3 class=\"mvp-card-title\">{escape(indicator)}</h3>\n"
-            "            <span class=\"mvp-card-badge\">Top&nbsp;3</span>\n"
-            "          </header>\n"
-            f"{card_body}"
-            "        </article>"
+        open_attr = " open" if index == 0 else ""
+        categories.append(
+            f"          <details class=\"mvp-category\"{open_attr}>\n"
+            "            <summary>\n"
+            f"              <span class=\"mvp-category-title\">{escape(indicator)}</span>\n"
+            "              <span class=\"mvp-category-badge\">Top 3 je Team</span>\n"
+            "            </summary>\n"
+            f"{category_body}"
+            "          </details>"
         )
 
-    if not cards:
+    if not categories:
         return ""
 
-    cards_html = "\n".join(cards)
+    categories_html = "\n".join(categories)
     return (
         "\n"
         "    <section class=\"mvp-group\">\n"
@@ -2084,9 +2100,11 @@ def format_mvp_rankings_section(
         "        <summary>MVP-Rankings</summary>\n"
         "        <div class=\"mvp-overview-content\">\n"
         "          <p class=\"mvp-note\">Top-3-Platzierungen je Team aus dem offiziellen MVP-Ranking der Volleyball Bundesliga.</p>\n"
-        "          <div class=\"mvp-grid\">\n"
-        f"{cards_html}\n"
+        "          <div class=\"mvp-legend\">\n"
+        f"            <span class=\"mvp-legend-item\" data-team=\"usc\">{escape(usc_name)}</span>\n"
+        f"            <span class=\"mvp-legend-item\" data-team=\"opponent\">{escape(opponent_name)}</span>\n"
         "          </div>\n"
+        f"{categories_html}\n"
         "        </div>\n"
         "      </details>\n"
         "    </section>\n"
@@ -2602,9 +2620,9 @@ def build_html_report(
       color: #1f2933;
     }}
     main {{
-      max-width: 60rem;
+      max-width: 56rem;
       margin: 0 auto;
-      padding: clamp(0.75rem, 3vw, 1.5rem) clamp(1rem, 4vw, 3rem);
+      padding: clamp(0.6rem, 2.5vw, 1.2rem) clamp(0.9rem, 3vw, 2.4rem);
     }}
     h1 {{
       color: #004c54;
@@ -2616,12 +2634,12 @@ def build_html_report(
       margin-bottom: 1rem;
     }}
     section {{
-      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+      margin-top: clamp(1.2rem, 3vw, 2rem);
     }}
     .meta {{
       display: grid;
-      gap: 0.35rem;
-      margin: 0 0 1.5rem 0;
+      gap: 0.25rem;
+      margin: 0 0 1.3rem 0;
       padding: 0;
     }}
     .meta p {{
@@ -2654,16 +2672,16 @@ def build_html_report(
       padding: 0;
       margin: 0;
       display: grid;
-      gap: 1rem;
+      gap: 0.75rem;
     }}
     .match-list li {{
       background: #ffffff;
-      border-radius: 0.85rem;
-      padding: 1rem clamp(1rem, 3vw, 1.5rem);
+      border-radius: 0.8rem;
+      padding: 0.85rem clamp(0.9rem, 2.6vw, 1.3rem);
       box-shadow: 0 10px 30px rgba(0, 76, 84, 0.08);
     }}
     .lineup-link {{
-      margin-top: clamp(1rem, 3vw, 1.75rem);
+      margin-top: clamp(0.75rem, 2.5vw, 1.4rem);
       display: flex;
       justify-content: center;
     }}
@@ -2740,7 +2758,7 @@ def build_html_report(
     .transfer-group {{
       margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
       display: grid;
-      gap: 1rem;
+      gap: 0.75rem;
     }}
     .accordion {{
       border-radius: 0.85rem;
@@ -2757,7 +2775,7 @@ def build_html_report(
     }}
     .accordion summary {{
       cursor: pointer;
-      padding: 1rem 1.35rem;
+      padding: 0.85rem 1.2rem;
       font-weight: 600;
       display: flex;
       align-items: center;
@@ -2777,7 +2795,7 @@ def build_html_report(
       transform: rotate(180deg);
     }}
     .accordion-content {{
-      padding: 0 1.35rem 1.35rem;
+      padding: 0 1.2rem 1.2rem;
     }}
     .news-list {{
       list-style: none;
@@ -2801,21 +2819,21 @@ def build_html_report(
       margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
     }}
     .mvp-overview {{
-      border-radius: 0.85rem;
+      border-radius: 0.8rem;
       border: none;
       background: #ffffff;
-      box-shadow: 0 16px 36px rgba(15, 118, 110, 0.15);
+      box-shadow: 0 14px 30px rgba(15, 118, 110, 0.14);
       overflow: hidden;
     }}
     .mvp-overview summary {{
       cursor: pointer;
-      padding: 1rem 1.35rem;
+      padding: 0.85rem 1.2rem;
       font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: space-between;
       list-style: none;
-      font-size: calc(var(--font-scale) * clamp(1rem, 2.6vw, 1.2rem));
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.15rem));
     }}
     .mvp-overview summary::-webkit-details-marker {{
       display: none;
@@ -2829,87 +2847,179 @@ def build_html_report(
       transform: rotate(180deg);
     }}
     .mvp-overview-content {{
-      padding: 0 1.35rem 1.35rem;
+      padding: 0 1.2rem 1.2rem;
       display: grid;
-      gap: clamp(0.75rem, 2.5vw, 1.25rem);
+      gap: clamp(0.6rem, 2vw, 1.1rem);
     }}
     .mvp-note {{
       margin: 0;
       font-size: calc(var(--font-scale) * 0.85rem);
       color: #475569;
     }}
-    .mvp-grid {{
-      display: grid;
-      gap: clamp(0.75rem, 2.5vw, 1.25rem);
+    .mvp-legend {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
     }}
-    .mvp-card {{
-      border-radius: 0.85rem;
-      border: none;
-      background: #ffffff;
-      box-shadow: 0 16px 36px rgba(15, 118, 110, 0.15);
+    .mvp-legend-item {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: calc(var(--font-scale) * 0.75rem);
+      font-weight: 600;
+      background: rgba(15, 23, 42, 0.05);
+      color: #0f172a;
+    }}
+    .mvp-legend-item::before {{
+      content: "";
+      width: 0.65rem;
+      height: 0.65rem;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 2px rgba(15, 23, 42, 0.15);
+    }}
+    .mvp-legend-item[data-team="usc"]::before {{
+      background: #16a34a;
+    }}
+    .mvp-legend-item[data-team="opponent"]::before {{
+      background: #2563eb;
+    }}
+    .mvp-category {{
+      border-radius: 0.8rem;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
       overflow: hidden;
     }}
-    .mvp-card summary {{
+    .mvp-category summary {{
       cursor: pointer;
-      padding: 1rem 1.35rem;
+      padding: 0.85rem 1.05rem;
       font-weight: 600;
-      list-style: none;
-      font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.2rem));
       display: flex;
       align-items: center;
       justify-content: space-between;
+      list-style: none;
+      font-size: calc(var(--font-scale) * clamp(0.95rem, 2.2vw, 1.1rem));
+      gap: 0.6rem;
+      background: rgba(15, 118, 110, 0.08);
     }}
-    .mvp-card summary::-webkit-details-marker {{
+    .mvp-category summary::-webkit-details-marker {{
       display: none;
     }}
-    .mvp-card summary::after {{
+    .mvp-category summary::after {{
       content: "▾";
-      font-size: calc(var(--font-scale) * 1rem);
+      font-size: calc(var(--font-scale) * 0.95rem);
       transition: transform 0.2s ease;
+      color: inherit;
     }}
-    .mvp-card[open] summary::after {{
+    .mvp-category[open] summary::after {{
       transform: rotate(180deg);
     }}
-    .mvp-card-content {{
-      padding: 0 1.35rem 1.35rem;
+    .mvp-category-title {{
+      flex: 1;
     }}
-    .mvp-table-wrapper {{
-      margin-top: 0.65rem;
-      overflow-x: auto;
+    .mvp-category-badge {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(15, 118, 110, 0.14);
+      color: #0f4c75;
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * 0.7rem);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
     }}
-    .mvp-table {{
-      width: 100%;
-      border-collapse: collapse;
-      font-size: calc(var(--font-scale) * 0.85rem);
-      min-width: 28rem;
+    .mvp-category-content {{
+      padding: 0.9rem 1.05rem 1.1rem;
+      display: grid;
+      gap: 0.7rem;
     }}
-    .mvp-table th,
-    .mvp-table td {{
-      text-align: left;
-      padding: 0.55rem 0.75rem;
-      border-bottom: 1px solid #e2e8f0;
-      white-space: nowrap;
+    .mvp-list {{
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.55rem;
     }}
-    .mvp-table td[data-label] {{
-      white-space: nowrap;
+    .mvp-entry {{
+      display: grid;
+      grid-template-columns: minmax(4.75rem, auto) 1fr minmax(4.5rem, auto);
+      gap: 0.6rem;
+      align-items: center;
+      padding: 0.6rem 0.75rem;
+      border-radius: 0.7rem;
+      background: rgba(15, 23, 42, 0.05);
+      box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
     }}
-    .mvp-table tbody tr:last-child td {{
-      border-bottom: none;
+    .mvp-entry-rank {{
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * 0.95rem);
+      color: #0f172a;
+    }}
+    .mvp-entry-info {{
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }}
+    .mvp-entry-name {{
+      font-weight: 600;
+      color: #0f172a;
+      font-size: calc(var(--font-scale) * 0.95rem);
+    }}
+    .mvp-entry-meta {{
+      font-size: calc(var(--font-scale) * 0.78rem);
+      color: #475569;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }}
+    .mvp-entry-score {{
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * 0.95rem);
+      color: #0f4c75;
+      justify-self: end;
+    }}
+    .mvp-entry[data-team="opponent"] {{
+      background: rgba(59, 130, 246, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.22);
+    }}
+    .mvp-entry[data-team="opponent"] .mvp-entry-score {{
+      color: #1d4ed8;
+    }}
+    .mvp-entry[data-team="usc"] {{
+      background: rgba(16, 185, 129, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(5, 150, 105, 0.24);
+    }}
+    .mvp-entry[data-team="usc"] .mvp-entry-score {{
+      color: #047857;
+    }}
+    @media (max-width: 38rem) {{
+      .mvp-category summary {{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+      }}
+      .mvp-entry {{
+        grid-template-columns: minmax(4.25rem, auto) 1fr;
+        grid-template-areas: \"rank score\" \"info info\";
+        row-gap: 0.4rem;
+      }}
+      .mvp-entry-rank {{
+        grid-area: rank;
+      }}
+      .mvp-entry-score {{
+        grid-area: score;
+      }}
+      .mvp-entry-info {{
+        grid-area: info;
+      }}
     }}
     .mvp-empty {{
       margin: 0;
       font-size: calc(var(--font-scale) * 0.9rem);
       color: #475569;
-    }}
-    .mvp-row[data-team-role="usc"] td {{
-      font-weight: 600;
-      color: #065f46;
-      background: rgba(16, 185, 129, 0.12);
-    }}
-    .mvp-row[data-team-role="opponent"] td {{
-      font-weight: 600;
-      color: #1d4ed8;
-      background: rgba(59, 130, 246, 0.12);
     }}
     .transfer-list {{
       list-style: none;
