@@ -73,8 +73,7 @@ jobs:
 
           git add docs/index.html docs/index_app.html
           git commit -m "Update generated USC reports" || echo "Keine neuen Commits nötig"
-          git push origin HEAD
-
+          git push origin HEAD --force
 
   deploy:
     if: github.event_name != 'pull_request'
