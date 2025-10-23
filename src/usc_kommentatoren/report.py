@@ -37,6 +37,43 @@ BERLIN_TZ = ZoneInfo("Europe/Berlin")
 USC_CANONICAL_NAME = "USC Münster"
 USC_HOMEPAGE = "https://www.usc-muenster.de/"
 
+# Farbkonfiguration für Hervorhebungen von USC und Gegner.
+# Werte können bei Bedarf angepasst werden, um die farbliche Darstellung global zu ändern.
+HIGHLIGHT_COLORS: Dict[str, Dict[str, str]] = {
+    "usc": {
+        "row_bg": "#dcfce7",
+        "row_text": "#047857",
+        "legend_dot": "#16a34a",
+        "accordion_bg": "#dcfce7",
+        "accordion_shadow": "rgba(22, 163, 74, 0.08)",
+        "card_border": "rgba(45, 212, 191, 0.55)",
+        "card_shadow": "rgba(45, 212, 191, 0.16)",
+        "mvp_bg": "rgba(16, 185, 129, 0.12)",
+        "mvp_border": "rgba(5, 150, 105, 0.24)",
+        "mvp_score": "#047857",
+        "dark_row_bg": "rgba(22, 163, 74, 0.25)",
+        "dark_row_text": "#bbf7d0",
+        "dark_accordion_bg": "#1a4f3a",
+        "dark_accordion_shadow": "rgba(74, 222, 128, 0.26)",
+    },
+    "opponent": {
+        "row_bg": "#e0f2fe",
+        "row_text": "#1d4ed8",
+        "legend_dot": "#2563eb",
+        "accordion_bg": "#e0f2fe",
+        "accordion_shadow": "rgba(30, 64, 175, 0.08)",
+        "card_border": "rgba(59, 130, 246, 0.35)",
+        "card_shadow": "rgba(59, 130, 246, 0.18)",
+        "mvp_bg": "rgba(59, 130, 246, 0.12)",
+        "mvp_border": "rgba(37, 99, 235, 0.22)",
+        "mvp_score": "#1d4ed8",
+        "dark_row_bg": "rgba(59, 130, 246, 0.18)",
+        "dark_row_text": "#bfdbfe",
+        "dark_accordion_bg": "#1c3f5f",
+        "dark_accordion_shadow": "rgba(56, 189, 248, 0.28)",
+    },
+}
+
 INTERNATIONAL_MATCHES_LINK: tuple[str, str] = (
     "internationale_spiele.html",
     "Internationale Spiele 2025/26",
@@ -2417,6 +2454,7 @@ def format_match_line(
     match: Match,
     *,
     stats: Optional[Sequence[MatchStatsTotals]] = None,
+    highlight_teams: Optional[Mapping[str, str]] = None,
 ) -> str:
     kickoff_local = match.kickoff.astimezone(BERLIN_TZ)
     date_label = kickoff_local.strftime("%d.%m.%Y")
@@ -2473,9 +2511,13 @@ def format_match_line(
         meta_html = f"<div class=\"match-meta\">{' · '.join(combined)}</div>"
     stats_html = ""
     if stats:
-        normalized_home = normalize_name(match.home_team)
-        normalized_away = normalize_name(match.away_team)
         normalized_usc = normalize_name(USC_CANONICAL_NAME)
+        highlight_map: Dict[str, str] = {}
+        if highlight_teams:
+            for role, name in highlight_teams.items():
+                if not name:
+                    continue
+                highlight_map[role] = normalize_name(name)
         fallback_cards: List[str] = []
         table_entries: List[Tuple[str, Optional[str], MatchStatsMetrics]] = []
         tables_available = True
@@ -2485,10 +2527,11 @@ def format_match_line(
             team_role: Optional[str] = None
             if normalized_team == normalized_usc:
                 team_role = "usc"
-            elif normalized_team == normalized_home:
-                team_role = "home"
-            elif normalized_team == normalized_away:
-                team_role = "away"
+            else:
+                for role, normalized_focus in highlight_map.items():
+                    if normalized_focus and normalized_team == normalized_focus:
+                        team_role = role
+                        break
             metrics = entry.metrics or _parse_match_stats_metrics(entry.totals_line)
             if metrics is None:
                 tables_available = False
@@ -3187,6 +3230,7 @@ def build_html_report(
     def _combine_matches(
         next_match: Optional[Match],
         recent_matches: List[Match],
+        highlight_lookup: Mapping[str, str],
     ) -> str:
         combined: List[str] = []
         seen: set[tuple[datetime, str, str]] = set()
@@ -3208,14 +3252,27 @@ def build_html_report(
             stats_payload: Optional[Sequence[MatchStatsTotals]] = None
             if match_stats and match.stats_url:
                 stats_payload = match_stats.get(match.stats_url)
-            combined.append(format_match_line(match, stats=stats_payload))
+            combined.append(
+                format_match_line(
+                    match,
+                    stats=stats_payload,
+                    highlight_teams=highlight_lookup,
+                )
+            )
 
         if not combined:
             return "<li>Keine Daten verfügbar.</li>"
         return "\n      ".join(combined)
 
-    usc_items = _combine_matches(usc_next, usc_recent)
-    opponent_items = _combine_matches(opponent_next, opponent_recent)
+    highlight_targets = {
+        "usc": USC_CANONICAL_NAME,
+        "opponent": next_home.away_team,
+    }
+
+    usc_items = _combine_matches(usc_next, usc_recent, highlight_targets)
+    opponent_items = _combine_matches(
+        opponent_next, opponent_recent, highlight_targets
+    )
 
     usc_news_items = format_news_list(usc_news)
     opponent_news_items = format_news_list(opponent_news)
@@ -3341,10 +3398,26 @@ def build_html_report(
     :root {{
       color-scheme: light dark;
       --font-scale: {scale_value};
-      --accordion-opponent-bg: #e0f2fe;
-      --accordion-opponent-shadow: rgba(30, 64, 175, 0.08);
-      --accordion-usc-bg: #dcfce7;
-      --accordion-usc-shadow: rgba(22, 163, 74, 0.08);
+      --accordion-opponent-bg: {HIGHLIGHT_COLORS['opponent']['accordion_bg']};
+      --accordion-opponent-shadow: {HIGHLIGHT_COLORS['opponent']['accordion_shadow']};
+      --accordion-usc-bg: {HIGHLIGHT_COLORS['usc']['accordion_bg']};
+      --accordion-usc-shadow: {HIGHLIGHT_COLORS['usc']['accordion_shadow']};
+      --usc-highlight-row-bg: {HIGHLIGHT_COLORS['usc']['row_bg']};
+      --usc-highlight-row-text: {HIGHLIGHT_COLORS['usc']['row_text']};
+      --usc-highlight-card-border: {HIGHLIGHT_COLORS['usc']['card_border']};
+      --usc-highlight-card-shadow: {HIGHLIGHT_COLORS['usc']['card_shadow']};
+      --usc-highlight-mvp-bg: {HIGHLIGHT_COLORS['usc']['mvp_bg']};
+      --usc-highlight-mvp-border: {HIGHLIGHT_COLORS['usc']['mvp_border']};
+      --usc-highlight-mvp-score: {HIGHLIGHT_COLORS['usc']['mvp_score']};
+      --usc-highlight-legend-dot: {HIGHLIGHT_COLORS['usc']['legend_dot']};
+      --opponent-highlight-row-bg: {HIGHLIGHT_COLORS['opponent']['row_bg']};
+      --opponent-highlight-row-text: {HIGHLIGHT_COLORS['opponent']['row_text']};
+      --opponent-highlight-card-border: {HIGHLIGHT_COLORS['opponent']['card_border']};
+      --opponent-highlight-card-shadow: {HIGHLIGHT_COLORS['opponent']['card_shadow']};
+      --opponent-highlight-mvp-bg: {HIGHLIGHT_COLORS['opponent']['mvp_bg']};
+      --opponent-highlight-mvp-border: {HIGHLIGHT_COLORS['opponent']['mvp_border']};
+      --opponent-highlight-mvp-score: {HIGHLIGHT_COLORS['opponent']['mvp_score']};
+      --opponent-highlight-legend-dot: {HIGHLIGHT_COLORS['opponent']['legend_dot']};
     }}
     body {{
       margin: 0;
@@ -3566,22 +3639,19 @@ def build_html_report(
       border-top: 1px solid #e2e8f0;
     }}
     .match-stats-table tbody tr[data-team-role="usc"] {{
-      background: #dcfce7;
-      color: #047857;
+      background: var(--usc-highlight-row-bg);
+      color: var(--usc-highlight-row-text);
     }}
     .match-stats-table tbody tr[data-team-role="usc"] th,
     .match-stats-table tbody tr[data-team-role="usc"] td {{
       color: inherit;
     }}
-    .match-stats-table tbody tr[data-team-role="home"],
-    .match-stats-table tbody tr[data-team-role="away"] {{
-      background: #e0f2fe;
-      color: #1d4ed8;
+    .match-stats-table tbody tr[data-team-role="opponent"] {{
+      background: var(--opponent-highlight-row-bg);
+      color: var(--opponent-highlight-row-text);
     }}
-    .match-stats-table tbody tr[data-team-role="home"] th,
-    .match-stats-table tbody tr[data-team-role="home"] td,
-    .match-stats-table tbody tr[data-team-role="away"] th,
-    .match-stats-table tbody tr[data-team-role="away"] td {{
+    .match-stats-table tbody tr[data-team-role="opponent"] th,
+    .match-stats-table tbody tr[data-team-role="opponent"] td {{
       color: inherit;
     }}
     .match-stats-card {{
@@ -3592,12 +3662,12 @@ def build_html_report(
       border: 1px solid rgba(148, 163, 184, 0.35);
     }}
     .match-stats-card[data-team-role="usc"] {{
-      border-color: rgba(45, 212, 191, 0.55);
-      box-shadow: 0 14px 30px rgba(45, 212, 191, 0.16);
+      border-color: var(--usc-highlight-card-border);
+      box-shadow: 0 14px 30px var(--usc-highlight-card-shadow);
     }}
-    .match-stats-card[data-team-role="home"],
-    .match-stats-card[data-team-role="away"] {{
-      border-color: rgba(59, 130, 246, 0.35);
+    .match-stats-card[data-team-role="opponent"] {{
+      border-color: var(--opponent-highlight-card-border);
+      box-shadow: 0 14px 30px var(--opponent-highlight-card-shadow);
     }}
     .match-stats-card h4 {{
       margin: 0 0 0.5rem 0;
@@ -3745,10 +3815,10 @@ def build_html_report(
       box-shadow: inset 0 0 0 2px rgba(15, 23, 42, 0.15);
     }}
     .mvp-legend-item[data-team="usc"]::before {{
-      background: #16a34a;
+      background: var(--usc-highlight-legend-dot);
     }}
     .mvp-legend-item[data-team="opponent"]::before {{
-      background: #2563eb;
+      background: var(--opponent-highlight-legend-dot);
     }}
     .mvp-category {{
       border-radius: 0.8rem;
@@ -3846,18 +3916,18 @@ def build_html_report(
       justify-self: end;
     }}
     .mvp-entry[data-team="opponent"] {{
-      background: rgba(59, 130, 246, 0.12);
-      box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.22);
+      background: var(--opponent-highlight-mvp-bg);
+      box-shadow: inset 0 0 0 1px var(--opponent-highlight-mvp-border);
     }}
     .mvp-entry[data-team="opponent"] .mvp-entry-score {{
-      color: #1d4ed8;
+      color: var(--opponent-highlight-mvp-score);
     }}
     .mvp-entry[data-team="usc"] {{
-      background: rgba(16, 185, 129, 0.12);
-      box-shadow: inset 0 0 0 1px rgba(5, 150, 105, 0.24);
+      background: var(--usc-highlight-mvp-bg);
+      box-shadow: inset 0 0 0 1px var(--usc-highlight-mvp-border);
     }}
     .mvp-entry[data-team="usc"] .mvp-entry-score {{
-      color: #047857;
+      color: var(--usc-highlight-mvp-score);
     }}
     @media (max-width: 38rem) {{
       .mvp-category summary {{
@@ -3878,6 +3948,23 @@ def build_html_report(
       }}
       .mvp-entry-info {{
         grid-area: info;
+      }}
+    }}
+    @media (max-width: 30rem) {{
+      .match-stats summary {{
+        font-size: calc(var(--font-scale) * 0.82rem);
+      }}
+      .match-stats-table {{
+        min-width: min(16rem, 100%);
+      }}
+      .match-stats-table thead th {{
+        font-size: calc(var(--font-scale) * 0.62rem);
+        padding: 0.3rem 0.35rem;
+      }}
+      .match-stats-table tbody th,
+      .match-stats-table tbody td {{
+        font-size: calc(var(--font-scale) * 0.7rem);
+        padding: 0.35rem 0.35rem;
       }}
     }}
     .mvp-empty {{
@@ -4159,10 +4246,14 @@ def build_html_report(
     }}
     @media (prefers-color-scheme: dark) {{
       :root {{
-        --accordion-opponent-bg: #1c3f5f;
-        --accordion-opponent-shadow: rgba(56, 189, 248, 0.28);
-        --accordion-usc-bg: #1a4f3a;
-        --accordion-usc-shadow: rgba(74, 222, 128, 0.26);
+        --accordion-opponent-bg: {HIGHLIGHT_COLORS['opponent']['dark_accordion_bg']};
+        --accordion-opponent-shadow: {HIGHLIGHT_COLORS['opponent']['dark_accordion_shadow']};
+        --accordion-usc-bg: {HIGHLIGHT_COLORS['usc']['dark_accordion_bg']};
+        --accordion-usc-shadow: {HIGHLIGHT_COLORS['usc']['dark_accordion_shadow']};
+        --usc-highlight-row-bg: {HIGHLIGHT_COLORS['usc']['dark_row_bg']};
+        --usc-highlight-row-text: {HIGHLIGHT_COLORS['usc']['dark_row_text']};
+        --opponent-highlight-row-bg: {HIGHLIGHT_COLORS['opponent']['dark_row_bg']};
+        --opponent-highlight-row-text: {HIGHLIGHT_COLORS['opponent']['dark_row_text']};
       }}
       body {{
         background: #0e1b1f;
@@ -4202,13 +4293,12 @@ def build_html_report(
         color: #e2f3f7;
       }}
       .match-stats-table tbody tr[data-team-role="usc"] {{
-        background: rgba(22, 163, 74, 0.25);
-        color: #bbf7d0;
+        background: var(--usc-highlight-row-bg);
+        color: var(--usc-highlight-row-text);
       }}
-      .match-stats-table tbody tr[data-team-role="home"],
-      .match-stats-table tbody tr[data-team-role="away"] {{
-        background: rgba(59, 130, 246, 0.18);
-        color: #bfdbfe;
+      .match-stats-table tbody tr[data-team-role="opponent"] {{
+        background: var(--opponent-highlight-row-bg);
+        color: var(--opponent-highlight-row-text);
       }}
       .match-stats-card {{
         background: #0f1f24;
