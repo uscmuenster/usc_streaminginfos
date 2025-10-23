@@ -74,6 +74,11 @@ HIGHLIGHT_COLORS: Dict[str, Dict[str, str]] = {
     },
 }
 
+THEME_COLORS: Dict[str, str] = {
+    "mvp_overview_summary_bg": "#fde68a",
+    "dark_mvp_overview_summary_bg": "rgba(253, 186, 116, 0.35)",
+}
+
 INTERNATIONAL_MATCHES_LINK: tuple[str, str] = (
     "internationale_spiele.html",
     "Internationale Spiele 2025/26",
@@ -3504,6 +3509,7 @@ def build_html_report(
       --opponent-highlight-mvp-border: {HIGHLIGHT_COLORS['opponent']['mvp_border']};
       --opponent-highlight-mvp-score: {HIGHLIGHT_COLORS['opponent']['mvp_score']};
       --opponent-highlight-legend-dot: {HIGHLIGHT_COLORS['opponent']['legend_dot']};
+      --mvp-overview-summary-bg: {THEME_COLORS['mvp_overview_summary_bg']};
     }}
     body {{
       margin: 0;
@@ -3854,6 +3860,8 @@ def build_html_report(
       justify-content: space-between;
       list-style: none;
       font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.15rem));
+      background: var(--mvp-overview-summary-bg);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
     }}
     .mvp-overview summary::-webkit-details-marker {{
       display: none;
@@ -4340,6 +4348,7 @@ def build_html_report(
         --usc-highlight-row-text: {HIGHLIGHT_COLORS['usc']['dark_row_text']};
         --opponent-highlight-row-bg: {HIGHLIGHT_COLORS['opponent']['dark_row_bg']};
         --opponent-highlight-row-text: {HIGHLIGHT_COLORS['opponent']['dark_row_text']};
+        --mvp-overview-summary-bg: {THEME_COLORS['dark_mvp_overview_summary_bg']};
       }}
       body {{
         background: #0e1b1f;
@@ -4413,6 +4422,8 @@ def build_html_report(
       }}
       .mvp-overview summary {{
         color: #f1f5f9;
+        background: var(--mvp-overview-summary-bg);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.35);
       }}
       .mvp-note {{
         color: #cbd5f5;
