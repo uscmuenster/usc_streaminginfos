@@ -1,7 +1,7 @@
 {
   "matches": [
     {
-      "stats_url": "https://www.volleyball-bundesliga.de/uploads/19bb6c96-f1cc-4867-9058-0864849ec964",
+      "stats_url": "https://www.volleyball-bundesliga.de/uploads/831866c1-9e16-46f8-827c-4b0dd011928b",
       "teams": [
         {
           "name": "SSC Palmberg Schwerin",
@@ -38,7 +38,7 @@
             "points": 3
           },
           "reception": {
-            "attempts": 63,
+            "attempts": 68,
             "errors": 10,
             "positive_pct": "29%",
             "perfect_pct": "12%"
@@ -46,12 +46,68 @@
           "attack": {
             "attempts": 81,
             "errors": 9,
-            "blocked": 13,
+            "blocked": 11,
             "points": 19,
             "success_pct": "23%"
           },
           "block": {
+            "points": 3
+          }
+        }
+      ]
+    },
+    {
+      "stats_url": "https://www.volleyball-bundesliga.de/uploads/19bb6c96-f1cc-4867-9058-0864849ec964",
+      "teams": [
+        {
+          "name": "Binder Blaubären Flacht",
+          "aliases": [
+            "Binder Blaubären TSV Flacht"
+          ],
+          "serve": {
+            "attempts": 50,
+            "errors": 13,
+            "points": 2
+          },
+          "reception": {
+            "attempts": 61,
+            "errors": 5,
+            "positive_pct": "21%",
+            "perfect_pct": "8%"
+          },
+          "attack": {
+            "attempts": 72,
+            "errors": 9,
+            "blocked": 7,
+            "points": 19,
+            "success_pct": "26%"
+          },
+          "block": {
             "points": 6
+          }
+        },
+        {
+          "name": "USC Münster",
+          "serve": {
+            "attempts": 74,
+            "errors": 13,
+            "points": 5
+          },
+          "reception": {
+            "attempts": 37,
+            "errors": 2,
+            "positive_pct": "35%",
+            "perfect_pct": "14%"
+          },
+          "attack": {
+            "attempts": 82,
+            "errors": 7,
+            "blocked": 6,
+            "points": 40,
+            "success_pct": "49%"
+          },
+          "block": {
+            "points": 7
           }
         }
       ]
