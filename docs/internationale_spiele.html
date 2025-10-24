@@ -69,17 +69,90 @@
       outline: none;
     }
     .team-section {
-      border-top: 1px solid var(--border);
-      padding-top: clamp(1rem, 3vw, 1.5rem);
       margin-top: clamp(1rem, 3vw, 1.5rem);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      background: #f8fafc;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
     }
     .team-section:first-of-type {
-      border-top: none;
-      padding-top: 0;
-      margin-top: 0;
+      margin-top: clamp(0.75rem, 2.4vw, 1.1rem);
+    }
+    .team-section summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      padding: clamp(0.85rem, 2.6vw, 1.15rem) clamp(1rem, 3vw, 1.5rem);
+      font-size: calc(var(--font-scale) * clamp(1.05rem, 2.6vw, 1.4rem));
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(15, 23, 42, 0.02);
+    }
+    .team-section summary::-webkit-details-marker {
+      display: none;
+    }
+    .team-section summary::after {
+      content: "▾";
+      font-size: 0.85em;
+      margin-left: auto;
+      transition: transform 0.2s ease;
+    }
+    .team-section[open] summary::after {
+      transform: rotate(-180deg);
+    }
+    .team-name {
+      flex-shrink: 0;
+    }
+    .team-meta {
+      font-size: calc(var(--font-scale) * 0.92rem);
+      color: #475569;
+      font-weight: 500;
+    }
+    .team-section-content {
+      padding: clamp(0.95rem, 2.8vw, 1.35rem) clamp(1.05rem, 3vw, 1.6rem) clamp(1.15rem, 3.2vw, 1.65rem);
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+      display: grid;
+      gap: clamp(0.85rem, 2.6vw, 1.4rem);
     }
     .match-group {
-      margin-top: clamp(0.75rem, 2vw, 1.25rem);
+      margin: 0;
+      border: 1px solid var(--border);
+      border-radius: 0.85rem;
+      background: #f8fafc;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }
+    .match-group summary {
+      cursor: pointer;
+      padding: clamp(0.8rem, 2.4vw, 1rem) clamp(0.9rem, 2.6vw, 1.2rem);
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.2rem));
+      font-weight: 600;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      list-style: none;
+    }
+    .match-group summary::-webkit-details-marker {
+      display: none;
+    }
+    .match-group summary::after {
+      content: "▾";
+      font-size: 0.85em;
+      margin-left: auto;
+      transition: transform 0.2s ease;
+    }
+    .match-group[open] summary::after {
+      transform: rotate(-180deg);
+    }
+    .match-content {
+      padding: 0 clamp(0.9rem, 2.6vw, 1.2rem) clamp(1rem, 3vw, 1.4rem);
+      border-top: 1px solid var(--border);
+      background: #ffffff;
     }
     .match-list {
       list-style: none;
@@ -143,194 +216,239 @@
   <section class="competition">
     <h2>CEV Champions League Volley 2025/26 (Frauen)</h2>
     <p class="competition-source">Quelle: <a href="https://championsleague.cev.eu/en/women/" rel="noopener" target="_blank">Offizielle CEV-Wettbewerbsseite</a></p>
-  <section class="team-section">
-    <h3>DRESDNER SC</h3>
-    <section class="match-group">
-      <h4>Anstehende Spiele</h4>
-      <ul class="match-list">
-      <li class="match-card">
-        <div class="match-header">4th Round · Leg 1</div>
-        <div class="match-pairing">Auswärtsspiel bei ŁKS Commercecon ŁÓDŹ (Poland)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">26.11.2025 20:30 Uhr (CEV-Angabe) | ŁÓDŹ Sport Arena</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">4th Round · Leg 2</div>
-        <div class="match-pairing">Heimspiel gegen A. Carraro Prosecco DOC CONEGLIANO (Italy)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">02.12.2025 19:00 Uhr (CEV-Angabe) | Margon Arena DRESDEN</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">4th Round · Leg 3</div>
-        <div class="match-pairing">Auswärtsspiel bei ANKARA Zeren Spor Kulübü (Turkey)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">07.01.2026 17:00 Uhr (CEV-Angabe) | TVF Ziraat Bankkart Volleyball Hall ANKARA / A</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">4th Round · Leg 4</div>
-        <div class="match-pairing">Auswärtsspiel bei A. Carraro Prosecco DOC CONEGLIANO (Italy)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">15.01.2026 20:30 Uhr (CEV-Angabe) | Palaverde VILLORBA - TREVISO</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">4th Round · Leg 5</div>
-        <div class="match-pairing">Heimspiel gegen ŁKS Commercecon ŁÓDŹ (Poland)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">28.01.2026 19:00 Uhr (CEV-Angabe) | Margon Arena DRESDEN</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">4th Round · Leg 6</div>
-        <div class="match-pairing">Heimspiel gegen ANKARA Zeren Spor Kulübü (Turkey)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">04.02.2026 19:00 Uhr (CEV-Angabe) | Margon Arena DRESDEN</div>
-      </li>
-      </ul>
-    </section>
-    <section class="match-group">
-      <h4>Abgeschlossene Spiele</h4>
-      <p class="group-empty">Keine Einträge vorhanden.</p>
-    </section>
-  </section>
-  <section class="team-section">
-    <h3>SSC Palmberg SCHWERIN</h3>
-    <section class="match-group">
-      <h4>Anstehende Spiele</h4>
-      <ul class="match-list">
-      <li class="match-card">
-        <div class="match-header">4th Round · Leg 1</div>
-        <div class="match-pairing">Heimspiel gegen LEVALLOIS PARIS Saint Cloud (France)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">27.11.2025 18:00 Uhr (CEV-Angabe) | PALMBERG Arena SCHWERIN</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">4th Round · Leg 3</div>
-        <div class="match-pairing">Heimspiel gegen KS Developres RZESZÓW (Poland)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">08.01.2026 18:00 Uhr (CEV-Angabe) | PALMBERG Arena SCHWERIN</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">4th Round · Leg 4</div>
-        <div class="match-pairing">Heimspiel gegen Winner Matches 3rd Round CLVW 09/10</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">15.01.2026 18:00 Uhr (CEV-Angabe) | PALMBERG Arena SCHWERIN</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">4th Round · Leg 5</div>
-        <div class="match-pairing">Auswärtsspiel bei LEVALLOIS PARIS Saint Cloud (France)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">28.01.2026 20:00 Uhr (CEV-Angabe) | Palais des sports Marcel Cerdan LEVALLOIS PERRET</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">4th Round · Leg 6</div>
-        <div class="match-pairing">Auswärtsspiel bei KS Developres RZESZÓW (Poland)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">04.02.2026 18:00 Uhr (CEV-Angabe) | RCWS Podpromie RZESZÓW</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">4th Round · Leg 2</div>
-        <div class="match-pairing">Auswärtsspiel bei Winner Matches 3rd Round CLVW 09/10</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">Termin noch nicht festgelegt</div>
-      </li>
-      </ul>
-    </section>
-    <section class="match-group">
-      <h4>Abgeschlossene Spiele</h4>
-      <p class="group-empty">Keine Einträge vorhanden.</p>
-    </section>
-  </section>
+  <details class="team-section" open>
+    <summary>
+      <span class="team-name">DRESDNER SC</span>
+      <span class="team-meta">6 anstehend</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 1</div>
+              <div class="match-pairing">Auswärtsspiel bei ŁKS Commercecon ŁÓDŹ (Poland)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">26.11.2025 20:30 Uhr (CEV-Angabe) | ŁÓDŹ Sport Arena</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 2</div>
+              <div class="match-pairing">Heimspiel gegen A. Carraro Prosecco DOC CONEGLIANO (Italy)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">02.12.2025 19:00 Uhr (CEV-Angabe) | Margon Arena DRESDEN</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 3</div>
+              <div class="match-pairing">Auswärtsspiel bei ANKARA Zeren Spor Kulübü (Turkey)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">07.01.2026 17:00 Uhr (CEV-Angabe) | TVF Ziraat Bankkart Volleyball Hall ANKARA / A</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 4</div>
+              <div class="match-pairing">Auswärtsspiel bei A. Carraro Prosecco DOC CONEGLIANO (Italy)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">15.01.2026 20:30 Uhr (CEV-Angabe) | Palaverde VILLORBA - TREVISO</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 5</div>
+              <div class="match-pairing">Heimspiel gegen ŁKS Commercecon ŁÓDŹ (Poland)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">28.01.2026 19:00 Uhr (CEV-Angabe) | Margon Arena DRESDEN</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 6</div>
+              <div class="match-pairing">Heimspiel gegen ANKARA Zeren Spor Kulübü (Turkey)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">04.02.2026 19:00 Uhr (CEV-Angabe) | Margon Arena DRESDEN</div>
+            </li>
+              </ul>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+    </div>
+  </details>
+  <details class="team-section" open>
+    <summary>
+      <span class="team-name">SSC Palmberg SCHWERIN</span>
+      <span class="team-meta">6 anstehend</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 1</div>
+              <div class="match-pairing">Heimspiel gegen LEVALLOIS PARIS Saint Cloud (France)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">27.11.2025 18:00 Uhr (CEV-Angabe) | PALMBERG Arena SCHWERIN</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 3</div>
+              <div class="match-pairing">Heimspiel gegen KS Developres RZESZÓW (Poland)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">08.01.2026 18:00 Uhr (CEV-Angabe) | PALMBERG Arena SCHWERIN</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 4</div>
+              <div class="match-pairing">Heimspiel gegen Winner Matches 3rd Round CLVW 09/10</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">15.01.2026 18:00 Uhr (CEV-Angabe) | PALMBERG Arena SCHWERIN</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 5</div>
+              <div class="match-pairing">Auswärtsspiel bei LEVALLOIS PARIS Saint Cloud (France)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">28.01.2026 20:00 Uhr (CEV-Angabe) | Palais des sports Marcel Cerdan LEVALLOIS PERRET</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 6</div>
+              <div class="match-pairing">Auswärtsspiel bei KS Developres RZESZÓW (Poland)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">04.02.2026 18:00 Uhr (CEV-Angabe) | RCWS Podpromie RZESZÓW</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 2</div>
+              <div class="match-pairing">Auswärtsspiel bei Winner Matches 3rd Round CLVW 09/10</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">Termin noch nicht festgelegt</div>
+            </li>
+              </ul>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+    </div>
+  </details>
   </section>
   <section class="competition">
     <h2>CEV Volleyball Cup 2025/26 (Frauen)</h2>
     <p class="competition-source">Quelle: <a href="https://www.cev.eu/club/volleyball-cup/2026/women/" rel="noopener" target="_blank">Offizielle CEV-Wettbewerbsseite</a></p>
-  <section class="team-section">
-    <h3>Allianz MTV STUTTGART</h3>
-    <section class="match-group">
-      <h4>Anstehende Spiele</h4>
-      <ul class="match-list">
-      <li class="match-card">
-        <div class="match-header">Main Phase · Home Matches</div>
-        <div class="match-pairing">Auswärtsspiel bei Loser Matches 2nd Round CLVW 01/02 (Bye)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">Termin noch nicht festgelegt</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">Main Phase · Away Matches</div>
-        <div class="match-pairing">Heimspiel gegen Loser Matches 2nd Round CLVW 01/02 (Bye)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">Termin noch nicht festgelegt | SCHARRena STUTTGART</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">Main Phase · Home Matches</div>
-        <div class="match-pairing">Auswärtsspiel bei Winner CCW 21/22</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">Termin noch nicht festgelegt</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">Main Phase · Away Matches</div>
-        <div class="match-pairing">Heimspiel gegen Winner CCW 21/22</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">Termin noch nicht festgelegt</div>
-      </li>
-      </ul>
-    </section>
-    <section class="match-group">
-      <h4>Abgeschlossene Spiele</h4>
-      <p class="group-empty">Keine Einträge vorhanden.</p>
-    </section>
-  </section>
-  <section class="team-section">
-    <h3>VfB SUHL Thüringen</h3>
-    <section class="match-group">
-      <h4>Anstehende Spiele</h4>
-      <ul class="match-list">
-      <li class="match-card">
-        <div class="match-header">Main Phase · Home Matches</div>
-        <div class="match-pairing">Heimspiel gegen Dinamo BUCURESTI (Romania)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">25.11.2025 19:00 Uhr (CEV-Angabe) | Sporthalle Wolfsgrube SUHL</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">Main Phase · Away Matches</div>
-        <div class="match-pairing">Auswärtsspiel bei Dinamo BUCURESTI (Romania)</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">02.12.2025 17:00 Uhr (CEV-Angabe) | Dinamo BUCURESTI</div>
-      </li>
-      </ul>
-    </section>
-    <section class="match-group">
-      <h4>Abgeschlossene Spiele</h4>
-      <p class="group-empty">Keine Einträge vorhanden.</p>
-    </section>
-  </section>
+  <details class="team-section" open>
+    <summary>
+      <span class="team-name">Allianz MTV STUTTGART</span>
+      <span class="team-meta">4 anstehend</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">Main Phase · Home Matches</div>
+              <div class="match-pairing">Auswärtsspiel bei Loser Matches 2nd Round CLVW 01/02 (Bye)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">Termin noch nicht festgelegt</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">Main Phase · Away Matches</div>
+              <div class="match-pairing">Heimspiel gegen Loser Matches 2nd Round CLVW 01/02 (Bye)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">Termin noch nicht festgelegt | SCHARRena STUTTGART</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">Main Phase · Home Matches</div>
+              <div class="match-pairing">Auswärtsspiel bei Winner CCW 21/22</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">Termin noch nicht festgelegt</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">Main Phase · Away Matches</div>
+              <div class="match-pairing">Heimspiel gegen Winner CCW 21/22</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">Termin noch nicht festgelegt</div>
+            </li>
+              </ul>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+    </div>
+  </details>
+  <details class="team-section" open>
+    <summary>
+      <span class="team-name">VfB SUHL Thüringen</span>
+      <span class="team-meta">2 anstehend</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">Main Phase · Home Matches</div>
+              <div class="match-pairing">Heimspiel gegen Dinamo BUCURESTI (Romania)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">25.11.2025 19:00 Uhr (CEV-Angabe) | Sporthalle Wolfsgrube SUHL</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">Main Phase · Away Matches</div>
+              <div class="match-pairing">Auswärtsspiel bei Dinamo BUCURESTI (Romania)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">02.12.2025 17:00 Uhr (CEV-Angabe) | Dinamo BUCURESTI</div>
+            </li>
+              </ul>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+    </div>
+  </details>
   </section>
   <section class="competition">
     <h2>CEV Volleyball Challenge Cup 2025/26 (Frauen)</h2>
     <p class="competition-source">Quelle: <a href="https://www.cev.eu/club/volleyball-challenge-cup/2026/women/" rel="noopener" target="_blank">Offizielle CEV-Wettbewerbsseite</a></p>
-  <section class="team-section">
-    <h3>SC POTSDAM</h3>
-    <section class="match-group">
-      <h4>Anstehende Spiele</h4>
-      <ul class="match-list">
-      <li class="match-card">
-        <div class="match-header">Main Phase · Away Matches</div>
-        <div class="match-pairing">Heimspiel gegen Winner CHCW 07/08</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">03.12.2025 19:00 Uhr (CEV-Angabe) | MBS Arena POTSDAM</div>
-      </li>
-      <li class="match-card">
-        <div class="match-header">Main Phase · Home Matches</div>
-        <div class="match-pairing">Auswärtsspiel bei Winner CHCW 07/08</div>
-        <div class="match-score">Noch nicht gespielt</div>
-        <div class="match-meta">Termin noch nicht festgelegt</div>
-      </li>
-      </ul>
-    </section>
-    <section class="match-group">
-      <h4>Abgeschlossene Spiele</h4>
-      <p class="group-empty">Keine Einträge vorhanden.</p>
-    </section>
-  </section>
+  <details class="team-section" open>
+    <summary>
+      <span class="team-name">SC POTSDAM</span>
+      <span class="team-meta">2 anstehend</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">Main Phase · Away Matches</div>
+              <div class="match-pairing">Heimspiel gegen Winner CHCW 07/08</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">03.12.2025 19:00 Uhr (CEV-Angabe) | MBS Arena POTSDAM</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">Main Phase · Home Matches</div>
+              <div class="match-pairing">Auswärtsspiel bei Winner CHCW 07/08</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">Termin noch nicht festgelegt</div>
+            </li>
+              </ul>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+    </div>
+  </details>
   </section>
   </main>
 </body>
