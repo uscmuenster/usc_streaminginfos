@@ -3309,7 +3309,11 @@ def build_html_report(
     mvp_rankings: Optional[Mapping[str, Mapping[str, Any]]] = None,
 ) -> str:
     heading = pretty_name(next_home.away_team)
-    kickoff_dt = next_home.kickoff.astimezone(BERLIN_TZ)
+    kickoff_raw = next_home.kickoff
+    if kickoff_raw.tzinfo is None:
+        kickoff_raw = kickoff_raw.replace(tzinfo=BERLIN_TZ)
+
+    kickoff_dt = kickoff_raw.astimezone(BERLIN_TZ)
     kickoff_date = kickoff_dt.strftime("%d.%m.%Y")
     kickoff_weekday = GERMAN_WEEKDAYS.get(
         kickoff_dt.weekday(), kickoff_dt.strftime("%a")
@@ -3317,7 +3321,7 @@ def build_html_report(
     kickoff_time = kickoff_dt.strftime("%H:%M")
     kickoff = f"{kickoff_date} ({kickoff_weekday}) {kickoff_time}"
     kickoff_label = f"{kickoff} Uhr"
-    countdown_iso = kickoff_dt.isoformat()
+    countdown_iso = kickoff_dt.isoformat(timespec="seconds")
     match_day = kickoff_dt.date()
     location = pretty_name(next_home.location)
     usc_url = get_team_homepage(USC_CANONICAL_NAME) or USC_HOMEPAGE
