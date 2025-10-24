@@ -84,6 +84,11 @@ INTERNATIONAL_MATCHES_LINK: tuple[str, str] = (
     "Internationale Spiele 2025/26",
 )
 
+SECOND_LEAGUE_PRO_LINK: tuple[str, str] = (
+    "https://www.volleyball-bundesliga.de/cms/home/2_bundesliga_frauen/archiv/2_bundesliga_frauen_pro/ergebnisse.xhtml?LeaguePresenter.view=resultTable&LeaguePresenter.matchSeriesId=770580944#samsCmsComponent_767352916",
+    "2. BL Pro 2024/25",
+)
+
 REQUEST_HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; usc-kommentatoren/1.0; +https://github.com/)"
 }
@@ -3243,6 +3248,11 @@ def _format_season_results_section(
             link_items.append(
                 f"          <li><a href=\"{escape(url)}\" rel=\"noopener\" target=\"_blank\">{escape(label)}</a></li>"
             )
+
+    second_league_url, second_league_label = SECOND_LEAGUE_PRO_LINK
+    link_items.append(
+        f"          <li><a href=\"{escape(second_league_url)}\" rel=\"noopener\" target=\"_blank\">{escape(second_league_label)}</a></li>"
+    )
 
     internal_link_url, internal_link_label = INTERNATIONAL_MATCHES_LINK
     link_items.append(
