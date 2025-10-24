@@ -3424,10 +3424,28 @@ def build_html_report(
         ]
     )
 
-    meta_lines = [
-        f"<p><strong>Spieltermin:</strong> {escape(kickoff_label)}</p>",
-        f"<p><strong>Austragungsort:</strong> {escape(location)}</p>",
+    countdown_meta_lines = [
+        (
+            "<p class=\"countdown-meta__kickoff\">"
+            f"<strong>Spieltermin:</strong> {escape(kickoff_label)}"
+            "</p>"
+        ),
+        (
+            "<p class=\"countdown-meta__location\">"
+            f"<strong>Austragungsort:</strong> {escape(location)}"
+            "</p>"
+        ),
     ]
+
+    countdown_meta_html = "\n".join(
+        [
+            "    <div class=\"countdown-meta\">",
+            *[f"      {line}" for line in countdown_meta_lines],
+            "    </div>",
+        ]
+    )
+
+    meta_lines = []
 
     referees = list(next_home.referees)
     for idx in range(1, 3):
@@ -3574,6 +3592,22 @@ def build_html_report(
     .meta p {{
       margin: 0;
     }}
+    .countdown-meta {{
+      display: grid;
+      gap: clamp(0.2rem, 1.2vw, 0.45rem);
+      margin: 0 0 clamp(0.55rem, 2vw, 0.9rem) 0;
+    }}
+    .countdown-meta p {{
+      margin: 0;
+    }}
+    .countdown-meta__kickoff {{
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.05rem, 3.4vw, 1.25rem));
+      font-weight: 600;
+    }}
+    .countdown-meta__location {{
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.95rem, 3vw, 1.1rem));
+      font-weight: 500;
+    }}
     .countdown-banner {{
       margin: 0 0 1.5rem 0;
       padding: clamp(0.55rem, 1.7vw, 0.9rem) clamp(0.65rem, 2.2vw, 1.15rem);
@@ -3583,6 +3617,14 @@ def build_html_report(
       display: grid;
       gap: 0.25rem;
       box-shadow: 0 12px 28px rgba(15, 118, 110, 0.28);
+      width: fit-content;
+      max-width: 100%;
+      justify-items: start;
+    }}
+    @media (max-width: 40rem) {{
+      .countdown-banner {{
+        width: 100%;
+      }}
     }}
     .countdown-banner--live {{
       background: linear-gradient(135deg, #b91c1c, #f97316);
@@ -4594,6 +4636,7 @@ def build_html_report(
 <body>
   <main>
     <h1>Nächster USC-Heimgegner:<br><span data-next-opponent>{escape(heading)}</span></h1>
+{countdown_meta_html}
 {countdown_html}
     <div class=\"meta\">
       {meta_html}
