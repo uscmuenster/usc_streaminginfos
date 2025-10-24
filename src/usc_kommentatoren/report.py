@@ -2622,12 +2622,12 @@ def format_match_line(
                         [
                             f"              <tr{row_attr}>",
                             f"                <th scope=\"row\">{escape(team_label)}</th>",
-                            f"                <td>{metrics.serves_attempts}</td>",
-                            f"                <td>{metrics.serves_errors}</td>",
-                            f"                <td>{metrics.serves_points}</td>",
-                            f"                <td>{metrics.receptions_attempts}</td>",
-                            f"                <td>{metrics.receptions_errors}</td>",
-                            f"                <td>{escape(metrics.receptions_positive_pct)} ({escape(metrics.receptions_perfect_pct)})</td>",
+                            f"                <td class=\"match-stats-value\">{metrics.serves_attempts}</td>",
+                            f"                <td class=\"match-stats-value\">{metrics.serves_errors}</td>",
+                            f"                <td class=\"match-stats-value\">{metrics.serves_points}</td>",
+                            f"                <td class=\"match-stats-value\">{metrics.receptions_attempts}</td>",
+                            f"                <td class=\"match-stats-value\">{metrics.receptions_errors}</td>",
+                            f"                <td class=\"match-stats-value\">{escape(metrics.receptions_positive_pct)} ({escape(metrics.receptions_perfect_pct)})</td>",
                             "              </tr>",
                         ]
                     )
@@ -2637,12 +2637,12 @@ def format_match_line(
                         [
                             f"              <tr{row_attr}>",
                             f"                <th scope=\"row\">{escape(team_label)}</th>",
-                            f"                <td>{metrics.attacks_attempts}</td>",
-                            f"                <td>{metrics.attacks_errors}</td>",
-                            f"                <td>{metrics.attacks_blocked}</td>",
-                            f"                <td>{metrics.attacks_points}</td>",
-                            f"                <td>{escape(metrics.attacks_success_pct)}</td>",
-                            f"                <td>{metrics.blocks_points}</td>",
+                            f"                <td class=\"match-stats-value\">{metrics.attacks_attempts}</td>",
+                            f"                <td class=\"match-stats-value\">{metrics.attacks_errors}</td>",
+                            f"                <td class=\"match-stats-value\">{metrics.attacks_blocked}</td>",
+                            f"                <td class=\"match-stats-value\">{metrics.attacks_points}</td>",
+                            f"                <td class=\"match-stats-value\">{escape(metrics.attacks_success_pct)}</td>",
+                            f"                <td class=\"match-stats-value\">{metrics.blocks_points}</td>",
                             "              </tr>",
                         ]
                     )
@@ -3827,6 +3827,9 @@ def build_html_report(
       font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       font-weight: 500;
       color: #1f2937;
+    }}
+    .match-stats-table tbody td.match-stats-value {{
+      text-align: center;
     }}
     .match-stats-table tbody tr + tr th,
     .match-stats-table tbody tr + tr td {{
