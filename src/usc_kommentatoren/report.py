@@ -3621,11 +3621,6 @@ def build_html_report(
       max-width: 100%;
       justify-items: start;
     }}
-    @media (max-width: 40rem) {{
-      .countdown-banner {{
-        width: 100%;
-      }}
-    }}
     .countdown-banner--live {{
       background: linear-gradient(135deg, #b91c1c, #f97316);
       box-shadow: 0 18px 40px rgba(180, 83, 9, 0.4);
