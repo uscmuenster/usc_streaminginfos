@@ -33,7 +33,8 @@ VBL_BASE_URL = "https://www.volleyball-bundesliga.de/"
 VBL_PRESS_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/pressespiegel.xhtml"
 WECHSELBOERSE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/wechselboerse.xhtml"
 TEAM_PAGE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/teams_spielerinnen/mannschaften.xhtml"
-BERLIN_TZ = ZoneInfo("Europe/Berlin")
+BERLIN_TIMEZONE_NAME = "Europe/Berlin"
+BERLIN_TZ = ZoneInfo(BERLIN_TIMEZONE_NAME)
 USC_CANONICAL_NAME = "USC Münster"
 USC_HOMEPAGE = "https://www.usc-muenster.de/"
 
@@ -3309,7 +3310,11 @@ def build_html_report(
     mvp_rankings: Optional[Mapping[str, Mapping[str, Any]]] = None,
 ) -> str:
     heading = pretty_name(next_home.away_team)
-    kickoff_dt = next_home.kickoff.astimezone(BERLIN_TZ)
+    kickoff_raw = next_home.kickoff
+    if kickoff_raw.tzinfo is None:
+        kickoff_raw = kickoff_raw.replace(tzinfo=BERLIN_TZ)
+
+    kickoff_dt = kickoff_raw.astimezone(BERLIN_TZ)
     kickoff_date = kickoff_dt.strftime("%d.%m.%Y")
     kickoff_weekday = GERMAN_WEEKDAYS.get(
         kickoff_dt.weekday(), kickoff_dt.strftime("%a")
@@ -3317,7 +3322,7 @@ def build_html_report(
     kickoff_time = kickoff_dt.strftime("%H:%M")
     kickoff = f"{kickoff_date} ({kickoff_weekday}) {kickoff_time}"
     kickoff_label = f"{kickoff} Uhr"
-    countdown_iso = kickoff_dt.isoformat()
+    countdown_iso = kickoff_dt.isoformat(timespec="seconds")
     match_day = kickoff_dt.date()
     location = pretty_name(next_home.location)
     usc_url = get_team_homepage(USC_CANONICAL_NAME) or USC_HOMEPAGE
@@ -3416,7 +3421,8 @@ def build_html_report(
         [
             (
                 "    <section class=\"countdown-banner\" data-countdown-banner "
-                f"data-kickoff=\"{escape(countdown_iso)}\">"
+                f"data-kickoff=\"{escape(countdown_iso)}\" "
+                f"data-timezone=\"{escape(BERLIN_TIMEZONE_NAME)}\">"
             ),
             "      <p class=\"countdown-heading\">Countdown bis zum Spielbeginn</p>",
             (
@@ -4739,19 +4745,97 @@ def build_html_report(
         themeMeta.setAttribute("content", themeColor);
       }}
 
+      const createTimeZoneOffsetGetter = (timeZone) => {{
+        try {{
+          const formatter = new Intl.DateTimeFormat('en-US', {{
+            timeZone,
+            hour12: false,
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          }});
+          return (date) => {{
+            const parts = formatter.formatToParts(date);
+            let year;
+            let month;
+            let day;
+            let hour;
+            let minute;
+            let second;
+            for (const part of parts) {{
+              if (part.type === 'year') {{
+                year = Number(part.value);
+              }} else if (part.type === 'month') {{
+                month = Number(part.value);
+              }} else if (part.type === 'day') {{
+                day = Number(part.value);
+              }} else if (part.type === 'hour') {{
+                hour = Number(part.value);
+              }} else if (part.type === 'minute') {{
+                minute = Number(part.value);
+              }} else if (part.type === 'second') {{
+                second = Number(part.value);
+              }}
+            }}
+
+            if (
+              year === undefined ||
+              month === undefined ||
+              day === undefined ||
+              hour === undefined ||
+              minute === undefined ||
+              second === undefined
+            ) {{
+              return Number.NaN;
+            }}
+
+            const utcMillis = Date.UTC(
+              year,
+              month - 1,
+              day,
+              hour,
+              minute,
+              second,
+            );
+            return (date.getTime() - utcMillis) / 60000;
+          }};
+        }} catch (error) {{
+          return null;
+        }}
+      }};
+
       const banner = document.querySelector('[data-countdown-banner]');
       if (banner) {{
         const iso = banner.getAttribute('data-kickoff');
+        const timeZone = banner.getAttribute('data-timezone') || '{BERLIN_TIMEZONE_NAME}';
         if (iso) {{
           const targetMs = Date.parse(iso);
           if (!Number.isNaN(targetMs)) {{
+            const getOffset = createTimeZoneOffsetGetter(timeZone);
+            const targetDate = new Date(targetMs);
+            const targetOffset = getOffset ? getOffset(targetDate) : Number.NaN;
             const display = banner.querySelector('[data-countdown-display]');
             const pad = (value) => String(value).padStart(2, '0');
             const plural = (value, singular, pluralForm) =>
               value + ' ' + (value === 1 ? singular : pluralForm);
             let timerId;
             const update = () => {{
-              const diff = targetMs - Date.now();
+              const now = new Date();
+              let diff = targetMs - now.getTime();
+
+              if (
+                getOffset &&
+                Number.isFinite(targetOffset)
+              ) {{
+                const nowOffset = getOffset(now);
+                if (Number.isFinite(nowOffset)) {{
+                  diff -= (targetOffset - nowOffset) * 60000;
+                }}
+              }}
+
               if (diff <= 0) {{
                 if (display) {{
                   display.textContent = 'Anpfiff!';
