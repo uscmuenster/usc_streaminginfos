@@ -3897,59 +3897,6 @@ def build_html_report(
       font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
       color: #475569;
     }}
-    .pwa-install-banner {{
-      position: fixed;
-      left: 50%;
-      bottom: 1.25rem;
-      transform: translateX(-50%);
-      width: min(90vw, 22rem);
-      background: var(--theme-color);
-      color: #ffffff;
-      border-radius: 1rem;
-      box-shadow: 0 18px 40px rgba(15, 118, 110, 0.28);
-      padding: 1rem 1.15rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-      z-index: 1200;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
-    }}
-    .pwa-install-content {{
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }}
-    .pwa-install-content strong {{
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.05rem);
-    }}
-    .pwa-install-actions {{
-      display: flex;
-      gap: 0.6rem;
-      justify-content: flex-end;
-    }}
-    .pwa-install-button,
-    .pwa-install-dismiss {{
-      appearance: none;
-      border: none;
-      border-radius: 999px;
-      padding: 0.45rem 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
-    }}
-    .pwa-install-button {{
-      background: #ffffff;
-      color: var(--theme-color);
-      box-shadow: 0 8px 20px rgba(15, 118, 110, 0.25);
-    }}
-    .pwa-install-button:focus {{
-      outline: 2px solid rgba(255, 255, 255, 0.8);
-      outline-offset: 2px;
-    }}
-    .pwa-install-dismiss {{
-      background: rgba(255, 255, 255, 0.25);
-      color: #f8fafc;
-    }}
     .mvp-legend {{
       display: flex;
       flex-wrap: wrap;
