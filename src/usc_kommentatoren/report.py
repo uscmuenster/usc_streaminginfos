@@ -2627,8 +2627,7 @@ def format_match_line(
                             f"                <td>{metrics.serves_points}</td>",
                             f"                <td>{metrics.receptions_attempts}</td>",
                             f"                <td>{metrics.receptions_errors}</td>",
-                            f"                <td>{escape(metrics.receptions_positive_pct)}</td>",
-                            f"                <td>{escape(metrics.receptions_perfect_pct)}</td>",
+                            f"                <td>{escape(metrics.receptions_positive_pct)} ({escape(metrics.receptions_perfect_pct)})</td>",
                             "              </tr>",
                         ]
                     )
@@ -2660,16 +2659,15 @@ def format_match_line(
                 "              <tr>\n"
                 "                <th scope=\"col\" rowspan=\"2\">Team</th>\n"
                 "                <th scope=\"colgroup\" colspan=\"3\">Aufschlag</th>\n"
-                "                <th scope=\"colgroup\" colspan=\"4\">Annahme</th>\n"
+                "                <th scope=\"colgroup\" colspan=\"3\">Annahme</th>\n"
                 "              </tr>\n"
                 "              <tr>\n"
-                "                <th scope=\"col\">Auf-Ges</th>\n"
-                "                <th scope=\"col\">Auf-Fhl</th>\n"
-                "                <th scope=\"col\">Auf-Pkt</th>\n"
-                "                <th scope=\"col\">An-Ges</th>\n"
-                "                <th scope=\"col\">An-Fhl</th>\n"
-                "                <th scope=\"col\">An-Pos%</th>\n"
-                "                <th scope=\"col\">An-Prf%</th>\n"
+                "                <th scope=\"col\">Ges.</th>\n"
+                "                <th scope=\"col\">Fhl</th>\n"
+                "                <th scope=\"col\">Pkt</th>\n"
+                "                <th scope=\"col\">Ges.</th>\n"
+                "                <th scope=\"col\">Fhl</th>\n"
+                "                <th scope=\"col\">Pos (Prf)</th>\n"
                 "              </tr>\n"
                 "            </thead>\n"
                 "            <tbody>\n"
@@ -2686,12 +2684,12 @@ def format_match_line(
                 "                <th scope=\"colgroup\" colspan=\"1\">Block</th>\n"
                 "              </tr>\n"
                 "              <tr>\n"
-                "                <th scope=\"col\">Ag-Ges</th>\n"
-                "                <th scope=\"col\">Ag-Fhl</th>\n"
-                "                <th scope=\"col\">Ag-Blo</th>\n"
-                "                <th scope=\"col\">Ag-Pkt</th>\n"
-                "                <th scope=\"col\">Ag-%</th>\n"
-                "                <th scope=\"col\">Block</th>\n"
+                "                <th scope=\"col\">Ges.</th>\n"
+                "                <th scope=\"col\">Fhl</th>\n"
+                "                <th scope=\"col\">Blo</th>\n"
+                "                <th scope=\"col\">Pkt</th>\n"
+                "                <th scope=\"col\">Pkt%</th>\n"
+                "                <th scope=\"col\">Pkt</th>\n"
                 "              </tr>\n"
                 "            </thead>\n"
                 "            <tbody>\n"
