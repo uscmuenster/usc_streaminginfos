@@ -3248,6 +3248,9 @@ def _format_season_results_section(
     link_items.append(
         f"          <li><a href=\"{escape(internal_link_url)}\">{escape(internal_link_label)}</a></li>"
     )
+    link_items.append(
+        "          <li><a href=\"https://github.com/uscmuenster/usc_streaminginfos\" rel=\"noopener\" target=\"_blank\">GitHub Projekt - Streaminginfos</a></li>"
+    )
 
     if link_items:
         link_block = [
