@@ -3313,6 +3313,8 @@ def build_html_report(
     )
     kickoff_time = kickoff_dt.strftime("%H:%M")
     kickoff = f"{kickoff_date} ({kickoff_weekday}) {kickoff_time}"
+    kickoff_label = f"{kickoff} Uhr"
+    countdown_iso = kickoff_dt.isoformat()
     match_day = kickoff_dt.date()
     location = pretty_name(next_home.location)
     usc_url = get_team_homepage(USC_CANONICAL_NAME) or USC_HOMEPAGE
@@ -3407,10 +3409,43 @@ def build_html_report(
             f"<figcaption>Teamfoto {escape(USC_CANONICAL_NAME)}</figcaption>"
             "</figure>\n"
         )
-    meta_lines = [
-        f"<p><strong>Spieltermin:</strong> {escape(kickoff)} Uhr</p>",
-        f"<p><strong>Austragungsort:</strong> {escape(location)}</p>",
+    countdown_html = "\n".join(
+        [
+            (
+                "    <section class=\"countdown-banner\" data-countdown-banner "
+                f"data-kickoff=\"{escape(countdown_iso)}\">"
+            ),
+            "      <p class=\"countdown-heading\">Countdown bis zum Spielbeginn</p>",
+            (
+                "      <p class=\"countdown-display\" data-countdown-display"
+                " aria-live=\"polite\">--:--:--</p>"
+            ),
+            "    </section>",
+        ]
+    )
+
+    countdown_meta_lines = [
+        (
+            "<p class=\"countdown-meta__kickoff\">"
+            f"<strong>Spieltermin:</strong> {escape(kickoff_label)}"
+            "</p>"
+        ),
+        (
+            "<p class=\"countdown-meta__location\">"
+            f"<strong>Austragungsort:</strong> {escape(location)}"
+            "</p>"
+        ),
     ]
+
+    countdown_meta_html = "\n".join(
+        [
+            "    <div class=\"countdown-meta\">",
+            *[f"      {line}" for line in countdown_meta_lines],
+            "    </div>",
+        ]
+    )
+
+    meta_lines = []
 
     referees = list(next_home.referees)
     for idx in range(1, 3):
@@ -3556,6 +3591,57 @@ def build_html_report(
     }}
     .meta p {{
       margin: 0;
+    }}
+    .countdown-meta {{
+      display: grid;
+      gap: clamp(0.2rem, 1.2vw, 0.45rem);
+      margin: 0 0 clamp(0.55rem, 2vw, 0.9rem) 0;
+    }}
+    .countdown-meta p {{
+      margin: 0;
+    }}
+    .countdown-meta__kickoff {{
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.05rem, 3.4vw, 1.25rem));
+      font-weight: 600;
+    }}
+    .countdown-meta__location {{
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.95rem, 3vw, 1.1rem));
+      font-weight: 500;
+    }}
+    .countdown-banner {{
+      margin: 0 0 1.5rem 0;
+      padding: clamp(0.55rem, 1.7vw, 0.9rem) clamp(0.65rem, 2.2vw, 1.15rem);
+      border-radius: 0.95rem;
+      background: linear-gradient(135deg, #0f766e, #10b981);
+      color: #f0fdf4;
+      display: grid;
+      gap: 0.25rem;
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.28);
+      width: fit-content;
+      max-width: 100%;
+      justify-items: start;
+    }}
+    @media (max-width: 40rem) {{
+      .countdown-banner {{
+        width: 100%;
+      }}
+    }}
+    .countdown-banner--live {{
+      background: linear-gradient(135deg, #b91c1c, #f97316);
+      box-shadow: 0 18px 40px rgba(180, 83, 9, 0.4);
+    }}
+    .countdown-heading {{
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.5rem, 1.5vw, 0.65rem));
+    }}
+    .countdown-display {{
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.2rem, 3.6vw, 1.6rem));
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
     }}
     .update-note {{
       display: inline-flex;
@@ -4536,12 +4622,22 @@ def build_html_report(
       a {{
         color: #5eead4;
       }}
+      .countdown-banner {{
+        background: linear-gradient(135deg, rgba(15, 118, 110, 0.8), rgba(45, 212, 191, 0.85));
+        color: #ecfeff;
+        box-shadow: 0 20px 44px rgba(0, 0, 0, 0.55);
+      }}
+      .countdown-banner--live {{
+        background: linear-gradient(135deg, rgba(190, 18, 60, 0.85), rgba(249, 115, 22, 0.85));
+      }}
     }}
   </style>
 </head>
 <body>
   <main>
     <h1>Nächster USC-Heimgegner:<br><span data-next-opponent>{escape(heading)}</span></h1>
+{countdown_meta_html}
+{countdown_html}
     <div class=\"meta\">
       {meta_html}
     </div>
@@ -4643,6 +4739,51 @@ def build_html_report(
       const themeMeta = document.querySelector('meta[name="theme-color"]');
       if (themeMeta) {{
         themeMeta.setAttribute("content", themeColor);
+      }}
+
+      const banner = document.querySelector('[data-countdown-banner]');
+      if (banner) {{
+        const iso = banner.getAttribute('data-kickoff');
+        if (iso) {{
+          const targetMs = Date.parse(iso);
+          if (!Number.isNaN(targetMs)) {{
+            const display = banner.querySelector('[data-countdown-display]');
+            const pad = (value) => String(value).padStart(2, '0');
+            const plural = (value, singular, pluralForm) =>
+              value + ' ' + (value === 1 ? singular : pluralForm);
+            let timerId;
+            const update = () => {{
+              const diff = targetMs - Date.now();
+              if (diff <= 0) {{
+                if (display) {{
+                  display.textContent = 'Anpfiff!';
+                }}
+                banner.classList.add('countdown-banner--live');
+                if (typeof timerId === 'number') {{
+                  window.clearInterval(timerId);
+                }}
+                return;
+              }}
+
+              const totalSeconds = Math.floor(diff / 1000);
+              const days = Math.floor(totalSeconds / 86400);
+              const hours = Math.floor((totalSeconds % 86400) / 3600);
+              const minutes = Math.floor((totalSeconds % 3600) / 60);
+              const seconds = totalSeconds % 60;
+              const parts = [];
+              if (days > 0) {{
+                parts.push(plural(days, 'Tag', 'Tage'));
+              }}
+              parts.push(pad(hours) + ':' + pad(minutes) + ':' + pad(seconds));
+              if (display) {{
+                display.textContent = parts.join(' · ');
+              }}
+            }};
+
+            update();
+            timerId = window.setInterval(update, 1000);
+          }}
+        }}
       }}
 
     }})();
