@@ -274,21 +274,26 @@ def render_team_section(team: str, matches: Iterable[MatchRecord]) -> str:
             upcoming.append(match)
 
     def render_group(title: str, items: List[MatchRecord]) -> str:
+        heading = html.escape(title)
         if not items:
             return (
-                "    <section class=\"match-group\">\n"
-                f"      <h4>{html.escape(title)}</h4>\n"
-                "      <p class=\"group-empty\">Keine Einträge vorhanden.</p>\n"
-                "    </section>"
+                "    <details class=\"match-group\">\n"
+                f"      <summary>{heading}</summary>\n"
+                "      <div class=\"match-content\">\n"
+                "        <p class=\"group-empty\">Keine Einträge vorhanden.</p>\n"
+                "      </div>\n"
+                "    </details>"
             )
         rows = "\n".join(format_match_row(item) for item in items)
         return (
-            "    <section class=\"match-group\">\n"
-            f"      <h4>{html.escape(title)}</h4>\n"
-            "      <ul class=\"match-list\">\n"
+            "    <details class=\"match-group\">\n"
+            f"      <summary>{heading}</summary>\n"
+            "      <div class=\"match-content\">\n"
+            "        <ul class=\"match-list\">\n"
             f"{rows}\n"
-            "      </ul>\n"
-            "    </section>"
+            "        </ul>\n"
+            "      </div>\n"
+            "    </details>"
         )
 
     upcoming_sorted = sorted(upcoming, key=lambda item: (
@@ -412,6 +417,39 @@ def render_html(comp_results: List[tuple[CompetitionConfig, Dict[str, List[Match
     }}
     .match-group {{
       margin-top: clamp(0.75rem, 2vw, 1.25rem);
+      border: 1px solid var(--border);
+      border-radius: 0.85rem;
+      background: #f8fafc;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }}
+    .match-group summary {{
+      cursor: pointer;
+      padding: clamp(0.8rem, 2.4vw, 1rem) clamp(0.9rem, 2.6vw, 1.2rem);
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.2rem));
+      font-weight: 600;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      list-style: none;
+    }}
+    .match-group summary::-webkit-details-marker {{
+      display: none;
+    }}
+    .match-group summary::after {{
+      content: "\25BC";
+      font-size: 0.85em;
+      margin-left: auto;
+      transition: transform 0.2s ease;
+    }}
+    .match-group[open] summary::after {{
+      transform: rotate(-180deg);
+    }}
+    .match-content {{
+      padding: 0 clamp(0.9rem, 2.6vw, 1.2rem) clamp(1rem, 3vw, 1.4rem);
+      border-top: 1px solid var(--border);
+      background: #ffffff;
     }}
     .match-list {{
       list-style: none;
@@ -471,7 +509,7 @@ def render_html(comp_results: List[tuple[CompetitionConfig, Dict[str, List[Match
   <main>
     <h1>Internationale Spiele deutscher Frauen-Teams</h1>
     <p class=\"meta\">Letzte Aktualisierung: {timestamp}</p>
-    <p class=\"footnote\">Alle Angaben stammen aus den offiziellen Ergebnis-Feeds der CEV. Anstoßzeiten werden ohne Zeitzonenangabe veröffentlicht und entsprechen der dort ausgewiesenen Ortszeit.</p>
+    <p class=\"footnote\">Alle Angaben stammen aus den offiziellen Ergebnis-Feeds der CEV. Startzeiten werden ohne Zeitzonenangabe veröffentlicht und entsprechen der dort ausgewiesenen Ortszeit.</p>
 {competitions_html}
   </main>
 </body>
