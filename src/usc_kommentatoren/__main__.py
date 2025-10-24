@@ -16,6 +16,7 @@ from .report import (
     THEME_COLORS,
     build_html_report,
     collect_instagram_links,
+    collect_match_stats_totals,
     collect_team_roster,
     collect_team_news,
     collect_team_photo,
@@ -255,6 +256,11 @@ def main() -> int:
 
     generated_at = datetime.now(tz=BERLIN_TZ)
 
+    stats_matches: List[Match] = []
+    stats_matches.extend(usc_recent)
+    stats_matches.extend(opponent_recent)
+    match_stats_map = collect_match_stats_totals(stats_matches)
+
     report_kwargs = dict(
         next_home=next_home,
         usc_recent=usc_recent,
@@ -273,6 +279,7 @@ def main() -> int:
         opponent_photo=opponent_photo,
         season_results=season_results_data,
         generated_at=generated_at,
+        match_stats=match_stats_map,
         mvp_rankings=mvp_rankings_data,
     )
 
