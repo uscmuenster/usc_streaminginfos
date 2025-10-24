@@ -2379,9 +2379,16 @@ def _parse_stats_totals_pdf(data: bytes) -> Tuple[MatchStatsTotals, ...]:
         return ()
     if not reader.pages:
         return ()
-    raw_text = reader.pages[0].extract_text() or ""
-    cleaned = raw_text.replace("\x00", "")
-    lines = cleaned.splitlines()
+    lines: List[str] = []
+    for page in reader.pages:
+        try:
+            raw_text = page.extract_text() or ""
+        except Exception:
+            raw_text = ""
+        if not raw_text:
+            continue
+        cleaned = raw_text.replace("\x00", "")
+        lines.extend(cleaned.splitlines())
     if not lines:
         return ()
     markers = [idx for idx, line in enumerate(lines) if line.strip() == "Spieler insgesamt"]
