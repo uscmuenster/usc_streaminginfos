@@ -391,6 +391,33 @@ def render_html(comp_results: List[tuple[CompetitionConfig, Dict[str, List[Match
       margin: 0 auto;
       padding: clamp(1rem, 4vw, 2.75rem);
     }}
+    header {{
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.6rem, 2vw, 1rem);
+      margin-bottom: clamp(1.1rem, 3vw, 1.7rem);
+    }}
+    header nav {{
+      margin-bottom: clamp(0.2rem, 1vw, 0.5rem);
+    }}
+    header nav a {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+      background: #ecfdf5;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }}
+    header nav a:hover,
+    header nav a:focus-visible {{
+      background: var(--accent);
+      color: #ffffff;
+      outline: none;
+    }}
     h1 {{
       margin-top: 0;
       margin-bottom: 0.75rem;
@@ -573,7 +600,12 @@ def render_html(comp_results: List[tuple[CompetitionConfig, Dict[str, List[Match
 </head>
 <body>
   <main>
-    <h1>Internationale Spiele deutscher Frauen-Teams</h1>
+    <header>
+      <nav aria-label=\"Navigation\">
+        <a href=\"index.html\">⟵ zurück zur Übersicht</a>
+      </nav>
+      <h1>Internationale Spiele deutscher Frauen-Teams</h1>
+    </header>
     <p class=\"meta\">Letzte Aktualisierung: {timestamp}</p>
     <p class=\"footnote\">Alle Angaben stammen aus den offiziellen Ergebnis-Feeds der CEV. Startzeiten werden ohne Zeitzonenangabe veröffentlicht und entsprechen der dort ausgewiesenen Ortszeit.</p>
 {competitions_html}
