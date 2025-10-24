@@ -1,0 +1,75 @@
+name: HTML Report
+
+on:
+  push:
+    branches: [ work, main ]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 1 * * *'  # täglich um 01:00 Uhr
+
+permissions:
+  contents: write   # erforderlich zum Pushen nach gh-pages
+
+concurrency:
+  group: 'html-report'
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧩 Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # wichtig, um gh-pages zu überschreiben
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 📦 Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: ✅ Check sources compile
+        run: python -m compileall src
+
+      - name: 🛠 Generate USC HTML report
+        env:
+          PYTHONPATH: src
+        run: |
+          python -m usc_kommentatoren
+
+          # Cache-Busting: Commit-Hash und Zeitstempel in HTML einfügen
+          COMMIT_HASH=$(git rev-parse --short HEAD)
+          for f in docs/*.html; do
+            echo "<!-- Build $COMMIT_HASH $(date -u +"%Y-%m-%dT%H:%M:%SZ") -->" >> "$f"
+          done
+
+      - name: 🔁 Commit HTML files to gh-pages branch
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+          # neuen temporären Branch für Pages-Deploy erzeugen
+          git fetch origin
+          git checkout --orphan gh-pages
+          git reset --hard
+
+          # aktuelle Docs übernehmen
+          cp -r docs/* .
+          touch .nojekyll
+
+          git add -A
+          git commit -m "🚀 Deploy $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+
+          # force-push auf gh-pages
+          git push -f origin gh-pages
+
+      - name: 🧹 Clean workspace
+        if: always()
+        run: rm -rf docs
+
