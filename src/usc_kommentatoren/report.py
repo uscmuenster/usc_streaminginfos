@@ -4640,14 +4640,6 @@ def build_html_report(
   <script>
     (() => {{
       const themeColor = "{THEME_COLORS['mvp_overview_summary_bg']}";
-      if ("serviceWorker" in navigator) {{
-        window.addEventListener("load", () => {{
-          navigator.serviceWorker.register("sw.js").catch((error) => {{
-            console.error("Service worker registration failed", error);
-          }});
-        }});
-      }}
-
       const themeMeta = document.querySelector('meta[name="theme-color"]');
       if (themeMeta) {{
         themeMeta.setAttribute("content", themeColor);
