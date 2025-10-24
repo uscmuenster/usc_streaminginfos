@@ -3,7 +3,6 @@ from __future__ import annotations
 import base64
 import csv
 import time
-from collections import deque
 from dataclasses import dataclass, replace
 import re
 from datetime import date, datetime, timedelta
@@ -247,7 +246,6 @@ class MatchStatsTotals:
     header_lines: Tuple[str, ...]
     totals_line: str
     metrics: Optional["MatchStatsMetrics"] = None
-    players: Tuple["MatchStatsPlayerMetrics", ...] = ()
 
 
 @dataclass(frozen=True)
@@ -255,25 +253,6 @@ class MatchStatsMetrics:
     serves_attempts: int
     serves_errors: int
     serves_points: int
-    receptions_attempts: int
-    receptions_errors: int
-    receptions_positive_pct: str
-    receptions_perfect_pct: str
-    attacks_attempts: int
-    attacks_errors: int
-    attacks_blocked: int
-    attacks_points: int
-    attacks_success_pct: str
-    blocks_points: int
-
-
-@dataclass(frozen=True)
-class MatchStatsPlayerMetrics:
-    jersey: str
-    name: str
-    serve_attempts: int
-    serve_errors: int
-    serve_points: int
     receptions_attempts: int
     receptions_errors: int
     receptions_positive_pct: str
@@ -2140,115 +2119,6 @@ def _normalize_stats_totals_line(line: str) -> str:
     return stripped
 
 
-def _parse_player_stats_line(line: str) -> Optional[MatchStatsPlayerMetrics]:
-    stripped = line.strip()
-    if not stripped or not stripped[0].isdigit():
-        return None
-
-    working = line.rstrip()
-    tokens: list[str] = []
-    pattern = re.compile(r"([+\-]?\d+%?|\(\s*\d+%?\)|\.)\s*$")
-    while working:
-        match = pattern.search(working)
-        if not match:
-            break
-        tokens.append(match.group(1))
-        working = working[: match.start()].rstrip()
-
-    token_queue = deque(tokens)
-
-    def _parse_int_token(raw: Optional[str]) -> int:
-        if raw is None:
-            return 0
-        token = raw.strip()
-        if not token or token == ".":
-            return 0
-        token = token.replace("+", "")
-        try:
-            return int(token)
-        except ValueError:
-            return 0
-
-    def _parse_percent_token(raw: Optional[str]) -> str:
-        if raw is None:
-            return "–"
-        token = raw.strip()
-        if not token or token == ".":
-            return "–"
-        token = token.strip("() ")
-        if not token:
-            return "–"
-        if not token.endswith("%"):
-            token = f"{token}%"
-        return token
-
-    def _pop_left() -> Optional[str]:
-        if token_queue:
-            return token_queue.popleft()
-        return None
-
-    block_points = _parse_int_token(_pop_left())
-    attacks_success_pct = _parse_percent_token(_pop_left())
-    attacks_points = _parse_int_token(_pop_left())
-    attacks_blocked = _parse_int_token(_pop_left())
-    attacks_errors = _parse_int_token(_pop_left())
-    attacks_attempts = _parse_int_token(_pop_left())
-
-    reception_perfect_pct = "–"
-    if token_queue:
-        peek = token_queue[0].strip()
-        if peek.startswith("("):
-            reception_perfect_pct = _parse_percent_token(_pop_left())
-        elif peek == ".":
-            _pop_left()
-            reception_perfect_pct = "–"
-
-    reception_positive_pct = _parse_percent_token(_pop_left())
-    receptions_errors = _parse_int_token(_pop_left())
-    receptions_attempts = _parse_int_token(_pop_left())
-    serve_points = _parse_int_token(_pop_left())
-    serve_errors = _parse_int_token(_pop_left())
-    serve_attempts = _parse_int_token(_pop_left())
-
-    remainder = working.strip()
-    if not remainder:
-        return None
-    name_match = re.match(r"(\d+)([A-Za-z]?)(.*)", remainder)
-    if not name_match:
-        return None
-    jersey_number = name_match.group(1)
-    jersey_suffix = name_match.group(2) or ""
-    jersey = f"{jersey_number}{jersey_suffix}".strip()
-    name_segment = name_match.group(3).strip()
-    if not name_segment:
-        name = jersey
-    else:
-        name_parts = name_segment.split()
-        while name_parts and (
-            name_parts[-1].isdigit() or set(name_parts[-1]) <= {"*"}
-        ):
-            name_parts.pop()
-        name = " ".join(name_parts).strip() or jersey
-
-    return MatchStatsPlayerMetrics(
-        jersey=jersey,
-        name=name,
-        serve_attempts=serve_attempts,
-        serve_errors=serve_errors,
-        serve_points=serve_points,
-        receptions_attempts=receptions_attempts,
-        receptions_errors=receptions_errors,
-        receptions_positive_pct=reception_positive_pct,
-        receptions_perfect_pct=reception_perfect_pct,
-        attacks_attempts=attacks_attempts,
-        attacks_errors=attacks_errors,
-        attacks_blocked=attacks_blocked,
-        attacks_points=attacks_points,
-        attacks_success_pct=attacks_success_pct,
-        blocks_points=block_points,
-    )
-
-
 _MATCH_STATS_LINE_PATTERN = re.compile(
     r"(?P<serve_attempts>\d+)\s+"
     r"(?P<serve_combo>\d+)\s+"
@@ -2405,39 +2275,26 @@ def _parse_stats_totals_pdf(data: bytes) -> Tuple[MatchStatsTotals, ...]:
                 header_lines.append(_normalize_stats_header_line(candidate))
             cursor -= 1
         header_lines.reverse()
-        section_lines: List[str] = []
+        totals_line: Optional[str] = None
         for probe in range(marker + 1, len(lines)):
             candidate = lines[probe].strip()
             if not candidate:
                 continue
             if candidate.startswith("Satz"):
                 break
-            section_lines.append(candidate)
-        totals_line: Optional[str] = None
-        totals_index: Optional[int] = None
-        for idx, candidate in enumerate(section_lines):
             if re.search(r"[A-Za-zÄÖÜäöüß]", candidate):
                 continue
             if re.search(r"\d", candidate):
                 totals_line = candidate
-                totals_index = idx
-                break
         if not totals_line:
             continue
         normalized_totals = _normalize_stats_totals_line(totals_line)
-        player_metrics: List[MatchStatsPlayerMetrics] = []
-        if totals_index:
-            for raw_line in section_lines[:totals_index]:
-                parsed = _parse_player_stats_line(raw_line)
-                if parsed:
-                    player_metrics.append(parsed)
         team_name = team_names[marker_index] if marker_index < len(team_names) else f"Team {marker_index + 1}"
         summaries.append(
             MatchStatsTotals(
                 team_name=team_name,
                 header_lines=tuple(header_lines),
                 totals_line=normalized_totals,
-                players=tuple(player_metrics),
             )
         )
     return tuple(summaries)
@@ -2467,7 +2324,6 @@ def fetch_match_stats_totals(
                     header_lines=(),
                     totals_line="",
                     metrics=metrics,
-                    players=(),
                 )
                 for _, team_name, metrics in manual_entries
             )
@@ -2495,7 +2351,6 @@ def fetch_match_stats_totals(
                         header_lines=entry.header_lines,
                         totals_line=entry.totals_line,
                         metrics=metrics,
-                        players=entry.players,
                     )
                 )
             else:
@@ -2509,7 +2364,6 @@ def fetch_match_stats_totals(
                     header_lines=(),
                     totals_line="",
                     metrics=metrics,
-                    players=(),
                 )
             )
         summaries = updated
@@ -2730,9 +2584,7 @@ def format_match_line(
                     normalized_focus = normalize_name(canonical_focus)
                 highlight_map[role] = normalized_focus
         fallback_cards: List[str] = []
-        table_entries: List[
-            Tuple[str, Optional[str], MatchStatsMetrics, Tuple[MatchStatsPlayerMetrics, ...]]
-        ] = []
+        table_entries: List[Tuple[str, Optional[str], MatchStatsMetrics]] = []
         tables_available = True
         for entry in stats:
             team_label = get_team_short_label(entry.team_name)
@@ -2749,11 +2601,10 @@ def format_match_line(
                         team_role = role
                         break
             metrics = entry.metrics or _parse_match_stats_metrics(entry.totals_line)
-            players = entry.players
             if metrics is None:
                 tables_available = False
             else:
-                table_entries.append((team_label, team_role, metrics, players))
+                table_entries.append((team_label, team_role, metrics))
             content_lines = [line for line in entry.header_lines if line]
             content_lines.append(entry.totals_line)
             content_text = "\n".join(content_lines)
@@ -2771,8 +2622,7 @@ def format_match_line(
         if tables_available and table_entries:
             serve_rows: List[str] = []
             attack_rows: List[str] = []
-            player_tables: List[str] = []
-            for team_label, team_role, metrics, players in table_entries:
+            for team_label, team_role, metrics in table_entries:
                 row_attr = f" data-team-role=\"{team_role}\"" if team_role else ""
                 serve_rows.append(
                     "\n".join(
@@ -2807,77 +2657,6 @@ def format_match_line(
                 )
             serve_rows_html = "\n".join(serve_rows)
             attack_rows_html = "\n".join(attack_rows)
-            for team_label, team_role, _metrics, players in table_entries:
-                if not players:
-                    continue
-                row_lines: List[str] = []
-                row_attr = f" data-team-role=\"{team_role}\"" if team_role else ""
-                for player in players:
-                    row_lines.append(
-                        "\n".join(
-                            [
-                                f"              <tr{row_attr}>",
-                                f"                <td class=\"player-number\">{escape(player.jersey)}</td>",
-                                f"                <th scope=\"row\">{escape(player.name)}</th>",
-                                f"                <td>{player.serve_attempts}</td>",
-                                f"                <td>{player.serve_errors}</td>",
-                                f"                <td>{player.serve_points}</td>",
-                                f"                <td>{player.receptions_attempts}</td>",
-                                f"                <td>{player.receptions_errors}</td>",
-                                f"                <td>{escape(player.receptions_positive_pct)}</td>",
-                                f"                <td>{escape(player.receptions_perfect_pct)}</td>",
-                                f"                <td>{player.attacks_attempts}</td>",
-                                f"                <td>{player.attacks_errors}</td>",
-                                f"                <td>{player.attacks_blocked}</td>",
-                                f"                <td>{player.attacks_points}</td>",
-                                f"                <td>{escape(player.attacks_success_pct)}</td>",
-                                f"                <td>{player.blocks_points}</td>",
-                                "              </tr>",
-                            ]
-                        )
-                    )
-                if not row_lines:
-                    continue
-                player_rows_html = "\n".join(row_lines)
-                table_attr = f" data-team-role=\"{team_role}\"" if team_role else ""
-                player_tables.append(
-                    "\n".join(
-                        [
-                            "        <div class=\"match-stats-table-wrapper match-stats-player-table-wrapper\">",
-                            f"          <table class=\"match-stats-table match-stats-player-table\"{table_attr}>",
-                            "            <thead>",
-                            "              <tr>",
-                            "                <th scope=\"col\" rowspan=\"2\">Nr.</th>",
-                            "                <th scope=\"col\" rowspan=\"2\">Spielerin</th>",
-                            "                <th scope=\"colgroup\" colspan=\"3\">Aufschlag</th>",
-                            "                <th scope=\"colgroup\" colspan=\"4\">Annahme</th>",
-                            "                <th scope=\"colgroup\" colspan=\"5\">Angriff</th>",
-                            "                <th scope=\"col\" rowspan=\"2\">Block</th>",
-                            "              </tr>",
-                            "              <tr>",
-                            "                <th scope=\"col\">Ges.</th>",
-                            "                <th scope=\"col\">Fhl</th>",
-                            "                <th scope=\"col\">Pkt</th>",
-                            "                <th scope=\"col\">Ges.</th>",
-                            "                <th scope=\"col\">Fhl</th>",
-                            "                <th scope=\"col\">Pos%</th>",
-                            "                <th scope=\"col\">Prf%</th>",
-                            "                <th scope=\"col\">Ges.</th>",
-                            "                <th scope=\"col\">Fhl</th>",
-                            "                <th scope=\"col\">Blo</th>",
-                            "                <th scope=\"col\">Pkt</th>",
-                            "                <th scope=\"col\">Pkt%</th>",
-                            "                <th scope=\"col\">Pkt</th>",
-                            "              </tr>",
-                            "            </thead>",
-                            "            <tbody>",
-                            f"{player_rows_html}\n",
-                            "            </tbody>",
-                            "          </table>",
-                            "        </div>",
-                        ]
-                    )
-                )
             stats_html = (
                 "    <details class=\"match-stats\">\n"
                 "      <summary>Teamstatistik</summary>\n"
@@ -2927,7 +2706,6 @@ def format_match_line(
                 "            </tbody>\n"
                 "          </table>\n"
                 "        </div>\n"
-                f"{('\n'.join(player_tables) + '\n') if player_tables else ''}"
                 "      </div>\n"
                 "    </details>"
             )
@@ -4079,20 +3857,6 @@ def build_html_report(
     .match-stats-table tbody tr[data-team-role="opponent"] td {{
       color: inherit;
     }}
-    .match-stats-player-table-wrapper {{
-      grid-column: 1 / -1;
-    }}
-    .match-stats-player-table thead th {{
-      white-space: nowrap;
-    }}
-    .match-stats-player-table tbody th,
-    .match-stats-player-table tbody td {{
-      white-space: nowrap;
-    }}
-    .match-stats-player-table .player-number {{
-      text-align: center;
-      font-weight: 600;
-    }}
     .match-stats-card {{
       border-radius: 0.75rem;
       background: #ffffff;
@@ -5131,7 +4895,6 @@ __all__ = [
     "MatchResult",
     "RosterMember",
     "MatchStatsTotals",
-    "MatchStatsPlayerMetrics",
     "TransferItem",
     "TEAM_HOMEPAGES",
     "TEAM_ROSTER_IDS",
