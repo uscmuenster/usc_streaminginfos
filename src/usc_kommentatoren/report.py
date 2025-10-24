@@ -3576,7 +3576,7 @@ def build_html_report(
       color: #1f2933;
     }}
     main {{
-      max-width: 56rem;
+      max-width: min(110rem, 96vw);
       margin: 0 auto;
       padding: clamp(0.6rem, 2.5vw, 1.2rem) clamp(0.9rem, 3vw, 2.4rem);
     }}
