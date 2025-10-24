@@ -3,45 +3,77 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="theme-color" content="#0f766e">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="manifest" href="manifest.webmanifest">
   <title>Nächster USC-Heimgegner</title>
   <style>
     :root {
       color-scheme: light dark;
       --font-scale: 0.75;
+      --font-context-scale: 1;
+      --theme-color: #0f766e;
       --accordion-opponent-bg: #e0f2fe;
       --accordion-opponent-shadow: rgba(30, 64, 175, 0.08);
       --accordion-usc-bg: #dcfce7;
       --accordion-usc-shadow: rgba(22, 163, 74, 0.08);
+      --usc-highlight-row-bg: #dcfce7;
+      --usc-highlight-row-text: #047857;
+      --usc-highlight-card-border: rgba(45, 212, 191, 0.55);
+      --usc-highlight-card-shadow: rgba(45, 212, 191, 0.16);
+      --usc-highlight-mvp-bg: rgba(16, 185, 129, 0.12);
+      --usc-highlight-mvp-border: rgba(5, 150, 105, 0.24);
+      --usc-highlight-mvp-score: #047857;
+      --usc-highlight-legend-dot: #16a34a;
+      --opponent-highlight-row-bg: #e0f2fe;
+      --opponent-highlight-row-text: #1d4ed8;
+      --opponent-highlight-card-border: rgba(59, 130, 246, 0.35);
+      --opponent-highlight-card-shadow: rgba(59, 130, 246, 0.18);
+      --opponent-highlight-mvp-bg: rgba(59, 130, 246, 0.12);
+      --opponent-highlight-mvp-border: rgba(37, 99, 235, 0.22);
+      --opponent-highlight-mvp-score: #1d4ed8;
+      --opponent-highlight-legend-dot: #2563eb;
+      --mvp-overview-summary-bg: #0f766e;
+    }
+    @media (display-mode: standalone), (display-mode: fullscreen) {
+      :root {
+        --font-context-scale: 1.25;
+      }
     }
     body {
       margin: 0;
       font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
       line-height: 1.6;
-      font-size: calc(var(--font-scale) * clamp(0.95rem, 1.8vw, 1.05rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.95rem, 1.8vw, 1.05rem));
       background: #f5f7f9;
       color: #1f2933;
     }
     main {
-      max-width: 60rem;
+      max-width: 56rem;
       margin: 0 auto;
-      padding: clamp(0.75rem, 3vw, 1.5rem) clamp(1rem, 4vw, 3rem);
+      padding: clamp(0.6rem, 2.5vw, 1.2rem) clamp(0.9rem, 3vw, 2.4rem);
     }
     h1 {
       color: #004c54;
-      font-size: calc(var(--font-scale) * clamp(1.55rem, 4.5vw, 2.35rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.55rem, 4.5vw, 2.35rem));
       margin: 0 0 1.25rem 0;
     }
     h2 {
-      font-size: calc(var(--font-scale) * clamp(1.15rem, 3.6vw, 1.6rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.15rem, 3.6vw, 1.6rem));
       margin-bottom: 1rem;
     }
     section {
-      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+      margin-top: clamp(1.2rem, 3vw, 2rem);
     }
     .meta {
       display: grid;
-      gap: 0.35rem;
-      margin: 0 0 1.5rem 0;
+      gap: 0.25rem;
+      margin: 0 0 1.3rem 0;
       padding: 0;
     }
     .meta p {
@@ -55,7 +87,7 @@
       background: #ecfdf5;
       color: #047857;
       border-radius: 999px;
-      font-size: calc(var(--font-scale) * 0.7rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.7rem);
       font-weight: 600;
       border: 1px solid #bbf7d0;
     }
@@ -74,16 +106,16 @@
       padding: 0;
       margin: 0;
       display: grid;
-      gap: 1rem;
+      gap: 0.75rem;
     }
     .match-list li {
       background: #ffffff;
-      border-radius: 0.85rem;
-      padding: 1rem clamp(1rem, 3vw, 1.5rem);
+      border-radius: 0.8rem;
+      padding: 0.85rem clamp(0.9rem, 2.6vw, 1.3rem);
       box-shadow: 0 10px 30px rgba(0, 76, 84, 0.08);
     }
     .lineup-link {
-      margin-top: clamp(1rem, 3vw, 1.75rem);
+      margin-top: clamp(0.75rem, 2.5vw, 1.4rem);
       display: flex;
       justify-content: center;
     }
@@ -129,11 +161,11 @@
     }
     .match-result {
       font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       color: #0f766e;
     }
     .match-meta {
-      font-size: calc(var(--font-scale) * 0.85rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
       color: #475569;
       display: flex;
       flex-wrap: wrap;
@@ -155,12 +187,138 @@
       text-decoration: underline;
       outline: none;
     }
+    .match-stats {
+      margin-top: clamp(0.45rem, 1.4vw, 0.85rem);
+      border-radius: 0.85rem;
+      background: #f8fafc;
+      border: 1px solid rgba(15, 118, 110, 0.18);
+      padding: 0.75rem 1rem;
+    }
+    .match-stats summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.92rem);
+    }
+    .match-stats summary::-webkit-details-marker {
+      display: none;
+    }
+    .match-stats summary::after {
+      content: "▾";
+      margin-left: auto;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      transition: transform 0.2s ease;
+    }
+    .match-stats[open] summary::after {
+      transform: rotate(180deg);
+    }
+    .match-stats-content {
+      margin-top: 0.75rem;
+      display: grid;
+      gap: clamp(0.75rem, 2vw, 1.1rem);
+    }
+    .match-stats-table-wrapper {
+      overflow-x: auto;
+    }
+    .match-stats-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #ffffff;
+      border-radius: 0.75rem;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      min-width: 22rem;
+    }
+    .match-stats-table thead th {
+      background: rgba(15, 118, 110, 0.12);
+      color: #0f766e;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      padding: 0.55rem 0.75rem;
+      text-align: center;
+    }
+    .match-stats-table thead th:first-child {
+      text-align: left;
+    }
+    .match-stats-table tbody th {
+      text-align: left;
+      padding: 0.65rem 0.85rem;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .match-stats-table tbody td {
+      text-align: center;
+      padding: 0.65rem 0.7rem;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      font-weight: 500;
+      color: #1f2937;
+    }
+    .match-stats-table tbody tr + tr th,
+    .match-stats-table tbody tr + tr td {
+      border-top: 1px solid #e2e8f0;
+    }
+    .match-stats-table tbody tr[data-team-role="usc"] {
+      background: var(--usc-highlight-row-bg);
+      color: var(--usc-highlight-row-text);
+    }
+    .match-stats-table tbody tr[data-team-role="usc"] th,
+    .match-stats-table tbody tr[data-team-role="usc"] td {
+      color: inherit;
+    }
+    .match-stats-table tbody tr[data-team-role="opponent"] {
+      background: var(--opponent-highlight-row-bg);
+      color: var(--opponent-highlight-row-text);
+    }
+    .match-stats-table tbody tr[data-team-role="opponent"] th,
+    .match-stats-table tbody tr[data-team-role="opponent"] td {
+      color: inherit;
+    }
+    .match-stats-card {
+      border-radius: 0.75rem;
+      background: #ffffff;
+      padding: 0.75rem 0.95rem;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+    .match-stats-card[data-team-role="usc"] {
+      border-color: var(--usc-highlight-card-border);
+      box-shadow: 0 14px 30px var(--usc-highlight-card-shadow);
+    }
+    .match-stats-card[data-team-role="opponent"] {
+      border-color: var(--opponent-highlight-card-border);
+      box-shadow: 0 14px 30px var(--opponent-highlight-card-shadow);
+    }
+    .match-stats-card h4 {
+      margin: 0 0 0.5rem 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .match-stats-card pre {
+      margin: 0;
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.75rem);
+      line-height: 1.4;
+      white-space: pre;
+      overflow-x: auto;
+      padding: 0.5rem 0.65rem;
+      background: rgba(15, 23, 42, 0.04);
+      border-radius: 0.6rem;
+      color: #1f2937;
+    }
     .news-group,
     .roster-group,
     .transfer-group {
       margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
       display: grid;
-      gap: 1rem;
+      gap: 0.75rem;
     }
     .accordion {
       border-radius: 0.85rem;
@@ -177,27 +335,27 @@
     }
     .accordion summary {
       cursor: pointer;
-      padding: 1rem 1.35rem;
+      padding: 0.85rem 1.2rem;
       font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: space-between;
       list-style: none;
-      font-size: calc(var(--font-scale) * clamp(1rem, 2.6vw, 1.2rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1rem, 2.6vw, 1.2rem));
     }
     .accordion summary::-webkit-details-marker {
       display: none;
     }
     .accordion summary::after {
       content: "▾";
-      font-size: calc(var(--font-scale) * 1rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
       transition: transform 0.2s ease;
     }
     .accordion[open] summary::after {
       transform: rotate(180deg);
     }
     .accordion-content {
-      padding: 0 1.35rem 1.35rem;
+      padding: 0 1.2rem 1.2rem;
     }
     .news-list {
       list-style: none;
@@ -213,7 +371,7 @@
     }
     .news-meta {
       display: block;
-      font-size: calc(var(--font-scale) * 0.85rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
       color: #64748b;
       margin-top: 0.2rem;
     }
@@ -221,115 +379,228 @@
       margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
     }
     .mvp-overview {
-      border-radius: 0.85rem;
+      border-radius: 0.8rem;
       border: none;
       background: #ffffff;
-      box-shadow: 0 16px 36px rgba(15, 118, 110, 0.15);
+      box-shadow: 0 14px 30px rgba(15, 118, 110, 0.14);
       overflow: hidden;
     }
     .mvp-overview summary {
       cursor: pointer;
-      padding: 1rem 1.35rem;
+      padding: 0.85rem 1.2rem;
       font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: space-between;
       list-style: none;
-      font-size: calc(var(--font-scale) * clamp(1rem, 2.6vw, 1.2rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1rem, 2.4vw, 1.15rem));
+      background: var(--mvp-overview-summary-bg);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      color: #ffffff;
     }
     .mvp-overview summary::-webkit-details-marker {
       display: none;
     }
     .mvp-overview summary::after {
       content: "▾";
-      font-size: calc(var(--font-scale) * 1rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
       transition: transform 0.2s ease;
     }
     .mvp-overview[open] summary::after {
       transform: rotate(180deg);
     }
     .mvp-overview-content {
-      padding: 0 1.35rem 1.35rem;
+      padding: 0 1.2rem 1.2rem;
       display: grid;
-      gap: clamp(0.75rem, 2.5vw, 1.25rem);
+      gap: clamp(0.6rem, 2vw, 1.1rem);
     }
     .mvp-note {
       margin: 0;
-      font-size: calc(var(--font-scale) * 0.85rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
       color: #475569;
     }
-    .mvp-grid {
-      display: grid;
-      gap: clamp(0.75rem, 2.5vw, 1.25rem);
+    .mvp-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
     }
-    .mvp-card {
-      border-radius: 0.85rem;
-      border: none;
-      background: #ffffff;
-      box-shadow: 0 16px 36px rgba(15, 118, 110, 0.15);
+    .mvp-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.75rem);
+      font-weight: 600;
+      background: rgba(15, 23, 42, 0.05);
+      color: #0f172a;
+    }
+    .mvp-legend-item::before {
+      content: "";
+      width: 0.65rem;
+      height: 0.65rem;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 2px rgba(15, 23, 42, 0.15);
+    }
+    .mvp-legend-item[data-team="usc"]::before {
+      background: var(--usc-highlight-legend-dot);
+    }
+    .mvp-legend-item[data-team="opponent"]::before {
+      background: var(--opponent-highlight-legend-dot);
+    }
+    .mvp-category {
+      border-radius: 0.8rem;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
       overflow: hidden;
     }
-    .mvp-card summary {
+    .mvp-category summary {
       cursor: pointer;
-      padding: 1rem 1.35rem;
+      padding: 0.85rem 1.05rem;
       font-weight: 600;
-      list-style: none;
-      font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.2rem));
       display: flex;
       align-items: center;
       justify-content: space-between;
+      list-style: none;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.95rem, 2.2vw, 1.1rem));
+      gap: 0.6rem;
+      background: rgba(15, 118, 110, 0.08);
     }
-    .mvp-card summary::-webkit-details-marker {
+    .mvp-category summary::-webkit-details-marker {
       display: none;
     }
-    .mvp-card summary::after {
+    .mvp-category summary::after {
       content: "▾";
-      font-size: calc(var(--font-scale) * 1rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
       transition: transform 0.2s ease;
+      color: inherit;
     }
-    .mvp-card[open] summary::after {
+    .mvp-category[open] summary::after {
       transform: rotate(180deg);
     }
-    .mvp-card-content {
-      padding: 0 1.35rem 1.35rem;
+    .mvp-category-title {
+      flex: 1;
+      color: #0f766e;
     }
-    .mvp-table-wrapper {
-      margin-top: 0.65rem;
-      overflow-x: auto;
+    .mvp-category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(15, 118, 110, 0.14);
+      color: #0f4c75;
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.7rem);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
     }
-    .mvp-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: calc(var(--font-scale) * 0.85rem);
-      min-width: 28rem;
+    .mvp-category-content {
+      padding: 0.9rem 1.05rem 1.1rem;
+      display: grid;
+      gap: 0.7rem;
     }
-    .mvp-table th,
-    .mvp-table td {
-      text-align: left;
-      padding: 0.55rem 0.75rem;
-      border-bottom: 1px solid #e2e8f0;
-      white-space: nowrap;
+    .mvp-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.55rem;
     }
-    .mvp-table td[data-label] {
-      white-space: nowrap;
+    .mvp-entry {
+      display: grid;
+      grid-template-columns: minmax(4.75rem, auto) 1fr minmax(4.5rem, auto);
+      gap: 0.6rem;
+      align-items: center;
+      padding: 0.6rem 0.75rem;
+      border-radius: 0.7rem;
+      background: rgba(15, 23, 42, 0.05);
+      box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
     }
-    .mvp-table tbody tr:last-child td {
-      border-bottom: none;
+    .mvp-entry-rank {
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      color: #0f172a;
+    }
+    .mvp-entry-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .mvp-entry-name {
+      font-weight: 600;
+      color: #0f172a;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+    }
+    .mvp-entry-meta {
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.78rem);
+      color: #475569;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .mvp-entry-score {
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      color: #0f4c75;
+      justify-self: end;
+    }
+    .mvp-entry[data-team="opponent"] {
+      background: var(--opponent-highlight-mvp-bg);
+      box-shadow: inset 0 0 0 1px var(--opponent-highlight-mvp-border);
+    }
+    .mvp-entry[data-team="opponent"] .mvp-entry-score {
+      color: var(--opponent-highlight-mvp-score);
+    }
+    .mvp-entry[data-team="usc"] {
+      background: var(--usc-highlight-mvp-bg);
+      box-shadow: inset 0 0 0 1px var(--usc-highlight-mvp-border);
+    }
+    .mvp-entry[data-team="usc"] .mvp-entry-score {
+      color: var(--usc-highlight-mvp-score);
+    }
+    @media (max-width: 38rem) {
+      .mvp-category summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+      }
+      .mvp-entry {
+        grid-template-columns: minmax(4.25rem, auto) 1fr;
+        grid-template-areas: "rank score" "info info";
+        row-gap: 0.4rem;
+      }
+      .mvp-entry-rank {
+        grid-area: rank;
+      }
+      .mvp-entry-score {
+        grid-area: score;
+      }
+      .mvp-entry-info {
+        grid-area: info;
+      }
+    }
+    @media (max-width: 30rem) {
+      .match-stats summary {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
+      }
+      .match-stats-table {
+        min-width: min(16rem, 100%);
+      }
+      .match-stats-table thead th {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.62rem);
+        padding: 0.3rem 0.35rem;
+      }
+      .match-stats-table tbody th,
+      .match-stats-table tbody td {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.7rem);
+        padding: 0.35rem 0.35rem;
+      }
     }
     .mvp-empty {
       margin: 0;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       color: #475569;
-    }
-    .mvp-row[data-team-role="usc"] td {
-      font-weight: 600;
-      color: #065f46;
-      background: rgba(16, 185, 129, 0.12);
-    }
-    .mvp-row[data-team-role="opponent"] td {
-      font-weight: 600;
-      color: #1d4ed8;
-      background: rgba(59, 130, 246, 0.12);
     }
     .transfer-list {
       list-style: none;
@@ -345,7 +616,7 @@
       margin: 0;
     }
     .transfer-line {
-      font-size: calc(var(--font-scale) * 0.95rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
       font-weight: 500;
       color: inherit;
       word-break: break-word;
@@ -359,7 +630,7 @@
       display: block;
     }
     .team-photo figcaption {
-      font-size: calc(var(--font-scale) * 0.85rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
       color: #64748b;
       margin-top: 0.35rem;
       text-align: center;
@@ -380,7 +651,7 @@
     .roster-number {
       font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
       font-weight: 600;
-      font-size: calc(var(--font-scale) * 0.95rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
       background: #bae6fd;
       color: #1f2933;
       border-radius: 0.65rem;
@@ -397,10 +668,10 @@
     }
     .roster-name {
       font-weight: 600;
-      font-size: calc(var(--font-scale) * 1rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
     }
     .roster-details {
-      font-size: calc(var(--font-scale) * 0.82rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
       color: #475569;
       line-height: 1.35;
     }
@@ -437,7 +708,7 @@
     }
     .instagram-card h3 {
       margin: 0 0 0.75rem 0;
-      font-size: calc(var(--font-scale) * clamp(1.05rem, 3vw, 1.3rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.05rem, 3vw, 1.3rem));
     }
     .instagram-list {
       list-style: none;
@@ -461,7 +732,7 @@
     }
     .season-results-status {
       margin: 0;
-      font-size: calc(var(--font-scale) * 0.8rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
       color: #475569;
     }
     .season-results-grid {
@@ -479,7 +750,7 @@
     }
     .season-results-card h3 {
       margin: 0;
-      font-size: calc(var(--font-scale) * clamp(1.05rem, 3vw, 1.3rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.05rem, 3vw, 1.3rem));
       color: #0f172a;
     }
     .season-results-list {
@@ -487,12 +758,12 @@
       padding-left: 1rem;
       display: grid;
       gap: 0.35rem;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       color: #1f2933;
     }
     .season-results-fallback {
       margin: 0;
-      font-size: calc(var(--font-scale) * 0.9rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       color: #475569;
     }
     .season-results-links {
@@ -504,7 +775,7 @@
     }
     .season-results-links h3 {
       margin: 0 0 0.75rem 0;
-      font-size: calc(var(--font-scale) * clamp(0.95rem, 2.5vw, 1.1rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.95rem, 2.5vw, 1.1rem));
       color: #1f2937;
     }
     .season-results-link-list {
@@ -544,13 +815,13 @@
     }
     @media (max-width: 40rem) {
       body {
-        font-size: calc(var(--font-scale) * 0.9rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
       }
       h1 {
-        font-size: calc(var(--font-scale) * 1.6rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.6rem);
       }
       h2 {
-        font-size: calc(var(--font-scale) * 1.1rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.1rem);
       }
       .match-list li {
         padding: 0.85rem 1rem;
@@ -569,19 +840,34 @@
         justify-content: center;
       }
       .match-result {
-        font-size: calc(var(--font-scale) * 0.85rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
+      }
+      .match-stats summary {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      }
+      .match-stats-table {
+        min-width: min(18rem, 100%);
+      }
+      .match-stats-table thead th {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.68rem);
+        padding: 0.35rem 0.45rem;
+      }
+      .match-stats-table tbody th,
+      .match-stats-table tbody td {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.78rem);
+        padding: 0.4rem 0.45rem;
       }
       .accordion summary {
-        font-size: calc(var(--font-scale) * 1.05rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.05rem);
       }
       .mvp-overview summary {
-        font-size: calc(var(--font-scale) * 1.05rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.05rem);
       }
       .roster-item {
         grid-template-columns: minmax(3rem, auto) 1fr;
       }
       .roster-number {
-        font-size: calc(var(--font-scale) * 0.8rem);
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
         padding: 0.3rem 0.5rem;
       }
       .team-photo {
@@ -594,6 +880,12 @@
         --accordion-opponent-shadow: rgba(56, 189, 248, 0.28);
         --accordion-usc-bg: #1a4f3a;
         --accordion-usc-shadow: rgba(74, 222, 128, 0.26);
+        --usc-highlight-row-bg: rgba(22, 163, 74, 0.25);
+        --usc-highlight-row-text: #bbf7d0;
+        --opponent-highlight-row-bg: rgba(59, 130, 246, 0.18);
+        --opponent-highlight-row-text: #bfdbfe;
+        --mvp-overview-summary-bg: rgba(253, 186, 116, 0.35);
+        --theme-color: rgba(253, 186, 116, 0.35);
       }
       body {
         background: #0e1b1f;
@@ -607,6 +899,50 @@
       .match-list li {
         background: #132a30;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      }
+      .match-stats {
+        background: #132a30;
+        border-color: rgba(45, 212, 191, 0.35);
+      }
+      .match-stats summary {
+        color: #e2f3f7;
+      }
+      .match-stats-table {
+        background: #0f1f24;
+        border-color: rgba(94, 234, 212, 0.25);
+        box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+      }
+      .match-stats-table thead th {
+        background: rgba(94, 234, 212, 0.16);
+        color: #5eead4;
+      }
+      .match-stats-table tbody tr + tr th,
+      .match-stats-table tbody tr + tr td {
+        border-color: rgba(148, 163, 184, 0.35);
+      }
+      .match-stats-table tbody th,
+      .match-stats-table tbody td {
+        color: #e2f3f7;
+      }
+      .match-stats-table tbody tr[data-team-role="usc"] {
+        background: var(--usc-highlight-row-bg);
+        color: var(--usc-highlight-row-text);
+      }
+      .match-stats-table tbody tr[data-team-role="opponent"] {
+        background: var(--opponent-highlight-row-bg);
+        color: var(--opponent-highlight-row-text);
+      }
+      .match-stats-card {
+        background: #0f1f24;
+        border-color: rgba(94, 234, 212, 0.25);
+        box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+      }
+      .match-stats-card h4 {
+        color: #f0f9ff;
+      }
+      .match-stats-card pre {
+        background: rgba(15, 118, 110, 0.22);
+        color: #f1f5f9;
       }
       .lineup-link a {
         background: #14b8a6;
@@ -623,6 +959,8 @@
       }
       .mvp-overview summary {
         color: #f1f5f9;
+        background: var(--mvp-overview-summary-bg);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.35);
       }
       .mvp-note {
         color: #cbd5f5;
@@ -669,6 +1007,15 @@
       }
       .season-results-status {
         color: #94a3b8;
+      }
+      .pwa-install-banner {
+        box-shadow: 0 22px 44px rgba(8, 47, 73, 0.55);
+      }
+      .pwa-install-button {
+        color: #0f766e;
+      }
+      .pwa-install-dismiss {
+        color: #e2f3f7;
       }
       .match-result {
         color: #5eead4;
@@ -730,17 +1077,383 @@
     <section>
       <h2>Spiele: ETV Hamburger Volksbank Volleys</h2>
       <ul class="match-list">
-        <li><div class="match-line"><div class="match-header"><strong>29.10.2025 (Mi) 20:00 Uhr</strong> – ETV Hamburger Volksbank Volleys vs. Ladies in Black Aachen</div><div class="match-meta"><span>Schiedsrichter: Barnick, Björn (Barkelsby), Gierke, Stefan (Pampow)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480124&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a></div></div></li>
-      <li><div class="match-line"><div class="match-header"><strong>18.10.2025 (Sa) 18:00 Uhr</strong> – SSC Palmberg Schwerin vs. ETV Hamburger Volksbank Volleys</div><div class="match-result">Ergebnis: 3:0 / 75:41 (25:16 25:11 25:14)</div><div class="match-meta"><span>Zuschauer: 1857</span> · <span>MVP: Grozer, Leana (SSC Palmberg Schwerin) und Meiser, Jana-Marie (ETV Hamburger Volksbank Volleys)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480001&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/831866c1-9e16-46f8-827c-4b0dd011928b" target="_blank" rel="noopener">Statistik (PDF)</a></div></div></li>
-      <li><div class="match-line"><div class="match-header"><strong>11.10.2025 (Sa) 19:30 Uhr</strong> – ETV Hamburger Volksbank Volleys vs. Allianz MTV Stuttgart</div><div class="match-result">Ergebnis: 0:3 / 51:75 (14:25 20:25 17:25)</div><div class="match-meta"><span>Zuschauer: 1018</span> · <span>MVP: Hartig, Anna (ETV Hamburger Volksbank Volleys) und Stautz, Antonia (Allianz MTV Stuttgart)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777479964&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/eb523e7a-332e-481d-a2ad-a6f9d1615c3e" target="_blank" rel="noopener">Statistik (PDF)</a></div></div></li>
+        <li>
+  <div class="match-line">
+    <div class="match-header"><strong>29.10.2025 (Mi) 20:00 Uhr</strong> – ETV Hamburger Volksbank Volleys vs. Ladies in Black Aachen</div>
+    <div class="match-meta"><span>Schiedsrichter: Barnick, Björn (Barkelsby), Gierke, Stefan (Pampow)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480124&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a></div>
+  </div>
+</li>
+      <li>
+  <div class="match-line">
+    <div class="match-header"><strong>18.10.2025 (Sa) 18:00 Uhr</strong> – SSC Palmberg Schwerin vs. ETV Hamburger Volksbank Volleys</div>
+    <div class="match-result">Ergebnis: 3:0 / 75:41 (25:16 25:11 25:14)</div>
+    <div class="match-meta"><span>Zuschauer: 1857</span> · <span>MVP: Grozer, Leana (SSC Palmberg Schwerin) und Meiser, Jana-Marie (ETV Hamburger Volksbank Volleys)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480001&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/831866c1-9e16-46f8-827c-4b0dd011928b" target="_blank" rel="noopener">Statistik (PDF)</a></div>
+    <details class="match-stats">
+      <summary>Teamstatistik</summary>
+      <div class="match-stats-content">
+        <div class="match-stats-table-wrapper">
+          <table class="match-stats-table">
+            <thead>
+              <tr>
+                <th scope="col" rowspan="2">Team</th>
+                <th scope="colgroup" colspan="3">Aufschlag</th>
+                <th scope="colgroup" colspan="3">Annahme</th>
+              </tr>
+              <tr>
+                <th scope="col">Ges.</th>
+                <th scope="col">Fhl</th>
+                <th scope="col">Pkt</th>
+                <th scope="col">Ges.</th>
+                <th scope="col">Fhl</th>
+                <th scope="col">Pos (Prf)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Schwerin</th>
+                <td>74</td>
+                <td>6</td>
+                <td>10</td>
+                <td>37</td>
+                <td>3</td>
+                <td>51% (24%)</td>
+              </tr>
+              <tr data-team-role="opponent">
+                <th scope="row">Hamburg</th>
+                <td>42</td>
+                <td>5</td>
+                <td>3</td>
+                <td>68</td>
+                <td>10</td>
+                <td>29% (12%)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="match-stats-table-wrapper">
+          <table class="match-stats-table">
+            <thead>
+              <tr>
+                <th scope="col" rowspan="2">Team</th>
+                <th scope="colgroup" colspan="5">Angriff</th>
+                <th scope="colgroup" colspan="1">Block</th>
+              </tr>
+              <tr>
+                <th scope="col">Ges.</th>
+                <th scope="col">Fhl</th>
+                <th scope="col">Blo</th>
+                <th scope="col">Pkt</th>
+                <th scope="col">Pkt%</th>
+                <th scope="col">Pkt</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Schwerin</th>
+                <td>78</td>
+                <td>10</td>
+                <td>3</td>
+                <td>37</td>
+                <td>47%</td>
+                <td>11</td>
+              </tr>
+              <tr data-team-role="opponent">
+                <th scope="row">Hamburg</th>
+                <td>81</td>
+                <td>9</td>
+                <td>11</td>
+                <td>19</td>
+                <td>23%</td>
+                <td>3</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+  </div>
+</li>
+      <li>
+  <div class="match-line">
+    <div class="match-header"><strong>11.10.2025 (Sa) 19:30 Uhr</strong> – ETV Hamburger Volksbank Volleys vs. Allianz MTV Stuttgart</div>
+    <div class="match-result">Ergebnis: 0:3 / 51:75 (14:25 20:25 17:25)</div>
+    <div class="match-meta"><span>Zuschauer: 1018</span> · <span>MVP: Hartig, Anna (ETV Hamburger Volksbank Volleys) und Stautz, Antonia (Allianz MTV Stuttgart)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777479964&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/eb523e7a-332e-481d-a2ad-a6f9d1615c3e" target="_blank" rel="noopener">Statistik (PDF)</a></div>
+    <details class="match-stats">
+      <summary>Teamstatistik</summary>
+      <div class="match-stats-content">
+        <div class="match-stats-table-wrapper">
+          <table class="match-stats-table">
+            <thead>
+              <tr>
+                <th scope="col" rowspan="2">Team</th>
+                <th scope="colgroup" colspan="3">Aufschlag</th>
+                <th scope="colgroup" colspan="3">Annahme</th>
+              </tr>
+              <tr>
+                <th scope="col">Ges.</th>
+                <th scope="col">Fhl</th>
+                <th scope="col">Pkt</th>
+                <th scope="col">Ges.</th>
+                <th scope="col">Fhl</th>
+                <th scope="col">Pos (Prf)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-team-role="opponent">
+                <th scope="row">Hamburg</th>
+                <td>52</td>
+                <td>10</td>
+                <td>4</td>
+                <td>67</td>
+                <td>8</td>
+                <td>28% (7%)</td>
+              </tr>
+              <tr>
+                <th scope="row">Stuttgart</th>
+                <td>74</td>
+                <td>7</td>
+                <td>8</td>
+                <td>42</td>
+                <td>4</td>
+                <td>52% (29%)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="match-stats-table-wrapper">
+          <table class="match-stats-table">
+            <thead>
+              <tr>
+                <th scope="col" rowspan="2">Team</th>
+                <th scope="colgroup" colspan="5">Angriff</th>
+                <th scope="colgroup" colspan="1">Block</th>
+              </tr>
+              <tr>
+                <th scope="col">Ges.</th>
+                <th scope="col">Fhl</th>
+                <th scope="col">Blo</th>
+                <th scope="col">Pkt</th>
+                <th scope="col">Pkt%</th>
+                <th scope="col">Pkt</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-team-role="opponent">
+                <th scope="row">Hamburg</th>
+                <td>91</td>
+                <td>8</td>
+                <td>8</td>
+                <td>28</td>
+                <td>31%</td>
+                <td>6</td>
+              </tr>
+              <tr>
+                <th scope="row">Stuttgart</th>
+                <td>90</td>
+                <td>3</td>
+                <td>6</td>
+                <td>40</td>
+                <td>44%</td>
+                <td>8</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+  </div>
+</li>
       </ul>
     </section>
     <section>
       <h2>Spiele: USC Münster</h2>
       <ul class="match-list">
-        <li><div class="match-line"><div class="match-header"><strong>01.11.2025 (Sa) 19:30 Uhr</strong> – USC Münster vs. Ladies in Black Aachen</div><div class="match-meta"><span>Schiedsrichter: Hesse, Jennifer (Oberursel), Adick, Marvin (Aurich)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480186&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a></div></div></li>
-      <li><div class="match-line"><div class="match-header"><strong>15.10.2025 (Mi) 19:30 Uhr</strong> – Binder Blaubären TSV Flacht vs. USC Münster</div><div class="match-result">Ergebnis: 0:3 / 49:75 (14:25 15:25 20:25)</div><div class="match-meta"><span>Zuschauer: 433</span> · <span>MVP: Neuhaus, Frauke (Binder Blaubären TSV Flacht) und Ford, Brianna (USC Münster)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777479989&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/19bb6c96-f1cc-4867-9058-0864849ec964" target="_blank" rel="noopener">Statistik (PDF)</a></div></div></li>
-      <li><div class="match-line"><div class="match-header"><strong>12.10.2025 (So) 16:00 Uhr</strong> – USC Münster vs. SSC Palmberg Schwerin</div><div class="match-result">Ergebnis: 3:2 / 106:106 (20:25 25:22 21:25 25:21 15:13)</div><div class="match-meta"><span>Zuschauer: 2124</span> · <span>MVP: Jordan, Emilia (USC Münster) und Kirchhoff, Mia (SSC Palmberg Schwerin)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777479976&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/70a7c2ba-97bc-4478-8e8e-e55ec764d2e6" target="_blank" rel="noopener">Statistik (PDF)</a></div></div></li>
+        <li>
+  <div class="match-line">
+    <div class="match-header"><strong>01.11.2025 (Sa) 19:30 Uhr</strong> – USC Münster vs. Ladies in Black Aachen</div>
+    <div class="match-meta"><span>Schiedsrichter: Hesse, Jennifer (Oberursel), Adick, Marvin (Aurich)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480186&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a></div>
+  </div>
+</li>
+      <li>
+  <div class="match-line">
+    <div class="match-header"><strong>15.10.2025 (Mi) 19:30 Uhr</strong> – Binder Blaubären TSV Flacht vs. USC Münster</div>
+    <div class="match-result">Ergebnis: 0:3 / 49:75 (14:25 15:25 20:25)</div>
+    <div class="match-meta"><span>Zuschauer: 433</span> · <span>MVP: Neuhaus, Frauke (Binder Blaubären TSV Flacht) und Ford, Brianna (USC Münster)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777479989&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/19bb6c96-f1cc-4867-9058-0864849ec964" target="_blank" rel="noopener">Statistik (PDF)</a></div>
+    <details class="match-stats">
+      <summary>Teamstatistik</summary>
+      <div class="match-stats-content">
+        <div class="match-stats-table-wrapper">
+          <table class="match-stats-table">
+            <thead>
+              <tr>
+                <th scope="col" rowspan="2">Team</th>
+                <th scope="colgroup" colspan="3">Aufschlag</th>
+                <th scope="colgroup" colspan="3">Annahme</th>
+              </tr>
+              <tr>
+                <th scope="col">Ges.</th>
+                <th scope="col">Fhl</th>
+                <th scope="col">Pkt</th>
+                <th scope="col">Ges.</th>
+                <th scope="col">Fhl</th>
+                <th scope="col">Pos (Prf)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Flacht</th>
+                <td>50</td>
+                <td>13</td>
+                <td>2</td>
+                <td>61</td>
+                <td>5</td>
+                <td>21% (8%)</td>
+              </tr>
+              <tr data-team-role="usc">
+                <th scope="row">Münster</th>
+                <td>74</td>
+                <td>13</td>
+                <td>5</td>
+                <td>37</td>
+                <td>2</td>
+                <td>35% (14%)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="match-stats-table-wrapper">
+          <table class="match-stats-table">
+            <thead>
+              <tr>
+                <th scope="col" rowspan="2">Team</th>
+                <th scope="colgroup" colspan="5">Angriff</th>
+                <th scope="colgroup" colspan="1">Block</th>
+              </tr>
+              <tr>
+                <th scope="col">Ges.</th>
+                <th scope="col">Fhl</th>
+                <th scope="col">Blo</th>
+                <th scope="col">Pkt</th>
+                <th scope="col">Pkt%</th>
+                <th scope="col">Pkt</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Flacht</th>
+                <td>72</td>
+                <td>9</td>
+                <td>7</td>
+                <td>19</td>
+                <td>26%</td>
+                <td>6</td>
+              </tr>
+              <tr data-team-role="usc">
+                <th scope="row">Münster</th>
+                <td>82</td>
+                <td>7</td>
+                <td>6</td>
+                <td>40</td>
+                <td>49%</td>
+                <td>7</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+  </div>
+</li>
+      <li>
+  <div class="match-line">
+    <div class="match-header"><strong>12.10.2025 (So) 16:00 Uhr</strong> – USC Münster vs. SSC Palmberg Schwerin</div>
+    <div class="match-result">Ergebnis: 3:2 / 106:106 (20:25 25:22 21:25 25:21 15:13)</div>
+    <div class="match-meta"><span>Zuschauer: 2124</span> · <span>MVP: Jordan, Emilia (USC Münster) und Kirchhoff, Mia (SSC Palmberg Schwerin)</span> · <a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777479976&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/70a7c2ba-97bc-4478-8e8e-e55ec764d2e6" target="_blank" rel="noopener">Statistik (PDF)</a></div>
+    <details class="match-stats">
+      <summary>Teamstatistik</summary>
+      <div class="match-stats-content">
+        <div class="match-stats-table-wrapper">
+          <table class="match-stats-table">
+            <thead>
+              <tr>
+                <th scope="col" rowspan="2">Team</th>
+                <th scope="colgroup" colspan="3">Aufschlag</th>
+                <th scope="colgroup" colspan="3">Annahme</th>
+              </tr>
+              <tr>
+                <th scope="col">Ges.</th>
+                <th scope="col">Fhl</th>
+                <th scope="col">Pkt</th>
+                <th scope="col">Ges.</th>
+                <th scope="col">Fhl</th>
+                <th scope="col">Pos (Prf)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Schwerin</th>
+                <td>107</td>
+                <td>19</td>
+                <td>15</td>
+                <td>86</td>
+                <td>14</td>
+                <td>33% (15%)</td>
+              </tr>
+              <tr data-team-role="usc">
+                <th scope="row">Münster</th>
+                <td>105</td>
+                <td>19</td>
+                <td>14</td>
+                <td>88</td>
+                <td>15</td>
+                <td>30% (15%)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="match-stats-table-wrapper">
+          <table class="match-stats-table">
+            <thead>
+              <tr>
+                <th scope="col" rowspan="2">Team</th>
+                <th scope="colgroup" colspan="5">Angriff</th>
+                <th scope="colgroup" colspan="1">Block</th>
+              </tr>
+              <tr>
+                <th scope="col">Ges.</th>
+                <th scope="col">Fhl</th>
+                <th scope="col">Blo</th>
+                <th scope="col">Pkt</th>
+                <th scope="col">Pkt%</th>
+                <th scope="col">Pkt</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Schwerin</th>
+                <td>129</td>
+                <td>10</td>
+                <td>9</td>
+                <td>50</td>
+                <td>39%</td>
+                <td>8</td>
+              </tr>
+              <tr data-team-role="usc">
+                <th scope="row">Münster</th>
+                <td>132</td>
+                <td>10</td>
+                <td>8</td>
+                <td>52</td>
+                <td>39%</td>
+                <td>9</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+  </div>
+</li>
       </ul>
     </section>
     <section class="lineup-link">
@@ -882,13 +1595,20 @@
         <summary>News von ETV Hamburger Volksbank Volleys</summary>
         <div class="accordion-content">
           <ul class="news-list">
-            <li><a href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys#news-3442-271">ETV Hamburger Volksbank Volleys kämpferisch gegen SSC Palmberg Schwerin</a><span class="news-meta">Homepage ETV Hamburger Volksbank Volleys – 20.10.2025 00:00</span></li>
+            <li><a href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys#news-3442-283">ETV Hamburger Volksbank Volleys erhalten Lizenz ohne Bedingungen für die Saison 2025/26</a><span class="news-meta">Homepage ETV Hamburger Volksbank Volleys – 23.10.2025 00:00</span></li>
+      <li><a href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys#news-3442-271">ETV Hamburger Volksbank Volleys kämpferisch gegen SSC Palmberg Schwerin</a><span class="news-meta">Homepage ETV Hamburger Volksbank Volleys – 20.10.2025 00:00</span></li>
       <li><a href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys#news-3442-269">ETV Hamburger Volksbank Volleys auswärts gegen amtierenden Deutschen Meister SSC Palmberg Schwerin</a><span class="news-meta">Homepage ETV Hamburger Volksbank Volleys – 17.10.2025 00:00</span></li>
       <li><a href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys#news-3442-257">ETV Hamburger Volksbank Volleys starten couragiert in erste Bundesligasaison</a><span class="news-meta">Homepage ETV Hamburger Volksbank Volleys – 11.10.2025 00:00</span></li>
-      <li><a href="https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys#news-3442-254">ETV Hamburger Volksbank Volleys vor erstem Bundesligaspiel</a><span class="news-meta">Homepage ETV Hamburger Volksbank Volleys – 10.10.2025 00:00</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778851870&amp;component_56784875.page=0#a_56784875_778851870">Große Vorfreude auf erstes Liga-Heimspiel</a><span class="news-meta">Volleyball Bundesliga – 23.10.2025 16:48</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778811477&amp;component_56784875.page=0#a_56784875_778811477">Ins Münsterland zum Aufsteiger Borken</a><span class="news-meta">Volleyball Bundesliga – 21.10.2025 13:18</span></li>
       <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778799141&amp;component_56784875.page=0#a_56784875_778799141">ETV kämpferisch in Schwerin</a><span class="news-meta">Volleyball Bundesliga – 20.10.2025 12:58</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778793009&amp;component_56784875.page=0#a_56784875_778793009">Noch keine Punkte beim Auswärts-Auftakt</a><span class="news-meta">Volleyball Bundesliga – 20.10.2025 03:13</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778790353&amp;component_56784875.page=0#a_56784875_778790353">Überzeugendes 3:0 gegen Aufsteiger Borken</a><span class="news-meta">Volleyball Bundesliga – 19.10.2025 22:35</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778772327&amp;component_56784875.page=0#a_56784875_778772327">Hart erkämpfter Sieg gegen Suhl</a><span class="news-meta">Volleyball Bundesliga – 18.10.2025 21:02</span></li>
       <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=778770711&amp;component_56784875.page=0#a_56784875_778770711">Heimsieg gegen Hamburger Aufsteiger</a><span class="news-meta">Volleyball Bundesliga – 18.10.2025 19:29</span></li>
+      <li><a href="https://byc-news.de/wiesbaden/volle-huette-beim-heimspiel-des-vc-wiesbaden-vs-skurios-volleys-borken/">Volle Hütte beim Heimspiel des VC Wiesbaden vs. Skurios Volleys Borken</a><span class="news-meta">BYC-News via VBL Pressespiegel – 20.10.2025 00:48</span></li>
       <li><a href="https://www.abendblatt.de/sport/article410245756/wie-hamburgs-volleyballerinnen-erstklassig-werden-wollen.html">Wie Hamburgs Volleyballerinnen erstklassig werden wollen</a><span class="news-meta">Hamburger Abendblatt via VBL Pressespiegel – 18.10.2025 06:00</span></li>
+      <li><a href="https://www.sportschau.de/regional/mdr/mdr-dsc-volleys-vor-vbl-auftakt-mit-jungem-superstar-und-urspruenglicher-kommunikation-100.html">DSC Volleys vor VBL-Auftakt: Mit jungem Superstar und ursprünglicher Kommunikation</a><span class="news-meta">Sportschau via VBL Pressespiegel – 14.10.2025 10:10</span></li>
       <li><a href="https://suederelbe24.de/mutiger-bundesliga-auftakt-etv-hamburger-volksbank-volleys-begeistern-trotz-niederlage-gegen-stuttgart/">Mutiger Bundesliga-Auftakt: ETV Hamburger Volksbank Volleys begeistern trotz Niederlage gegen Stuttgart</a><span class="news-meta">Suederelbe24 via VBL Pressespiegel – 13.10.2025 20:09</span></li>
       <li><a href="https://www.abendblatt.de/sport/article410206173/volleyball-bundesliga-frauen-etv-volksbank-volleys-hamburg-mtv-allianz-stuttgart-aufstieg-cu-arena-geld-1.html">Wie der ETV mit dem neuen Geld in der Bundesliga plant</a><span class="news-meta">Hamburger Abendblatt via VBL Pressespiegel – 13.10.2025 13:46</span></li>
           </ul>
@@ -898,7 +1618,9 @@
         <summary>News von USC Münster</summary>
         <div class="accordion-content">
           <ul class="news-list">
-            <li><a href="https://www.usc-muenster.de/erste-liga/alles-begann-im-regen-wie-kultfan-bibo-taktgeber-beim-usc-wurde/">Alles begann im Regen: Wie Kultfan „Bibo“ Taktgeber beim USC wurde</a><span class="news-meta">Homepage USC Münster – 22.10.2025 16:32</span></li>
+            <li><a href="https://www.usc-muenster.de/usc/defekte-telefonanlage-in-der-geschaeftsstelle/">Defekte Telefonanlage in der Geschäftsstelle</a><span class="news-meta">Homepage USC Münster – 24.10.2025 08:21</span></li>
+      <li><a href="https://www.usc-muenster.de/erste-liga/usc-muenster-gewinnt-viadee-unternehmensberatung-als-neuen-sponsor/">USC Münster gewinnt viadee Unternehmensberatung als neuen Sponsor</a><span class="news-meta">Homepage USC Münster – 23.10.2025 09:03</span></li>
+      <li><a href="https://www.usc-muenster.de/erste-liga/alles-begann-im-regen-wie-kultfan-bibo-taktgeber-beim-usc-wurde/">Alles begann im Regen: Wie Kultfan „Bibo“ Taktgeber beim USC wurde</a><span class="news-meta">Homepage USC Münster – 22.10.2025 16:32</span></li>
       <li><a href="https://www.usc-muenster.de/zweite-liga/spannung-pur-usc2-setzt-sich-nach-fuenf-saetzen-gegen-bonn-durch/">Spannung pur: USC2 setzt sich nach fünf Sätzen gegen Bonn durch</a><span class="news-meta">Homepage USC Münster – 20.10.2025 08:44</span></li>
       <li><a href="https://www.usc-muenster.de/jugend/voller-erfolg-beim-jugendcheck-2025/">Voller Erfolg beim Jugendcheck 2025!</a><span class="news-meta">Homepage USC Münster – 20.10.2025 08:39</span></li>
       <li><a href="https://www.usc-muenster.de/erste-liga/usc-muenster-feiert-ersten-auswaertssieg/">USC Münster feiert ersten Auswärtssieg</a><span class="news-meta">Homepage USC Münster – 15.10.2025 21:30</span></li>
@@ -916,360 +1638,637 @@
         <summary>MVP-Rankings</summary>
         <div class="mvp-overview-content">
           <p class="mvp-note">Top-3-Platzierungen je Team aus dem offiziellen MVP-Ranking der Volleyball Bundesliga.</p>
-          <div class="mvp-grid">
-        <article class="mvp-card">
-          <header class="mvp-card-header">
-            <h3 class="mvp-card-title">alle Spielelemente / Top-Scorer</h3>
-            <span class="mvp-card-badge">Top&nbsp;3</span>
-          </header>
-          <ol class="mvp-top-list">
-            <li class="mvp-top-item">
-              <span class="mvp-rank">21.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Thaden, Alexa Sophie</span>
-                <span class="mvp-meta">Hamburg • Mittelblock • 2</span>
-              </div>
-              <span class="mvp-score">0,0%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">60.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Körtzinger, Leonie</span>
-                <span class="mvp-meta">Hamburg • Diagonal • 2</span>
-              </div>
-              <span class="mvp-score">-42,9%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">62.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Frobel, Svea</span>
-                <span class="mvp-meta">Hamburg • Außenangriff • 2</span>
-              </div>
-              <span class="mvp-score">-50,0%</span>
-            </li>
-          </ol>
-        </article>
-        <article class="mvp-card">
-          <header class="mvp-card-header">
-            <h3 class="mvp-card-title">Aufschlag / Quote Aufschläge mit Wirkung</h3>
-            <span class="mvp-card-badge">Top&nbsp;3</span>
-          </header>
-          <ol class="mvp-top-list">
-            <li class="mvp-top-item">
-              <span class="mvp-rank">8.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Thaden, Alexa Sophie</span>
-                <span class="mvp-meta">Hamburg • Mittelblock • 2</span>
-              </div>
-              <span class="mvp-score">40,0%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">47.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Körtzinger, Leonie</span>
-                <span class="mvp-meta">Hamburg • Diagonal • 2</span>
-              </div>
-              <span class="mvp-score">19,0%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">56.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Frobel, Svea</span>
-                <span class="mvp-meta">Hamburg • Außenangriff • 2</span>
-              </div>
-              <span class="mvp-score">14,3%</span>
-            </li>
-          </ol>
-        </article>
-        <article class="mvp-card">
-          <header class="mvp-card-header">
-            <h3 class="mvp-card-title">Annahme / Quote perfekte oder gute Annahme</h3>
-            <span class="mvp-card-badge">Top&nbsp;3</span>
-          </header>
-          <ol class="mvp-top-list">
-            <li class="mvp-top-item">
-              <span class="mvp-rank">17.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Meiser, Jana-Marie</span>
-                <span class="mvp-meta">Hamburg • Libero • 2</span>
-              </div>
-              <span class="mvp-score">35,0%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">22.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Ammerman, Hannah</span>
-                <span class="mvp-meta">Hamburg • Außenangriff • 2</span>
-              </div>
-              <span class="mvp-score">30,4%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">27.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Frobel, Svea</span>
-                <span class="mvp-meta">Hamburg • Außenangriff • 2</span>
-              </div>
-              <span class="mvp-score">28,3%</span>
-            </li>
-          </ol>
-        </article>
-        <article class="mvp-card">
-          <header class="mvp-card-header">
-            <h3 class="mvp-card-title">Aufschlag / Quote Aufschlagpunkte</h3>
-            <span class="mvp-card-badge">Top&nbsp;3</span>
-          </header>
-          <ol class="mvp-top-list">
-            <li class="mvp-top-item">
-              <span class="mvp-rank">5.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Thaden, Alexa Sophie</span>
-                <span class="mvp-meta">Hamburg • Mittelblock • 2</span>
-              </div>
-              <span class="mvp-score">20,0%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">7.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Körtzinger, Leonie</span>
-                <span class="mvp-meta">Hamburg • Diagonal • 2</span>
-              </div>
-              <span class="mvp-score">19,0%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">50.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Frobel, Svea</span>
-                <span class="mvp-meta">Hamburg • Außenangriff • 2</span>
-              </div>
-              <span class="mvp-score">0,0%</span>
-            </li>
-          </ol>
-        </article>
-        <article class="mvp-card">
-          <header class="mvp-card-header">
-            <h3 class="mvp-card-title">Annahme / Annahmeeffizienz</h3>
-            <span class="mvp-card-badge">Top&nbsp;3</span>
-          </header>
-          <ol class="mvp-top-list">
-            <li class="mvp-top-item">
-              <span class="mvp-rank">21.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Meiser, Jana-Marie</span>
-                <span class="mvp-meta">Hamburg • Libero • 2</span>
-              </div>
-              <span class="mvp-score">15,0%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">28.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Ammerman, Hannah</span>
-                <span class="mvp-meta">Hamburg • Außenangriff • 2</span>
-              </div>
-              <span class="mvp-score">4,3%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">28.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Frobel, Svea</span>
-                <span class="mvp-meta">Hamburg • Außenangriff • 2</span>
-              </div>
-              <span class="mvp-score">4,3%</span>
-            </li>
-          </ol>
-        </article>
-        <article class="mvp-card">
-          <header class="mvp-card-header">
-            <h3 class="mvp-card-title">Angriff / Angriffseffizienz</h3>
-            <span class="mvp-card-badge">Top&nbsp;3</span>
-          </header>
-          <ol class="mvp-top-list">
-            <li class="mvp-top-item">
-              <span class="mvp-rank">10.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Frobel, Svea</span>
-                <span class="mvp-meta">Hamburg • Außenangriff • 2</span>
-              </div>
-              <span class="mvp-score">4,9%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">–</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">–</span>
-                <span class="mvp-meta">Hamburg • – • –</span>
-              </div>
-              <span class="mvp-score">–</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">–</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">–</span>
-                <span class="mvp-meta">Hamburg • – • –</span>
-              </div>
-              <span class="mvp-score">–</span>
-            </li>
-          </ol>
-        </article>
-        <article class="mvp-card">
-          <header class="mvp-card-header">
-            <h3 class="mvp-card-title">Block / Blockpunkte</h3>
-            <span class="mvp-card-badge">Top&nbsp;3</span>
-          </header>
-          <ol class="mvp-top-list">
-            <li class="mvp-top-item">
-              <span class="mvp-rank">7.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Hartig, Anna</span>
-                <span class="mvp-meta">Hamburg • Mittelblock • 2</span>
-              </div>
-              <span class="mvp-score">5</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">21.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Ammerman, Hannah</span>
-                <span class="mvp-meta">Hamburg • Außenangriff • 2</span>
-              </div>
-              <span class="mvp-score">2</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">37.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Krams, Louisa</span>
-                <span class="mvp-meta">Hamburg • Mittelblock • 1</span>
-              </div>
-              <span class="mvp-score">1</span>
-            </li>
-          </ol>
-        </article>
-        <article class="mvp-card">
-          <header class="mvp-card-header">
-            <h3 class="mvp-card-title">Aufschlag / Aufschlagpunkte</h3>
-            <span class="mvp-card-badge">Top&nbsp;3</span>
-          </header>
-          <ol class="mvp-top-list">
-            <li class="mvp-top-item">
-              <span class="mvp-rank">6.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Körtzinger, Leonie</span>
-                <span class="mvp-meta">Hamburg • Diagonal • 2</span>
-              </div>
-              <span class="mvp-score">4</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">17.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Thaden, Alexa Sophie</span>
-                <span class="mvp-meta">Hamburg • Mittelblock • 2</span>
-              </div>
-              <span class="mvp-score">2</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">34.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Konjer, Zoe</span>
-                <span class="mvp-meta">Hamburg • Zuspiel • 2</span>
-              </div>
-              <span class="mvp-score">1</span>
-            </li>
-          </ol>
-        </article>
-        <article class="mvp-card">
-          <header class="mvp-card-header">
-            <h3 class="mvp-card-title">Angriff / Quote Angriffspunkte</h3>
-            <span class="mvp-card-badge">Top&nbsp;3</span>
-          </header>
-          <ol class="mvp-top-list">
-            <li class="mvp-top-item">
-              <span class="mvp-rank">11.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Frobel, Svea</span>
-                <span class="mvp-meta">Hamburg • Außenangriff • 2</span>
-              </div>
-              <span class="mvp-score">31,1%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">–</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">–</span>
-                <span class="mvp-meta">Hamburg • – • –</span>
-              </div>
-              <span class="mvp-score">–</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">–</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">–</span>
-                <span class="mvp-meta">Hamburg • – • –</span>
-              </div>
-              <span class="mvp-score">–</span>
-            </li>
-          </ol>
-        </article>
-        <article class="mvp-card">
-          <header class="mvp-card-header">
-            <h3 class="mvp-card-title">Angriff / Angriffspunkte</h3>
-            <span class="mvp-card-badge">Top&nbsp;3</span>
-          </header>
-          <ol class="mvp-top-list">
-            <li class="mvp-top-item">
-              <span class="mvp-rank">10.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Frobel, Svea</span>
-                <span class="mvp-meta">Hamburg • Außenangriff • 2</span>
-              </div>
-              <span class="mvp-score">19</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">31.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Hartig, Anna</span>
-                <span class="mvp-meta">Hamburg • Mittelblock • 2</span>
-              </div>
-              <span class="mvp-score">8</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">39.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Körtzinger, Leonie</span>
-                <span class="mvp-meta">Hamburg • Diagonal • 2</span>
-              </div>
-              <span class="mvp-score">7</span>
-            </li>
-          </ol>
-        </article>
-        <article class="mvp-card">
-          <header class="mvp-card-header">
-            <h3 class="mvp-card-title">Aufschlag / Aufschlageffizienz</h3>
-            <span class="mvp-card-badge">Top&nbsp;3</span>
-          </header>
-          <ol class="mvp-top-list">
-            <li class="mvp-top-item">
-              <span class="mvp-rank">21.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Thaden, Alexa Sophie</span>
-                <span class="mvp-meta">Hamburg • Mittelblock • 2</span>
-              </div>
-              <span class="mvp-score">0,0%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">60.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Körtzinger, Leonie</span>
-                <span class="mvp-meta">Hamburg • Diagonal • 2</span>
-              </div>
-              <span class="mvp-score">-42,9%</span>
-            </li>
-            <li class="mvp-top-item">
-              <span class="mvp-rank">62.</span>
-              <div class="mvp-top-content">
-                <span class="mvp-name">Frobel, Svea</span>
-                <span class="mvp-meta">Hamburg • Außenangriff • 2</span>
-              </div>
-              <span class="mvp-score">-50,0%</span>
-            </li>
-          </ol>
-        </article>
+          <div class="mvp-legend">
+            <span class="mvp-legend-item" data-team="usc">Münster</span>
+            <span class="mvp-legend-item" data-team="opponent">Hamburg</span>
           </div>
+          <details class="mvp-category" open>
+            <summary>
+              <span class="mvp-category-title">alle Spielelemente / Top-Scorer</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">6.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Körtzinger, Leonie</span>
+                    <span class="mvp-entry-meta">Diagonal • ETV Hamburger Volksbank Volleys • 2 Sätze • 19,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">21 | 4</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">17.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Thaden, Alexa Sophie</span>
+                    <span class="mvp-entry-meta">Mittelblock • ETV Hamburger Volksbank Volleys • 2 Sätze • 40,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">10 | 2</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">34.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Konjer, Zoe</span>
+                    <span class="mvp-entry-meta">Zuspiel • ETV Hamburger Volksbank Volleys • 2 Sätze • 12,5% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">8 | 1</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">3.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Ford, Brianna</span>
+                    <span class="mvp-entry-meta">Diagonal • USC Münster • 2 Sätze • 36,7% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">30 | 6</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">6.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Waelkens, Anke</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 2 Sätze • 38,9% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">18 | 4</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">10.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 2 Sätze • 25,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">28 | 3</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Aufschlag / Quote Aufschläge mit Wirkung</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">8.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Thaden, Alexa Sophie</span>
+                    <span class="mvp-entry-meta">Mittelblock • ETV Hamburger Volksbank Volleys • 2 Sätze • 40,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">10 | 40,0%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">47.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Körtzinger, Leonie</span>
+                    <span class="mvp-entry-meta">Diagonal • ETV Hamburger Volksbank Volleys • 2 Sätze • 19,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">21 | 19,0%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">56.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Frobel, Svea</span>
+                    <span class="mvp-entry-meta">Außenangriff • ETV Hamburger Volksbank Volleys • 2 Sätze • 14,3% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">14 | 14,3%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">11.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Waelkens, Anke</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 2 Sätze • 38,9% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">18 | 38,9%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">14.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Ford, Brianna</span>
+                    <span class="mvp-entry-meta">Diagonal • USC Münster • 2 Sätze • 36,7% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">30 | 36,7%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">28.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 2 Sätze • 25,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">28 | 25,0%</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Annahme / Quote perfekte oder gute Annahme</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">17.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Meiser, Jana-Marie</span>
+                    <span class="mvp-entry-meta">Libero • ETV Hamburger Volksbank Volleys • 2 Sätze • 0,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">0 | 35,0%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">22.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Ammerman, Hannah</span>
+                    <span class="mvp-entry-meta">Außenangriff • ETV Hamburger Volksbank Volleys • 2 Sätze • 12,5% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">8 | 30,4%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">27.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Frobel, Svea</span>
+                    <span class="mvp-entry-meta">Außenangriff • ETV Hamburger Volksbank Volleys • 2 Sätze • 14,3% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">14 | 28,3%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">12.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Martin, Isabel Rebecca</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 2 Sätze • 8,3% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">24 | 40,7%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">23.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Molenaar, Pippa</span>
+                    <span class="mvp-entry-meta">Libero • USC Münster • 2 Sätze • 0,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">0 | 30,3%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">29.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 2 Sätze • 25,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">28 | 27,3%</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Aufschlag / Quote Aufschlagpunkte</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">5.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Thaden, Alexa Sophie</span>
+                    <span class="mvp-entry-meta">Mittelblock • ETV Hamburger Volksbank Volleys • 2 Sätze • 40,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">10 | 20,0%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">7.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Körtzinger, Leonie</span>
+                    <span class="mvp-entry-meta">Diagonal • ETV Hamburger Volksbank Volleys • 2 Sätze • 19,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">21 | 19,0%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">50.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Frobel, Svea</span>
+                    <span class="mvp-entry-meta">Außenangriff • ETV Hamburger Volksbank Volleys • 2 Sätze • 14,3% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">14 | 0,0%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">3.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Waelkens, Anke</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 2 Sätze • 38,9% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">18 | 22,2%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">5.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Ford, Brianna</span>
+                    <span class="mvp-entry-meta">Diagonal • USC Münster • 2 Sätze • 36,7% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">30 | 20,0%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">17.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 2 Sätze • 25,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">28 | 10,7%</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Annahme / Annahmeeffizienz</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">21.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Meiser, Jana-Marie</span>
+                    <span class="mvp-entry-meta">Libero • ETV Hamburger Volksbank Volleys • 2 Sätze • 0,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">0 | 15,0%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">28.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Ammerman, Hannah</span>
+                    <span class="mvp-entry-meta">Außenangriff • ETV Hamburger Volksbank Volleys • 2 Sätze • 12,5% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">8 | 4,3%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">28.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Frobel, Svea</span>
+                    <span class="mvp-entry-meta">Außenangriff • ETV Hamburger Volksbank Volleys • 2 Sätze • 14,3% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">14 | 4,3%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">14.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Molenaar, Pippa</span>
+                    <span class="mvp-entry-meta">Libero • USC Münster • 2 Sätze • 0,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">0 | 24,2%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">16.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Martin, Isabel Rebecca</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 2 Sätze • 8,3% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">24 | 22,2%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">34.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 2 Sätze • 25,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">28 | -2,3%</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Angriff / Angriffseffizienz</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">10.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Frobel, Svea</span>
+                    <span class="mvp-entry-meta">Außenangriff • ETV Hamburger Volksbank Volleys • 2 Sätze • 14,3% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">14 | 4,9%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">–</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">–</span>
+                    <span class="mvp-entry-meta">– • ETV Hamburger Volksbank Volleys • – Sätze • – Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">– | –</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">–</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">–</span>
+                    <span class="mvp-entry-meta">– • ETV Hamburger Volksbank Volleys • – Sätze • – Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">– | –</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">7.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Ford, Brianna</span>
+                    <span class="mvp-entry-meta">Diagonal • USC Münster • 2 Sätze • 36,7% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">30 | 23,6%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">8.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Martin, Isabel Rebecca</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 2 Sätze • 8,3% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">24 | 21,3%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">–</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">–</span>
+                    <span class="mvp-entry-meta">– • USC Münster • – Sätze • – Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">– | –</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Block / Blockpunkte</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">7.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Hartig, Anna</span>
+                    <span class="mvp-entry-meta">Mittelblock • ETV Hamburger Volksbank Volleys • 2 Sätze • 0,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">9 | 5</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">21.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Ammerman, Hannah</span>
+                    <span class="mvp-entry-meta">Außenangriff • ETV Hamburger Volksbank Volleys • 2 Sätze • 12,5% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">8 | 2</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">37.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Krams, Louisa</span>
+                    <span class="mvp-entry-meta">Mittelblock • ETV Hamburger Volksbank Volleys • 1 Sätze • 37,5% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">8 | 1</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">10.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Spöler, Esther</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 2 Sätze • 25,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">28 | 4</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">10.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Waelkens, Anke</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 2 Sätze • 38,9% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">18 | 4</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">18.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 2 Sätze • 25,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">28 | 3</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Aufschlag / Aufschlagpunkte</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">6.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Körtzinger, Leonie</span>
+                    <span class="mvp-entry-meta">Diagonal • ETV Hamburger Volksbank Volleys • 2 Sätze • 19,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">21 | 4</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">17.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Thaden, Alexa Sophie</span>
+                    <span class="mvp-entry-meta">Mittelblock • ETV Hamburger Volksbank Volleys • 2 Sätze • 40,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">10 | 2</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">34.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Konjer, Zoe</span>
+                    <span class="mvp-entry-meta">Zuspiel • ETV Hamburger Volksbank Volleys • 2 Sätze • 12,5% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">8 | 1</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">3.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Ford, Brianna</span>
+                    <span class="mvp-entry-meta">Diagonal • USC Münster • 2 Sätze • 36,7% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">30 | 6</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">6.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Waelkens, Anke</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 2 Sätze • 38,9% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">18 | 4</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">10.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 2 Sätze • 25,0% Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">28 | 3</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Angriff / Quote Angriffspunkte</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">11.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Frobel, Svea</span>
+                    <span class="mvp-entry-meta">Außenangriff • ETV Hamburger Volksbank Volleys • 2 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">61 | 31,1%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">–</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">–</span>
+                    <span class="mvp-entry-meta">– • ETV Hamburger Volksbank Volleys • – Sätze • – Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">– | –</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">–</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">–</span>
+                    <span class="mvp-entry-meta">– • ETV Hamburger Volksbank Volleys • – Sätze • – Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">– | –</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">6.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Ford, Brianna</span>
+                    <span class="mvp-entry-meta">Diagonal • USC Münster • 2 Sätze • 30 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">72 | 41,7%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">7.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Martin, Isabel Rebecca</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 2 Sätze • 18 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">47 | 38,3%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">–</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">–</span>
+                    <span class="mvp-entry-meta">– • USC Münster • – Sätze • – Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">– | –</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Angriff / Angriffspunkte</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">10.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Frobel, Svea</span>
+                    <span class="mvp-entry-meta">Außenangriff • ETV Hamburger Volksbank Volleys • 6 Sätze • 2 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">61 | 19</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">31.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Hartig, Anna</span>
+                    <span class="mvp-entry-meta">Mittelblock • ETV Hamburger Volksbank Volleys • 6 Sätze • 2 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">18 | 8</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">39.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Körtzinger, Leonie</span>
+                    <span class="mvp-entry-meta">Diagonal • ETV Hamburger Volksbank Volleys • 6 Sätze • 2 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">32 | 7</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">3.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Ford, Brianna</span>
+                    <span class="mvp-entry-meta">Diagonal • USC Münster • 8 Sätze • 2 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">72 | 30</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">11.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Martin, Isabel Rebecca</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 8 Sätze • 2 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">47 | 18</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">15.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Spöler, Esther</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 8 Sätze • 2 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">28 | 14</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Aufschlag / Aufschlageffizienz</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">21.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Thaden, Alexa Sophie</span>
+                    <span class="mvp-entry-meta">Mittelblock • ETV Hamburger Volksbank Volleys • 4 Sätze • 2 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">10 | 0,0%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">60.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Körtzinger, Leonie</span>
+                    <span class="mvp-entry-meta">Diagonal • ETV Hamburger Volksbank Volleys • 6 Sätze • 2 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">21 | -42,9%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">62.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Frobel, Svea</span>
+                    <span class="mvp-entry-meta">Außenangriff • ETV Hamburger Volksbank Volleys • 6 Sätze • 2 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">14 | -50,0%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">8.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 7 Sätze • 2 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">28 | 21,4%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">11.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Ford, Brianna</span>
+                    <span class="mvp-entry-meta">Diagonal • USC Münster • 8 Sätze • 2 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">30 | 13,3%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">12.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Waelkens, Anke</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 7 Sätze • 2 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">18 | 11,1%</span>
+                </li>
+              </ol>
+            </div>
+          </details>
         </div>
       </details>
     </section>
@@ -1322,11 +2321,30 @@
     <footer class="page-footer">
       <p class="update-note" role="status">
         <span aria-hidden="true">📅</span>
-        <span><strong>Aktualisiert am</strong> Donnerstag, 23. Oktober 2025 um 08:28</span>
+        <span><strong>Aktualisiert am</strong> Freitag, 24. Oktober 2025 um 09:14</span>
       </p>
     </footer>
 
 
   </main>
+  <script>
+    (() => {
+      const themeColor = "#0f766e";
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("sw.js").catch((error) => {
+            console.error("Service worker registration failed", error);
+          });
+        });
+      }
+
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeMeta) {
+        themeMeta.setAttribute("content", themeColor);
+      }
+
+    })();
+  </script>
 </body>
 </html>
+<!-- Build cc465c1 2025-10-24T07:14:48Z -->
