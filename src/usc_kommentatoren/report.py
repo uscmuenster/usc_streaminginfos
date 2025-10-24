@@ -3420,11 +3420,6 @@ def build_html_report(
                 "      <p class=\"countdown-display\" data-countdown-display"
                 " aria-live=\"polite\">--:--:--</p>"
             ),
-            (
-                "      <p class=\"countdown-status\">Anpfiff am "
-                f"{escape(kickoff_label)} (Europe/Berlin) · "
-                "<span data-countdown-remaining>--</span></p>"
-            ),
             "    </section>",
         ]
     )
@@ -3581,13 +3576,13 @@ def build_html_report(
     }}
     .countdown-banner {{
       margin: 0 0 1.5rem 0;
-      padding: clamp(0.85rem, 2.4vw, 1.4rem) clamp(1rem, 3vw, 1.8rem);
+      padding: clamp(0.55rem, 1.7vw, 0.9rem) clamp(0.65rem, 2.2vw, 1.15rem);
       border-radius: 0.95rem;
       background: linear-gradient(135deg, #0f766e, #10b981);
       color: #f0fdf4;
       display: grid;
-      gap: 0.4rem;
-      box-shadow: 0 16px 36px rgba(15, 118, 110, 0.32);
+      gap: 0.25rem;
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.28);
     }}
     .countdown-banner--live {{
       background: linear-gradient(135deg, #b91c1c, #f97316);
@@ -3598,18 +3593,13 @@ def build_html_report(
       text-transform: uppercase;
       letter-spacing: 0.08em;
       font-weight: 700;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.75rem, 2.2vw, 0.95rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.5rem, 1.5vw, 0.65rem));
     }}
     .countdown-display {{
       margin: 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.8rem, 5.5vw, 2.35rem));
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.2rem, 3.6vw, 1.6rem));
       font-weight: 700;
       font-variant-numeric: tabular-nums;
-    }}
-    .countdown-status {{
-      margin: 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.85rem, 2.5vw, 1rem));
-      font-weight: 500;
     }}
     .update-note {{
       display: inline-flex;
@@ -4598,9 +4588,6 @@ def build_html_report(
       .countdown-banner--live {{
         background: linear-gradient(135deg, rgba(190, 18, 60, 0.85), rgba(249, 115, 22, 0.85));
       }}
-      .countdown-status {{
-        color: #bae6fd;
-      }}
     }}
   </style>
 </head>
@@ -4718,7 +4705,6 @@ def build_html_report(
           const targetMs = Date.parse(iso);
           if (!Number.isNaN(targetMs)) {{
             const display = banner.querySelector('[data-countdown-display]');
-            const remaining = banner.querySelector('[data-countdown-remaining]');
             const pad = (value) => String(value).padStart(2, '0');
             const plural = (value, singular, pluralForm) =>
               value + ' ' + (value === 1 ? singular : pluralForm);
@@ -4728,9 +4714,6 @@ def build_html_report(
               if (diff <= 0) {{
                 if (display) {{
                   display.textContent = 'Anpfiff!';
-                }}
-                if (remaining) {{
-                  remaining.textContent = 'läuft bereits';
                 }}
                 banner.classList.add('countdown-banner--live');
                 if (typeof timerId === 'number') {{
@@ -4751,31 +4734,6 @@ def build_html_report(
               parts.push(pad(hours) + ':' + pad(minutes) + ':' + pad(seconds));
               if (display) {{
                 display.textContent = parts.join(' · ');
-              }}
-              if (remaining) {{
-                let relative = '';
-                if (days > 0) {{
-                  relative =
-                    'noch ' +
-                    plural(days, 'Tag', 'Tage') +
-                    ', ' +
-                    plural(hours, 'Stunde', 'Stunden');
-                }} else if (hours > 0) {{
-                  relative =
-                    'noch ' +
-                    plural(hours, 'Stunde', 'Stunden') +
-                    ', ' +
-                    plural(minutes, 'Minute', 'Minuten');
-                }} else if (minutes > 0) {{
-                  relative =
-                    'noch ' +
-                    plural(minutes, 'Minute', 'Minuten') +
-                    ' und ' +
-                    plural(seconds, 'Sekunde', 'Sekunden');
-                }} else {{
-                  relative = 'noch ' + plural(seconds, 'Sekunde', 'Sekunden');
-                }}
-                remaining.textContent = relative;
               }}
             }};
 
