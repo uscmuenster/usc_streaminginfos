@@ -310,11 +310,37 @@ def render_team_section(team: str, matches: Iterable[MatchRecord]) -> str:
         render_group("Abgeschlossene Spiele", completed_sorted),
     ]
     groups_html = "\n".join(groups)
+    groups_html_indented = "\n".join(
+        f"      {line}" for line in groups_html.splitlines()
+    )
+
+    upcoming_count = len(upcoming_sorted)
+    completed_count = len(completed_sorted)
+    summary_segments: List[str] = []
+    if upcoming_count:
+        summary_segments.append(
+            f"{upcoming_count} anstehend"
+        )
+    if completed_count:
+        summary_segments.append(
+            f"{completed_count} abgeschlossen"
+        )
+    if not summary_segments:
+        summary_segments.append("Keine gemeldeten Spiele")
+    summary_text = " · ".join(summary_segments)
+
+    open_attr = " open" if upcoming_count else ""
+
     return (
-        "  <section class=\"team-section\">\n"
-        f"    <h3>{html.escape(team)}</h3>\n"
-        f"{groups_html}\n"
-        "  </section>"
+        f"  <details class=\"team-section\"{open_attr}>\n"
+        "    <summary>\n"
+        f"      <span class=\"team-name\">{html.escape(team)}</span>\n"
+        f"      <span class=\"team-meta\">{html.escape(summary_text)}</span>\n"
+        "    </summary>\n"
+        "    <div class=\"team-section-content\">\n"
+        f"{groups_html_indented}\n"
+        "    </div>\n"
+        "  </details>"
     )
 
 
@@ -406,17 +432,57 @@ def render_html(comp_results: List[tuple[CompetitionConfig, Dict[str, List[Match
       outline: none;
     }}
     .team-section {{
-      border-top: 1px solid var(--border);
-      padding-top: clamp(1rem, 3vw, 1.5rem);
       margin-top: clamp(1rem, 3vw, 1.5rem);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      background: #f8fafc;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
     }}
     .team-section:first-of-type {{
-      border-top: none;
-      padding-top: 0;
-      margin-top: 0;
+      margin-top: clamp(0.75rem, 2.4vw, 1.1rem);
+    }}
+    .team-section summary {{
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      padding: clamp(0.85rem, 2.6vw, 1.15rem) clamp(1rem, 3vw, 1.5rem);
+      font-size: calc(var(--font-scale) * clamp(1.05rem, 2.6vw, 1.4rem));
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(15, 23, 42, 0.02);
+    }}
+    .team-section summary::-webkit-details-marker {{
+      display: none;
+    }}
+    .team-section summary::after {{
+      content: "▾";
+      font-size: 0.85em;
+      margin-left: auto;
+      transition: transform 0.2s ease;
+    }}
+    .team-section[open] summary::after {{
+      transform: rotate(-180deg);
+    }}
+    .team-name {{
+      flex-shrink: 0;
+    }}
+    .team-meta {{
+      font-size: calc(var(--font-scale) * 0.92rem);
+      color: #475569;
+      font-weight: 500;
+    }}
+    .team-section-content {{
+      padding: clamp(0.95rem, 2.8vw, 1.35rem) clamp(1.05rem, 3vw, 1.6rem) clamp(1.15rem, 3.2vw, 1.65rem);
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+      display: grid;
+      gap: clamp(0.85rem, 2.6vw, 1.4rem);
     }}
     .match-group {{
-      margin-top: clamp(0.75rem, 2vw, 1.25rem);
+      margin: 0;
       border: 1px solid var(--border);
       border-radius: 0.85rem;
       background: #f8fafc;
@@ -438,7 +504,7 @@ def render_html(comp_results: List[tuple[CompetitionConfig, Dict[str, List[Match
       display: none;
     }}
     .match-group summary::after {{
-      content: "\25BC";
+      content: "▾";
       font-size: 0.85em;
       margin-left: auto;
       transition: transform 0.2s ease;
