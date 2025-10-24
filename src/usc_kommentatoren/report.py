@@ -2659,6 +2659,7 @@ def format_match_line(
     *,
     stats: Optional[Sequence[MatchStatsTotals]] = None,
     highlight_teams: Optional[Mapping[str, str]] = None,
+    show_team_stats: bool = False,
 ) -> str:
     kickoff_local = match.kickoff.astimezone(BERLIN_TZ)
     date_label = kickoff_local.strftime("%d.%m.%Y")
@@ -2714,7 +2715,7 @@ def format_match_line(
         combined = extras + links
         meta_html = f"<div class=\"match-meta\">{' · '.join(combined)}</div>"
     stats_html = ""
-    if stats:
+    if show_team_stats and stats:
         normalized_usc = normalize_name(USC_CANONICAL_NAME)
         canonical_usc = TEAM_CANONICAL_LOOKUP.get(normalized_usc)
         if canonical_usc:
