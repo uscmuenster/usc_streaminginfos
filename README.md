@@ -48,6 +48,33 @@ Standardmäßig landet die Datei unter `docs/internationale_spiele.html` und kan
 * Python 3.12 oder neuer
 * Abhängigkeiten installieren mit `pip install -r requirements.txt`
 
+## Schnelleinstieg für die lokale Entwicklung
+
+1. Erstelle dir am besten eine virtuelle Umgebung, um alle Abhängigkeiten vom System zu trennen:
+
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
+   ```
+
+2. Installiere anschließend die benötigten Pakete:
+
+   ```bash
+   pip install --upgrade pip
+   pip install -r requirements.txt
+   ```
+
+3. Für einmalige Testläufe kannst du die wichtigsten Skripte direkt über `PYTHONPATH=src` aufrufen. Häufige Beispiele:
+
+   ```bash
+   PYTHONPATH=src python -m usc_kommentatoren --help
+   PYTHONPATH=src python scripts/update_lineups.py --limit 1
+   ```
+
+4. Wenn du Änderungen am Code testen möchtest, lösche bei Bedarf die Cache-Verzeichnisse in `data/` oder starte die Skripte mit geänderten `--schedule-path`- bzw. `--roster-dir`-Argumenten, damit neue Daten geladen werden.
+
+5. Für ein tägliches Update kannst du den bestehenden GitHub-Action-Workflow lokal simulieren, indem du `scripts/`-Befehle hintereinander ausführst oder `python -m usc_kommentatoren` in einem Cronjob einplanst.
+
 ## Manuelle Ausführung
 
 Das Paket stellt einen kleinen Helfer bereit, der den offiziellen Spielplan lädt, aktuelle Vereins- und VBL-Meldungen sammelt und die HTML-Dateien erzeugt. Standardmäßig schreibt der Befehl sowohl `docs/index.html` (normale Ansicht) als auch `docs/index_app.html` (Schriftgrößen ca. 75 % für die App-Einbindung), damit beide Varianten direkt von GitHub Pages oder einem anderen statischen Hoster ausgeliefert werden können. Beispiel:
