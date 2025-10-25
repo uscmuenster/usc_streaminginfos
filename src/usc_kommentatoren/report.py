@@ -3675,6 +3675,12 @@ def build_html_report(
       margin: 0;
       display: grid;
       gap: 0.75rem;
+      grid-template-columns: 1fr;
+    }}
+    @media (min-width: 48rem) {{
+      .match-list {{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }}
     }}
     .match-list li {{
       background: #ffffff;
