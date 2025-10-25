@@ -3569,13 +3569,13 @@ def build_html_report(
     hero_layout_lines = [
         "    <div class=\"hero-layout\">",
         "      <div class=\"hero-primary\">",
-        indent(countdown_meta_html, "        ").rstrip(),
-        indent(countdown_html, "        ").rstrip(),
         "        <div class=\"meta\">",
         f"          {meta_html}",
         "        </div>",
+        indent(broadcast_box_html, "        ").rstrip(),
         "      </div>",
-        indent(broadcast_box_html, "      ").rstrip(),
+        indent(countdown_meta_html, "      ").rstrip(),
+        indent(countdown_html, "      ").rstrip(),
         "    </div>",
     ]
     hero_layout_html = "\n".join(hero_layout_lines)
