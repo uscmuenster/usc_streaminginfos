@@ -3534,7 +3534,7 @@ def build_html_report(
             countdown_prefix = "+"
             countdown_value = -countdown_delta
         countdown_label = f"T{countdown_prefix}{_format_minutes_seconds(countdown_value)}"
-        actual_time_label = actual_dt.strftime("%H:%M")
+        actual_time_label = actual_dt.strftime("%H:%M:%S")
         duration_label = _format_hms(entry.duration)
         broadcast_item_blocks.append(
             "\n".join(
