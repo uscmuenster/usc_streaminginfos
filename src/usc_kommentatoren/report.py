@@ -3795,7 +3795,7 @@ def build_html_report(
     }}
     .broadcast-table tbody th,
     .broadcast-table tbody td {{
-      padding: 0.45rem 0.65rem;
+      padding: 0.15rem 0.65rem;
       vertical-align: top;
       border-top: 1px solid rgba(148, 163, 184, 0.35);
       line-height: 1.3;
@@ -3865,7 +3865,6 @@ def build_html_report(
       display: inline-flex;
       align-items: center;
       gap: clamp(0.35rem, 1.5vw, 0.6rem);
-      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.28);
       width: auto;
       max-width: 100%;
     }}
