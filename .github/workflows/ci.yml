@@ -6,7 +6,7 @@ on:
   pull_request:
   workflow_dispatch:
   schedule:
-    - cron: '0 1 * * *'  # täglich um 01:00 Uhr
+    - cron: '0 3 * * *'  # täglich um 01:00 Uhr
 
 permissions:
   contents: write   # erlaubt Push auf gh-pages
