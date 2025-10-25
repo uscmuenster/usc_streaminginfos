@@ -3,7 +3,7 @@ name: Update international matches overview
 on:
   workflow_dispatch:
   schedule:
-    - cron: '45 4 * * *'
+    - cron: '45 2 * * *'
 
 permissions:
   contents: write  # notwendig, um direkt pushen zu dürfen
