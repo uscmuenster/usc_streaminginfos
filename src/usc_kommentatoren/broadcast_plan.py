@@ -25,11 +25,6 @@ class BroadcastPlanEntry:
 
 BROADCAST_PLAN: tuple[BroadcastPlanEntry, ...] = (
     BroadcastPlanEntry(
-        planned_time=_parse_time("18:00:00"),
-        duration=_parse_duration("00:40:00"),
-        note="Signal liegt an.",
-    ),
-    BroadcastPlanEntry(
         planned_time=_parse_time("18:40:00"),
         duration=_parse_duration("00:05:00"),
         note="LIGA Grafik-Tafel: \"Die Übertragung startet in Kürze\" → Signal auf Plattform.",
@@ -48,16 +43,8 @@ BROADCAST_PLAN: tuple[BroadcastPlanEntry, ...] = (
         planned_time=_parse_time("18:45:30"),
         duration=_parse_duration("00:01:30"),
         note=(
-            "Kommentatoren im On; optional Moderation und Gast möglich. Bild-im-Bild möglich. "
+            "Kommentatoren im On; Bild-im-Bild. "
             "Spieltagsübersicht, Tabelle, Aufstellungen und Schiedsrichter können gezeigt werden."
-        ),
-    ),
-    BroadcastPlanEntry(
-        planned_time=_parse_time("18:47:00"),
-        duration=_parse_duration("00:07:00"),
-        note=(
-            "Feld-Interview – live vor der Sponsorenwand. Nur mit Moderation. "
-            "Gäste über Bauchbinde kennzeichnen; anschließend Werbung über K1."
         ),
     ),
     BroadcastPlanEntry(
