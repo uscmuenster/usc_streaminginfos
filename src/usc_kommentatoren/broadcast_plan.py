@@ -65,7 +65,7 @@ BROADCAST_PLAN: tuple[BroadcastPlanEntry, ...] = (
     BroadcastPlanEntry(
         planned_time=_parse_time("19:30:00"),
         duration=_parse_duration("00:00:45"),
-        note="45 Sekunden Fazit 1. Satz",
+        note="Ende 1. Satz: 45 Sekunden Fazit",
     ),
     BroadcastPlanEntry(
         planned_time=_parse_time("19:30:45"),
