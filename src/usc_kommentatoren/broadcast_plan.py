@@ -1,0 +1,74 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+from datetime import time, timedelta
+
+REFERENCE_KICKOFF_TIME = time.fromisoformat("19:00:00")
+
+
+def _parse_time(value: str) -> time:
+    hours, minutes, seconds = (int(part) for part in value.split(":", 2))
+    return time(hour=hours, minute=minutes, second=seconds)
+
+
+def _parse_duration(value: str) -> timedelta:
+    hours, minutes, seconds = (int(part) for part in value.split(":", 2))
+    return timedelta(hours=hours, minutes=minutes, seconds=seconds)
+
+
+@dataclass(frozen=True)
+class BroadcastPlanEntry:
+    planned_time: time
+    duration: timedelta
+    note: str
+
+
+BROADCAST_PLAN: tuple[BroadcastPlanEntry, ...] = (
+    BroadcastPlanEntry(
+        planned_time=_parse_time("18:00:00"),
+        duration=_parse_duration("00:40:00"),
+        note="Signal liegt an.",
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("18:40:00"),
+        duration=_parse_duration("00:05:00"),
+        note="LIGA Grafik-Tafel: \"Die Übertragung startet in Kürze\" → Signal auf Plattform.",
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("18:45:00"),
+        duration=_parse_duration("00:00:20"),
+        note="Volleyball – Opening Title.",
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("18:45:20"),
+        duration=_parse_duration("00:00:10"),
+        note="Dyn VBL Opener.",
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("18:45:30"),
+        duration=_parse_duration("00:01:30"),
+        note=(
+            "Kommentatoren im On; optional Moderation und Gast möglich. Bild-im-Bild möglich. "
+            "Spieltagsübersicht, Tabelle, Aufstellungen und Schiedsrichter können gezeigt werden."
+        ),
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("18:47:00"),
+        duration=_parse_duration("00:07:00"),
+        note=(
+            "Feld-Interview – live vor der Sponsorenwand. Nur mit Moderation. "
+            "Gäste über Bauchbinde kennzeichnen; anschließend Werbung über K1."
+        ),
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("18:54:00"),
+        duration=_parse_duration("00:03:08"),
+        note="Werbung 1 (Regie: saubere K1, Kommentatoren: still).",
+    ),
+)
+
+__all__ = [
+    "REFERENCE_KICKOFF_TIME",
+    "BroadcastPlanEntry",
+    "BROADCAST_PLAN",
+]

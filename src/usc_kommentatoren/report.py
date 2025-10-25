@@ -15,12 +15,18 @@ from zoneinfo import ZoneInfo
 from urllib.parse import parse_qs, urljoin, urlparse
 from email.utils import parsedate_to_datetime
 import xml.etree.ElementTree as ET
+from textwrap import indent
 
 from PyPDF2 import PdfReader
 from PyPDF2.errors import PdfReadError
 
 import requests
 from bs4 import BeautifulSoup, Tag
+
+from .broadcast_plan import (
+    BROADCAST_PLAN,
+    REFERENCE_KICKOFF_TIME,
+)
 
 DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
 SCHEDULE_PAGE_URL = (
@@ -3257,6 +3263,9 @@ def _format_season_results_section(
         f"          <li><a href=\"{escape(internal_link_url)}\">{escape(internal_link_label)}</a></li>"
     )
     link_items.append(
+        "          <li><a href=\"https://uscmuenster.github.io/scouting/index.html\" rel=\"noopener\" target=\"_blank\">Scouting USC Münster</a></li>"
+    )
+    link_items.append(
         "          <li><a href=\"https://github.com/uscmuenster/usc_streaminginfos\" rel=\"noopener\" target=\"_blank\">GitHub Projekt - Streaminginfos</a></li>"
     )
 
@@ -3494,6 +3503,83 @@ def build_html_report(
         )
     meta_html = "\n      ".join(meta_lines)
 
+    def _format_minutes_seconds(delta: timedelta) -> str:
+        total_seconds = int(round(delta.total_seconds()))
+        total_seconds = max(total_seconds, 0)
+        minutes, seconds = divmod(total_seconds, 60)
+        return f"{minutes:d}:{seconds:02d}"
+
+    def _format_hms(delta: timedelta) -> str:
+        total_seconds = int(round(delta.total_seconds()))
+        total_seconds = abs(total_seconds)
+        hours, remainder = divmod(total_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+
+    tzinfo = kickoff_dt.tzinfo or BERLIN_TZ
+    reference_dt = datetime.combine(kickoff_dt.date(), REFERENCE_KICKOFF_TIME)
+    reference_dt = reference_dt.replace(tzinfo=tzinfo)
+
+    broadcast_item_blocks: List[str] = []
+    for entry in BROADCAST_PLAN:
+        planned_dt = datetime.combine(kickoff_dt.date(), entry.planned_time)
+        planned_dt = planned_dt.replace(tzinfo=tzinfo)
+        offset = planned_dt - reference_dt
+        actual_dt = kickoff_dt + offset
+        countdown_delta = kickoff_dt - actual_dt
+        if countdown_delta.total_seconds() >= 0:
+            countdown_prefix = "\u2212"
+            countdown_value = countdown_delta
+        else:
+            countdown_prefix = "+"
+            countdown_value = -countdown_delta
+        countdown_label = f"T{countdown_prefix}{_format_minutes_seconds(countdown_value)}"
+        actual_time_label = actual_dt.strftime("%H:%M")
+        duration_label = _format_hms(entry.duration)
+        broadcast_item_blocks.append(
+            "\n".join(
+                [
+                    "<li class=\"broadcast-item\">",
+                    "  <div class=\"broadcast-item__time\">",
+                    f"    <span class=\"broadcast-item__clock\">{escape(actual_time_label)} Uhr</span>",
+                    f"    <span class=\"broadcast-item__countdown\">{escape(countdown_label)}</span>",
+                    "  </div>",
+                    f"  <p class=\"broadcast-item__title\">{escape(entry.note)}</p>",
+                    f"  <p class=\"broadcast-item__duration\">Dauer: {escape(duration_label)}</p>",
+                    "</li>",
+                ]
+            )
+        )
+
+    broadcast_box_lines = [
+        "<aside class=\"broadcast-box\" aria-labelledby=\"broadcast-plan-heading\">",
+        "  <h2 id=\"broadcast-plan-heading\">Sendeablauf</h2>",
+    ]
+    if broadcast_item_blocks:
+        broadcast_box_lines.append("  <ul class=\"broadcast-list\">")
+        broadcast_box_lines.extend(indent(block, "    ") for block in broadcast_item_blocks)
+        broadcast_box_lines.append("  </ul>")
+    else:
+        broadcast_box_lines.append(
+            "  <p class=\"broadcast-empty\">Keine Sendeplanung hinterlegt.</p>"
+        )
+    broadcast_box_lines.append("</aside>")
+    broadcast_box_html = "\n".join(broadcast_box_lines)
+
+    hero_layout_lines = [
+        "    <div class=\"hero-layout\">",
+        "      <div class=\"hero-primary\">",
+        indent(countdown_meta_html, "        ").rstrip(),
+        indent(countdown_html, "        ").rstrip(),
+        "        <div class=\"meta\">",
+        f"          {meta_html}",
+        "        </div>",
+        "      </div>",
+        indent(broadcast_box_html, "      ").rstrip(),
+        "    </div>",
+    ]
+    hero_layout_html = "\n".join(hero_layout_lines)
+
     birthday_notes = collect_birthday_notes(
         match_day,
         (
@@ -3615,6 +3701,84 @@ def build_html_report(
     }}
     .meta p {{
       margin: 0;
+    }}
+    .hero-layout {{
+      display: grid;
+      gap: clamp(1rem, 3vw, 1.8rem);
+      align-items: start;
+      margin-bottom: clamp(1.1rem, 3vw, 1.6rem);
+    }}
+    .hero-primary {{
+      display: grid;
+      gap: clamp(0.8rem, 2.4vw, 1.3rem);
+    }}
+    .broadcast-box {{
+      border-radius: 1rem;
+      background: #ffffff;
+      padding: clamp(0.9rem, 2.6vw, 1.4rem);
+      box-shadow: 0 18px 40px rgba(15, 118, 110, 0.16);
+      border: 1px solid rgba(15, 118, 110, 0.18);
+      display: grid;
+      gap: clamp(0.65rem, 2vw, 0.95rem);
+    }}
+    .broadcast-box h2 {{
+      margin: 0;
+    }}
+    .broadcast-list {{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.75rem;
+    }}
+    .broadcast-item {{
+      border-radius: 0.85rem;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      padding: 0.75rem 0.95rem;
+      display: grid;
+      gap: 0.4rem;
+    }}
+    .broadcast-item__time {{
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
+    }}
+    .broadcast-item__clock {{
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+    }}
+    .broadcast-item__countdown {{
+      font-weight: 700;
+      color: #0f766e;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+    }}
+    .broadcast-item__title {{
+      margin: 0;
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+    }}
+    .broadcast-item__duration {{
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
+      color: #475569;
+    }}
+    .broadcast-empty {{
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      color: #475569;
+    }}
+    @media (min-width: 60rem) {{
+      .hero-layout {{
+        grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+      }}
+    }}
+    @media (max-width: 50rem) {{
+      .hero-layout {{
+        grid-template-columns: minmax(0, 1fr);
+      }}
     }}
     .countdown-meta {{
       display: grid;
@@ -4486,6 +4650,22 @@ def build_html_report(
         background: #0e1b1f;
         color: #e6f1f3;
       }}
+      .broadcast-box {{
+        background: rgba(15, 31, 36, 0.85);
+        border-color: rgba(94, 234, 212, 0.25);
+        box-shadow: 0 20px 48px rgba(15, 118, 110, 0.35);
+      }}
+      .broadcast-item {{
+        background: rgba(15, 31, 36, 0.55);
+        border-color: rgba(148, 163, 184, 0.35);
+      }}
+      .broadcast-item__countdown {{
+        color: #5eead4;
+      }}
+      .broadcast-item__duration,
+      .broadcast-empty {{
+        color: #cbd5f5;
+      }}
       h1,
       h2,
       h3 {{
@@ -4667,11 +4847,7 @@ def build_html_report(
 <body>
   <main>
     <h1>Nächster USC-Heimgegner:<br><span data-next-opponent>{escape(heading)}</span></h1>
-{countdown_meta_html}
-{countdown_html}
-    <div class=\"meta\">
-      {meta_html}
-    </div>
+{hero_layout_html}
 {notes_html}
     <section>
       <h2>Spiele: {escape(heading)}</h2>
