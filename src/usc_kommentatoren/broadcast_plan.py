@@ -41,7 +41,7 @@ BROADCAST_PLAN: tuple[BroadcastPlanEntry, ...] = (
     ),
     BroadcastPlanEntry(
         planned_time=_parse_time("18:45:30"),
-        duration=_parse_duration("00:01:30"),
+        duration=_parse_duration("00:08:30"),
         note=(
             "Beginn Kommentar; Bild-im-Bild mit K1. "
             "Spieltagsübersicht und Rückblick, Tabelle, Schiedsrichter."
