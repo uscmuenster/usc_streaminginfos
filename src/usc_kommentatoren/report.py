@@ -3250,6 +3250,9 @@ def _format_season_results_section(
         f"          <li><a href=\"{escape(internal_link_url)}\">{escape(internal_link_label)}</a></li>"
     )
     link_items.append(
+        "          <li><a href=\"https://uscmuenster.github.io/scouting/index.html\" rel=\"noopener\" target=\"_blank\">Scouting USC Münster</a></li>"
+    )
+    link_items.append(
         "          <li><a href=\"https://github.com/uscmuenster/usc_streaminginfos\" rel=\"noopener\" target=\"_blank\">GitHub Projekt - Streaminginfos</a></li>"
     )
 
