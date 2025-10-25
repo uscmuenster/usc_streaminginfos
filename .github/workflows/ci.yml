@@ -1,9 +1,6 @@
 name: HTML Report
 
 on:
-  push:
-    branches: [ work, main ]
-  pull_request:
   workflow_dispatch:
   schedule:
     - cron: '0 3 * * *'  # täglich um 01:00 Uhr
