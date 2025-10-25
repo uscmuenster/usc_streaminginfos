@@ -2512,6 +2512,7 @@ def format_match_line(
     *,
     stats: Optional[Sequence[MatchStatsTotals]] = None,
     highlight_teams: Optional[Mapping[str, str]] = None,
+    list_item_classes: Optional[Iterable[str]] = None,
 ) -> str:
     kickoff_local = match.kickoff.astimezone(BERLIN_TZ)
     date_label = kickoff_local.strftime("%d.%m.%Y")
@@ -2717,8 +2718,14 @@ def format_match_line(
                 "    </details>"
             )
 
+    class_attr = ""
+    if list_item_classes:
+        class_names = [cls.strip() for cls in list_item_classes if cls and cls.strip()]
+        if class_names:
+            class_attr = f" class=\"{' '.join(class_names)}\""
+
     segments: List[str] = [
-        "<li>",
+        f"<li{class_attr}>",
         "  <div class=\"match-line\">",
         f"    <div class=\"match-header\"><strong>{escape(kickoff_label)}</strong> – {escape(teams)}</div>",
     ]
@@ -3362,11 +3369,19 @@ def build_html_report(
             stats_payload: Optional[Sequence[MatchStatsTotals]] = None
             if match_stats and match.stats_url:
                 stats_payload = match_stats.get(match.stats_url)
+            item_classes: List[str] = ["match-item"]
+            if not match.is_finished:
+                item_classes.append("match-item--upcoming")
+                if next_match and match is next_match:
+                    item_classes.append("match-item--next")
+            else:
+                item_classes.append("match-item--finished")
             combined.append(
                 format_match_line(
                     match,
                     stats=stats_payload,
                     highlight_teams=highlight_lookup,
+                    list_item_classes=item_classes,
                 )
             )
 
@@ -3844,6 +3859,9 @@ def build_html_report(
     @media (min-width: 48rem) {{
       .match-list {{
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }}
+      .match-list li.match-item--upcoming {{
+        grid-column: 1 / -1;
       }}
     }}
     .match-list li {{
