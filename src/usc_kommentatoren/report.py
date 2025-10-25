@@ -3741,6 +3741,20 @@ def build_html_report(
       display: grid;
       gap: clamp(0.55rem, 1.8vw, 0.8rem);
     }}
+    .broadcast-box__heading {{
+      display: flex;
+      align-items: center;
+      gap: clamp(0.75rem, 2vw, 1.2rem);
+      flex-wrap: nowrap;
+      width: 100%;
+    }}
+    .broadcast-box__heading h2 {{
+      flex: 1 1 auto;
+      min-width: 0;
+    }}
+    .broadcast-box__heading .countdown-banner {{
+      margin-left: auto;
+    }}
     .broadcast-box h2 {{
       margin: 0;
     }}
@@ -3843,17 +3857,17 @@ def build_html_report(
       font-weight: 500;
     }}
     .countdown-banner {{
-      margin: 0 0 1.5rem 0;
+      margin: 0;
       padding: clamp(0.55rem, 1.7vw, 0.9rem) clamp(0.65rem, 2.2vw, 1.15rem);
       border-radius: 0.95rem;
       background: linear-gradient(135deg, #0f766e, #10b981);
       color: #f0fdf4;
-      display: grid;
-      gap: 0.25rem;
+      display: inline-flex;
+      align-items: baseline;
+      gap: clamp(0.35rem, 1.5vw, 0.6rem);
       box-shadow: 0 12px 28px rgba(15, 118, 110, 0.28);
-      width: fit-content;
+      width: auto;
       max-width: 100%;
-      justify-items: start;
     }}
     .countdown-banner--live {{
       background: linear-gradient(135deg, #b91c1c, #f97316);
