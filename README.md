@@ -15,6 +15,7 @@ Der Kern des Projekts ist der automatisch erzeugte Spieltagsbericht. Er liefert 
 * Aufklappbare Kaderübersichten beider Teams mit inline eingebundenem Mannschaftsfoto, Positions- und Größenangaben sowie separaten Blöcken für Trainer*innen/Staff. 【F:src/usc_kommentatoren/report.py†L2294-L2330】
 * Wechselbörse-Sektionen je Team, die Zu- und Abgänge aus der offiziellen VBL-Wechselbörse sammeln. 【F:src/usc_kommentatoren/report.py†L2279-L2330】【F:src/usc_kommentatoren/report.py†L1736-L1848】
 * News-, Instagram- und Saisonrückblick-Abschnitte, die aktuelle Artikel, Social-Media-Links und optional externe Saisonzusammenfassungen bündeln. 【F:src/usc_kommentatoren/report.py†L1945-L2068】【F:src/usc_kommentatoren/report.py†L2134-L2245】
+* Einen eigenen Bereich „Sendeablauf“, der für Streams die geplanten Programmpunkte mit Countdown, Uhrzeit und Dauer als kompakte Tabelle aufbereitet. 【F:src/usc_kommentatoren/report.py†L3536-L3579】
 
 Die App-Ansicht wird automatisch erzeugt (Schriftfaktor standardmäßig 0,75), kann aber über die CLI-Optionen skaliert oder deaktiviert werden.
 
