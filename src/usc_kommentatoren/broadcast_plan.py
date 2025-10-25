@@ -31,13 +31,8 @@ BROADCAST_PLAN: tuple[BroadcastPlanEntry, ...] = (
     ),
     BroadcastPlanEntry(
         planned_time=_parse_time("18:45:00"),
-        duration=_parse_duration("00:00:20"),
-        note="Volleyball – Opening Title.",
-    ),
-    BroadcastPlanEntry(
-        planned_time=_parse_time("18:45:20"),
-        duration=_parse_duration("00:00:10"),
-        note="Dyn VBL Opener.",
+        duration=_parse_duration("00:00:30"),
+        note="Volleyball – Opening Title + DYN VBL Opener",
     ),
     BroadcastPlanEntry(
         planned_time=_parse_time("18:45:30"),
