@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: '45 4 * * *'
 
+permissions:
+  contents: write  # notwendig, um direkt pushen zu dürfen
+
 jobs:
   refresh-international-matches:
     name: Refresh international matches page
@@ -13,6 +16,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,12 +30,10 @@ jobs:
       - name: Generate international matches page
         run: python scripts/update_international_matches.py
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          commit-message: 'chore: update international matches overview'
-          title: 'chore: update international matches overview'
-          body: 'Automated update of the international matches page.'
-          branch: automation/update-international-matches
-          add-paths: |
-            docs/internationale_spiele.html
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/internationale_spiele.html
+          git commit -m "chore: update international matches overview" || echo "No changes to commit"
+          git push origin main
