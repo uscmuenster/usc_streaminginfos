@@ -3766,7 +3766,7 @@ def build_html_report(
     }}
     .broadcast-heading--countdown,
     .broadcast-heading--duration {{
-      text-align: right;
+      text-align: left;
     }}
     .broadcast-heading--note {{
       width: 55%;
@@ -3783,6 +3783,7 @@ def build_html_report(
       vertical-align: top;
       border-top: 1px solid rgba(148, 163, 184, 0.35);
       line-height: 1.3;
+      text-align: left;
     }}
     .broadcast-table tbody tr:first-child th,
     .broadcast-table tbody tr:first-child td {{
@@ -3797,14 +3798,14 @@ def build_html_report(
       font-weight: 700;
       color: #0f766e;
       white-space: nowrap;
-      text-align: right;
+      text-align: left;
     }}
     .broadcast-cell--note {{
       font-weight: 500;
       line-height: 1.35;
     }}
     .broadcast-cell--duration {{
-      text-align: right;
+      text-align: left;
       white-space: nowrap;
       font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
     }}
