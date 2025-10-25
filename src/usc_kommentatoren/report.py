@@ -3551,8 +3551,11 @@ def build_html_report(
 
     broadcast_box_lines = [
         "<aside class=\"broadcast-box\" aria-labelledby=\"broadcast-plan-heading\">",
-        "  <h2 id=\"broadcast-plan-heading\">Sendeablauf</h2>",
+        "  <div class=\"broadcast-box__heading\">",
+        "    <h2 id=\"broadcast-plan-heading\">Sendeablauf</h2>",
     ]
+    broadcast_box_lines.extend(indent(countdown_html, "    ").splitlines())
+    broadcast_box_lines.append("  </div>")
     if broadcast_item_blocks:
         broadcast_box_lines.extend(
             [
@@ -3588,7 +3591,6 @@ def build_html_report(
         "    <div class=\"hero-layout\">",
         "      <div class=\"hero-primary\">",
         indent(countdown_meta_html, "        ").rstrip(),
-        indent(countdown_html, "        ").rstrip(),
         "        <div class=\"meta\">",
         f"          {meta_html}",
         "        </div>",
