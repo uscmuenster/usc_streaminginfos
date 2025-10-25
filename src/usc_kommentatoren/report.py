@@ -3858,7 +3858,7 @@ def build_html_report(
     }}
     .countdown-banner {{
       margin: 0;
-      padding: clamp(0.55rem, 1.7vw, 0.9rem) clamp(0.65rem, 2.2vw, 1.15rem);
+      padding: clamp(0.55rem, 1.7vw, 0.15rem) clamp(0.65rem, 2.2vw, 1.15rem);
       border-radius: 0.95rem;
       background: linear-gradient(135deg, #0f766e, #10b981);
       color: #f0fdf4;
