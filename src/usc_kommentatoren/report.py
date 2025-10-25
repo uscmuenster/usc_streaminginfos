@@ -3863,7 +3863,7 @@ def build_html_report(
       background: linear-gradient(135deg, #0f766e, #10b981);
       color: #f0fdf4;
       display: inline-flex;
-      align-items: baseline;
+      align-items: center;
       gap: clamp(0.35rem, 1.5vw, 0.6rem);
       box-shadow: 0 12px 28px rgba(15, 118, 110, 0.28);
       width: auto;
