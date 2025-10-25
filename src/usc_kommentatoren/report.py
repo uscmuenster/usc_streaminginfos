@@ -3539,14 +3539,12 @@ def build_html_report(
         broadcast_item_blocks.append(
             "\n".join(
                 [
-                    "<li class=\"broadcast-item\">",
-                    "  <div class=\"broadcast-item__time\">",
-                    f"    <span class=\"broadcast-item__clock\">{escape(actual_time_label)} Uhr</span>",
-                    f"    <span class=\"broadcast-item__countdown\">{escape(countdown_label)}</span>",
-                    "  </div>",
-                    f"  <p class=\"broadcast-item__title\">{escape(entry.note)}</p>",
-                    f"  <p class=\"broadcast-item__duration\">Dauer: {escape(duration_label)}</p>",
-                    "</li>",
+                    "<tr class=\"broadcast-row\">",
+                    f"  <th scope=\"row\" class=\"broadcast-cell broadcast-cell--time\">{escape(actual_time_label)} Uhr</th>",
+                    f"  <td class=\"broadcast-cell broadcast-cell--countdown\">{escape(countdown_label)}</td>",
+                    f"  <td class=\"broadcast-cell broadcast-cell--note\">{escape(entry.note)}</td>",
+                    f"  <td class=\"broadcast-cell broadcast-cell--duration\">{escape(duration_label)}</td>",
+                    "</tr>",
                 ]
             )
         )
@@ -3556,9 +3554,29 @@ def build_html_report(
         "  <h2 id=\"broadcast-plan-heading\">Sendeablauf</h2>",
     ]
     if broadcast_item_blocks:
-        broadcast_box_lines.append("  <ul class=\"broadcast-list\">")
-        broadcast_box_lines.extend(indent(block, "    ") for block in broadcast_item_blocks)
-        broadcast_box_lines.append("  </ul>")
+        broadcast_box_lines.extend(
+            [
+                "  <div class=\"broadcast-table-wrapper\">",
+                "    <table class=\"broadcast-table\">",
+                "      <thead>",
+                "        <tr>",
+                "          <th scope=\"col\" class=\"broadcast-heading broadcast-heading--time\">Zeit</th>",
+                "          <th scope=\"col\" class=\"broadcast-heading broadcast-heading--countdown\">Countdown</th>",
+                "          <th scope=\"col\" class=\"broadcast-heading broadcast-heading--note\">Programmpunkt</th>",
+                "          <th scope=\"col\" class=\"broadcast-heading broadcast-heading--duration\">Dauer</th>",
+                "        </tr>",
+                "      </thead>",
+                "      <tbody>",
+            ]
+        )
+        broadcast_box_lines.extend(indent(block, "        ") for block in broadcast_item_blocks)
+        broadcast_box_lines.extend(
+            [
+                "      </tbody>",
+                "    </table>",
+                "  </div>",
+            ]
+        )
     else:
         broadcast_box_lines.append(
             "  <p class=\"broadcast-empty\">Keine Sendeplanung hinterlegt.</p>"
@@ -3715,55 +3733,80 @@ def build_html_report(
     .broadcast-box {{
       border-radius: 1rem;
       background: #ffffff;
-      padding: clamp(0.9rem, 2.6vw, 1.4rem);
+      padding: clamp(0.75rem, 2.2vw, 1.15rem);
       box-shadow: 0 18px 40px rgba(15, 118, 110, 0.16);
       border: 1px solid rgba(15, 118, 110, 0.18);
       display: grid;
-      gap: clamp(0.65rem, 2vw, 0.95rem);
+      gap: clamp(0.55rem, 1.8vw, 0.8rem);
     }}
     .broadcast-box h2 {{
       margin: 0;
     }}
-    .broadcast-list {{
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      gap: 0.75rem;
-    }}
-    .broadcast-item {{
+    .broadcast-table-wrapper {{
       border-radius: 0.85rem;
       border: 1px solid #e2e8f0;
       background: #f8fafc;
-      padding: 0.75rem 0.95rem;
-      display: grid;
-      gap: 0.4rem;
+      overflow-x: auto;
     }}
-    .broadcast-item__time {{
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
+    .broadcast-table {{
+      width: 100%;
+      border-collapse: collapse;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
     }}
-    .broadcast-item__clock {{
+    .broadcast-table thead th {{
+      text-align: left;
       font-weight: 600;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.68rem);
+      color: #0f766e;
+      padding: 0.45rem 0.65rem;
+      background: rgba(15, 118, 110, 0.08);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.35);
     }}
-    .broadcast-item__countdown {{
+    .broadcast-heading--countdown,
+    .broadcast-heading--duration {{
+      text-align: right;
+    }}
+    .broadcast-heading--note {{
+      width: 55%;
+    }}
+    .broadcast-table thead th:first-child {{
+      border-top-left-radius: 0.85rem;
+    }}
+    .broadcast-table thead th:last-child {{
+      border-top-right-radius: 0.85rem;
+    }}
+    .broadcast-table tbody th,
+    .broadcast-table tbody td {{
+      padding: 0.45rem 0.65rem;
+      vertical-align: top;
+      border-top: 1px solid rgba(148, 163, 184, 0.35);
+      line-height: 1.3;
+    }}
+    .broadcast-table tbody tr:first-child th,
+    .broadcast-table tbody tr:first-child td {{
+      border-top: none;
+    }}
+    .broadcast-cell--time {{
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-weight: 600;
+      white-space: nowrap;
+    }}
+    .broadcast-cell--countdown {{
       font-weight: 700;
       color: #0f766e;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      white-space: nowrap;
+      text-align: right;
     }}
-    .broadcast-item__title {{
-      margin: 0;
-      font-weight: 600;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+    .broadcast-cell--note {{
+      font-weight: 500;
+      line-height: 1.35;
     }}
-    .broadcast-item__duration {{
-      margin: 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
-      color: #475569;
+    .broadcast-cell--duration {{
+      text-align: right;
+      white-space: nowrap;
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
     }}
     .broadcast-empty {{
       margin: 0;
@@ -3772,7 +3815,7 @@ def build_html_report(
     }}
     @media (min-width: 60rem) {{
       .hero-layout {{
-        grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 0.35fr) minmax(0, 0.65fr);
       }}
     }}
     @media (max-width: 50rem) {{
@@ -4655,14 +4698,19 @@ def build_html_report(
         border-color: rgba(94, 234, 212, 0.25);
         box-shadow: 0 20px 48px rgba(15, 118, 110, 0.35);
       }}
-      .broadcast-item {{
+      .broadcast-table-wrapper {{
         background: rgba(15, 31, 36, 0.55);
         border-color: rgba(148, 163, 184, 0.35);
       }}
-      .broadcast-item__countdown {{
+      .broadcast-table thead th {{
+        background: rgba(45, 88, 90, 0.35);
+        color: #5eead4;
+        border-bottom-color: rgba(94, 234, 212, 0.3);
+      }}
+      .broadcast-cell--countdown {{
         color: #5eead4;
       }}
-      .broadcast-item__duration,
+      .broadcast-cell--duration,
       .broadcast-empty {{
         color: #cbd5f5;
       }}
