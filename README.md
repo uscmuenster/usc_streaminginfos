@@ -43,6 +43,15 @@ Mit `scripts/update_international_matches.py` aggregierst du Champions-League-, 
 
 Standardmäßig landet die Datei unter `docs/internationale_spiele.html` und kann ebenso über GitHub Pages bereitgestellt werden.
 
+## Projektstruktur
+
+Zur Orientierung findest du hier die wichtigsten Verzeichnisse des Projekts im Überblick:
+
+* `src/usc_kommentatoren/`: Python-Paket mit dem CLI-Einstiegspunkt, der Spielplan, News, Kader und Statistiken zusammenzieht und den HTML-Bericht rendert.【F:src/usc_kommentatoren/__main__.py†L1-L129】【F:src/usc_kommentatoren/report.py†L3290-L3342】
+* `scripts/`: Hilfsprogramme für wiederkehrende Aufgaben wie die Aktualisierung des Lineup-Datensatzes oder das Sammeln internationaler Spiele.【F:scripts/update_lineups.py†L1-L78】【F:scripts/update_international_matches.py†L1-L64】
+* `docs/`: Ausgabeordner für generierte HTML-Seiten, JSON-Datensätze und ergänzende Dokumentation rund um die Datenpipelines.【F:docs/lineups_workflow.md†L1-L37】
+* `.github/workflows/`: Automatisierte GitHub-Actions, die Berichte und Datensätze regelmäßig erzeugen und veröffentlichen.【F:.github/workflows/update-lineups.yml†L1-L34】
+
 ## Voraussetzungen
 
 * Python 3.12 oder neuer
