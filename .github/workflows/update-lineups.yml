@@ -3,7 +3,7 @@ name: Update lineups dataset
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 4 * * *'
+    - cron: '30 2 * * *'
 
 permissions:
   contents: write  # erlaubt Push auf das Repository
