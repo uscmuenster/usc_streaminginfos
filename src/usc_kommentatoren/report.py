@@ -2565,8 +2565,17 @@ def format_match_line(
 
     meta_html = ""
     if extras or links:
-        combined = extras + links
-        meta_html = f"<div class=\"match-meta\">{' · '.join(combined)}</div>"
+        extras_html = " · ".join(extras)
+        links_html = " · ".join(links)
+        parts: List[str] = []
+        if extras_html:
+            parts.append(extras_html)
+        if links_html:
+            if parts:
+                parts.append("<br>" + links_html)
+            else:
+                parts.append(links_html)
+        meta_html = f"<div class=\"match-meta\">{''.join(parts)}</div>"
     stats_html = ""
     if stats:
         normalized_usc = normalize_name(USC_CANONICAL_NAME)
