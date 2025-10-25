@@ -43,14 +43,44 @@ BROADCAST_PLAN: tuple[BroadcastPlanEntry, ...] = (
         planned_time=_parse_time("18:45:30"),
         duration=_parse_duration("00:01:30"),
         note=(
-            "Kommentatoren im On; Bild-im-Bild. "
-            "Spieltagsübersicht, Tabelle, Aufstellungen und Schiedsrichter können gezeigt werden."
+            "Beginn Kommentar; Bild-im-Bild mit K1. "
+            "Spieltagsübersicht und Rückblick, Tabelle, Aufstellungen und Schiedsrichter."
         ),
     ),
     BroadcastPlanEntry(
         planned_time=_parse_time("18:54:00"),
         duration=_parse_duration("00:03:08"),
         note="Werbung 1 (Regie: saubere K1, Kommentatoren: still).",
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("18:57:08"),
+        duration=_parse_duration("00:02:52"),
+        note="Einlauf Spielerinnen, Wiederbeginn Kommentar",
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("19:00:00"),
+        duration=_parse_duration("00:30:00"),
+        note="Spielbeginn",
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("19:30:00"),
+        duration=_parse_duration("00:00:45"),
+        note="45 Sekunden Fazit 1. Satz",
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("19:30:45"),
+        duration=_parse_duration("00:01:30"),
+        note="01:30 Minuten ohne Kommentar",
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("19:32:15"),
+        duration=_parse_duration("00:00:45"),
+        note="45 Sekunden Wiedereinstieg vor dem 2. Satz",
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("19:33:00"),
+        duration=_parse_duration("00:30:00"),
+        note="Beginn 2. Satz",
     ),
 )
 
