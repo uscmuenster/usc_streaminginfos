@@ -3448,7 +3448,7 @@ def build_html_report(
                 f"data-kickoff=\"{escape(countdown_iso)}\" "
                 f"data-timezone=\"{escape(BERLIN_TIMEZONE_NAME)}\">"
             ),
-            "      <p class=\"countdown-heading\">Countdown bis zum Spielbeginn</p>",
+            "      <p class=\"countdown-heading\"></p>",
             (
                 "      <p class=\"countdown-display\" data-countdown-display"
                 " aria-live=\"polite\">--:--:--</p>"
