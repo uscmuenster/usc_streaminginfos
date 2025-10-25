@@ -15,6 +15,7 @@ Der Kern des Projekts ist der automatisch erzeugte Spieltagsbericht. Er liefert 
 * Aufklappbare Kaderübersichten beider Teams mit inline eingebundenem Mannschaftsfoto, Positions- und Größenangaben sowie separaten Blöcken für Trainer*innen/Staff. 【F:src/usc_kommentatoren/report.py†L2294-L2330】
 * Wechselbörse-Sektionen je Team, die Zu- und Abgänge aus der offiziellen VBL-Wechselbörse sammeln. 【F:src/usc_kommentatoren/report.py†L2279-L2330】【F:src/usc_kommentatoren/report.py†L1736-L1848】
 * News-, Instagram- und Saisonrückblick-Abschnitte, die aktuelle Artikel, Social-Media-Links und optional externe Saisonzusammenfassungen bündeln. 【F:src/usc_kommentatoren/report.py†L1945-L2068】【F:src/usc_kommentatoren/report.py†L2134-L2245】
+* Einen eigenen Bereich „Sendeablauf“, der für Streams die geplanten Programmpunkte mit Countdown, Uhrzeit und Dauer als kompakte Tabelle aufbereitet. 【F:src/usc_kommentatoren/report.py†L3536-L3579】
 
 Die App-Ansicht wird automatisch erzeugt (Schriftfaktor standardmäßig 0,75), kann aber über die CLI-Optionen skaliert oder deaktiviert werden.
 
@@ -42,6 +43,15 @@ Mit `scripts/update_international_matches.py` aggregierst du Champions-League-, 
 * Auflistungen kommender und abgeschlossener Spiele pro Team, inklusive Terminangaben, Austragungsort, Match-Centre-Links und Satzergebnissen. 【F:scripts/update_international_matches.py†L91-L226】【F:scripts/update_international_matches.py†L228-L324】
 
 Standardmäßig landet die Datei unter `docs/internationale_spiele.html` und kann ebenso über GitHub Pages bereitgestellt werden.
+
+## Projektstruktur
+
+Zur Orientierung findest du hier die wichtigsten Verzeichnisse des Projekts im Überblick:
+
+* `src/usc_kommentatoren/`: Python-Paket mit dem CLI-Einstiegspunkt, der Spielplan, News, Kader und Statistiken zusammenzieht und den HTML-Bericht rendert.【F:src/usc_kommentatoren/__main__.py†L1-L129】【F:src/usc_kommentatoren/report.py†L3290-L3342】
+* `scripts/`: Hilfsprogramme für wiederkehrende Aufgaben wie die Aktualisierung des Lineup-Datensatzes oder das Sammeln internationaler Spiele.【F:scripts/update_lineups.py†L1-L78】【F:scripts/update_international_matches.py†L1-L64】
+* `docs/`: Ausgabeordner für generierte HTML-Seiten, JSON-Datensätze und ergänzende Dokumentation rund um die Datenpipelines.【F:docs/lineups_workflow.md†L1-L37】
+* `.github/workflows/`: Automatisierte GitHub-Actions, die Berichte und Datensätze regelmäßig erzeugen und veröffentlichen.【F:.github/workflows/update-lineups.yml†L1-L34】
 
 ## Voraussetzungen
 
