@@ -3,7 +3,7 @@ name: Update MVP top 3 dataset
 on:
   workflow_dispatch:
   schedule:
-    - cron: '15 5 * * *'
+    - cron: '15 2 * * *'
 
 permissions:
   contents: write  # notwendig, um direkt pushen zu dürfen
