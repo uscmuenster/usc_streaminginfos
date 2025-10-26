@@ -4256,9 +4256,10 @@ def build_html_report(
       color: inherit;
     }}
     .match-result {{
-      font-family: \"Fira Mono\", \"SFMono-Regular\", Menlo, Consolas, monospace;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.1rem);
       color: #0f766e;
+      font-weight: 600;
     }}
     .match-meta {{
       font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
