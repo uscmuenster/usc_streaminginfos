@@ -129,6 +129,14 @@ Weitere Optionen lassen sich über `PYTHONPATH=src python -m usc_kommentatoren -
 
 Alle Pfade lassen sich über die jeweiligen CLI-Argumente anpassen.
 
+## Troubleshooting & Tipps für die tägliche Nutzung
+
+* **Leere oder unvollständige Datenblöcke?** Starte das Skript mit `--recent-limit` beziehungsweise `--news-lookback`, um testweise mehr Partien oder einen längeren News-Zeitraum einzubeziehen. So lässt sich schnell prüfen, ob wirklich keine Inhalte vorhanden sind oder ob Filter greifen.
+* **Fehlerhafte CSV-Quellen?** Mit `--schedule-path` kannst du einen lokal geprüften Spielplan einlesen, bevor du den offiziellen VBL-Export wieder aktivierst. Gerade vor Saisonstart ändern sich URLs erfahrungsgemäß häufiger.
+* **Langsame Aktualisierungen?** Lösche bei Bedarf die Caches unter `data/` oder lege alternative Verzeichnisse via `--roster-dir`, `--photo-dir` und `--season-results` fest. Der Generator lädt fehlende Dateien automatisch nach, sobald der Cache leer ist.
+* **App-Ansicht testen:** Nutze `--skip-app-output`, wenn du dich auf die Desktop-Variante konzentrieren möchtest. Umgekehrt erzwingt eine Kombination aus `--app-output` und `--app-scale`, dass nur die mobile Fassung regeneriert wird.
+* **Log-Ausgaben beobachten:** Führe das Modul mit `PYTHONPATH=src python -m usc_kommentatoren` direkt im Terminal aus, um HTTP-Anfragen und Cache-Hinweise unmittelbar zu sehen. Kombiniert mit `--help` erkennst du außerdem schnell, welche Optionen für eine manuelle Fehleranalyse zur Verfügung stehen.
+
 ## Automatisierung mit GitHub Actions
 
 Der Workflow `.github/workflows/ci.yml` kann manuell gestartet werden (`workflow_dispatch`) und läuft zusätzlich jede Nacht um 03:00 Uhr deutscher Zeit (`cron: "0 1 * * *"` in UTC). Bei jedem Lauf werden die Abhängigkeiten installiert, der aktuelle CSV-Spielplan nach `data/schedule.csv` heruntergeladen, das Modul kompiliert und anschließend der HTML-Bericht erzeugt. Das Ergebnis wird als Artefakt `usc-report` bereitgestellt, in `docs/index.html` geschrieben, bei Änderungen automatisch in den `main`-Branch eingecheckt **und** direkt über GitHub Pages veröffentlicht.
