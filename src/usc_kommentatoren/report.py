@@ -3450,19 +3450,19 @@ def build_html_report(
             f"<figcaption>Teamfoto {escape(USC_CANONICAL_NAME)}</figcaption>"
             "</figure>\n"
         )
-    countdown_html = "\n".join(
+    countdown_summary_html = "\n".join(
         [
             (
-                "    <section class=\"countdown-banner\" data-countdown-banner "
+                "      <span class=\"countdown-banner\" data-countdown-banner "
                 f"data-kickoff=\"{escape(countdown_iso)}\" "
                 f"data-timezone=\"{escape(BERLIN_TIMEZONE_NAME)}\">"
             ),
-            "      <p class=\"countdown-heading\"></p>",
+            "        <span class=\"countdown-heading\"></span>",
             (
-                "      <p class=\"countdown-display\" data-countdown-display"
-                " aria-live=\"polite\">--:--:--</p>"
+                "        <span class=\"countdown-display\" data-countdown-display"
+                " aria-live=\"polite\">--:--:--</span>"
             ),
-            "    </section>",
+            "      </span>",
         ]
     )
 
@@ -3567,11 +3567,11 @@ def build_html_report(
             "id=\"broadcast-plan-heading\" role=\"heading\" "
             "aria-level=\"2\">Sendeablauf</span>"
         ),
+        *countdown_summary_html.splitlines(),
         "      <span class=\"broadcast-box__summary-indicator\" aria-hidden=\"true\"></span>",
         "    </summary>",
         "    <div class=\"broadcast-box__content\">",
     ]
-    broadcast_box_lines.extend(indent(countdown_html, "      ").splitlines())
     if broadcast_item_blocks:
         broadcast_box_lines.extend(
             [
