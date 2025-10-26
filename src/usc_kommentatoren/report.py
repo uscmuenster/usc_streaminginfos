@@ -3587,7 +3587,7 @@ def build_html_report(
         (
             "      <span class=\"broadcast-box__summary-title\" "
             "id=\"broadcast-plan-heading\" role=\"heading\" "
-            "aria-level=\"2\">Sendeablauf</span>"
+            "aria-level=\"2\">Sendeablauf vor Spielbeginn</span>"
         ),
         *countdown_summary_html.splitlines(),
         "      <span class=\"broadcast-box__summary-indicator\" aria-hidden=\"true\"></span>",
