@@ -653,8 +653,12 @@ def build_lineup_dataset(
     if not recent_rows:
         raise RuntimeError("Keine abgeschlossenen USC-Spiele gefunden.")
 
-    next_home = find_next_usc_home_match_row(schedule_rows)
-    opponent_name = next_home.away_team if next_home else ""
+    next_home_match = find_next_usc_home_match_row(schedule_rows)
+    if not next_home_match:
+        raise RuntimeError("Kein zukünftiges USC-Heimspiel gefunden.")
+
+    opponent_name = next_home_match.away_team
+
     opponent_rows = find_recent_matches_for_team(
         schedule_rows,
         opponent_name,
