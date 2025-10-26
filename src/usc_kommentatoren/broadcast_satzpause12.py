@@ -39,6 +39,11 @@ BROADCAST_PLAN: tuple[BroadcastPlanEntry, ...] = (
         duration=_parse_duration("00:00:45"),
         note="45 Sekunden Wiedereinstieg vor dem 2. Satz",
     ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("19:33:00"),
+        duration=_parse_duration("00:00:00"),
+        note="Satzbeginn 2. Satz",
+    ),
 )
 
 __all__ = [
