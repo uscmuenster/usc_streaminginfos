@@ -3741,6 +3741,14 @@ def build_html_report(
     ]
     stopwatch_box_html = "\n".join(stopwatch_box_lines)
 
+    hero_secondary_lines = [
+        "      <div class=\"hero-secondary\">",
+        indent(broadcast_box_html, "        ").rstrip(),
+        indent(stopwatch_box_html, "        ").rstrip(),
+        indent(set_break_12_box_html, "        ").rstrip(),
+        indent(set_break_23_box_html, "        ").rstrip(),
+        "      </div>",
+    ]
     hero_layout_lines = [
         "    <div class=\"hero-layout\">",
         "      <div class=\"hero-primary\">",
@@ -3749,10 +3757,7 @@ def build_html_report(
         f"          {meta_html}",
         "        </div>",
         "      </div>",
-        indent(broadcast_box_html, "      ").rstrip(),
-        indent(stopwatch_box_html, "      ").rstrip(),
-        indent(set_break_12_box_html, "      ").rstrip(),
-        indent(set_break_23_box_html, "      ").rstrip(),
+        *hero_secondary_lines,
         "    </div>",
     ]
     hero_layout_html = "\n".join(hero_layout_lines)
@@ -3888,6 +3893,10 @@ def build_html_report(
     .hero-primary {{
       display: grid;
       gap: clamp(0.8rem, 2.4vw, 1.3rem);
+    }}
+    .hero-secondary {{
+      display: grid;
+      gap: clamp(0.9rem, 2.6vw, 1.4rem);
     }}
     .broadcast-box {{
       border-radius: 1rem;
