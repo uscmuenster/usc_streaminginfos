@@ -3629,6 +3629,30 @@ def build_html_report(
     )
     broadcast_box_html = "\n".join(broadcast_box_lines)
 
+    stopwatch_box_lines = [
+        "<aside class=\"broadcast-box\" aria-labelledby=\"stopwatch-heading\">",
+        "  <details class=\"broadcast-box__details\" data-stopwatch>",
+        "    <summary class=\"broadcast-box__summary\">",
+        (
+            "      <span class=\"broadcast-box__summary-title\" "
+            "id=\"stopwatch-heading\" role=\"heading\" "
+            "aria-level=\"2\">Stoppuhr</span>"
+        ),
+        "      <span class=\"broadcast-box__summary-indicator\" aria-hidden=\"true\"></span>",
+        "    </summary>",
+        "    <div class=\"broadcast-box__content\">",
+        "      <div class=\"stopwatch-display\" data-stopwatch-display aria-live=\"polite\">00:00</div>",
+        "      <div class=\"stopwatch-controls\" role=\"group\" aria-label=\"Stoppuhr-Steuerung\">",
+        "        <button type=\"button\" class=\"stopwatch-button\" data-stopwatch-start>Start</button>",
+        "        <button type=\"button\" class=\"stopwatch-button\" data-stopwatch-stop>Stopp</button>",
+        "        <button type=\"button\" class=\"stopwatch-button\" data-stopwatch-reset>Zurücksetzen</button>",
+        "      </div>",
+        "    </div>",
+        "  </details>",
+        "</aside>",
+    ]
+    stopwatch_box_html = "\n".join(stopwatch_box_lines)
+
     hero_layout_lines = [
         "    <div class=\"hero-layout\">",
         "      <div class=\"hero-primary\">",
@@ -3638,6 +3662,7 @@ def build_html_report(
         "        </div>",
         "      </div>",
         indent(broadcast_box_html, "      ").rstrip(),
+        indent(stopwatch_box_html, "      ").rstrip(),
         "    </div>",
     ]
     hero_layout_html = "\n".join(hero_layout_lines)
@@ -3841,6 +3866,51 @@ def build_html_report(
     }}
     .broadcast-box h2 {{
       margin: 0;
+    }}
+    .stopwatch-display {{
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.75rem, 5vw, 2.2rem));
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      padding: clamp(0.35rem, 1vw, 0.6rem);
+      border-radius: 0.75rem;
+      background: rgba(15, 118, 110, 0.08);
+      border: 1px solid rgba(15, 118, 110, 0.15);
+    }}
+    .stopwatch--running .stopwatch-display {{
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.18), rgba(14, 165, 233, 0.2));
+      border-color: rgba(14, 165, 233, 0.4);
+      box-shadow: 0 18px 36px rgba(14, 165, 233, 0.22);
+    }}
+    .stopwatch-controls {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(0.4rem, 1.5vw, 0.75rem);
+      justify-content: center;
+    }}
+    .stopwatch-button {{
+      font: inherit;
+      font-weight: 600;
+      padding: clamp(0.35rem, 1vw, 0.55rem) clamp(0.75rem, 2.5vw, 1.6rem);
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      color: #ffffff;
+      background: linear-gradient(135deg, #0f766e, #0ea5e9);
+      box-shadow: 0 14px 30px rgba(14, 165, 233, 0.25);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    }}
+    .stopwatch-button:hover {{
+      filter: brightness(1.05);
+      box-shadow: 0 16px 34px rgba(14, 165, 233, 0.35);
+    }}
+    .stopwatch-button:active {{
+      transform: translateY(1px) scale(0.99);
+    }}
+    .stopwatch-button:focus-visible {{
+      outline: 3px solid rgba(14, 165, 233, 0.55);
+      outline-offset: 2px;
     }}
     .broadcast-table-wrapper {{
       border-radius: 0.85rem;
@@ -5217,6 +5287,94 @@ def build_html_report(
             timerId = window.setInterval(update, 1000);
           }}
         }}
+      }}
+
+      const stopwatch = document.querySelector('[data-stopwatch]');
+      if (stopwatch) {{
+        const display = stopwatch.querySelector('[data-stopwatch-display]');
+        const startButton = stopwatch.querySelector('[data-stopwatch-start]');
+        const stopButton = stopwatch.querySelector('[data-stopwatch-stop]');
+        const resetButton = stopwatch.querySelector('[data-stopwatch-reset]');
+
+        let startTimestamp = 0;
+        let accumulatedMs = 0;
+        let intervalId;
+
+        const formatTime = (totalMs) => {{
+          const totalSeconds = Math.floor(totalMs / 1000);
+          const minutes = Math.floor(totalSeconds / 60);
+          const seconds = totalSeconds % 60;
+          return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }};
+
+        const stopInterval = () => {{
+          if (typeof intervalId === 'number') {{
+            window.clearInterval(intervalId);
+          }}
+          intervalId = undefined;
+        }};
+
+        const render = () => {{
+          const runningMs = startTimestamp ? Date.now() - startTimestamp : 0;
+          const totalMs = accumulatedMs + Math.max(runningMs, 0);
+          if (display) {{
+            display.textContent = formatTime(totalMs);
+          }}
+        }};
+
+        const setRunning = (running) => {{
+          stopwatch.classList.toggle('stopwatch--running', running);
+        }};
+
+        const start = () => {{
+          if (startTimestamp) {{
+            return;
+          }}
+          startTimestamp = Date.now();
+          stopInterval();
+          intervalId = window.setInterval(render, 200);
+          setRunning(true);
+          render();
+        }};
+
+        const stop = () => {{
+          if (!startTimestamp) {{
+            return;
+          }}
+          accumulatedMs += Date.now() - startTimestamp;
+          startTimestamp = 0;
+          stopInterval();
+          setRunning(false);
+          render();
+        }};
+
+        const reset = () => {{
+          accumulatedMs = 0;
+          startTimestamp = 0;
+          stopInterval();
+          setRunning(false);
+          render();
+        }};
+
+        startButton?.addEventListener('click', start);
+        stopButton?.addEventListener('click', stop);
+        resetButton?.addEventListener('click', reset);
+
+        stopwatch.addEventListener('toggle', () => {{
+          if (!stopwatch.open) {{
+            stop();
+          }}
+        }});
+
+        document.addEventListener('visibilitychange', () => {{
+          if (document.visibilityState !== 'visible' && startTimestamp) {{
+            accumulatedMs += Date.now() - startTimestamp;
+            startTimestamp = Date.now();
+          }}
+          render();
+        }});
+
+        render();
       }}
 
     }})();
