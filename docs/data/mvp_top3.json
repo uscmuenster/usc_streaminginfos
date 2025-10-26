@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-10-25T05:31:28.380358+00:00",
+  "generated_at": "2025-10-26T03:17:27.237248+00:00",
   "usc_team": "USC Münster",
   "opponent_team": "ETV Hamburger Volksbank Volleys",
   "limit": 3,
@@ -9,7 +9,7 @@
       "label": "alle Spielelemente / Top-Scorer",
       "usc": [
         {
-          "Rang": "4.",
+          "Rang": "8.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "8",
@@ -25,7 +25,7 @@
           "ranking": "36"
         },
         {
-          "Rang": "10.",
+          "Rang": "14.",
           "column_1": "",
           "Name": "Spöler, Esther",
           "Sätze": "8",
@@ -41,7 +41,7 @@
           "ranking": "20"
         },
         {
-          "Rang": "13.",
+          "Rang": "17.",
           "column_1": "",
           "Name": "Waelkens, Anke",
           "Sätze": "7",
@@ -59,7 +59,7 @@
       ],
       "opponent": [
         {
-          "Rang": "16.",
+          "Rang": "20.",
           "column_1": "",
           "Name": "Hartig, Anna",
           "Sätze": "6",
@@ -75,7 +75,7 @@
           "ranking": "13"
         },
         {
-          "Rang": "36.",
+          "Rang": "41.",
           "column_1": "",
           "Name": "Körtzinger, Leonie",
           "Sätze": "6",
@@ -91,7 +91,7 @@
           "ranking": "12"
         },
         {
-          "Rang": "44.",
+          "Rang": "49.",
           "column_1": "",
           "Name": "Klein, Luise",
           "Sätze": "4",
@@ -113,7 +113,7 @@
       "label": "Aufschlag / Quote Aufschläge mit Wirkung",
       "usc": [
         {
-          "Rang": "11.",
+          "Rang": "9.",
           "column_1": "",
           "Name": "Waelkens, Anke",
           "Sätze": "7",
@@ -129,7 +129,7 @@
           "ranking": "18"
         },
         {
-          "Rang": "14.",
+          "Rang": "12.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "8",
@@ -145,7 +145,7 @@
           "ranking": "30"
         },
         {
-          "Rang": "28.",
+          "Rang": "32.",
           "column_1": "",
           "Name": "Malm, Cecilia",
           "Sätze": "7",
@@ -179,7 +179,7 @@
           "ranking": "10"
         },
         {
-          "Rang": "47.",
+          "Rang": "48.",
           "column_1": "",
           "Name": "Körtzinger, Leonie",
           "Sätze": "6",
@@ -195,7 +195,7 @@
           "ranking": "21"
         },
         {
-          "Rang": "56.",
+          "Rang": "59.",
           "column_1": "",
           "Name": "Frobel, Svea",
           "Sätze": "6",
@@ -217,7 +217,7 @@
       "label": "Annahme / Quote perfekte oder gute Annahme",
       "usc": [
         {
-          "Rang": "12.",
+          "Rang": "13.",
           "column_1": "",
           "Name": "Martin, Isabel Rebecca",
           "Sätze": "8",
@@ -233,7 +233,7 @@
           "ranking": "27 | 40,7%"
         },
         {
-          "Rang": "23.",
+          "Rang": "25.",
           "column_1": "",
           "Name": "Molenaar, Pippa",
           "Sätze": "8",
@@ -249,7 +249,7 @@
           "ranking": "33 | 30,3%"
         },
         {
-          "Rang": "29.",
+          "Rang": "32.",
           "column_1": "",
           "Name": "Malm, Cecilia",
           "Sätze": "7",
@@ -267,7 +267,7 @@
       ],
       "opponent": [
         {
-          "Rang": "17.",
+          "Rang": "18.",
           "column_1": "",
           "Name": "Meiser, Jana-Marie",
           "Sätze": "6",
@@ -283,7 +283,7 @@
           "ranking": "40 | 35,0%"
         },
         {
-          "Rang": "22.",
+          "Rang": "24.",
           "column_1": "",
           "Name": "Ammerman, Hannah",
           "Sätze": "5",
@@ -299,7 +299,7 @@
           "ranking": "23 | 30,4%"
         },
         {
-          "Rang": "27.",
+          "Rang": "29.",
           "column_1": "",
           "Name": "Frobel, Svea",
           "Sätze": "6",
@@ -321,7 +321,7 @@
       "label": "Aufschlag / Quote Aufschlagpunkte",
       "usc": [
         {
-          "Rang": "3.",
+          "Rang": "2.",
           "column_1": "",
           "Name": "Waelkens, Anke",
           "Sätze": "2",
@@ -403,7 +403,7 @@
           "ranking": "21"
         },
         {
-          "Rang": "50.",
+          "Rang": "57.",
           "column_1": "",
           "Name": "Frobel, Svea",
           "Sätze": "2",
@@ -441,7 +441,7 @@
           "ranking": "33 | 24,2%"
         },
         {
-          "Rang": "16.",
+          "Rang": "17.",
           "column_1": "",
           "Name": "Martin, Isabel Rebecca",
           "Sätze": "8",
@@ -457,7 +457,7 @@
           "ranking": "27 | 22,2%"
         },
         {
-          "Rang": "34.",
+          "Rang": "36.",
           "column_1": "",
           "Name": "Malm, Cecilia",
           "Sätze": "7",
@@ -491,7 +491,7 @@
           "ranking": "40 | 15,0%"
         },
         {
-          "Rang": "28.",
+          "Rang": "31.",
           "column_1": "",
           "Name": "Ammerman, Hannah",
           "Sätze": "5",
@@ -507,7 +507,7 @@
           "ranking": "23 | 4,3%"
         },
         {
-          "Rang": "28.",
+          "Rang": "31.",
           "column_1": "",
           "Name": "Frobel, Svea",
           "Sätze": "6",
@@ -529,7 +529,7 @@
       "label": "Angriff / Angriffseffizienz",
       "usc": [
         {
-          "Rang": "7.",
+          "Rang": "12.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "8",
@@ -545,7 +545,7 @@
           "ranking": "72"
         },
         {
-          "Rang": "8.",
+          "Rang": "13.",
           "column_1": "",
           "Name": "Martin, Isabel Rebecca",
           "Sätze": "8",
@@ -579,7 +579,7 @@
       ],
       "opponent": [
         {
-          "Rang": "10.",
+          "Rang": "15.",
           "column_1": "",
           "Name": "Frobel, Svea",
           "Sätze": "6",
@@ -633,7 +633,7 @@
       "label": "Block / Blockpunkte",
       "usc": [
         {
-          "Rang": "10.",
+          "Rang": "11.",
           "column_1": "",
           "Name": "Spöler, Esther",
           "Sätze": "8",
@@ -649,7 +649,7 @@
           "ranking": "0,5"
         },
         {
-          "Rang": "10.",
+          "Rang": "11.",
           "column_1": "",
           "Name": "Waelkens, Anke",
           "Sätze": "7",
@@ -665,7 +665,7 @@
           "ranking": "0,6"
         },
         {
-          "Rang": "18.",
+          "Rang": "20.",
           "column_1": "",
           "Name": "Malm, Cecilia",
           "Sätze": "7",
@@ -683,7 +683,7 @@
       ],
       "opponent": [
         {
-          "Rang": "7.",
+          "Rang": "8.",
           "column_1": "",
           "Name": "Hartig, Anna",
           "Sätze": "6",
@@ -699,7 +699,7 @@
           "ranking": "0,8"
         },
         {
-          "Rang": "21.",
+          "Rang": "26.",
           "column_1": "",
           "Name": "Ammerman, Hannah",
           "Sätze": "5",
@@ -715,7 +715,7 @@
           "ranking": "0,4"
         },
         {
-          "Rang": "37.",
+          "Rang": "44.",
           "column_1": "",
           "Name": "Krams, Louisa",
           "Sätze": "3",
@@ -753,7 +753,7 @@
           "ranking": "30 | 6"
         },
         {
-          "Rang": "6.",
+          "Rang": "8.",
           "column_1": "",
           "Name": "Waelkens, Anke",
           "Sätze": "2",
@@ -769,7 +769,7 @@
           "ranking": "18 | 4"
         },
         {
-          "Rang": "10.",
+          "Rang": "13.",
           "column_1": "",
           "Name": "Malm, Cecilia",
           "Sätze": "2",
@@ -787,7 +787,7 @@
       ],
       "opponent": [
         {
-          "Rang": "6.",
+          "Rang": "8.",
           "column_1": "",
           "Name": "Körtzinger, Leonie",
           "Sätze": "2",
@@ -803,7 +803,7 @@
           "ranking": "21 | 4"
         },
         {
-          "Rang": "17.",
+          "Rang": "18.",
           "column_1": "",
           "Name": "Thaden, Alexa Sophie",
           "Sätze": "2",
@@ -819,7 +819,7 @@
           "ranking": "10 | 2"
         },
         {
-          "Rang": "34.",
+          "Rang": "39.",
           "column_1": "",
           "Name": "Konjer, Zoe",
           "Sätze": "2",
@@ -841,7 +841,7 @@
       "label": "Angriff / Quote Angriffspunkte",
       "usc": [
         {
-          "Rang": "6.",
+          "Rang": "10.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "2",
@@ -857,7 +857,7 @@
           "ranking": "72"
         },
         {
-          "Rang": "7.",
+          "Rang": "11.",
           "column_1": "",
           "Name": "Martin, Isabel Rebecca",
           "Sätze": "2",
@@ -891,7 +891,7 @@
       ],
       "opponent": [
         {
-          "Rang": "11.",
+          "Rang": "16.",
           "column_1": "",
           "Name": "Frobel, Svea",
           "Sätze": "2",
@@ -961,7 +961,7 @@
           "ranking": "72"
         },
         {
-          "Rang": "11.",
+          "Rang": "14.",
           "column_1": "",
           "Name": "Martin, Isabel Rebecca",
           "Sätze": "8",
@@ -977,7 +977,7 @@
           "ranking": "47"
         },
         {
-          "Rang": "15.",
+          "Rang": "19.",
           "column_1": "",
           "Name": "Spöler, Esther",
           "Sätze": "8",
@@ -995,7 +995,7 @@
       ],
       "opponent": [
         {
-          "Rang": "10.",
+          "Rang": "13.",
           "column_1": "",
           "Name": "Frobel, Svea",
           "Sätze": "6",
@@ -1011,7 +1011,7 @@
           "ranking": "61"
         },
         {
-          "Rang": "31.",
+          "Rang": "37.",
           "column_1": "",
           "Name": "Hartig, Anna",
           "Sätze": "6",
@@ -1027,7 +1027,7 @@
           "ranking": "18"
         },
         {
-          "Rang": "39.",
+          "Rang": "45.",
           "column_1": "",
           "Name": "Körtzinger, Leonie",
           "Sätze": "6",
@@ -1049,7 +1049,7 @@
       "label": "Aufschlag / Aufschlageffizienz",
       "usc": [
         {
-          "Rang": "8.",
+          "Rang": "7.",
           "column_1": "",
           "Name": "Malm, Cecilia",
           "Sätze": "7",
@@ -1065,7 +1065,7 @@
           "ranking": "28 | 21,4%"
         },
         {
-          "Rang": "11.",
+          "Rang": "13.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "8",
@@ -1081,7 +1081,7 @@
           "ranking": "30 | 13,3%"
         },
         {
-          "Rang": "12.",
+          "Rang": "14.",
           "column_1": "",
           "Name": "Waelkens, Anke",
           "Sätze": "7",
@@ -1099,7 +1099,7 @@
       ],
       "opponent": [
         {
-          "Rang": "21.",
+          "Rang": "22.",
           "column_1": "",
           "Name": "Thaden, Alexa Sophie",
           "Sätze": "4",
@@ -1115,7 +1115,7 @@
           "ranking": "10 | 0,0%"
         },
         {
-          "Rang": "60.",
+          "Rang": "63.",
           "column_1": "",
           "Name": "Körtzinger, Leonie",
           "Sätze": "6",
@@ -1131,7 +1131,7 @@
           "ranking": "21 | -42,9%"
         },
         {
-          "Rang": "62.",
+          "Rang": "65.",
           "column_1": "",
           "Name": "Frobel, Svea",
           "Sätze": "6",
