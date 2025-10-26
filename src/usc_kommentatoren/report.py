@@ -3709,7 +3709,7 @@ def build_html_report(
     set_break_12_box_html = _render_set_break_box(
         FIRST_SET_BREAK_PLAN,
         "set-break-1-2-heading",
-        "Satzpause 1 → 2",
+        "Satzpause 1 → 2 | 3 → 4 | 4 → 5",
     )
     set_break_23_box_html = _render_set_break_box(
         SECOND_SET_BREAK_PLAN,
