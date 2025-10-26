@@ -27,7 +27,8 @@ from .broadcast_plan import (
     BROADCAST_PLAN,
     REFERENCE_KICKOFF_TIME,
 )
-from .broadcast_satzpause12 import BROADCAST_PLAN as SET_BREAK_PLAN
+from .broadcast_satzpause12 import BROADCAST_PLAN as FIRST_SET_BREAK_PLAN
+from .broadcast_satzpause23 import BROADCAST_PLAN as SECOND_SET_BREAK_PLAN
 
 DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
 SCHEDULE_PAGE_URL = (
@@ -3630,72 +3631,91 @@ def build_html_report(
     )
     broadcast_box_html = "\n".join(broadcast_box_lines)
 
-    set_break_rows: List[str] = []
-    cumulative_duration = timedelta()
-    for entry in SET_BREAK_PLAN:
-        start_label = _format_minutes_seconds(cumulative_duration)
-        duration_label = _format_minutes_seconds(entry.duration)
-        set_break_rows.append(
-            "\n".join(
+    def _render_set_break_box(
+        plan: Iterable[Any],
+        heading_id: str,
+        heading_label: str,
+    ) -> str:
+        rows: List[str] = []
+        cumulative_duration = timedelta()
+        for entry in plan:
+            start_label = _format_minutes_seconds(cumulative_duration)
+            duration_label = _format_minutes_seconds(entry.duration)
+            rows.append(
+                "\n".join(
+                    [
+                        "<tr class=\"broadcast-row\">",
+                        f"  <td class=\"broadcast-cell broadcast-cell--start\">{escape(start_label)}</td>",
+                        f"  <td class=\"broadcast-cell broadcast-cell--note\">{escape(entry.note)}</td>",
+                        f"  <td class=\"broadcast-cell broadcast-cell--duration\">{escape(duration_label)}</td>",
+                        "</tr>",
+                    ]
+                )
+            )
+            cumulative_duration += entry.duration
+
+        heading_id_attr = escape(heading_id, quote=True)
+        heading_label_html = escape(heading_label)
+
+        box_lines = [
+            f"<aside class=\"broadcast-box\" aria-labelledby=\"{heading_id_attr}\">",
+            "  <details class=\"broadcast-box__details\">",
+            "    <summary class=\"broadcast-box__summary\">",
+            (
+                "      <span class=\"broadcast-box__summary-title\" "
+                f"id=\"{heading_id_attr}\" role=\"heading\" "
+                f"aria-level=\"2\">{heading_label_html}</span>"
+            ),
+            "      <span class=\"broadcast-box__summary-indicator\" aria-hidden=\"true\"></span>",
+            "    </summary>",
+            "    <div class=\"broadcast-box__content\">",
+        ]
+        if rows:
+            box_lines.extend(
                 [
-                    "<tr class=\"broadcast-row\">",
-                    f"  <td class=\"broadcast-cell broadcast-cell--start\">{escape(start_label)}</td>",
-                    f"  <td class=\"broadcast-cell broadcast-cell--note\">{escape(entry.note)}</td>",
-                    f"  <td class=\"broadcast-cell broadcast-cell--duration\">{escape(duration_label)}</td>",
-                    "</tr>",
+                    "      <div class=\"broadcast-table-wrapper\">",
+                    "        <table class=\"broadcast-table\">",
+                    "          <thead>",
+                    "            <tr>",
+                    "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--start\">Start</th>",
+                    "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--note\">Programmpunkt</th>",
+                    "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--duration\">Dauer</th>",
+                    "            </tr>",
+                    "          </thead>",
+                    "          <tbody>",
                 ]
             )
+            box_lines.extend(indent(row, "            ") for row in rows)
+            box_lines.extend(
+                [
+                    "          </tbody>",
+                    "        </table>",
+                    "      </div>",
+                ]
+            )
+        else:
+            box_lines.append(
+                "      <p class=\"broadcast-empty\">Keine Informationen zur Satzpause hinterlegt.</p>"
+            )
+        box_lines.extend(
+            [
+                "    </div>",
+                "  </details>",
+                "</aside>",
+            ]
         )
-        cumulative_duration += entry.duration
+        return "\n".join(box_lines)
 
-    set_break_box_lines = [
-        "<aside class=\"broadcast-box\" aria-labelledby=\"set-break-heading\">",
-        "  <details class=\"broadcast-box__details\">",
-        "    <summary class=\"broadcast-box__summary\">",
-        (
-            "      <span class=\"broadcast-box__summary-title\" "
-            "id=\"set-break-heading\" role=\"heading\" "
-            "aria-level=\"2\">Satzpause 1 → 2</span>"
-        ),
-        "      <span class=\"broadcast-box__summary-indicator\" aria-hidden=\"true\"></span>",
-        "    </summary>",
-        "    <div class=\"broadcast-box__content\">",
-    ]
-    if set_break_rows:
-        set_break_box_lines.extend(
-            [
-                "      <div class=\"broadcast-table-wrapper\">",
-                "        <table class=\"broadcast-table\">",
-                "          <thead>",
-                "            <tr>",
-                "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--start\">Start</th>",
-                "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--note\">Programmpunkt</th>",
-                "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--duration\">Dauer</th>",
-                "            </tr>",
-                "          </thead>",
-                "          <tbody>",
-            ]
-        )
-        set_break_box_lines.extend(indent(row, "            ") for row in set_break_rows)
-        set_break_box_lines.extend(
-            [
-                "          </tbody>",
-                "        </table>",
-                "      </div>",
-            ]
-        )
-    else:
-        set_break_box_lines.append(
-            "      <p class=\"broadcast-empty\">Keine Informationen zur Satzpause hinterlegt.</p>"
-        )
-    set_break_box_lines.extend(
-        [
-            "    </div>",
-            "  </details>",
-            "</aside>",
-        ]
+    set_break_12_box_html = _render_set_break_box(
+        FIRST_SET_BREAK_PLAN,
+        "set-break-1-2-heading",
+        "Satzpause 1 → 2",
     )
-    set_break_box_html = "\n".join(set_break_box_lines)
+    set_break_23_box_html = _render_set_break_box(
+        SECOND_SET_BREAK_PLAN,
+        "set-break-2-3-heading",
+        "Satzpause 2 → 3",
+    )
 
     stopwatch_box_lines = [
         "<aside class=\"broadcast-box\" aria-labelledby=\"stopwatch-heading\">",
@@ -3721,6 +3741,14 @@ def build_html_report(
     ]
     stopwatch_box_html = "\n".join(stopwatch_box_lines)
 
+    hero_secondary_lines = [
+        "      <div class=\"hero-secondary\">",
+        indent(broadcast_box_html, "        ").rstrip(),
+        indent(stopwatch_box_html, "        ").rstrip(),
+        indent(set_break_12_box_html, "        ").rstrip(),
+        indent(set_break_23_box_html, "        ").rstrip(),
+        "      </div>",
+    ]
     hero_layout_lines = [
         "    <div class=\"hero-layout\">",
         "      <div class=\"hero-primary\">",
@@ -3729,9 +3757,7 @@ def build_html_report(
         f"          {meta_html}",
         "        </div>",
         "      </div>",
-        indent(broadcast_box_html, "      ").rstrip(),
-        indent(stopwatch_box_html, "      ").rstrip(),
-        indent(set_break_box_html, "      ").rstrip(),
+        *hero_secondary_lines,
         "    </div>",
     ]
     hero_layout_html = "\n".join(hero_layout_lines)
@@ -3867,6 +3893,10 @@ def build_html_report(
     .hero-primary {{
       display: grid;
       gap: clamp(0.8rem, 2.4vw, 1.3rem);
+    }}
+    .hero-secondary {{
+      display: grid;
+      gap: clamp(0.9rem, 2.6vw, 1.4rem);
     }}
     .broadcast-box {{
       border-radius: 1rem;
