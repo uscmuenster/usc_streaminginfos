@@ -3477,7 +3477,7 @@ def build_html_report(
                 f"data-kickoff=\"{escape(countdown_iso)}\" "
                 f"data-timezone=\"{escape(BERLIN_TIMEZONE_NAME)}\">"
             ),
-            "        <span class=\"countdown-heading\"></span>",
+            "        <span class=\"countdown-heading\" data-countdown-heading></span>",
             (
                 "        <span class=\"countdown-display\" data-countdown-display"
                 " aria-live=\"polite\">--:--:--</span>"
@@ -5238,11 +5238,11 @@ def build_html_report(
             const getOffset = createTimeZoneOffsetGetter(timeZone);
             const targetDate = new Date(targetMs);
             const targetOffset = getOffset ? getOffset(targetDate) : Number.NaN;
+            const heading = banner.querySelector('[data-countdown-heading]');
             const display = banner.querySelector('[data-countdown-display]');
             const pad = (value) => String(value).padStart(2, '0');
             const plural = (value, singular, pluralForm) =>
               value + ' ' + (value === 1 ? singular : pluralForm);
-            let timerId;
             const update = () => {{
               const now = new Date();
               let diff = targetMs - now.getTime();
@@ -5257,18 +5257,8 @@ def build_html_report(
                 }}
               }}
 
-              if (diff <= 0) {{
-                if (display) {{
-                  display.textContent = 'Anpfiff!';
-                }}
-                banner.classList.add('countdown-banner--live');
-                if (typeof timerId === 'number') {{
-                  window.clearInterval(timerId);
-                }}
-                return;
-              }}
-
-              const totalSeconds = Math.floor(diff / 1000);
+              const isLive = diff <= 0;
+              const totalSeconds = Math.floor(Math.abs(diff) / 1000);
               const days = Math.floor(totalSeconds / 86400);
               const hours = Math.floor((totalSeconds % 86400) / 3600);
               const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -5277,14 +5267,27 @@ def build_html_report(
               if (days > 0) {{
                 parts.push(plural(days, 'Tag', 'Tage'));
               }}
-              parts.push(pad(hours) + ':' + pad(minutes) + ':' + pad(seconds));
+              let timeLabel = pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+              if (isLive) {{
+                timeLabel = '+' + timeLabel;
+                banner.classList.add('countdown-banner--live');
+                if (heading) {{
+                  heading.textContent = 'Live';
+                }}
+              }} else {{
+                banner.classList.remove('countdown-banner--live');
+                if (heading) {{
+                  heading.textContent = 'Countdown';
+                }}
+              }}
+              parts.push(timeLabel);
               if (display) {{
                 display.textContent = parts.join(' · ');
               }}
             }};
 
             update();
-            timerId = window.setInterval(update, 1000);
+            window.setInterval(update, 1000);
           }}
         }}
       }}
