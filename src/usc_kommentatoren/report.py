@@ -3921,7 +3921,7 @@ def build_html_report(
     .broadcast-table {{
       width: 100%;
       border-collapse: collapse;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
     }}
     .broadcast-table thead th {{
       text-align: left;
@@ -3949,7 +3949,7 @@ def build_html_report(
     }}
     .broadcast-table tbody th,
     .broadcast-table tbody td {{
-      padding: 0.15rem 0.65rem;
+      padding: 0.3rem 0.65rem;
       vertical-align: top;
       border-top: 1px solid rgba(148, 163, 184, 0.35);
       line-height: 1.3;
