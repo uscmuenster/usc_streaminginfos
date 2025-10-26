@@ -29,6 +29,7 @@ from .broadcast_plan import (
 )
 from .broadcast_satzpause12 import BROADCAST_PLAN as FIRST_SET_BREAK_PLAN
 from .broadcast_satzpause23 import BROADCAST_PLAN as SECOND_SET_BREAK_PLAN
+from .broadcast_spielende import BROADCAST_PLAN as POST_MATCH_PLAN
 
 DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
 SCHEDULE_PAGE_URL = (
@@ -3717,6 +3718,11 @@ def build_html_report(
         "set-break-2-3-heading",
         "Satzpause 2 → 3",
     )
+    post_match_box_html = _render_set_break_box(
+        POST_MATCH_PLAN,
+        "post-match-heading",
+        "Spielende",
+    )
 
     stopwatch_box_lines = [
         "<aside class=\"broadcast-box\" aria-labelledby=\"stopwatch-heading\">",
@@ -3744,10 +3750,15 @@ def build_html_report(
 
     hero_secondary_lines = [
         "      <div class=\"hero-secondary\">",
-        indent(broadcast_box_html, "        ").rstrip(),
-        indent(stopwatch_box_html, "        ").rstrip(),
-        indent(set_break_12_box_html, "        ").rstrip(),
-        indent(set_break_23_box_html, "        ").rstrip(),
+        "        <div class=\"hero-secondary__column hero-secondary__column--left\">",
+        indent(stopwatch_box_html, "          ").rstrip(),
+        "        </div>",
+        "        <div class=\"hero-secondary__column hero-secondary__column--right\">",
+        indent(broadcast_box_html, "          ").rstrip(),
+        indent(set_break_12_box_html, "          ").rstrip(),
+        indent(set_break_23_box_html, "          ").rstrip(),
+        indent(post_match_box_html, "          ").rstrip(),
+        "        </div>",
         "      </div>",
     ]
     hero_layout_lines = [
@@ -3901,6 +3912,27 @@ def build_html_report(
     .hero-secondary {{
       display: grid;
       gap: clamp(0.9rem, 2.6vw, 1.4rem);
+      grid-template-columns: minmax(0, clamp(16rem, 28vw, 20rem)) minmax(0, 1fr);
+      align-items: start;
+    }}
+    .hero-secondary__column {{
+      display: grid;
+      gap: clamp(0.9rem, 2.6vw, 1.4rem);
+    }}
+    .hero-secondary__column--left {{
+      order: 1;
+    }}
+    .hero-secondary__column--right {{
+      order: 2;
+    }}
+    @media (max-width: 70rem) {{
+      .hero-secondary {{
+        grid-template-columns: 1fr;
+      }}
+      .hero-secondary__column--left,
+      .hero-secondary__column--right {{
+        order: initial;
+      }}
     }}
     .broadcast-box {{
       border-radius: 1rem;
