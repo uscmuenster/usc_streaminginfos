@@ -3655,7 +3655,7 @@ def build_html_report(
         (
             "      <span class=\"broadcast-box__summary-title\" "
             "id=\"set-break-heading\" role=\"heading\" "
-            "aria-level=\"2\">Satzpause 1 → 2</span>"
+            "aria-level=\"2\">Satzpause 1 → 2 und 3 → 4 und 4 → 5</span>"
         ),
         "      <span class=\"broadcast-box__summary-indicator\" aria-hidden=\"true\"></span>",
         "    </summary>",
