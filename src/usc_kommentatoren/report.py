@@ -3750,15 +3750,10 @@ def build_html_report(
 
     hero_secondary_lines = [
         "      <div class=\"hero-secondary\">",
-        "        <div class=\"hero-secondary__column hero-secondary__column--left\">",
-        indent(stopwatch_box_html, "          ").rstrip(),
-        "        </div>",
-        "        <div class=\"hero-secondary__column hero-secondary__column--right\">",
-        indent(broadcast_box_html, "          ").rstrip(),
-        indent(set_break_12_box_html, "          ").rstrip(),
-        indent(set_break_23_box_html, "          ").rstrip(),
-        indent(post_match_box_html, "          ").rstrip(),
-        "        </div>",
+        indent(broadcast_box_html, "        ").rstrip(),
+        indent(set_break_12_box_html, "        ").rstrip(),
+        indent(set_break_23_box_html, "        ").rstrip(),
+        indent(post_match_box_html, "        ").rstrip(),
         "      </div>",
     ]
     hero_layout_lines = [
@@ -3767,6 +3762,9 @@ def build_html_report(
         indent(countdown_meta_html, "        ").rstrip(),
         "        <div class=\"meta\">",
         f"          {meta_html}",
+        "        </div>",
+        "        <div class=\"hero-stopwatch\">",
+        indent(stopwatch_box_html, "          ").rstrip(),
         "        </div>",
         "      </div>",
         *hero_secondary_lines,
@@ -3904,34 +3902,23 @@ def build_html_report(
       gap: clamp(1rem, 3vw, 1.8rem);
       align-items: start;
       margin-bottom: clamp(1.1rem, 3vw, 1.6rem);
+      grid-template-columns: minmax(0, clamp(20rem, 34vw, 28rem)) minmax(0, 1fr);
     }}
     .hero-primary {{
       display: grid;
       gap: clamp(0.8rem, 2.4vw, 1.3rem);
     }}
+    .hero-stopwatch {{
+      display: grid;
+    }}
     .hero-secondary {{
       display: grid;
       gap: clamp(0.9rem, 2.6vw, 1.4rem);
-      grid-template-columns: minmax(0, clamp(16rem, 28vw, 20rem)) minmax(0, 1fr);
-      align-items: start;
-    }}
-    .hero-secondary__column {{
-      display: grid;
-      gap: clamp(0.9rem, 2.6vw, 1.4rem);
-    }}
-    .hero-secondary__column--left {{
-      order: 1;
-    }}
-    .hero-secondary__column--right {{
-      order: 2;
+      align-content: start;
     }}
     @media (max-width: 70rem) {{
-      .hero-secondary {{
+      .hero-layout {{
         grid-template-columns: 1fr;
-      }}
-      .hero-secondary__column--left,
-      .hero-secondary__column--right {{
-        order: initial;
       }}
     }}
     .broadcast-box {{
