@@ -3906,7 +3906,7 @@ def build_html_report(
     .broadcast-box__summary {{
       display: flex;
       align-items: center;
-      gap: clamp(0.75rem, 2vw, 1.2rem);
+      gap: clamp(0.45rem, 2vw, 1.2rem);
       margin: 0;
       padding: 0;
       cursor: pointer;
@@ -3976,13 +3976,13 @@ def build_html_report(
     .stopwatch-controls {{
       display: flex;
       flex-wrap: wrap;
-      gap: clamp(0.4rem, 1.5vw, 0.75rem);
+      gap: clamp(0.3rem, 1.5vw, 0.55rem);
       justify-content: center;
     }}
     .stopwatch-button {{
       font: inherit;
       font-weight: 600;
-      padding: clamp(0.35rem, 1vw, 0.55rem) clamp(0.75rem, 2.5vw, 1.6rem);
+      padding: clamp(0.35rem, 1vw, 0.55rem) clamp(0.75rem, 2.5vw, 1.1rem);
       border-radius: 999px;
       border: none;
       cursor: pointer;
