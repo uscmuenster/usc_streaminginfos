@@ -8,7 +8,7 @@ import re
 from datetime import date, datetime, timedelta
 from pathlib import Path
 import mimetypes
-from html import escape
+from html import escape, unescape
 from io import BytesIO, StringIO
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 from zoneinfo import ZoneInfo
@@ -1035,8 +1035,28 @@ def _parse_referee_field(raw: Optional[str]) -> Tuple[str, ...]:
     value = _normalize_schedule_field(raw)
     if not value:
         return ()
-    parts = [segment.strip() for segment in re.split(r"[;,/]", value) if segment.strip()]
-    return tuple(parts)
+
+    # Normalize HTML artefacts and unify separators that might appear in the
+    # exported CSV. The VBL recently switched to including HTML line breaks and
+    # HTML entities (e.g. ``&nbsp;``) in the referee column.  We also accept
+    # common alternative separators such as ``|`` or newlines.
+    normalized = unescape(value).replace("\xa0", " ")
+    normalized = re.sub(r"<br\s*/?>", "\n", normalized, flags=re.IGNORECASE)
+
+    parts = re.split(r"[\n;,/|]", normalized)
+    referees: List[str] = []
+    for part in parts:
+        cleaned = part.strip(" \t-–·")
+        cleaned = re.sub(
+            r"^(?:\d+\.\s*)?(?:schiedsrichter(?:\*?in)?|sr)\s*:?\s*",
+            "",
+            cleaned,
+            flags=re.IGNORECASE,
+        )
+        if cleaned:
+            referees.append(cleaned)
+
+    return tuple(referees)
 
 
 def parse_kickoff(date_str: str, time_str: str) -> datetime:
