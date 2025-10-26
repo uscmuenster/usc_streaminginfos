@@ -3631,18 +3631,22 @@ def build_html_report(
     broadcast_box_html = "\n".join(broadcast_box_lines)
 
     set_break_rows: List[str] = []
+    cumulative_duration = timedelta()
     for entry in SET_BREAK_PLAN:
+        start_label = _format_minutes_seconds(cumulative_duration)
         duration_label = _format_minutes_seconds(entry.duration)
         set_break_rows.append(
             "\n".join(
                 [
                     "<tr class=\"broadcast-row\">",
+                    f"  <td class=\"broadcast-cell broadcast-cell--start\">{escape(start_label)}</td>",
                     f"  <td class=\"broadcast-cell broadcast-cell--note\">{escape(entry.note)}</td>",
                     f"  <td class=\"broadcast-cell broadcast-cell--duration\">{escape(duration_label)}</td>",
                     "</tr>",
                 ]
             )
         )
+        cumulative_duration += entry.duration
 
     set_break_box_lines = [
         "<aside class=\"broadcast-box\" aria-labelledby=\"set-break-heading\">",
@@ -3664,6 +3668,7 @@ def build_html_report(
                 "        <table class=\"broadcast-table\">",
                 "          <thead>",
                 "            <tr>",
+                "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--start\">Start</th>",
                 "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--note\">Programmpunkt</th>",
                 "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--duration\">Dauer</th>",
                 "            </tr>",
@@ -3999,7 +4004,8 @@ def build_html_report(
       border-bottom: 1px solid rgba(148, 163, 184, 0.35);
     }}
     .broadcast-heading--countdown,
-    .broadcast-heading--duration {{
+    .broadcast-heading--duration,
+    .broadcast-heading--start {{
       text-align: left;
     }}
     .broadcast-heading--note {{
@@ -4042,6 +4048,10 @@ def build_html_report(
       text-align: left;
       white-space: nowrap;
       font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+    }}
+    .broadcast-cell--start {{
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      white-space: nowrap;
     }}
     .broadcast-empty {{
       margin: 0;
