@@ -92,6 +92,21 @@ BROADCAST_PLAN: tuple[BroadcastPlanEntry, ...] = (
         duration=_parse_duration("00:26:52"),
         note="Beginn 3. Satz",
     ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("20:30:00"),
+        duration=_parse_duration("00:30:00"),
+        note="Satzpause 3/4 und 4/5 genauso wie 1/2, also 1:30 Minuten ohne Kommentar",
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("21:00:00"),
+        duration=_parse_duration("00:03:30"),
+        note="Spielende. 3:30 Minuten MVP Ehrung",
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("21:03:30"),
+        duration=_parse_duration("00:02:00"),
+        note="Ausblick mit den nächsten Spielen, Tabelle, Verabschiedung",
+    ),
 )
 
 __all__ = [
