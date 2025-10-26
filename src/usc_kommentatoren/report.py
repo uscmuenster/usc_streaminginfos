@@ -3521,6 +3521,7 @@ def build_html_report(
             f"<p><strong>{idx}. Schiedsrichter*in:</strong> {escape(referee_name)}</p>"
         )
 
+    meta_lines.append("<p class=\"meta-spacer\" aria-hidden=\"true\"></p>")
     meta_lines.append(
         f"<p><a class=\"meta-link\" href=\"{escape(TABLE_URL)}\">Tabelle der Volleyball Bundesliga</a></p>"
     )
@@ -3883,6 +3884,9 @@ def build_html_report(
     }}
     .meta p {{
       margin: 0;
+    }}
+    .meta-spacer {{
+      height: clamp(0.6rem, 2.2vw, 1.2rem);
     }}
     .hero-layout {{
       display: grid;
