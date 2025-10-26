@@ -104,6 +104,11 @@ BROADCAST_PLAN: tuple[BroadcastPlanEntry, ...] = (
     ),
     BroadcastPlanEntry(
         planned_time=_parse_time("21:03:30"),
+        duration=_parse_duration("00:03:08"),
+        note="Werbung 3 (Regie: saubere K1, Kommentatoren: still)",
+    ),
+    BroadcastPlanEntry(
+        planned_time=_parse_time("21:06:38"),
         duration=_parse_duration("00:02:00"),
         note="Ausblick mit den nächsten Spielen, Tabelle, Verabschiedung",
     ),
