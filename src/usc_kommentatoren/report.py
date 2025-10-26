@@ -27,6 +27,7 @@ from .broadcast_plan import (
     BROADCAST_PLAN,
     REFERENCE_KICKOFF_TIME,
 )
+from .broadcast_satzpause12 import BROADCAST_PLAN as SET_BREAK_PLAN
 
 DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
 SCHEDULE_PAGE_URL = (
@@ -3629,6 +3630,68 @@ def build_html_report(
     )
     broadcast_box_html = "\n".join(broadcast_box_lines)
 
+    set_break_rows: List[str] = []
+    for entry in SET_BREAK_PLAN:
+        duration_label = _format_minutes_seconds(entry.duration)
+        set_break_rows.append(
+            "\n".join(
+                [
+                    "<tr class=\"broadcast-row\">",
+                    f"  <td class=\"broadcast-cell broadcast-cell--note\">{escape(entry.note)}</td>",
+                    f"  <td class=\"broadcast-cell broadcast-cell--duration\">{escape(duration_label)}</td>",
+                    "</tr>",
+                ]
+            )
+        )
+
+    set_break_box_lines = [
+        "<aside class=\"broadcast-box\" aria-labelledby=\"set-break-heading\">",
+        "  <details class=\"broadcast-box__details\">",
+        "    <summary class=\"broadcast-box__summary\">",
+        (
+            "      <span class=\"broadcast-box__summary-title\" "
+            "id=\"set-break-heading\" role=\"heading\" "
+            "aria-level=\"2\">Satzpause 1 → 2</span>"
+        ),
+        "      <span class=\"broadcast-box__summary-indicator\" aria-hidden=\"true\"></span>",
+        "    </summary>",
+        "    <div class=\"broadcast-box__content\">",
+    ]
+    if set_break_rows:
+        set_break_box_lines.extend(
+            [
+                "      <div class=\"broadcast-table-wrapper\">",
+                "        <table class=\"broadcast-table\">",
+                "          <thead>",
+                "            <tr>",
+                "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--note\">Programmpunkt</th>",
+                "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--duration\">Dauer</th>",
+                "            </tr>",
+                "          </thead>",
+                "          <tbody>",
+            ]
+        )
+        set_break_box_lines.extend(indent(row, "            ") for row in set_break_rows)
+        set_break_box_lines.extend(
+            [
+                "          </tbody>",
+                "        </table>",
+                "      </div>",
+            ]
+        )
+    else:
+        set_break_box_lines.append(
+            "      <p class=\"broadcast-empty\">Keine Informationen zur Satzpause hinterlegt.</p>"
+        )
+    set_break_box_lines.extend(
+        [
+            "    </div>",
+            "  </details>",
+            "</aside>",
+        ]
+    )
+    set_break_box_html = "\n".join(set_break_box_lines)
+
     stopwatch_box_lines = [
         "<aside class=\"broadcast-box\" aria-labelledby=\"stopwatch-heading\">",
         "  <details class=\"broadcast-box__details\" data-stopwatch>",
@@ -3663,6 +3726,7 @@ def build_html_report(
         "      </div>",
         indent(broadcast_box_html, "      ").rstrip(),
         indent(stopwatch_box_html, "      ").rstrip(),
+        indent(set_break_box_html, "      ").rstrip(),
         "    </div>",
     ]
     hero_layout_html = "\n".join(hero_layout_lines)
