@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import difflib
 import json
 import re
 from dataclasses import dataclass
@@ -623,6 +624,80 @@ def _resolve_setter_numbers(
     return cache[key]
 
 
+def _collect_official_roster_names(
+    team_name: str,
+    *,
+    roster_dir: Path,
+    cache: Dict[str, Dict[str, str]],
+) -> Dict[str, str]:
+    key = _simplify(team_name)
+    if not key:
+        return {}
+    if key in cache:
+        return cache[key]
+
+    try:
+        roster = collect_team_roster(team_name, roster_dir)
+    except Exception:
+        cache[key] = {}
+        return cache[key]
+
+    number_to_name: Dict[str, str] = {}
+    for member in roster:
+        if member.is_official:
+            continue
+        number: Optional[str] = None
+        if member.number_value is not None:
+            number = str(member.number_value)
+        else:
+            number = _extract_number_from_label(member.number_label)
+        if not number:
+            continue
+        cleaned_name = (member.name or "").strip()
+        if not cleaned_name:
+            continue
+        number_to_name[number] = cleaned_name
+
+    cache[key] = number_to_name
+    return cache[key]
+
+
+def _simplify_player_name_for_compare(value: str) -> str:
+    normalized = value.lower()
+    normalized = re.sub(r"[^a-zäöüß\s]", " ", normalized)
+    return " ".join(normalized.split())
+
+
+def _choose_preferred_player_name(
+    pdf_name: Optional[str], official_name: Optional[str]
+) -> Optional[str]:
+    pdf_clean = (pdf_name or "").strip()
+    official_clean = (official_name or "").strip()
+
+    if official_clean:
+        if not pdf_clean:
+            return official_clean
+
+        simplified_pdf = _simplify_player_name_for_compare(pdf_clean)
+        simplified_official = _simplify_player_name_for_compare(official_clean)
+
+        if simplified_pdf and simplified_official:
+            if simplified_pdf == simplified_official:
+                return official_clean
+            ratio = difflib.SequenceMatcher(None, simplified_pdf, simplified_official).ratio()
+            if ratio >= 0.6 or simplified_pdf in simplified_official or simplified_official in simplified_pdf:
+                return official_clean
+
+        if len(official_clean) > len(pdf_clean):
+            return official_clean
+
+    if pdf_clean:
+        return pdf_clean
+    if official_clean:
+        return official_clean
+    return None
+
+
 def merge_schedule_details(
     schedule_row: ScheduleRow,
     pdf_url: str,
@@ -689,15 +764,20 @@ def build_lineup_dataset(
         matches.append((focus, merge_schedule_details(row, pdf_url, pdf_lineups)))
 
     setter_cache: Dict[str, List[str]] = {}
+    official_roster_cache: Dict[str, Dict[str, str]] = {}
     for _focus, match in matches:
         for name in match.team_names.values():
             _resolve_setter_numbers(name, roster_dir=roster_cache_dir, cache=setter_cache)
+            _collect_official_roster_names(
+                name, roster_dir=roster_cache_dir, cache=official_roster_cache
+            )
 
     dataset = _serialize_dataset(
         matches,
         usc_team=USC_CANONICAL_NAME,
         opponent_team=opponent_name,
         setter_lookup=setter_cache,
+        roster_lookup=official_roster_cache,
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(dataset, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -710,6 +790,7 @@ def _serialize_dataset(
     usc_team: str,
     opponent_team: str,
     setter_lookup: Dict[str, List[str]],
+    roster_lookup: Dict[str, Dict[str, str]],
 ) -> Dict[str, object]:
     serialized: List[Dict[str, object]] = []
     for focus, match in matches:
@@ -733,7 +814,8 @@ def _serialize_dataset(
         teams_meta: Dict[str, Dict[str, object]] = {}
         for code, name in match.team_names.items():
             normalized = name or ""
-            setters = setter_lookup.get(_simplify(normalized), [])
+            simplified_team = _simplify(normalized)
+            setters = setter_lookup.get(simplified_team, [])
             teams_meta[code] = {
                 "code": code,
                 "name": normalized,
@@ -749,9 +831,15 @@ def _serialize_dataset(
             lineups: Dict[str, List[Dict[str, Optional[str]]]] = {}
             for code, positions in set_lineup.lineups.items():
                 roster = match.rosters.get(code, {})
+                team_name = match.team_names.get(code, "")
+                official_roster = roster_lookup.get(_simplify(team_name), {})
                 entries: List[Dict[str, Optional[str]]] = []
                 for slot, number in zip(POSITION_SLOTS, positions[:6]):
-                    full_name = roster.get(number)
+                    full_name = _choose_preferred_player_name(
+                        roster.get(number), official_roster.get(number)
+                    )
+                    if not full_name:
+                        full_name = roster.get(number) or official_roster.get(number)
                     short_name = _short_display_name(full_name)
                     entries.append(
                         {
