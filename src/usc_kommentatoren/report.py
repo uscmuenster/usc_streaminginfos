@@ -3575,8 +3575,8 @@ def build_html_report(
                     "<tr class=\"broadcast-row\">",
                     f"  <th scope=\"row\" class=\"broadcast-cell broadcast-cell--time\">{escape(actual_time_label)} Uhr</th>",
                     f"  <td class=\"broadcast-cell broadcast-cell--countdown\">{escape(countdown_label)}</td>",
-                    f"  <td class=\"broadcast-cell broadcast-cell--note\">{escape(entry.note)}</td>",
                     f"  <td class=\"broadcast-cell broadcast-cell--duration\">{escape(duration_label)}</td>",
+                    f"  <td class=\"broadcast-cell broadcast-cell--note\">{escape(entry.note)}</td>",
                     "</tr>",
                 ]
             )
@@ -3605,8 +3605,8 @@ def build_html_report(
                 "            <tr>",
                 "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--time\">Zeit</th>",
                 "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--countdown\">Countdown</th>",
-                "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--note\">Programmpunkt</th>",
                 "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--duration\">Dauer</th>",
+                "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--note\">Programmpunkt</th>",
                 "            </tr>",
                 "          </thead>",
                 "          <tbody>",
@@ -3648,8 +3648,8 @@ def build_html_report(
                     [
                         "<tr class=\"broadcast-row\">",
                         f"  <td class=\"broadcast-cell broadcast-cell--start\">{escape(start_label)}</td>",
-                        f"  <td class=\"broadcast-cell broadcast-cell--note\">{escape(entry.note)}</td>",
                         f"  <td class=\"broadcast-cell broadcast-cell--duration\">{escape(duration_label)}</td>",
+                        f"  <td class=\"broadcast-cell broadcast-cell--note\">{escape(entry.note)}</td>",
                         "</tr>",
                     ]
                 )
@@ -3680,8 +3680,8 @@ def build_html_report(
                     "          <thead>",
                     "            <tr>",
                     "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--start\">Start</th>",
-                    "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--note\">Programmpunkt</th>",
                     "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--duration\">Dauer</th>",
+                    "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--note\">Programmpunkt</th>",
                     "            </tr>",
                     "          </thead>",
                     "          <tbody>",
