@@ -4992,25 +4992,64 @@ def build_html_report(
         color: #e6f1f3;
       }}
       .broadcast-box {{
-        background: rgba(15, 31, 36, 0.85);
-        border-color: rgba(94, 234, 212, 0.25);
-        box-shadow: 0 20px 48px rgba(15, 118, 110, 0.35);
+        background: radial-gradient(circle at top left, rgba(15, 118, 110, 0.55), rgba(8, 47, 73, 0.9));
+        border-color: rgba(125, 211, 252, 0.22);
+        box-shadow: 0 26px 52px rgba(8, 47, 73, 0.55);
+      }}
+      .broadcast-box__summary {{
+        color: #e0f2fe;
+      }}
+      .broadcast-box__summary-title {{
+        color: #e0f2fe;
+      }}
+      .broadcast-box__summary-indicator {{
+        border-color: rgba(125, 211, 252, 0.55);
+        color: #bae6fd;
+        background: rgba(8, 145, 178, 0.18);
+      }}
+      .broadcast-box__details[open] .broadcast-box__summary-indicator {{
+        border-color: rgba(56, 189, 248, 0.75);
+        background: rgba(15, 118, 110, 0.35);
+        color: #f0fdfa;
+      }}
+      .broadcast-box__content {{
+        background: linear-gradient(145deg, rgba(12, 74, 110, 0.55), rgba(8, 47, 73, 0.75));
+        border-radius: 0.85rem;
+        padding: clamp(0.35rem, 1.4vw, 0.75rem);
+        box-shadow: inset 0 0 0 1px rgba(14, 165, 233, 0.15);
       }}
       .broadcast-table-wrapper {{
-        background: rgba(15, 31, 36, 0.55);
-        border-color: rgba(148, 163, 184, 0.35);
+        background: rgba(8, 47, 73, 0.65);
+        border-color: rgba(148, 163, 184, 0.32);
       }}
       .broadcast-table thead th {{
-        background: rgba(45, 88, 90, 0.35);
-        color: #5eead4;
-        border-bottom-color: rgba(94, 234, 212, 0.3);
+        background: linear-gradient(135deg, rgba(13, 148, 136, 0.35), rgba(59, 130, 246, 0.18));
+        color: #99f6e4;
+        border-bottom-color: rgba(20, 184, 166, 0.35);
+      }}
+      .broadcast-table tbody th,
+      .broadcast-table tbody td {{
+        border-top-color: rgba(51, 65, 85, 0.6);
+      }}
+      .broadcast-table tbody tr:nth-child(even) {{
+        background: rgba(15, 118, 110, 0.15);
+      }}
+      .broadcast-cell--time {{
+        color: #ccfbf1;
       }}
       .broadcast-cell--countdown {{
         color: #5eead4;
+        text-shadow: 0 0 8px rgba(94, 234, 212, 0.45);
+      }}
+      .broadcast-cell--note {{
+        color: #e0f2fe;
+      }}
+      .broadcast-cell--duration {{
+        color: #bfdbfe;
       }}
       .broadcast-cell--duration,
       .broadcast-empty {{
-        color: #cbd5f5;
+        color: #bfdbfe;
       }}
       h1,
       h2,
@@ -5179,13 +5218,20 @@ def build_html_report(
       a {{
         color: #5eead4;
       }}
+      .countdown-meta__kickoff {{
+        color: #ccfbf1;
+      }}
+      .countdown-meta__location {{
+        color: #bae6fd;
+      }}
       .countdown-banner {{
-        background: linear-gradient(135deg, rgba(15, 118, 110, 0.8), rgba(45, 212, 191, 0.85));
+        background: linear-gradient(135deg, rgba(20, 184, 166, 0.85), rgba(14, 165, 233, 0.65));
         color: #ecfeff;
-        box-shadow: 0 20px 44px rgba(0, 0, 0, 0.55);
+        box-shadow: 0 20px 44px rgba(14, 165, 233, 0.35);
       }}
       .countdown-banner--live {{
-        background: linear-gradient(135deg, rgba(190, 18, 60, 0.85), rgba(249, 115, 22, 0.85));
+        background: linear-gradient(135deg, rgba(248, 113, 113, 0.92), rgba(249, 115, 22, 0.88));
+        box-shadow: 0 22px 48px rgba(185, 28, 28, 0.45);
       }}
     }}
   </style>
