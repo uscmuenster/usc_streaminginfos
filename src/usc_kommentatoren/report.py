@@ -3263,8 +3263,12 @@ def format_direct_comparison_section(
     opponent_label = pretty_name(opponent_name)
     fallback_html = (
         '    <section class="direct-comparison">\n'
-        '      <h2>Direkter Vergleich</h2>\n'
-        '      <p class="direct-comparison__fallback">Keine Daten zum direkten Vergleich verfügbar.</p>\n'
+        '      <details class="direct-comparison__details" open>\n'
+        '        <summary class="direct-comparison__summary">\n'
+        '          <h2>Direkter Vergleich</h2>\n'
+        '        </summary>\n'
+        '        <p class="direct-comparison__fallback">Keine Daten zum direkten Vergleich verfügbar.</p>\n'
+        '      </details>\n'
         '    </section>'
     )
 
@@ -3501,25 +3505,38 @@ def format_direct_comparison_section(
 
     section_lines = [
         "    <section class=\"direct-comparison\">",
-        "      <h2>Direkter Vergleich</h2>",
-        "      <div class=\"direct-comparison__layout\">",
-        "        <div class=\"direct-comparison__table-wrapper\">",
-        "          <table class=\"direct-comparison__table\">",
-        "            <thead>",
-        "              <tr>",
-        "                <th scope=\"col\">Kennzahl</th>",
-        f"                <th scope=\"col\">{escape(usc_label)}</th>",
-        f"                <th scope=\"col\">{escape(opponent_label)}</th>",
-        "              </tr>",
-        "            </thead>",
-        "            <tbody>",
+        "      <details class=\"direct-comparison__details\" open>",
+        "        <summary class=\"direct-comparison__summary\">",
+        "          <h2>Direkter Vergleich</h2>",
+        "        </summary>",
+        "        <div class=\"direct-comparison__layout\">",
+        "          <div class=\"direct-comparison__table-wrapper\">",
+        "            <table class=\"direct-comparison__table\">",
+        "              <thead>",
+        "                <tr>",
+        "                  <th scope=\"col\">Kennzahl</th>",
+        f"                  <th scope=\"col\">{escape(usc_label)}</th>",
+        f"                  <th scope=\"col\">{escape(opponent_label)}</th>",
+        "                </tr>",
+        "              </thead>",
+        "              <tbody>",
         rows_html,
-        "            </tbody>",
-        "          </table>",
-        "        </div>",
+        "              </tbody>",
+        "            </table>",
+        "          </div>",
         meta_block,
-        "      </div>",
+        "        </div>",
     ]
+
+    if matches_block:
+        section_lines.append(matches_block)
+    if seasons_note:
+        section_lines.append(seasons_note)
+
+    section_lines.extend([
+        "      </details>",
+        "    </section>",
+    ])
 
     return "\n".join(section_lines)
 
