@@ -8,6 +8,7 @@ import re
 from datetime import date, datetime, timedelta
 from pathlib import Path
 import mimetypes
+import sys
 from html import escape, unescape
 from io import BytesIO, StringIO
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
@@ -32,6 +33,12 @@ from .broadcast_satzpause23 import BROADCAST_PLAN as SECOND_SET_BREAK_PLAN
 from .broadcast_spielende import BROADCAST_PLAN as POST_MATCH_PLAN
 
 DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
+DVV_POKAL_SCHEDULE_URL = "https://www.dvv-pokal.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311591"
+DEFAULT_ADDITIONAL_SCHEDULE_URLS: Tuple[str, ...] = (DVV_POKAL_SCHEDULE_URL,)
+SCHEDULE_COMPETITION_LABELS: Dict[str, str] = {
+    DEFAULT_SCHEDULE_URL: "Bundesliga",
+    DVV_POKAL_SCHEDULE_URL: "DVV-Pokal",
+}
 SCHEDULE_PAGE_URL = (
     "https://www.volleyball-bundesliga.de/cms/home/"
     "1_bundesliga_frauen/statistik/hauptrunde/spielplan.xhtml?playingScheduleMode=full"
@@ -205,6 +212,7 @@ class Match:
     referees: Tuple[str, ...] = ()
     attendance: Optional[str] = None
     mvps: Tuple[MVPSelection, ...] = ()
+    competition: Optional[str] = None
 
     @property
     def is_finished(self) -> bool:
@@ -520,14 +528,138 @@ def _download_schedule_text(
     return response.text
 
 
+def _resolve_schedule_urls(
+    primary_url: Optional[str],
+    extra_urls: Optional[Sequence[str]],
+) -> List[str]:
+    urls: List[str] = []
+    if primary_url:
+        urls.append(primary_url)
+    if extra_urls:
+        for entry in extra_urls:
+            if entry:
+                urls.append(entry)
+    return urls
+
+
+def _infer_competition_label(
+    schedule_url: str,
+    *,
+    primary_url: Optional[str] = None,
+) -> Optional[str]:
+    label = SCHEDULE_COMPETITION_LABELS.get(schedule_url)
+    if label:
+        return label
+    if primary_url and schedule_url == primary_url:
+        return SCHEDULE_COMPETITION_LABELS.get(schedule_url)
+    return None
+
+
+def _deduplicate_matches(matches: Iterable[Match]) -> List[Match]:
+    seen: set[tuple[datetime, str, str]] = set()
+    index_lookup: Dict[tuple[datetime, str, str], int] = {}
+    ordered = sorted(matches, key=lambda match: match.kickoff)
+    unique: List[Match] = []
+    for match in ordered:
+        signature = (
+            match.kickoff,
+            normalize_name(match.home_team),
+            normalize_name(match.away_team),
+        )
+        if signature in seen:
+            existing_index = index_lookup[signature]
+            existing_match = unique[existing_index]
+            if not existing_match.competition and match.competition:
+                unique[existing_index] = replace(
+                    existing_match, competition=match.competition
+                )
+            continue
+        seen.add(signature)
+        index_lookup[signature] = len(unique)
+        unique.append(match)
+    return unique
+
+
+def _combine_schedule_csv_texts(
+    sources: Sequence[Tuple[str, Optional[str]]]
+) -> str:
+    rows: List[Dict[str, str]] = []
+    fieldnames: List[str] = []
+    seen_fieldnames: set[str] = set()
+
+    def _ensure_field(name: str) -> None:
+        if name not in seen_fieldnames:
+            fieldnames.append(name)
+            seen_fieldnames.add(name)
+
+    for csv_text, competition_label in sources:
+        buffer = StringIO(csv_text)
+        reader = csv.DictReader(buffer, delimiter=";", quotechar="\"")
+        if reader.fieldnames:
+            for name in reader.fieldnames:
+                _ensure_field(name)
+        if competition_label:
+            _ensure_field("Wettbewerb")
+        for row in reader:
+            if not any(value.strip() for value in row.values() if isinstance(value, str)):
+                continue
+            normalized_row = dict(row)
+            if competition_label:
+                existing_label = normalized_row.get("Wettbewerb")
+                if not _normalize_schedule_field(existing_label):
+                    normalized_row["Wettbewerb"] = competition_label
+            elif "Wettbewerb" in normalized_row and _normalize_schedule_field(
+                normalized_row.get("Wettbewerb")
+            ):
+                _ensure_field("Wettbewerb")
+            rows.append(normalized_row)
+
+    if not fieldnames:
+        return ""
+
+    output = StringIO()
+    writer = csv.DictWriter(
+        output,
+        fieldnames=fieldnames,
+        delimiter=";",
+        quotechar="\"",
+        lineterminator="\n",
+    )
+    writer.writeheader()
+    for row in rows:
+        sanitized = {field: row.get(field, "") or "" for field in fieldnames}
+        writer.writerow(sanitized)
+    return output.getvalue()
+
+
 def fetch_schedule(
     url: str = DEFAULT_SCHEDULE_URL,
     *,
     retries: int = 5,
     delay_seconds: float = 2.0,
 ) -> List[Match]:
-    csv_text = _download_schedule_text(url, retries=retries, delay_seconds=delay_seconds)
-    return parse_schedule(csv_text)
+    urls = _resolve_schedule_urls(url, DEFAULT_ADDITIONAL_SCHEDULE_URLS)
+    matches: List[Match] = []
+    for schedule_url in urls:
+        try:
+            csv_text = _download_schedule_text(
+                schedule_url,
+                retries=retries,
+                delay_seconds=delay_seconds,
+            )
+        except Exception as exc:
+            if schedule_url == url:
+                raise
+            print(
+                f"Warnung: Zusätzlicher Spielplan konnte nicht geladen werden ({schedule_url}): {exc}",
+                file=sys.stderr,
+            )
+            continue
+        competition_label = _infer_competition_label(
+            schedule_url, primary_url=url
+        )
+        matches.extend(parse_schedule(csv_text, competition=competition_label))
+    return _deduplicate_matches(matches)
 
 
 def download_schedule(
@@ -537,9 +669,30 @@ def download_schedule(
     retries: int = 5,
     delay_seconds: float = 2.0,
 ) -> Path:
-    csv_text = _download_schedule_text(url, retries=retries, delay_seconds=delay_seconds)
+    urls = _resolve_schedule_urls(url, DEFAULT_ADDITIONAL_SCHEDULE_URLS)
+    csv_sources: List[Tuple[str, Optional[str]]] = []
+    for schedule_url in urls:
+        try:
+            csv_text = _download_schedule_text(
+                schedule_url,
+                retries=retries,
+                delay_seconds=delay_seconds,
+            )
+        except Exception as exc:
+            if schedule_url == url:
+                raise
+            print(
+                f"Warnung: Zusätzlicher Spielplan konnte nicht geladen werden ({schedule_url}): {exc}",
+                file=sys.stderr,
+            )
+        else:
+            competition_label = _infer_competition_label(
+                schedule_url, primary_url=url
+            )
+            csv_sources.append((csv_text, competition_label))
+    combined = _combine_schedule_csv_texts(csv_sources)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(csv_text, encoding="utf-8")
+    destination.write_text(combined, encoding="utf-8")
     return destination
 
 
@@ -1040,12 +1193,18 @@ def collect_team_roster(
     return parse_roster(csv_text)
 
 
-def load_schedule_from_file(path: Path) -> List[Match]:
+def load_schedule_from_file(
+    path: Path, *, competition: Optional[str] = None
+) -> List[Match]:
     csv_text = path.read_text(encoding="utf-8")
-    return parse_schedule(csv_text)
+    return parse_schedule(csv_text, competition=competition)
 
 
-def parse_schedule(csv_text: str) -> List[Match]:
+def parse_schedule(
+    csv_text: str,
+    *,
+    competition: Optional[str] = None,
+) -> List[Match]:
     buffer = StringIO(csv_text)
     reader = csv.DictReader(buffer, delimiter=";", quotechar="\"")
     matches: List[Match] = []
@@ -1064,6 +1223,8 @@ def parse_schedule(csv_text: str) -> List[Match]:
         attendance = _normalize_schedule_field(row.get("Zuschauerzahl"))
         referee_entries = _parse_referee_field(row.get("Schiedsgericht"))
 
+        match_competition = _normalize_schedule_field(row.get("Wettbewerb")) or competition
+
         matches.append(
             Match(
                 kickoff=kickoff,
@@ -1075,6 +1236,7 @@ def parse_schedule(csv_text: str) -> List[Match]:
                 match_number=match_number,
                 referees=referee_entries,
                 attendance=attendance,
+                competition=match_competition,
             )
         )
     return matches
@@ -2937,10 +3099,17 @@ def format_match_line(
         if class_names:
             class_attr = f" class=\"{' '.join(class_names)}\""
 
+    header_suffix = ""
+    if match.competition and not match.is_finished:
+        header_suffix = f" ({escape(match.competition)})"
+
     segments: List[str] = [
         f"<li{class_attr}>",
         "  <div class=\"match-line\">",
-        f"    <div class=\"match-header\"><strong>{escape(kickoff_label)}</strong> – {escape(teams)}</div>",
+        (
+            "    <div class=\"match-header\">"
+            f"<strong>{escape(kickoff_label)}</strong> – {escape(teams)}{header_suffix}</div>"
+        ),
     ]
     if result_block:
         segments.append(f"    {result_block}")
@@ -3883,6 +4052,15 @@ def build_html_report(
         ),
     ]
 
+    if next_home.competition:
+        countdown_meta_lines.append(
+            (
+                "<p class=\"countdown-meta__competition\">"
+                f"<strong>Wettbewerb:</strong> {escape(next_home.competition)}"
+                "</p>"
+            )
+        )
+
     countdown_meta_html = "\n".join(
         [
             "    <div class=\"countdown-meta\">",
@@ -4517,6 +4695,11 @@ def build_html_report(
     .countdown-meta__location {{
       font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.95rem, 3vw, 1.1rem));
       font-weight: 500;
+    }}
+    .countdown-meta__competition {{
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.9rem, 2.6vw, 1.05rem));
+      font-weight: 500;
+      color: #0369a1;
     }}
     .countdown-banner {{
       margin: 0;
@@ -5784,6 +5967,9 @@ def build_html_report(
       .countdown-meta__location {{
         color: #bae6fd;
       }}
+      .countdown-meta__competition {{
+        color: #7dd3fc;
+      }}
       .countdown-banner {{
         background: linear-gradient(135deg, rgba(20, 184, 166, 0.85), rgba(14, 165, 233, 0.65));
         color: #ecfeff;
@@ -6129,6 +6315,7 @@ def build_html_report(
 __all__ = [
     "BERLIN_TZ",
     "DEFAULT_SCHEDULE_URL",
+    "DVV_POKAL_SCHEDULE_URL",
     "NEWS_LOOKBACK_DAYS",
     "NewsItem",
     "Match",
