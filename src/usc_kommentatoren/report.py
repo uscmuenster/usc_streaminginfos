@@ -3250,25 +3250,177 @@ def format_direct_comparison_section(
 
     rows_html = "\n".join(rows)
 
+    last_match = comparison.matches[0] if comparison.matches else None
+    meta_block: str
+    if last_match:
+        home_team = pretty_name(last_match.home_team)
+        away_team = pretty_name(last_match.away_team)
+        team_line = f"{escape(home_team)} – {escape(away_team)}"
+
+        result_parts: List[str] = []
+        if last_match.result_sets:
+            result_parts.append(last_match.result_sets)
+        if last_match.result_points:
+            result_parts.append(f"({last_match.result_points})")
+        result_label = " ".join(part for part in result_parts if part)
+
+        outcome_label = "Ergebnis"
+        outcome_class = ""
+        if last_match.usc_won is True:
+            outcome_label = "Sieg USC"
+            outcome_class = " direct-comparison__result--win"
+        elif last_match.usc_won is False:
+            outcome_label = "Niederlage USC"
+            outcome_class = " direct-comparison__result--loss"
+
+        if last_match.date:
+            info_line = last_match.date.strftime("%d.%m.%Y")
+        elif last_match.date_label:
+            info_line = last_match.date_label
+        else:
+            info_line = ""
+
+        result_line = (
+            f"<p class=\"direct-comparison__result{outcome_class}\">{escape(outcome_label)}"
+            f"{(' • ' + escape(result_label)) if result_label else ''}</p>"
+        )
+
+        meta_parts: List[str] = [
+            "        <div class=\"direct-comparison__meta\">",
+            "          <h3>Letztes Duell</h3>",
+            f"          <p class=\"direct-comparison__teams\">{team_line}</p>",
+        ]
+        if info_line:
+            meta_parts.append(
+                f"          <p class=\"direct-comparison__meta-line\">{escape(info_line)}</p>"
+            )
+        meta_parts.append(f"          {result_line}")
+        meta_parts.append("        </div>")
+        meta_block = "\n".join(meta_parts)
+    else:
+        meta_block = (
+            "        <div class=\"direct-comparison__meta\">\n"
+            "          <h3>Letztes Duell</h3>\n"
+            "          <p class=\"direct-comparison__meta-line\">Keine Duelle gefunden.</p>\n"
+            "        </div>"
+        )
+
+    matches_block = ""
+    if comparison.matches:
+        match_items: List[str] = []
+        for match in comparison.matches:
+            header_parts: List[str] = []
+            if match.date:
+                header_parts.append(match.date.strftime("%d.%m.%Y"))
+            elif match.date_label:
+                label = match.date_label.strip()
+                if label:
+                    try:
+                        parsed_label = datetime.strptime(label, "%Y-%m-%d").date()
+                    except ValueError:
+                        header_parts.append(label)
+                    else:
+                        header_parts.append(parsed_label.strftime("%d.%m.%Y"))
+
+            meta_line = " · ".join(escape(part) for part in header_parts if part)
+
+            home_team = pretty_name(match.home_team)
+            away_team = pretty_name(match.away_team)
+            teams_line = f"{escape(home_team)} – {escape(away_team)}"
+
+            sets_label: Optional[str] = None
+            if match.usc_sets is not None and match.opponent_sets is not None:
+                sets_label = f"{match.usc_sets}:{match.opponent_sets}"
+            elif match.result_sets:
+                sets_label = match.result_sets
+
+            points_label: Optional[str] = None
+            if match.usc_points is not None and match.opponent_points is not None:
+                points_label = f"{match.usc_points}:{match.opponent_points}"
+            elif match.result_points:
+                points_label = match.result_points
+
+            result_parts: List[str] = []
+            if sets_label:
+                result_parts.append(escape(sets_label))
+            if points_label:
+                result_parts.append(f"({escape(points_label)})")
+            result_line = " ".join(result_parts)
+
+            result_class = "direct-comparison__match-result"
+            if match.usc_won is True:
+                result_class += " direct-comparison__result--win"
+            elif match.usc_won is False:
+                result_class += " direct-comparison__result--loss"
+
+            item_lines: List[str] = ["          <li class=\"direct-comparison__match\">"]
+            if meta_line:
+                item_lines.append(
+                    f"            <p class=\"direct-comparison__match-meta\">{meta_line}</p>"
+                )
+            item_lines.append(
+                f"            <p class=\"direct-comparison__match-teams\">{teams_line}</p>"
+            )
+            if result_line:
+                item_lines.append(
+                    f"            <p class=\"{result_class}\">{result_line}</p>"
+                )
+            item_lines.append("          </li>")
+            match_items.append("\n".join(item_lines))
+
+        if match_items:
+            matches_block = "\n".join(
+                [
+                    "      <div class=\"direct-comparison__matches\">",
+                    "        <h3>Alle Duelle</h3>",
+                    "        <ol class=\"direct-comparison__matches-list\">",
+                    "\n".join(match_items),
+                    "        </ol>",
+                    "      </div>",
+                ]
+            )
+
+    seasons_note = ""
+    if comparison.seasons:
+        unique_seasons = list(dict.fromkeys(comparison.seasons))
+        if unique_seasons:
+            ordered_seasons = sorted(unique_seasons)
+            if len(ordered_seasons) == 1:
+                season_label = f"Saison {ordered_seasons[0]}"
+            else:
+                season_label = f"Saisons {ordered_seasons[0]} – {ordered_seasons[-1]}"
+            seasons_note = (
+                "      <p class=\"direct-comparison__note\">"
+                f"Datenbasis: {escape(season_label)}"
+                "</p>"
+            )
+
     section_lines = [
         "    <section class=\"direct-comparison\">",
         "      <h2>Direkter Vergleich</h2>",
-        "      <div class=\"direct-comparison__table-wrapper\">",
-        "        <table class=\"direct-comparison__table\">",
-        "          <thead>",
-        "            <tr>",
-        "              <th scope=\"col\">Kennzahl</th>",
-        f"              <th scope=\"col\">{escape(usc_label)}</th>",
-        f"              <th scope=\"col\">{escape(opponent_label)}</th>",
-        "            </tr>",
-        "          </thead>",
-        "          <tbody>",
+        "      <div class=\"direct-comparison__layout\">",
+        "        <div class=\"direct-comparison__table-wrapper\">",
+        "          <table class=\"direct-comparison__table\">",
+        "            <thead>",
+        "              <tr>",
+        "                <th scope=\"col\">Kennzahl</th>",
+        f"                <th scope=\"col\">{escape(usc_label)}</th>",
+        f"                <th scope=\"col\">{escape(opponent_label)}</th>",
+        "              </tr>",
+        "            </thead>",
+        "            <tbody>",
         rows_html,
-        "          </tbody>",
-        "        </table>",
+        "            </tbody>",
+        "          </table>",
+        "        </div>",
+        meta_block,
         "      </div>",
-        "    </section>",
     ]
+    if matches_block:
+        section_lines.append(matches_block)
+    if seasons_note:
+        section_lines.append(seasons_note)
+    section_lines.append("    </section>")
     return "\n".join(section_lines)
 
 
