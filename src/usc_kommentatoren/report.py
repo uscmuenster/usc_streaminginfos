@@ -3248,24 +3248,15 @@ def format_instagram_list(links: Sequence[str]) -> str:
     return "\n          ".join(rendered)
 
 
-def _format_percentage(value: Optional[float]) -> str:
-    if value is None:
-        return "–"
-    rounded = round(value, 1)
-    if abs(rounded - round(rounded)) < 1e-9:
-        return f"{int(round(rounded))} %"
-    return f"{rounded:.1f} %"
-
-
 def format_direct_comparison_section(
     comparison: Optional[DirectComparisonData], opponent_name: str
 ) -> str:
     opponent_label = pretty_name(opponent_name)
     fallback_html = (
-        "    <section class=\"direct-comparison\">\n"
-        "      <h2>Direkter Vergleich</h2>\n"
-        "      <p class=\"direct-comparison__fallback\">Keine Daten zum direkten Vergleich verfügbar.</p>\n"
-        "    </section>"
+        '    <section class="direct-comparison">\n'
+        '      <h2>Direkter Vergleich</h2>\n'
+        '      <p class="direct-comparison__fallback">Keine Daten zum direkten Vergleich verfügbar.</p>\n'
+        '    </section>'
     )
 
     if not comparison:
@@ -3503,13 +3494,8 @@ def format_direct_comparison_section(
         meta_block,
         "      </div>",
     ]
-    if matches_block:
-        section_lines.append(matches_block)
-    if seasons_note:
-        section_lines.append(seasons_note)
-    section_lines.append("    </section>")
-    return "\n".join(section_lines)
 
+    return "\n".join(content_lines)
 
 def format_mvp_rankings_section(
     rankings: Optional[Mapping[str, Mapping[str, Any]]],
@@ -4912,148 +4898,41 @@ def build_html_report(
       padding: clamp(1rem, 3vw, 1.4rem);
       box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
     }}
-    .direct-comparison__layout {{
+    .direct-comparison__score {{
       display: grid;
-      gap: clamp(1rem, 3vw, 1.6rem);
-      align-items: start;
-    }}
-    @media (min-width: 52rem) {{
-      .direct-comparison__layout {{
-        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-      }}
-    }}
-    .direct-comparison__table-wrapper {{
-      overflow-x: auto;
-    }}
-    .direct-comparison__table {{
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 20rem;
-      background: #ffffff;
-      border-radius: 0.75rem;
-      overflow: hidden;
-      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.25);
-    }}
-    .direct-comparison__table thead th {{
-      background: rgba(15, 118, 110, 0.12);
-      text-transform: uppercase;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      text-align: left;
-      padding: 0.5rem 0.75rem;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.75rem);
-    }}
-    .direct-comparison__table thead th + th,
-    .direct-comparison__table thead th + th + th {{
-      text-align: center;
-    }}
-    .direct-comparison__table tbody tr {{
-      border-top: 1px solid rgba(148, 163, 184, 0.25);
-    }}
-    .direct-comparison__table tbody tr:nth-child(even) {{
-      background: rgba(15, 118, 110, 0.06);
-    }}
-    .direct-comparison__table tbody th {{
-      padding: 0.55rem 0.75rem;
-      font-weight: 600;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
-    }}
-    .direct-comparison__table tbody td {{
-      padding: 0.55rem 0.75rem;
-      text-align: center;
-      font-weight: 600;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
-      font-variant-numeric: tabular-nums;
-    }}
-    .direct-comparison__meta {{
-      display: grid;
-      gap: 0.45rem;
-      background: #f8fafc;
-      border-radius: 0.85rem;
-      padding: clamp(0.85rem, 3vw, 1.2rem);
-      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.25);
-    }}
-    .direct-comparison__meta h3 {{
-      margin: 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1rem, 2.8vw, 1.2rem));
+      gap: clamp(0.4rem, 2.5vw, 0.7rem);
+      justify-items: center;
     }}
     .direct-comparison__teams {{
       margin: 0;
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.05rem);
+      text-align: center;
+    }}
+    .direct-comparison__metric {{
+      margin: 0;
       font-weight: 600;
       font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
-    }}
-    .direct-comparison__meta-line {{
-      margin: 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
-      color: #475569;
-    }}
-    .direct-comparison__result {{
-      margin: 0;
-      font-weight: 600;
-      color: #0f766e;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
-    }}
-    .direct-comparison__result--win {{
-      color: #047857;
-    }}
-    .direct-comparison__result--loss {{
-      color: #b91c1c;
-    }}
-    .direct-comparison__matches {{
-      margin-top: clamp(0.85rem, 3vw, 1.2rem);
-      background: #f8fafc;
-      border-radius: 0.85rem;
-      padding: clamp(0.85rem, 3vw, 1.2rem);
-      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.25);
-      display: grid;
-      gap: clamp(0.55rem, 2.5vw, 0.9rem);
-    }}
-    .direct-comparison__matches h3 {{
-      margin: 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1rem, 2.6vw, 1.15rem));
-    }}
-    .direct-comparison__matches-list {{
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      gap: clamp(0.55rem, 2.5vw, 0.85rem);
-    }}
-    .direct-comparison__match {{
-      display: grid;
-      gap: 0.3rem;
-    }}
-    .direct-comparison__match-meta {{
-      margin: 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
-      color: #475569;
-    }}
-    .direct-comparison__match-teams {{
-      margin: 0;
-      font-weight: 600;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.93rem);
-    }}
-    .direct-comparison__match-result {{
-      margin: 0;
-      font-weight: 600;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
-      color: #0f766e;
       font-variant-numeric: tabular-nums;
+      color: #0f766e;
+      text-align: center;
     }}
-    .direct-comparison__match-location {{
-      margin: 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
-      color: #475569;
-    }}
-    .direct-comparison__note {{
-      margin: clamp(0.75rem, 2.5vw, 1rem) 0 0 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
-      color: #475569;
+    @media (min-width: 40rem) {{
+      .direct-comparison__score {{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-width: 32rem;
+        margin-inline: auto;
+      }}
+      .direct-comparison__teams {{
+        grid-column: 1 / -1;
+      }}
     }}
     .direct-comparison__fallback {{
       margin: 0;
       font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       color: #475569;
+      text-align: center;
+      font-weight: 500;
     }}
     .lineup-link {{
       margin-top: clamp(0.75rem, 2.5vw, 1.4rem);
@@ -5774,51 +5653,14 @@ def build_html_report(
       .direct-comparison {{
         padding: clamp(0.85rem, 3vw, 1.1rem);
       }}
-      .direct-comparison__layout {{
-        gap: clamp(0.75rem, 3vw, 1.2rem);
-      }}
-      .direct-comparison__table {{
-        min-width: min(18rem, 100%);
-      }}
-      .direct-comparison__table thead th {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.68rem);
-        padding: 0.4rem 0.5rem;
-      }}
-      .direct-comparison__table tbody th,
-      .direct-comparison__table tbody td {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
-        padding: 0.45rem 0.5rem;
-      }}
-      .direct-comparison__meta {{
-        padding: clamp(0.7rem, 3vw, 1rem);
+      .direct-comparison__score {{
+        gap: clamp(0.35rem, 3vw, 0.55rem);
       }}
       .direct-comparison__teams {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
-      }}
-      .direct-comparison__meta-line {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.78rem);
-      }}
-      .direct-comparison__result {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
-      }}
-      .direct-comparison__matches {{
-        padding: clamp(0.7rem, 3vw, 1rem);
-        gap: clamp(0.45rem, 2.5vw, 0.7rem);
-      }}
-      .direct-comparison__matches h3 {{
         font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
       }}
-      .direct-comparison__match-meta {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.75rem);
-      }}
-      .direct-comparison__match-teams {{
+      .direct-comparison__metric {{
         font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
-      }}
-      .direct-comparison__match-result {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
-      }}
-      .direct-comparison__match-location {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.75rem);
       }}
       .lineup-link ul {{
         flex-direction: column;
@@ -5958,63 +5800,17 @@ def build_html_report(
         background: #132a30;
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
       }}
-      .direct-comparison__table {{
-        background: #0f1f24;
-        box-shadow: 0 0 0 1px rgba(94, 234, 212, 0.25);
-      }}
-      .direct-comparison__table thead th {{
-        background: rgba(94, 234, 212, 0.16);
-        color: #5eead4;
-      }}
-      .direct-comparison__table tbody tr {{
-        border-top-color: rgba(148, 163, 184, 0.35);
-      }}
-      .direct-comparison__table tbody tr:nth-child(even) {{
-        background: rgba(15, 118, 110, 0.22);
-      }}
-      .direct-comparison__table tbody th,
-      .direct-comparison__table tbody td {{
-        color: #e2f3f7;
-      }}
-      .direct-comparison__meta {{
-        background: rgba(15, 118, 110, 0.18);
-        box-shadow: inset 0 0 0 1px rgba(94, 234, 212, 0.25);
+      .direct-comparison__score {{
+        justify-items: center;
       }}
       .direct-comparison__teams {{
         color: #f1f5f9;
       }}
-      .direct-comparison__meta-line {{
-        color: #cbd5f5;
-      }}
-      .direct-comparison__result {{
+      .direct-comparison__metric {{
         color: #5eead4;
       }}
-      .direct-comparison__result--win {{
-        color: #bbf7d0;
-      }}
-      .direct-comparison__result--loss {{
-        color: #fca5a5;
-      }}
-      .direct-comparison__note,
       .direct-comparison__fallback {{
         color: #94a3b8;
-      }}
-      .direct-comparison__matches {{
-        background: rgba(15, 118, 110, 0.18);
-        box-shadow: inset 0 0 0 1px rgba(94, 234, 212, 0.25);
-      }}
-      .direct-comparison__matches h3 {{
-        color: #f1f5f9;
-      }}
-      .direct-comparison__match-meta,
-      .direct-comparison__match-location {{
-        color: #cbd5f5;
-      }}
-      .direct-comparison__match-teams {{
-        color: #f1f5f9;
-      }}
-      .direct-comparison__match-result {{
-        color: #5eead4;
       }}
       .match-stats {{
         background: #132a30;
