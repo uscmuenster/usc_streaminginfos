@@ -3280,6 +3280,11 @@ def format_direct_comparison_section(
             ]
         )
 
+    def _format_percentage(value: Optional[float]) -> str:
+        if value is None:
+            return "–"
+        return f"{value:.0f}%"
+
     rows: List[str] = []
     rows.append(
         render_row(
