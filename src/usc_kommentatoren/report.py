@@ -2686,6 +2686,8 @@ def prepare_direct_comparison(
     if not normalized_target:
         return None
 
+    target_keywords = build_keywords(opponent_name)
+
     summary_totals = {
         "matches_played": 0,
         "usc_wins": 0,
@@ -2723,8 +2725,15 @@ def prepare_direct_comparison(
             opponent_label = str(opponent_entry.get("team") or "").strip()
             if not opponent_label:
                 continue
-            if normalize_name(opponent_label) != normalized_target:
-                continue
+            opponent_normalized = normalize_name(opponent_label)
+            if opponent_normalized != normalized_target:
+                candidate_keywords = build_keywords(opponent_label)
+                has_keyword_match = matches_keywords(opponent_label, target_keywords)
+                reverse_keyword_match = matches_keywords(
+                    opponent_name, candidate_keywords
+                )
+                if not has_keyword_match and not reverse_keyword_match:
+                    continue
             if season_label and season_label not in seen_seasons:
                 seasons_collected.append(season_label)
                 seen_seasons.add(season_label)
@@ -3268,6 +3277,22 @@ def format_direct_comparison_section(
         return fallback_html
 
     usc_label = USC_CANONICAL_NAME
+    usc_normalized = normalize_name(usc_label)
+    opponent_raw_name = opponent_name
+
+    def _teams_line(match: DirectComparisonMatch) -> str:
+        home_raw = match.home_team or opponent_raw_name
+        away_raw = match.away_team or usc_label
+        usc_is_home = normalize_name(home_raw) == usc_normalized if home_raw else False
+        if usc_is_home:
+            first_raw = home_raw
+            second_raw = match.away_team or opponent_raw_name
+        else:
+            first_raw = match.away_team or usc_label
+            second_raw = match.home_team or opponent_raw_name
+        first_label = pretty_name(first_raw)
+        second_label = pretty_name(second_raw)
+        return f"{escape(first_label)} – {escape(second_label)}"
 
     def render_row(label: str, usc_value: str, opponent_value: str) -> str:
         return "\n".join(
@@ -3358,9 +3383,7 @@ def format_direct_comparison_section(
     last_match = comparison.matches[0] if comparison.matches else None
     meta_block: str
     if last_match:
-        home_team = pretty_name(last_match.home_team)
-        away_team = pretty_name(last_match.away_team)
-        team_line = f"{escape(home_team)} – {escape(away_team)}"
+        team_line = _teams_line(last_match)
 
         result_label = _match_result_label(last_match)
 
@@ -3424,9 +3447,7 @@ def format_direct_comparison_section(
 
             meta_line = " · ".join(escape(part) for part in header_parts if part)
 
-            home_team = pretty_name(match.home_team)
-            away_team = pretty_name(match.away_team)
-            teams_line = f"{escape(home_team)} – {escape(away_team)}"
+            teams_line = _teams_line(match)
 
             result_label = _match_result_label(match)
 
