@@ -3340,7 +3340,6 @@ def format_direct_comparison_section(
             return f"({detail_label})"
         return ""
 
-    last_match = comparison.matches[0] if comparison.matches else None
     metrics_lines = [
         "          <div class=\"direct-comparison__metrics\">",
         render_metric("Siege", str(summary.usc_wins), str(summary.opponent_wins)),
@@ -3351,67 +3350,6 @@ def format_direct_comparison_section(
         ),
         "          </div>",
     ]
-
-    last_meeting_block: Optional[str] = None
-    if last_match:
-        team_line = _teams_line(last_match)
-
-        result_label = _match_result_label(last_match)
-
-        outcome_label = "Ergebnis"
-        outcome_class = ""
-        if last_match.usc_won is True:
-            outcome_label = "Sieg USC"
-            outcome_class = " direct-comparison__result--win"
-        elif last_match.usc_won is False:
-            outcome_label = "Niederlage USC"
-            outcome_class = " direct-comparison__result--loss"
-
-        if last_match.date:
-            info_line = last_match.date.strftime("%d.%m.%Y")
-        elif last_match.date_label:
-            info_line = last_match.date_label
-        else:
-            info_line = ""
-
-        match_meta_parts: List[str] = []
-        if last_match.competition:
-            match_meta_parts.append(last_match.competition)
-        if last_match.round_label:
-            match_meta_parts.append(last_match.round_label)
-        if last_match.location:
-            match_meta_parts.append(last_match.location)
-
-        meta_line = " · ".join(part for part in match_meta_parts if part)
-
-        result_line = (
-            f"<p class=\"direct-comparison__last-result{outcome_class}\">{escape(outcome_label)}"
-            f"{(' • ' + result_label) if result_label else ''}</p>"
-        )
-
-        last_meeting_parts: List[str] = [
-            "          <div class=\"direct-comparison__last-meeting\">",
-            "            <h3>Letztes Duell</h3>",
-            f"            <p class=\"direct-comparison__last-teams\">{team_line}</p>",
-        ]
-        if info_line:
-            last_meeting_parts.append(
-                f"            <p class=\"direct-comparison__last-meta\">{escape(info_line)}</p>"
-            )
-        if meta_line:
-            last_meeting_parts.append(
-                f"            <p class=\"direct-comparison__last-meta\">{escape(meta_line)}</p>"
-            )
-        last_meeting_parts.append(f"            {result_line}")
-        last_meeting_parts.append("          </div>")
-        last_meeting_block = "\n".join(last_meeting_parts)
-    else:
-        last_meeting_block = (
-            "          <div class=\"direct-comparison__last-meeting\">\n"
-            "            <h3>Letztes Duell</h3>\n"
-            "            <p class=\"direct-comparison__last-meta\">Keine Duelle gefunden.</p>\n"
-            "          </div>"
-        )
 
     matches_block = ""
     if comparison.matches:
@@ -3499,8 +3437,6 @@ def format_direct_comparison_section(
 
     content_parts: List[str] = []
     content_parts.extend(metrics_lines)
-    if last_meeting_block:
-        content_parts.append(last_meeting_block)
     if matches_block:
         content_parts.append(matches_block)
     if seasons_note:
