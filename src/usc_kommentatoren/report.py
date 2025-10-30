@@ -3248,24 +3248,15 @@ def format_instagram_list(links: Sequence[str]) -> str:
     return "\n          ".join(rendered)
 
 
-def _format_percentage(value: Optional[float]) -> str:
-    if value is None:
-        return "–"
-    rounded = round(value, 1)
-    if abs(rounded - round(rounded)) < 1e-9:
-        return f"{int(round(rounded))} %"
-    return f"{rounded:.1f} %"
-
-
 def format_direct_comparison_section(
     comparison: Optional[DirectComparisonData], opponent_name: str
 ) -> str:
     opponent_label = pretty_name(opponent_name)
     fallback_html = (
-        "    <section class=\"direct-comparison\">\n"
-        "      <h2>Direkter Vergleich</h2>\n"
-        "      <p class=\"direct-comparison__fallback\">Keine Daten zum direkten Vergleich verfügbar.</p>\n"
-        "    </section>"
+        '    <section class="direct-comparison">\n'
+        '      <h2>Direkter Vergleich</h2>\n'
+        '      <p class="direct-comparison__fallback">Keine Daten zum direkten Vergleich verfügbar.</p>\n'
+        '    </section>'
     )
 
     if not comparison:
@@ -3277,250 +3268,21 @@ def format_direct_comparison_section(
         return fallback_html
 
     usc_label = USC_CANONICAL_NAME
+    record_label = f"{summary.usc_wins}:{summary.opponent_wins}"
+    sets_label = f"{summary.usc_sets_for}:{summary.opponent_sets_for}"
 
-    def render_row(label: str, usc_value: str, opponent_value: str) -> str:
-        return "\n".join(
-            [
-                "            <tr>",
-                f"              <th scope=\"row\">{escape(label)}</th>",
-                f"              <td>{escape(usc_value)}</td>",
-                f"              <td>{escape(opponent_value)}</td>",
-                "            </tr>",
-            ]
-        )
-
-    rows: List[str] = []
-    rows.append(
-        render_row(
-            "Spiele",
-            str(summary.matches_played),
-            str(summary.matches_played),
-        )
-    )
-    rows.append(
-        render_row(
-            "Siege",
-            str(summary.usc_wins),
-            str(summary.opponent_wins),
-        )
-    )
-    rows.append(
-        render_row(
-            "Niederlagen",
-            str(summary.usc_losses),
-            str(summary.opponent_losses),
-        )
-    )
-    rows.append(
-        render_row(
-            "Sätze",
-            f"{summary.usc_sets_for}:{summary.opponent_sets_for}",
-            f"{summary.opponent_sets_for}:{summary.usc_sets_for}",
-        )
-    )
-    rows.append(
-        render_row(
-            "Punkte",
-            f"{summary.usc_points_for}:{summary.opponent_points_for}",
-            f"{summary.opponent_points_for}:{summary.usc_points_for}",
-        )
-    )
-
-    rows.append(
-        render_row(
-            "Siegquote",
-            _format_percentage(summary.usc_win_pct),
-            _format_percentage(summary.opponent_win_pct),
-        )
-    )
-
-    rows_html = "\n".join(rows)
-
-    last_match = comparison.matches[0] if comparison.matches else None
-    meta_block: str
-    if last_match:
-        home_team = pretty_name(last_match.home_team)
-        away_team = pretty_name(last_match.away_team)
-        team_line = f"{escape(home_team)} – {escape(away_team)}"
-
-        result_parts: List[str] = []
-        if last_match.result_sets:
-            result_parts.append(last_match.result_sets)
-        if last_match.result_points:
-            result_parts.append(f"({last_match.result_points})")
-        result_label = " ".join(part for part in result_parts if part)
-
-        outcome_label = "Ergebnis"
-        outcome_class = ""
-        if last_match.usc_won is True:
-            outcome_label = "Sieg USC"
-            outcome_class = " direct-comparison__result--win"
-        elif last_match.usc_won is False:
-            outcome_label = "Niederlage USC"
-            outcome_class = " direct-comparison__result--loss"
-
-        if last_match.date:
-            info_line = last_match.date.strftime("%d.%m.%Y")
-        elif last_match.date_label:
-            info_line = last_match.date_label
-        else:
-            info_line = ""
-
-        result_line = (
-            f"<p class=\"direct-comparison__result{outcome_class}\">{escape(outcome_label)}"
-            f"{(' • ' + escape(result_label)) if result_label else ''}</p>"
-        )
-
-        meta_parts: List[str] = [
-            "        <div class=\"direct-comparison__meta\">",
-            "          <h3>Letztes Duell</h3>",
-            f"          <p class=\"direct-comparison__teams\">{team_line}</p>",
-        ]
-        if info_line:
-            meta_parts.append(
-                f"          <p class=\"direct-comparison__meta-line\">{escape(info_line)}</p>"
-            )
-        meta_parts.append(f"          {result_line}")
-        meta_parts.append("        </div>")
-        meta_block = "\n".join(meta_parts)
-    else:
-        meta_block = (
-            "        <div class=\"direct-comparison__meta\">\n"
-            "          <h3>Letztes Duell</h3>\n"
-            "          <p class=\"direct-comparison__meta-line\">Keine Duelle gefunden.</p>\n"
-            "        </div>"
-        )
-
-    matches_block = ""
-    if comparison.matches:
-        match_items: List[str] = []
-        for match in comparison.matches:
-            header_parts: List[str] = []
-            if match.date:
-                header_parts.append(match.date.strftime("%d.%m.%Y"))
-            elif match.date_label:
-                label = match.date_label.strip()
-                if label:
-                    try:
-                        parsed_label = datetime.strptime(label, "%Y-%m-%d").date()
-                    except ValueError:
-                        header_parts.append(label)
-                    else:
-                        header_parts.append(parsed_label.strftime("%d.%m.%Y"))
-
-            meta_line = " · ".join(escape(part) for part in header_parts if part)
-
-            home_team = pretty_name(match.home_team)
-            away_team = pretty_name(match.away_team)
-            teams_line = f"{escape(home_team)} – {escape(away_team)}"
-
-            sets_label: Optional[str] = None
-            if match.usc_sets is not None and match.opponent_sets is not None:
-                sets_label = f"{match.usc_sets}:{match.opponent_sets}"
-            elif match.result_sets:
-                sets_label = match.result_sets
-
-            points_label: Optional[str] = None
-            if match.usc_points is not None and match.opponent_points is not None:
-                points_label = f"{match.usc_points}:{match.opponent_points}"
-            elif match.result_points:
-                points_label = match.result_points
-
-            set_scores_label: Optional[str] = None
-            if match.set_scores:
-                set_scores_label = ", ".join(escape(score) for score in match.set_scores)
-
-            primary_result_label = sets_label or (match.result_sets or "")
-            detail_label: Optional[str] = None
-            if set_scores_label:
-                detail_label = set_scores_label
-            elif points_label:
-                detail_label = escape(points_label)
-
-            result_label = ""
-            if primary_result_label and detail_label:
-                result_label = f"{escape(primary_result_label)} ({detail_label})"
-            elif primary_result_label:
-                result_label = escape(primary_result_label)
-            elif detail_label:
-                result_label = f"({detail_label})"
-
-            result_class = "direct-comparison__match-result"
-            if match.usc_won is True:
-                result_class += " direct-comparison__result--win"
-            elif match.usc_won is False:
-                result_class += " direct-comparison__result--loss"
-
-            item_lines: List[str] = ["          <li class=\"direct-comparison__match\">"]
-            line_segments: List[str] = []
-            if meta_line:
-                line_segments.append(f"{meta_line}:")
-            line_segments.append(teams_line)
-            if result_label:
-                line_segments.append(result_label)
-            combined_line = " ".join(segment for segment in line_segments if segment)
-            if combined_line:
-                item_lines.append(
-                    f"            <p class=\"{result_class}\">{combined_line}</p>"
-                )
-            item_lines.append("          </li>")
-            match_items.append("\n".join(item_lines))
-
-        if match_items:
-            matches_block = "\n".join(
-                [
-                    "      <div class=\"direct-comparison__matches\">",
-                    "        <h3>Alle Duelle</h3>",
-                    "        <ol class=\"direct-comparison__matches-list\">",
-                    "\n".join(match_items),
-                    "        </ol>",
-                    "      </div>",
-                ]
-            )
-
-    seasons_note = ""
-    if comparison.seasons:
-        unique_seasons = list(dict.fromkeys(comparison.seasons))
-        if unique_seasons:
-            ordered_seasons = sorted(unique_seasons)
-            if len(ordered_seasons) == 1:
-                season_label = f"Saison {ordered_seasons[0]}"
-            else:
-                season_label = f"Saisons {ordered_seasons[0]} – {ordered_seasons[-1]}"
-            seasons_note = (
-                "      <p class=\"direct-comparison__note\">"
-                f"Datenbasis: {escape(season_label)}"
-                "</p>"
-            )
-
-    section_lines = [
-        "    <section class=\"direct-comparison\">",
-        "      <h2>Direkter Vergleich</h2>",
-        "      <div class=\"direct-comparison__layout\">",
-        "        <div class=\"direct-comparison__table-wrapper\">",
-        "          <table class=\"direct-comparison__table\">",
-        "            <thead>",
-        "              <tr>",
-        "                <th scope=\"col\">Kennzahl</th>",
-        f"                <th scope=\"col\">{escape(usc_label)}</th>",
-        f"                <th scope=\"col\">{escape(opponent_label)}</th>",
-        "              </tr>",
-        "            </thead>",
-        "            <tbody>",
-        rows_html,
-        "            </tbody>",
-        "          </table>",
-        "        </div>",
-        meta_block,
-        "      </div>",
+    content_lines = [
+        '    <section class="direct-comparison">',
+        '      <h2>Direkter Vergleich</h2>',
+        '      <div class="direct-comparison__score">',
+        f'        <p class="direct-comparison__teams">{escape(usc_label)} vs. {escape(opponent_label)}</p>',
+        f'        <p class="direct-comparison__metric">Bilanz: {escape(record_label)}</p>',
+        f'        <p class="direct-comparison__metric">Sätze: {escape(sets_label)}</p>',
+        '      </div>',
+        '    </section>',
     ]
-    if matches_block:
-        section_lines.append(matches_block)
-    if seasons_note:
-        section_lines.append(seasons_note)
-    section_lines.append("    </section>")
-    return "\n".join(section_lines)
 
+    return "\n".join(content_lines)
 
 def format_mvp_rankings_section(
     rankings: Optional[Mapping[str, Mapping[str, Any]]],
@@ -4923,148 +4685,41 @@ def build_html_report(
       padding: clamp(1rem, 3vw, 1.4rem);
       box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
     }}
-    .direct-comparison__layout {{
+    .direct-comparison__score {{
       display: grid;
-      gap: clamp(1rem, 3vw, 1.6rem);
-      align-items: start;
-    }}
-    @media (min-width: 52rem) {{
-      .direct-comparison__layout {{
-        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-      }}
-    }}
-    .direct-comparison__table-wrapper {{
-      overflow-x: auto;
-    }}
-    .direct-comparison__table {{
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 20rem;
-      background: #ffffff;
-      border-radius: 0.75rem;
-      overflow: hidden;
-      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.25);
-    }}
-    .direct-comparison__table thead th {{
-      background: rgba(15, 118, 110, 0.12);
-      text-transform: uppercase;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      text-align: left;
-      padding: 0.5rem 0.75rem;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.75rem);
-    }}
-    .direct-comparison__table thead th + th,
-    .direct-comparison__table thead th + th + th {{
-      text-align: center;
-    }}
-    .direct-comparison__table tbody tr {{
-      border-top: 1px solid rgba(148, 163, 184, 0.25);
-    }}
-    .direct-comparison__table tbody tr:nth-child(even) {{
-      background: rgba(15, 118, 110, 0.06);
-    }}
-    .direct-comparison__table tbody th {{
-      padding: 0.55rem 0.75rem;
-      font-weight: 600;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
-    }}
-    .direct-comparison__table tbody td {{
-      padding: 0.55rem 0.75rem;
-      text-align: center;
-      font-weight: 600;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
-      font-variant-numeric: tabular-nums;
-    }}
-    .direct-comparison__meta {{
-      display: grid;
-      gap: 0.45rem;
-      background: #f8fafc;
-      border-radius: 0.85rem;
-      padding: clamp(0.85rem, 3vw, 1.2rem);
-      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.25);
-    }}
-    .direct-comparison__meta h3 {{
-      margin: 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1rem, 2.8vw, 1.2rem));
+      gap: clamp(0.4rem, 2.5vw, 0.7rem);
+      justify-items: center;
     }}
     .direct-comparison__teams {{
       margin: 0;
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.05rem);
+      text-align: center;
+    }}
+    .direct-comparison__metric {{
+      margin: 0;
       font-weight: 600;
       font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
-    }}
-    .direct-comparison__meta-line {{
-      margin: 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
-      color: #475569;
-    }}
-    .direct-comparison__result {{
-      margin: 0;
-      font-weight: 600;
-      color: #0f766e;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
-    }}
-    .direct-comparison__result--win {{
-      color: #047857;
-    }}
-    .direct-comparison__result--loss {{
-      color: #b91c1c;
-    }}
-    .direct-comparison__matches {{
-      margin-top: clamp(0.85rem, 3vw, 1.2rem);
-      background: #f8fafc;
-      border-radius: 0.85rem;
-      padding: clamp(0.85rem, 3vw, 1.2rem);
-      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.25);
-      display: grid;
-      gap: clamp(0.55rem, 2.5vw, 0.9rem);
-    }}
-    .direct-comparison__matches h3 {{
-      margin: 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1rem, 2.6vw, 1.15rem));
-    }}
-    .direct-comparison__matches-list {{
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      gap: clamp(0.55rem, 2.5vw, 0.85rem);
-    }}
-    .direct-comparison__match {{
-      display: grid;
-      gap: 0.3rem;
-    }}
-    .direct-comparison__match-meta {{
-      margin: 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
-      color: #475569;
-    }}
-    .direct-comparison__match-teams {{
-      margin: 0;
-      font-weight: 600;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.93rem);
-    }}
-    .direct-comparison__match-result {{
-      margin: 0;
-      font-weight: 600;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
-      color: #0f766e;
       font-variant-numeric: tabular-nums;
+      color: #0f766e;
+      text-align: center;
     }}
-    .direct-comparison__match-location {{
-      margin: 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
-      color: #475569;
-    }}
-    .direct-comparison__note {{
-      margin: clamp(0.75rem, 2.5vw, 1rem) 0 0 0;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
-      color: #475569;
+    @media (min-width: 40rem) {{
+      .direct-comparison__score {{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-width: 32rem;
+        margin-inline: auto;
+      }}
+      .direct-comparison__teams {{
+        grid-column: 1 / -1;
+      }}
     }}
     .direct-comparison__fallback {{
       margin: 0;
       font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
       color: #475569;
+      text-align: center;
+      font-weight: 500;
     }}
     .lineup-link {{
       margin-top: clamp(0.75rem, 2.5vw, 1.4rem);
@@ -5785,51 +5440,14 @@ def build_html_report(
       .direct-comparison {{
         padding: clamp(0.85rem, 3vw, 1.1rem);
       }}
-      .direct-comparison__layout {{
-        gap: clamp(0.75rem, 3vw, 1.2rem);
-      }}
-      .direct-comparison__table {{
-        min-width: min(18rem, 100%);
-      }}
-      .direct-comparison__table thead th {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.68rem);
-        padding: 0.4rem 0.5rem;
-      }}
-      .direct-comparison__table tbody th,
-      .direct-comparison__table tbody td {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
-        padding: 0.45rem 0.5rem;
-      }}
-      .direct-comparison__meta {{
-        padding: clamp(0.7rem, 3vw, 1rem);
+      .direct-comparison__score {{
+        gap: clamp(0.35rem, 3vw, 0.55rem);
       }}
       .direct-comparison__teams {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
-      }}
-      .direct-comparison__meta-line {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.78rem);
-      }}
-      .direct-comparison__result {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
-      }}
-      .direct-comparison__matches {{
-        padding: clamp(0.7rem, 3vw, 1rem);
-        gap: clamp(0.45rem, 2.5vw, 0.7rem);
-      }}
-      .direct-comparison__matches h3 {{
         font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
       }}
-      .direct-comparison__match-meta {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.75rem);
-      }}
-      .direct-comparison__match-teams {{
+      .direct-comparison__metric {{
         font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
-      }}
-      .direct-comparison__match-result {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
-      }}
-      .direct-comparison__match-location {{
-        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.75rem);
       }}
       .lineup-link ul {{
         flex-direction: column;
@@ -5969,63 +5587,17 @@ def build_html_report(
         background: #132a30;
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
       }}
-      .direct-comparison__table {{
-        background: #0f1f24;
-        box-shadow: 0 0 0 1px rgba(94, 234, 212, 0.25);
-      }}
-      .direct-comparison__table thead th {{
-        background: rgba(94, 234, 212, 0.16);
-        color: #5eead4;
-      }}
-      .direct-comparison__table tbody tr {{
-        border-top-color: rgba(148, 163, 184, 0.35);
-      }}
-      .direct-comparison__table tbody tr:nth-child(even) {{
-        background: rgba(15, 118, 110, 0.22);
-      }}
-      .direct-comparison__table tbody th,
-      .direct-comparison__table tbody td {{
-        color: #e2f3f7;
-      }}
-      .direct-comparison__meta {{
-        background: rgba(15, 118, 110, 0.18);
-        box-shadow: inset 0 0 0 1px rgba(94, 234, 212, 0.25);
+      .direct-comparison__score {{
+        justify-items: center;
       }}
       .direct-comparison__teams {{
         color: #f1f5f9;
       }}
-      .direct-comparison__meta-line {{
-        color: #cbd5f5;
-      }}
-      .direct-comparison__result {{
+      .direct-comparison__metric {{
         color: #5eead4;
       }}
-      .direct-comparison__result--win {{
-        color: #bbf7d0;
-      }}
-      .direct-comparison__result--loss {{
-        color: #fca5a5;
-      }}
-      .direct-comparison__note,
       .direct-comparison__fallback {{
         color: #94a3b8;
-      }}
-      .direct-comparison__matches {{
-        background: rgba(15, 118, 110, 0.18);
-        box-shadow: inset 0 0 0 1px rgba(94, 234, 212, 0.25);
-      }}
-      .direct-comparison__matches h3 {{
-        color: #f1f5f9;
-      }}
-      .direct-comparison__match-meta,
-      .direct-comparison__match-location {{
-        color: #cbd5f5;
-      }}
-      .direct-comparison__match-teams {{
-        color: #f1f5f9;
-      }}
-      .direct-comparison__match-result {{
-        color: #5eead4;
       }}
       .match-stats {{
         background: #132a30;
