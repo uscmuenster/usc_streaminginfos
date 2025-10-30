@@ -3273,18 +3273,12 @@ def format_direct_comparison_section(
             outcome_label = "Niederlage USC"
             outcome_class = " direct-comparison__result--loss"
 
-        info_parts: List[str] = []
         if last_match.date:
-            info_parts.append(last_match.date.strftime("%d.%m.%Y"))
+            info_line = last_match.date.strftime("%d.%m.%Y")
         elif last_match.date_label:
-            info_parts.append(last_match.date_label)
-        if last_match.round_label:
-            info_parts.append(last_match.round_label)
-        if last_match.competition:
-            info_parts.append(last_match.competition)
-        info_line = " · ".join(part for part in info_parts if part)
-
-        location_line = escape(last_match.location) if last_match.location else ""
+            info_line = last_match.date_label
+        else:
+            info_line = ""
 
         result_line = (
             f"<p class=\"direct-comparison__result{outcome_class}\">{escape(outcome_label)}"
@@ -3299,10 +3293,6 @@ def format_direct_comparison_section(
         if info_line:
             meta_parts.append(
                 f"          <p class=\"direct-comparison__meta-line\">{escape(info_line)}</p>"
-            )
-        if location_line:
-            meta_parts.append(
-                f"          <p class=\"direct-comparison__meta-line\">{location_line}</p>"
             )
         meta_parts.append(f"          {result_line}")
         meta_parts.append("        </div>")
@@ -3331,20 +3321,12 @@ def format_direct_comparison_section(
                         header_parts.append(label)
                     else:
                         header_parts.append(parsed_label.strftime("%d.%m.%Y"))
-            if match.round_label:
-                header_parts.append(match.round_label)
-            if match.competition:
-                header_parts.append(match.competition)
-            if match.season:
-                header_parts.append(f"Saison {match.season}")
 
             meta_line = " · ".join(escape(part) for part in header_parts if part)
 
             home_team = pretty_name(match.home_team)
             away_team = pretty_name(match.away_team)
             teams_line = f"{escape(home_team)} – {escape(away_team)}"
-
-            location_line = escape(match.location) if match.location else ""
 
             sets_label: Optional[str] = None
             if match.usc_sets is not None and match.opponent_sets is not None:
@@ -3382,11 +3364,6 @@ def format_direct_comparison_section(
             if result_line:
                 item_lines.append(
                     f"            <p class=\"{result_class}\">{result_line}</p>"
-                )
-            if location_line:
-                item_lines.append(
-                    "            "
-                    f"<p class=\"direct-comparison__match-location\">{location_line}</p>"
                 )
             item_lines.append("          </li>")
             match_items.append("\n".join(item_lines))
