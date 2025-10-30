@@ -8,6 +8,7 @@ import re
 from datetime import date, datetime, timedelta
 from pathlib import Path
 import mimetypes
+import sys
 from html import escape, unescape
 from io import BytesIO, StringIO
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
@@ -32,6 +33,8 @@ from .broadcast_satzpause23 import BROADCAST_PLAN as SECOND_SET_BREAK_PLAN
 from .broadcast_spielende import BROADCAST_PLAN as POST_MATCH_PLAN
 
 DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
+DVV_POKAL_SCHEDULE_URL = "https://www.dvv-pokal.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311591"
+DEFAULT_ADDITIONAL_SCHEDULE_URLS: Tuple[str, ...] = (DVV_POKAL_SCHEDULE_URL,)
 SCHEDULE_PAGE_URL = (
     "https://www.volleyball-bundesliga.de/cms/home/"
     "1_bundesliga_frauen/statistik/hauptrunde/spielplan.xhtml?playingScheduleMode=full"
@@ -520,14 +523,95 @@ def _download_schedule_text(
     return response.text
 
 
+def _resolve_schedule_urls(
+    primary_url: Optional[str],
+    extra_urls: Optional[Sequence[str]],
+) -> List[str]:
+    urls: List[str] = []
+    if primary_url:
+        urls.append(primary_url)
+    if extra_urls:
+        for entry in extra_urls:
+            if entry:
+                urls.append(entry)
+    return urls
+
+
+def _deduplicate_matches(matches: Iterable[Match]) -> List[Match]:
+    seen: set[tuple[datetime, str, str]] = set()
+    ordered = sorted(matches, key=lambda match: match.kickoff)
+    unique: List[Match] = []
+    for match in ordered:
+        signature = (
+            match.kickoff,
+            normalize_name(match.home_team),
+            normalize_name(match.away_team),
+        )
+        if signature in seen:
+            continue
+        seen.add(signature)
+        unique.append(match)
+    return unique
+
+
+def _combine_schedule_csv_texts(csv_texts: Sequence[str]) -> str:
+    rows: List[Dict[str, str]] = []
+    fieldnames: List[str] = []
+    for csv_text in csv_texts:
+        buffer = StringIO(csv_text)
+        reader = csv.DictReader(buffer, delimiter=";", quotechar="\"")
+        if reader.fieldnames:
+            for name in reader.fieldnames:
+                if name not in fieldnames:
+                    fieldnames.append(name)
+        for row in reader:
+            if not any(value.strip() for value in row.values() if isinstance(value, str)):
+                continue
+            rows.append(row)
+
+    if not fieldnames:
+        return ""
+
+    output = StringIO()
+    writer = csv.DictWriter(
+        output,
+        fieldnames=fieldnames,
+        delimiter=";",
+        quotechar="\"",
+        lineterminator="\n",
+    )
+    writer.writeheader()
+    for row in rows:
+        sanitized = {field: row.get(field, "") or "" for field in fieldnames}
+        writer.writerow(sanitized)
+    return output.getvalue()
+
+
 def fetch_schedule(
     url: str = DEFAULT_SCHEDULE_URL,
     *,
     retries: int = 5,
     delay_seconds: float = 2.0,
 ) -> List[Match]:
-    csv_text = _download_schedule_text(url, retries=retries, delay_seconds=delay_seconds)
-    return parse_schedule(csv_text)
+    urls = _resolve_schedule_urls(url, DEFAULT_ADDITIONAL_SCHEDULE_URLS)
+    matches: List[Match] = []
+    for schedule_url in urls:
+        try:
+            csv_text = _download_schedule_text(
+                schedule_url,
+                retries=retries,
+                delay_seconds=delay_seconds,
+            )
+        except Exception as exc:
+            if schedule_url == url:
+                raise
+            print(
+                f"Warnung: Zusätzlicher Spielplan konnte nicht geladen werden ({schedule_url}): {exc}",
+                file=sys.stderr,
+            )
+            continue
+        matches.extend(parse_schedule(csv_text))
+    return _deduplicate_matches(matches)
 
 
 def download_schedule(
@@ -537,9 +621,27 @@ def download_schedule(
     retries: int = 5,
     delay_seconds: float = 2.0,
 ) -> Path:
-    csv_text = _download_schedule_text(url, retries=retries, delay_seconds=delay_seconds)
+    urls = _resolve_schedule_urls(url, DEFAULT_ADDITIONAL_SCHEDULE_URLS)
+    csv_texts: List[str] = []
+    for schedule_url in urls:
+        try:
+            csv_texts.append(
+                _download_schedule_text(
+                    schedule_url,
+                    retries=retries,
+                    delay_seconds=delay_seconds,
+                )
+            )
+        except Exception as exc:
+            if schedule_url == url:
+                raise
+            print(
+                f"Warnung: Zusätzlicher Spielplan konnte nicht geladen werden ({schedule_url}): {exc}",
+                file=sys.stderr,
+            )
+    combined = _combine_schedule_csv_texts(csv_texts)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(csv_text, encoding="utf-8")
+    destination.write_text(combined, encoding="utf-8")
     return destination
 
 
@@ -6129,6 +6231,7 @@ def build_html_report(
 __all__ = [
     "BERLIN_TZ",
     "DEFAULT_SCHEDULE_URL",
+    "DVV_POKAL_SCHEDULE_URL",
     "NEWS_LOOKBACK_DAYS",
     "NewsItem",
     "Match",
