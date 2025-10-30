@@ -3265,7 +3265,7 @@ def format_direct_comparison_section(
     heading_id = f"direct-comparison-heading-{heading_slug}"
     fallback_html = (
         f'    <aside class="broadcast-box direct-comparison-box" aria-labelledby="{heading_id}">\n'
-        '      <details class="broadcast-box__details" open>\n'
+        '      <details class="broadcast-box__details">\n'
         '        <summary class="broadcast-box__summary">\n'
         f'          <span class="broadcast-box__summary-title" id="{heading_id}" role="heading" aria-level="2">Direkter Vergleich</span>\n'
         '          <span class="broadcast-box__summary-indicator" aria-hidden="true"></span>\n'
@@ -3444,7 +3444,7 @@ def format_direct_comparison_section(
 
     section_lines = [
         f"    <aside class=\"broadcast-box direct-comparison-box\" aria-labelledby=\"{heading_id}\">",
-        "      <details class=\"broadcast-box__details\" open>",
+        "      <details class=\"broadcast-box__details\">",
         "        <summary class=\"broadcast-box__summary\">",
         f"          <span class=\"broadcast-box__summary-title\" id=\"{heading_id}\" role=\"heading\" aria-level=\"2\">Direkter Vergleich</span>",
         "          <span class=\"broadcast-box__summary-indicator\" aria-hidden=\"true\"></span>",
