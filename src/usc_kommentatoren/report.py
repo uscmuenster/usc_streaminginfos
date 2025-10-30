@@ -307,6 +307,61 @@ class TransferItem:
             return self.date.strftime("%d.%m.%Y")
         return self.date_label
 
+
+@dataclass(frozen=True)
+class DirectComparisonSummary:
+    matches_played: int
+    usc_wins: int
+    opponent_wins: int
+    usc_sets_for: int
+    opponent_sets_for: int
+    usc_points_for: int
+    opponent_points_for: int
+
+    @property
+    def usc_losses(self) -> int:
+        return self.opponent_wins
+
+    @property
+    def opponent_losses(self) -> int:
+        return self.usc_wins
+
+    @property
+    def usc_win_pct(self) -> Optional[float]:
+        if self.matches_played <= 0:
+            return None
+        return (self.usc_wins / self.matches_played) * 100
+
+    @property
+    def opponent_win_pct(self) -> Optional[float]:
+        if self.matches_played <= 0:
+            return None
+        return (self.opponent_wins / self.matches_played) * 100
+
+
+@dataclass(frozen=True)
+class DirectComparisonMatch:
+    match_id: Optional[str]
+    date: Optional[date]
+    date_label: Optional[str]
+    season: Optional[str]
+    home_team: str
+    away_team: str
+    round_label: Optional[str]
+    competition: Optional[str]
+    location: Optional[str]
+    result_sets: Optional[str]
+    result_points: Optional[str]
+    usc_won: Optional[bool]
+
+
+@dataclass(frozen=True)
+class DirectComparisonData:
+    summary: DirectComparisonSummary
+    matches: Tuple[DirectComparisonMatch, ...]
+    seasons: Tuple[str, ...]
+
+
 @dataclass(frozen=True)
 class KeywordSet:
     keywords: Tuple[str, ...]
@@ -2410,6 +2465,282 @@ def collect_match_stats_totals(
     return collected
 
 
+def _coerce_int(value: Any) -> int:
+    if value is None:
+        return 0
+    if isinstance(value, bool):
+        return int(value)
+    if isinstance(value, int):
+        return value
+    try:
+        return int(str(value).strip())
+    except (TypeError, ValueError):
+        return 0
+
+
+def _resolve_with_fallback(summary_value: int, fallback_value: int) -> int:
+    if summary_value > 0:
+        return summary_value
+    if fallback_value > 0:
+        return fallback_value
+    return summary_value if summary_value >= 0 else 0
+
+
+def prepare_direct_comparison(
+    payload: Optional[Mapping[str, Any]], opponent_name: str
+) -> Optional[DirectComparisonData]:
+    if not payload or not opponent_name:
+        return None
+
+    seasons_raw = payload.get("seasons") if isinstance(payload, Mapping) else None
+    if not isinstance(seasons_raw, Sequence):
+        return None
+
+    normalized_target = normalize_name(opponent_name)
+    if not normalized_target:
+        return None
+
+    summary_totals = {
+        "matches_played": 0,
+        "usc_wins": 0,
+        "opponent_wins": 0,
+        "usc_sets_for": 0,
+        "opponent_sets_for": 0,
+        "usc_points_for": 0,
+        "opponent_points_for": 0,
+    }
+    fallback_totals = {
+        "matches_played": 0,
+        "usc_wins": 0,
+        "opponent_wins": 0,
+        "usc_sets_for": 0,
+        "opponent_sets_for": 0,
+        "usc_points_for": 0,
+        "opponent_points_for": 0,
+    }
+
+    matches: List[DirectComparisonMatch] = []
+    seasons_collected: List[str] = []
+    seen_seasons: set[str] = set()
+    seen_matches: set[Tuple[Optional[str], Optional[date], str, str]] = set()
+
+    for season_entry in seasons_raw:
+        if not isinstance(season_entry, Mapping):
+            continue
+        season_label = str(season_entry.get("season") or "").strip() or None
+        opponents = season_entry.get("opponents")
+        if not isinstance(opponents, Sequence):
+            continue
+        for opponent_entry in opponents:
+            if not isinstance(opponent_entry, Mapping):
+                continue
+            opponent_label = str(opponent_entry.get("team") or "").strip()
+            if not opponent_label:
+                continue
+            if normalize_name(opponent_label) != normalized_target:
+                continue
+            if season_label and season_label not in seen_seasons:
+                seasons_collected.append(season_label)
+                seen_seasons.add(season_label)
+
+            summary_payload = opponent_entry.get("summary")
+            if isinstance(summary_payload, Mapping):
+                summary_totals["matches_played"] += _coerce_int(
+                    summary_payload.get("matches_played")
+                )
+                summary_totals["usc_wins"] += _coerce_int(summary_payload.get("usc_wins"))
+                opponent_wins_value = summary_payload.get("opponent_wins")
+                if opponent_wins_value is None:
+                    opponent_wins_value = summary_payload.get("usc_losses")
+                summary_totals["opponent_wins"] += _coerce_int(opponent_wins_value)
+                summary_totals["usc_sets_for"] += _coerce_int(
+                    summary_payload.get("usc_sets_for")
+                )
+                opponent_sets_value = summary_payload.get("opponent_sets_for")
+                if opponent_sets_value is None:
+                    opponent_sets_value = summary_payload.get("usc_sets_against")
+                summary_totals["opponent_sets_for"] += _coerce_int(opponent_sets_value)
+                summary_totals["usc_points_for"] += _coerce_int(
+                    summary_payload.get("usc_points_for")
+                )
+                opponent_points_value = summary_payload.get("opponent_points_for")
+                if opponent_points_value is None:
+                    opponent_points_value = summary_payload.get("usc_points_against")
+                summary_totals["opponent_points_for"] += _coerce_int(
+                    opponent_points_value
+                )
+
+            matches_payload = opponent_entry.get("matches")
+            if not isinstance(matches_payload, Sequence):
+                continue
+            for match_entry in matches_payload:
+                if not isinstance(match_entry, Mapping):
+                    continue
+                match_id_raw = match_entry.get("match_id")
+                match_id: Optional[str] = None
+                if match_id_raw is not None:
+                    match_id_candidate = str(match_id_raw).strip()
+                    if match_id_candidate:
+                        match_id = match_id_candidate
+
+                date_raw = match_entry.get("date")
+                if date_raw is not None:
+                    date_candidate = str(date_raw).strip()
+                    date_label = date_candidate or None
+                else:
+                    date_label = None
+                parsed_date: Optional[date] = None
+                if date_label:
+                    try:
+                        parsed_date = datetime.strptime(date_label, "%Y-%m-%d").date()
+                    except ValueError:
+                        parsed_date = None
+
+                home_team_raw = match_entry.get("home_team")
+                home_team = str(home_team_raw).strip() if home_team_raw else ""
+                away_team_raw = match_entry.get("away_team")
+                away_team = str(away_team_raw).strip() if away_team_raw else ""
+
+                round_label = str(match_entry.get("round") or "").strip() or None
+                competition = str(match_entry.get("competition") or "").strip() or None
+                location = str(match_entry.get("location") or "").strip() or None
+
+                result_payload = match_entry.get("result")
+                result_sets: Optional[str] = None
+                result_points: Optional[str] = None
+                if isinstance(result_payload, Mapping):
+                    result_sets = str(result_payload.get("sets") or "").strip() or None
+                    result_points = str(result_payload.get("points") or "").strip() or None
+
+                usc_sets_value = _coerce_int(match_entry.get("usc_sets"))
+                opponent_sets_value = _coerce_int(match_entry.get("opponent_sets"))
+                usc_points_value = _coerce_int(match_entry.get("usc_points"))
+                opponent_points_value = _coerce_int(match_entry.get("opponent_points"))
+
+                fallback_totals["matches_played"] += 1
+                fallback_totals["usc_sets_for"] += usc_sets_value
+                fallback_totals["opponent_sets_for"] += opponent_sets_value
+                fallback_totals["usc_points_for"] += usc_points_value
+                fallback_totals["opponent_points_for"] += opponent_points_value
+
+                usc_won_raw = match_entry.get("usc_won")
+                usc_won: Optional[bool]
+                if isinstance(usc_won_raw, bool):
+                    usc_won = usc_won_raw
+                elif isinstance(usc_won_raw, (int, float)):
+                    usc_won = bool(usc_won_raw)
+                elif isinstance(usc_won_raw, str):
+                    lowered = usc_won_raw.strip().lower()
+                    if lowered in {"true", "1", "ja", "sieg", "win"}:
+                        usc_won = True
+                    elif lowered in {"false", "0", "nein", "niederlage", "loss"}:
+                        usc_won = False
+                    else:
+                        usc_won = None
+                else:
+                    usc_won = None
+
+                if usc_won is True:
+                    fallback_totals["usc_wins"] += 1
+                elif usc_won is False:
+                    fallback_totals["opponent_wins"] += 1
+                else:
+                    if usc_sets_value or opponent_sets_value:
+                        if usc_sets_value > opponent_sets_value:
+                            fallback_totals["usc_wins"] += 1
+                            usc_won = True
+                        elif opponent_sets_value > usc_sets_value:
+                            fallback_totals["opponent_wins"] += 1
+                            usc_won = False
+
+                match_key = (
+                    match_id,
+                    parsed_date,
+                    normalize_name(home_team) if home_team else "",
+                    normalize_name(away_team) if away_team else "",
+                )
+                if match_key in seen_matches:
+                    continue
+                seen_matches.add(match_key)
+
+                matches.append(
+                    DirectComparisonMatch(
+                        match_id=match_id,
+                        date=parsed_date,
+                        date_label=date_label,
+                        season=season_label,
+                        home_team=home_team or opponent_label,
+                        away_team=away_team or USC_CANONICAL_NAME,
+                        round_label=round_label,
+                        competition=competition,
+                        location=location,
+                        result_sets=result_sets,
+                        result_points=result_points,
+                        usc_won=usc_won,
+                    )
+                )
+
+    matches_played = _resolve_with_fallback(
+        summary_totals["matches_played"], fallback_totals["matches_played"]
+    )
+    usc_wins = _resolve_with_fallback(summary_totals["usc_wins"], fallback_totals["usc_wins"])
+    opponent_wins = _resolve_with_fallback(
+        summary_totals["opponent_wins"], fallback_totals["opponent_wins"]
+    )
+    usc_sets_for = _resolve_with_fallback(
+        summary_totals["usc_sets_for"], fallback_totals["usc_sets_for"]
+    )
+    opponent_sets_for = _resolve_with_fallback(
+        summary_totals["opponent_sets_for"], fallback_totals["opponent_sets_for"]
+    )
+    usc_points_for = _resolve_with_fallback(
+        summary_totals["usc_points_for"], fallback_totals["usc_points_for"]
+    )
+    opponent_points_for = _resolve_with_fallback(
+        summary_totals["opponent_points_for"], fallback_totals["opponent_points_for"]
+    )
+
+    if matches and matches_played < len(matches):
+        matches_played = len(matches)
+
+    if matches_played > 0 and usc_wins + opponent_wins < matches_played:
+        opponent_wins = matches_played - usc_wins
+
+    if (
+        matches_played <= 0
+        and usc_wins <= 0
+        and opponent_wins <= 0
+        and not matches
+    ):
+        return None
+
+    summary = DirectComparisonSummary(
+        matches_played=matches_played,
+        usc_wins=usc_wins,
+        opponent_wins=opponent_wins,
+        usc_sets_for=usc_sets_for,
+        opponent_sets_for=opponent_sets_for,
+        usc_points_for=usc_points_for,
+        opponent_points_for=opponent_points_for,
+    )
+
+    matches_sorted = sorted(
+        matches,
+        key=lambda item: (
+            item.date or date.min,
+            item.match_id or "",
+            item.season or "",
+        ),
+        reverse=True,
+    )
+
+    return DirectComparisonData(
+        summary=summary,
+        matches=tuple(matches_sorted),
+        seasons=tuple(seasons_collected),
+    )
+
+
 def pretty_name(name: str) -> str:
     if is_usc(name):
         return USC_CANONICAL_NAME
@@ -2683,6 +3014,201 @@ def format_instagram_list(links: Sequence[str]) -> str:
             display = f"@{segments[0]}"
         rendered.append(f"<li><a href=\"{escape(link)}\">{escape(display)}</a></li>")
     return "\n          ".join(rendered)
+
+
+def _format_percentage(value: Optional[float]) -> str:
+    if value is None:
+        return "–"
+    rounded = round(value, 1)
+    if abs(rounded - round(rounded)) < 1e-9:
+        return f"{int(round(rounded))} %"
+    return f"{rounded:.1f} %"
+
+
+def format_direct_comparison_section(
+    comparison: Optional[DirectComparisonData], opponent_name: str
+) -> str:
+    opponent_label = pretty_name(opponent_name)
+    fallback_html = (
+        "    <section class=\"direct-comparison\">\n"
+        "      <h2>Direkter Vergleich</h2>\n"
+        "      <p class=\"direct-comparison__fallback\">Keine Daten zum direkten Vergleich verfügbar.</p>\n"
+        "    </section>"
+    )
+
+    if not comparison:
+        return fallback_html
+
+    summary = comparison.summary
+    has_content = summary.matches_played > 0 or bool(comparison.matches)
+    if not has_content:
+        return fallback_html
+
+    usc_label = USC_CANONICAL_NAME
+
+    def render_row(label: str, usc_value: str, opponent_value: str) -> str:
+        return "\n".join(
+            [
+                "            <tr>",
+                f"              <th scope=\"row\">{escape(label)}</th>",
+                f"              <td>{escape(usc_value)}</td>",
+                f"              <td>{escape(opponent_value)}</td>",
+                "            </tr>",
+            ]
+        )
+
+    rows: List[str] = []
+    rows.append(
+        render_row(
+            "Spiele",
+            str(summary.matches_played),
+            str(summary.matches_played),
+        )
+    )
+    rows.append(
+        render_row(
+            "Siege",
+            str(summary.usc_wins),
+            str(summary.opponent_wins),
+        )
+    )
+    rows.append(
+        render_row(
+            "Niederlagen",
+            str(summary.usc_losses),
+            str(summary.opponent_losses),
+        )
+    )
+    rows.append(
+        render_row(
+            "Sätze",
+            f"{summary.usc_sets_for}:{summary.opponent_sets_for}",
+            f"{summary.opponent_sets_for}:{summary.usc_sets_for}",
+        )
+    )
+    rows.append(
+        render_row(
+            "Punkte",
+            f"{summary.usc_points_for}:{summary.opponent_points_for}",
+            f"{summary.opponent_points_for}:{summary.usc_points_for}",
+        )
+    )
+
+    rows.append(
+        render_row(
+            "Siegquote",
+            _format_percentage(summary.usc_win_pct),
+            _format_percentage(summary.opponent_win_pct),
+        )
+    )
+
+    rows_html = "\n".join(rows)
+
+    last_match = comparison.matches[0] if comparison.matches else None
+    meta_block: str
+    if last_match:
+        home_team = pretty_name(last_match.home_team)
+        away_team = pretty_name(last_match.away_team)
+        team_line = f"{escape(home_team)} – {escape(away_team)}"
+
+        result_parts: List[str] = []
+        if last_match.result_sets:
+            result_parts.append(last_match.result_sets)
+        if last_match.result_points:
+            result_parts.append(f"({last_match.result_points})")
+        result_label = " ".join(part for part in result_parts if part)
+
+        outcome_label = "Ergebnis"
+        outcome_class = ""
+        if last_match.usc_won is True:
+            outcome_label = "Sieg USC"
+            outcome_class = " direct-comparison__result--win"
+        elif last_match.usc_won is False:
+            outcome_label = "Niederlage USC"
+            outcome_class = " direct-comparison__result--loss"
+
+        info_parts: List[str] = []
+        if last_match.date:
+            info_parts.append(last_match.date.strftime("%d.%m.%Y"))
+        elif last_match.date_label:
+            info_parts.append(last_match.date_label)
+        if last_match.round_label:
+            info_parts.append(last_match.round_label)
+        if last_match.competition:
+            info_parts.append(last_match.competition)
+        info_line = " · ".join(part for part in info_parts if part)
+
+        location_line = escape(last_match.location) if last_match.location else ""
+
+        result_line = (
+            f"<p class=\"direct-comparison__result{outcome_class}\">{escape(outcome_label)}"
+            f"{(' • ' + escape(result_label)) if result_label else ''}</p>"
+        )
+
+        meta_parts: List[str] = [
+            "        <div class=\"direct-comparison__meta\">",
+            "          <h3>Letztes Duell</h3>",
+            f"          <p class=\"direct-comparison__teams\">{team_line}</p>",
+        ]
+        if info_line:
+            meta_parts.append(
+                f"          <p class=\"direct-comparison__meta-line\">{escape(info_line)}</p>"
+            )
+        if location_line:
+            meta_parts.append(
+                f"          <p class=\"direct-comparison__meta-line\">{location_line}</p>"
+            )
+        meta_parts.append(f"          {result_line}")
+        meta_parts.append("        </div>")
+        meta_block = "\n".join(meta_parts)
+    else:
+        meta_block = (
+            "        <div class=\"direct-comparison__meta\">\n"
+            "          <h3>Letztes Duell</h3>\n"
+            "          <p class=\"direct-comparison__meta-line\">Keine Duelle gefunden.</p>\n"
+            "        </div>"
+        )
+
+    seasons_note = ""
+    if comparison.seasons:
+        unique_seasons = list(dict.fromkeys(comparison.seasons))
+        if unique_seasons:
+            ordered_seasons = sorted(unique_seasons)
+            if len(ordered_seasons) == 1:
+                season_label = f"Saison {ordered_seasons[0]}"
+            else:
+                season_label = f"Saisons {ordered_seasons[0]} – {ordered_seasons[-1]}"
+            seasons_note = (
+                "      <p class=\"direct-comparison__note\">"
+                f"Datenbasis: {escape(season_label)}"
+                "</p>"
+            )
+
+    section_lines = [
+        "    <section class=\"direct-comparison\">",
+        "      <h2>Direkter Vergleich</h2>",
+        "      <div class=\"direct-comparison__layout\">",
+        "        <div class=\"direct-comparison__table-wrapper\">",
+        "          <table class=\"direct-comparison__table\">",
+        "            <thead>",
+        "              <tr>",
+        "                <th scope=\"col\">Kennzahl</th>",
+        f"                <th scope=\"col\">{escape(usc_label)}</th>",
+        f"                <th scope=\"col\">{escape(opponent_label)}</th>",
+        "              </tr>",
+        "            </thead>",
+        "            <tbody>",
+        rows_html,
+        "            </tbody>",
+        "          </table>",
+        "        </div>",
+        meta_block,
+        "      </div>",
+    ]
+    if seasons_note:
+        section_lines.append(seasons_note)
+    section_lines.append("    </section>")
+    return "\n".join(section_lines)
 
 
 def format_mvp_rankings_section(
@@ -3206,6 +3732,7 @@ def build_html_report(
     font_scale: float = 1.0,
     match_stats: Optional[Mapping[str, Sequence[MatchStatsTotals]]] = None,
     mvp_rankings: Optional[Mapping[str, Mapping[str, Any]]] = None,
+    direct_comparison: Optional[DirectComparisonData] = None,
 ) -> str:
     heading = pretty_name(next_home.away_team)
     kickoff_raw = next_home.kickoff
@@ -3296,6 +3823,10 @@ def build_html_report(
         mvp_rankings,
         usc_name=USC_CANONICAL_NAME,
         opponent_name=next_home.away_team,
+    )
+    direct_comparison_html = format_direct_comparison_section(
+        direct_comparison,
+        next_home.away_team,
     )
 
     navigation_links = [
@@ -4060,6 +4591,110 @@ def build_html_report(
       padding: 0.85rem clamp(0.9rem, 2.6vw, 1.3rem);
       box-shadow: 0 10px 30px rgba(0, 76, 84, 0.08);
     }}
+    .direct-comparison {{
+      margin-top: clamp(1rem, 3vw, 1.75rem);
+      background: #ffffff;
+      border-radius: 0.9rem;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    }}
+    .direct-comparison__layout {{
+      display: grid;
+      gap: clamp(1rem, 3vw, 1.6rem);
+      align-items: start;
+    }}
+    @media (min-width: 52rem) {{
+      .direct-comparison__layout {{
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      }}
+    }}
+    .direct-comparison__table-wrapper {{
+      overflow-x: auto;
+    }}
+    .direct-comparison__table {{
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 20rem;
+      background: #ffffff;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.25);
+    }}
+    .direct-comparison__table thead th {{
+      background: rgba(15, 118, 110, 0.12);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.75rem);
+    }}
+    .direct-comparison__table thead th + th,
+    .direct-comparison__table thead th + th + th {{
+      text-align: center;
+    }}
+    .direct-comparison__table tbody tr {{
+      border-top: 1px solid rgba(148, 163, 184, 0.25);
+    }}
+    .direct-comparison__table tbody tr:nth-child(even) {{
+      background: rgba(15, 118, 110, 0.06);
+    }}
+    .direct-comparison__table tbody th {{
+      padding: 0.55rem 0.75rem;
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+    }}
+    .direct-comparison__table tbody td {{
+      padding: 0.55rem 0.75rem;
+      text-align: center;
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      font-variant-numeric: tabular-nums;
+    }}
+    .direct-comparison__meta {{
+      display: grid;
+      gap: 0.45rem;
+      background: #f8fafc;
+      border-radius: 0.85rem;
+      padding: clamp(0.85rem, 3vw, 1.2rem);
+      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.25);
+    }}
+    .direct-comparison__meta h3 {{
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1rem, 2.8vw, 1.2rem));
+    }}
+    .direct-comparison__teams {{
+      margin: 0;
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+    }}
+    .direct-comparison__meta-line {{
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
+      color: #475569;
+    }}
+    .direct-comparison__result {{
+      margin: 0;
+      font-weight: 600;
+      color: #0f766e;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+    }}
+    .direct-comparison__result--win {{
+      color: #047857;
+    }}
+    .direct-comparison__result--loss {{
+      color: #b91c1c;
+    }}
+    .direct-comparison__note {{
+      margin: clamp(0.75rem, 2.5vw, 1rem) 0 0 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
+      color: #475569;
+    }}
+    .direct-comparison__fallback {{
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      color: #475569;
+    }}
     .lineup-link {{
       margin-top: clamp(0.75rem, 2.5vw, 1.4rem);
       display: flex;
@@ -4776,6 +5411,36 @@ def build_html_report(
       .match-list li {{
         padding: 0.85rem 1rem;
       }}
+      .direct-comparison {{
+        padding: clamp(0.85rem, 3vw, 1.1rem);
+      }}
+      .direct-comparison__layout {{
+        gap: clamp(0.75rem, 3vw, 1.2rem);
+      }}
+      .direct-comparison__table {{
+        min-width: min(18rem, 100%);
+      }}
+      .direct-comparison__table thead th {{
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.68rem);
+        padding: 0.4rem 0.5rem;
+      }}
+      .direct-comparison__table tbody th,
+      .direct-comparison__table tbody td {{
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
+        padding: 0.45rem 0.5rem;
+      }}
+      .direct-comparison__meta {{
+        padding: clamp(0.7rem, 3vw, 1rem);
+      }}
+      .direct-comparison__teams {{
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      }}
+      .direct-comparison__meta-line {{
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.78rem);
+      }}
+      .direct-comparison__result {{
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
+      }}
       .lineup-link ul {{
         flex-direction: column;
         align-items: center;
@@ -4909,6 +5574,51 @@ def build_html_report(
       .match-list li {{
         background: #132a30;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      }}
+      .direct-comparison {{
+        background: #132a30;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }}
+      .direct-comparison__table {{
+        background: #0f1f24;
+        box-shadow: 0 0 0 1px rgba(94, 234, 212, 0.25);
+      }}
+      .direct-comparison__table thead th {{
+        background: rgba(94, 234, 212, 0.16);
+        color: #5eead4;
+      }}
+      .direct-comparison__table tbody tr {{
+        border-top-color: rgba(148, 163, 184, 0.35);
+      }}
+      .direct-comparison__table tbody tr:nth-child(even) {{
+        background: rgba(15, 118, 110, 0.22);
+      }}
+      .direct-comparison__table tbody th,
+      .direct-comparison__table tbody td {{
+        color: #e2f3f7;
+      }}
+      .direct-comparison__meta {{
+        background: rgba(15, 118, 110, 0.18);
+        box-shadow: inset 0 0 0 1px rgba(94, 234, 212, 0.25);
+      }}
+      .direct-comparison__teams {{
+        color: #f1f5f9;
+      }}
+      .direct-comparison__meta-line {{
+        color: #cbd5f5;
+      }}
+      .direct-comparison__result {{
+        color: #5eead4;
+      }}
+      .direct-comparison__result--win {{
+        color: #bbf7d0;
+      }}
+      .direct-comparison__result--loss {{
+        color: #fca5a5;
+      }}
+      .direct-comparison__note,
+      .direct-comparison__fallback {{
+        color: #94a3b8;
       }}
       .match-stats {{
         background: #132a30;
@@ -5103,6 +5813,7 @@ def build_html_report(
         {usc_items}
       </ul>
     </section>
+{direct_comparison_html}
     <section class=\"lineup-link\">
       <ul>
         {lineup_link_items}
@@ -5425,6 +6136,9 @@ __all__ = [
     "RosterMember",
     "MatchStatsTotals",
     "TransferItem",
+    "DirectComparisonData",
+    "DirectComparisonMatch",
+    "DirectComparisonSummary",
     "TEAM_HOMEPAGES",
     "TEAM_ROSTER_IDS",
     "TABLE_URL",
@@ -5439,6 +6153,7 @@ __all__ = [
     "collect_team_roster",
     "collect_team_photo",
     "build_html_report",
+    "prepare_direct_comparison",
     "download_schedule",
     "get_team_homepage",
     "get_team_roster_url",

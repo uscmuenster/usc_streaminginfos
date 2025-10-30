@@ -29,6 +29,7 @@ from .report import (
     find_next_match_for_team,
     find_next_usc_home_match,
     load_schedule_from_file,
+    prepare_direct_comparison,
 )
 
 DEFAULT_OUTPUT_PATH = Path("docs/index.html")
@@ -98,6 +99,12 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=Path("docs/data/season_results_2024_25.json"),
         help="Pfad zur JSON-Datei mit den Saisonergebnissen (Standard: docs/data/season_results_2024_25.json).",
+    )
+    parser.add_argument(
+        "--direct-comparisons",
+        type=Path,
+        default=Path("docs/data/direct_comparisons.json"),
+        help="Pfad zur JSON-Datei mit direkten Vergleichen (Standard: docs/data/direct_comparisons.json).",
     )
     parser.add_argument(
         "--recent-limit",
@@ -227,6 +234,24 @@ def main() -> int:
             )
             season_results_data = None
 
+    direct_comparisons_payload = None
+    if args.direct_comparisons:
+        try:
+            direct_comparisons_payload = json.loads(
+                args.direct_comparisons.read_text(encoding="utf-8")
+            )
+        except FileNotFoundError:
+            print(
+                f"Hinweis: Direkter Vergleich {args.direct_comparisons} wurde nicht gefunden.",
+                file=sys.stderr,
+            )
+        except Exception as exc:  # pragma: no cover - invalid JSON
+            print(
+                f"Warnung: Direkter Vergleich konnte nicht geladen werden: {exc}",
+                file=sys.stderr,
+            )
+            direct_comparisons_payload = None
+
     mvp_rankings_data: Optional[Dict[str, Dict[str, List[List[str]]]]] = None
 
     if args.mvp_output and not args.skip_mvp_output:
@@ -261,6 +286,11 @@ def main() -> int:
     stats_matches.extend(opponent_recent)
     match_stats_map = collect_match_stats_totals(stats_matches)
 
+    direct_comparison_data = prepare_direct_comparison(
+        direct_comparisons_payload,
+        next_home.away_team,
+    )
+
     report_kwargs = dict(
         next_home=next_home,
         usc_recent=usc_recent,
@@ -281,6 +311,7 @@ def main() -> int:
         generated_at=generated_at,
         match_stats=match_stats_map,
         mvp_rankings=mvp_rankings_data,
+        direct_comparison=direct_comparison_data,
     )
 
     html = build_html_report(**report_kwargs)
