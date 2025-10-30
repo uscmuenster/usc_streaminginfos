@@ -360,6 +360,7 @@ class DirectComparisonMatch:
     location: Optional[str]
     result_sets: Optional[str]
     result_points: Optional[str]
+    set_scores: Tuple[str, ...]
     usc_sets: Optional[int]
     opponent_sets: Optional[int]
     usc_points: Optional[int]
@@ -2797,6 +2798,23 @@ def prepare_direct_comparison(
                     result_sets = str(result_payload.get("sets") or "").strip() or None
                     result_points = str(result_payload.get("points") or "").strip() or None
 
+                set_scores_field = match_entry.get("set_scores")
+                set_scores: Tuple[str, ...] = ()
+                if isinstance(set_scores_field, Sequence) and not isinstance(
+                    set_scores_field, (str, bytes)
+                ):
+                    normalized_scores: List[str] = []
+                    for score in set_scores_field:
+                        try:
+                            text = str(score)
+                        except Exception:
+                            continue
+                        cleaned_score = text.strip()
+                        if cleaned_score:
+                            normalized_scores.append(cleaned_score)
+                    if normalized_scores:
+                        set_scores = tuple(normalized_scores)
+
                 usc_sets_optional = _coerce_optional_int(match_entry.get("usc_sets"))
                 opponent_sets_optional = _coerce_optional_int(
                     match_entry.get("opponent_sets")
@@ -2878,6 +2896,7 @@ def prepare_direct_comparison(
                         location=location,
                         result_sets=result_sets,
                         result_points=result_points,
+                        set_scores=set_scores,
                         usc_sets=usc_sets_optional,
                         opponent_sets=opponent_sets_optional,
                         usc_points=usc_points_optional,
@@ -3407,12 +3426,24 @@ def format_direct_comparison_section(
             elif match.result_points:
                 points_label = match.result_points
 
-            result_parts: List[str] = []
-            if sets_label:
-                result_parts.append(escape(sets_label))
-            if points_label:
-                result_parts.append(f"({escape(points_label)})")
-            result_line = " ".join(result_parts)
+            set_scores_label: Optional[str] = None
+            if match.set_scores:
+                set_scores_label = ", ".join(escape(score) for score in match.set_scores)
+
+            primary_result_label = sets_label or (match.result_sets or "")
+            detail_label: Optional[str] = None
+            if set_scores_label:
+                detail_label = set_scores_label
+            elif points_label:
+                detail_label = escape(points_label)
+
+            result_label = ""
+            if primary_result_label and detail_label:
+                result_label = f"{escape(primary_result_label)} ({detail_label})"
+            elif primary_result_label:
+                result_label = escape(primary_result_label)
+            elif detail_label:
+                result_label = f"({detail_label})"
 
             result_class = "direct-comparison__match-result"
             if match.usc_won is True:
@@ -3421,16 +3452,16 @@ def format_direct_comparison_section(
                 result_class += " direct-comparison__result--loss"
 
             item_lines: List[str] = ["          <li class=\"direct-comparison__match\">"]
+            line_segments: List[str] = []
             if meta_line:
+                line_segments.append(f"{meta_line}:")
+            line_segments.append(teams_line)
+            if result_label:
+                line_segments.append(result_label)
+            combined_line = " ".join(segment for segment in line_segments if segment)
+            if combined_line:
                 item_lines.append(
-                    f"            <p class=\"direct-comparison__match-meta\">{meta_line}</p>"
-                )
-            item_lines.append(
-                f"            <p class=\"direct-comparison__match-teams\">{teams_line}</p>"
-            )
-            if result_line:
-                item_lines.append(
-                    f"            <p class=\"{result_class}\">{result_line}</p>"
+                    f"            <p class=\"{result_class}\">{combined_line}</p>"
                 )
             item_lines.append("          </li>")
             match_items.append("\n".join(item_lines))

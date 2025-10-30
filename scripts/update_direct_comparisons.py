@@ -10,7 +10,7 @@ import unicodedata
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Dict, Iterator, List, MutableMapping, Sequence
+from typing import Dict, Iterator, List, MutableMapping, Sequence, Tuple
 
 import requests
 
@@ -128,6 +128,26 @@ def extract_points(row: Row) -> tuple[int, int] | None:
     return None
 
 
+def extract_set_ballpoints(row: Row) -> Tuple[Tuple[int, int], ...]:
+    scores: List[Tuple[int, int]] = []
+    for index in range(1, 6):
+        home_key = f"Satz {index} - Ballpunkte 1"
+        away_key = f"Satz {index} - Ballpunkte 2"
+        home_raw = row.get(home_key)
+        away_raw = row.get(away_key)
+        home_text = (home_raw or "").strip()
+        away_text = (away_raw or "").strip()
+        if not home_text and not away_text:
+            break
+        try:
+            home_points = int(home_text)
+            away_points = int(away_text)
+        except (TypeError, ValueError):
+            break
+        scores.append((home_points, away_points))
+    return tuple(scores)
+
+
 def parse_date(value: str | None) -> str | None:
     if not value:
         return None
@@ -181,6 +201,21 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
                 if points_pair:
                     points_str = f"{points_pair[0]}:{points_pair[1]}"
 
+                set_scores_pairs = extract_set_ballpoints(row)
+                if usc_is_home:
+                    oriented_set_scores = [
+                        f"{home}:{away}" for home, away in set_scores_pairs
+                    ]
+                else:
+                    oriented_set_scores = [
+                        f"{away}:{home}" for home, away in set_scores_pairs
+                    ]
+                set_scores_value: List[str] | None
+                if oriented_set_scores:
+                    set_scores_value = oriented_set_scores
+                else:
+                    set_scores_value = None
+
                 match_record = clean_dict(
                     {
                         "match_id": match_identifier or None,
@@ -190,6 +225,7 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
                         "round": round_label or None,
                         "competition": competition or None,
                         "location": location,
+                        "set_scores": set_scores_value,
                         "result": clean_dict(
                             {
                                 "sets": row.get("Satzpunkte") or (row.get("Ergebnis") or "").split("/", 1)[0].strip() or None,
