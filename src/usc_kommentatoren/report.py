@@ -4948,7 +4948,7 @@ def build_html_report(
     }}
     .direct-comparison__metric-team {{
       font-weight: 600;
-      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.4rem);
       color: #0f172a;
       text-align: center;
     }}
