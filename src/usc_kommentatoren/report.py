@@ -4873,6 +4873,7 @@ def build_html_report(
       letter-spacing: 0.05em;
       font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.72rem);
       color: #0f766e;
+      text-align: center;
       margin: 0;
     }}
     .direct-comparison__metric-score {{
