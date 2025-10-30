@@ -3521,7 +3521,7 @@ def format_direct_comparison_section(
         "      </div>",
     ]
 
-    return "\n".join(content_lines)
+    return "\n".join(section_lines)
 
 def format_mvp_rankings_section(
     rankings: Optional[Mapping[str, Mapping[str, Any]]],
