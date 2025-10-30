@@ -4859,7 +4859,6 @@ def build_html_report(
     .countdown-meta__competition {{
       font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.9rem, 2.6vw, 1.05rem));
       font-weight: 500;
-      color: #0369a1;
     }}
     .countdown-banner {{
       margin: 0;
