@@ -360,6 +360,7 @@ class DirectComparisonMatch:
     location: Optional[str]
     result_sets: Optional[str]
     result_points: Optional[str]
+    set_scores: Tuple[str, ...]
     usc_sets: Optional[int]
     opponent_sets: Optional[int]
     usc_points: Optional[int]
@@ -2797,6 +2798,23 @@ def prepare_direct_comparison(
                     result_sets = str(result_payload.get("sets") or "").strip() or None
                     result_points = str(result_payload.get("points") or "").strip() or None
 
+                set_scores_field = match_entry.get("set_scores")
+                set_scores: Tuple[str, ...] = ()
+                if isinstance(set_scores_field, Sequence) and not isinstance(
+                    set_scores_field, (str, bytes)
+                ):
+                    normalized_scores: List[str] = []
+                    for score in set_scores_field:
+                        try:
+                            text = str(score)
+                        except Exception:
+                            continue
+                        cleaned_score = text.strip()
+                        if cleaned_score:
+                            normalized_scores.append(cleaned_score)
+                    if normalized_scores:
+                        set_scores = tuple(normalized_scores)
+
                 usc_sets_optional = _coerce_optional_int(match_entry.get("usc_sets"))
                 opponent_sets_optional = _coerce_optional_int(
                     match_entry.get("opponent_sets")
@@ -2878,6 +2896,7 @@ def prepare_direct_comparison(
                         location=location,
                         result_sets=result_sets,
                         result_points=result_points,
+                        set_scores=set_scores,
                         usc_sets=usc_sets_optional,
                         opponent_sets=opponent_sets_optional,
                         usc_points=usc_points_optional,
