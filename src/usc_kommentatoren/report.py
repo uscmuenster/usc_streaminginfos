@@ -53,6 +53,9 @@ BERLIN_TIMEZONE_NAME = "Europe/Berlin"
 BERLIN_TZ = ZoneInfo(BERLIN_TIMEZONE_NAME)
 USC_CANONICAL_NAME = "USC Münster"
 USC_HOMEPAGE = "https://www.usc-muenster.de/"
+_POSTAL_CODE_LOCATION_SUFFIX_RE = re.compile(
+    r"\s*\(\s*\d{4,5}(?:[-/ ]\d{4,5})?\s+[^)]*?\)\s*$"
+)
 
 # Farbkonfiguration für Hervorhebungen von USC und Gegner.
 # Werte können bei Bedarf angepasst werden, um die farbliche Darstellung global zu ändern.
@@ -428,6 +431,18 @@ def matches_keywords(text: str, keyword_set: KeywordSet) -> bool:
     # Accept single matches only when they correspond to the condensed team
     # name (e.g. ``uscmunster``), not generic tokens like "Volleys".
     return any(keyword in hits for keyword in strong_keywords if keyword)
+
+
+def _normalize_direct_comparison_location(value: Optional[str]) -> Optional[str]:
+    if value is None:
+        return None
+    cleaned = value.strip()
+    if not cleaned:
+        return None
+    sanitized = _POSTAL_CODE_LOCATION_SUFFIX_RE.sub("", cleaned).strip()
+    if sanitized:
+        return sanitized
+    return cleaned or None
 
 
 def _http_get(
@@ -2798,7 +2813,8 @@ def prepare_direct_comparison(
 
                 round_label = str(match_entry.get("round") or "").strip() or None
                 competition = str(match_entry.get("competition") or "").strip() or None
-                location = str(match_entry.get("location") or "").strip() or None
+                location_raw = str(match_entry.get("location") or "").strip()
+                location = _normalize_direct_comparison_location(location_raw)
 
                 result_payload = match_entry.get("result")
                 result_sets: Optional[str] = None
