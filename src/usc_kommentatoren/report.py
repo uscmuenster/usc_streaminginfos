@@ -53,6 +53,7 @@ BERLIN_TIMEZONE_NAME = "Europe/Berlin"
 BERLIN_TZ = ZoneInfo(BERLIN_TIMEZONE_NAME)
 USC_CANONICAL_NAME = "USC Münster"
 USC_HOMEPAGE = "https://www.usc-muenster.de/"
+_POSTAL_CODE_PREFIX_RE = re.compile(r"^\d{4,5}(?:[-/ ]\d{4,5})?\s+(?P<city>.+)$")
 
 # Farbkonfiguration für Hervorhebungen von USC und Gegner.
 # Werte können bei Bedarf angepasst werden, um die farbliche Darstellung global zu ändern.
@@ -428,6 +429,56 @@ def matches_keywords(text: str, keyword_set: KeywordSet) -> bool:
     # Accept single matches only when they correspond to the condensed team
     # name (e.g. ``uscmunster``), not generic tokens like "Volleys".
     return any(keyword in hits for keyword in strong_keywords if keyword)
+
+
+def _normalize_competition_label(value: Optional[str]) -> Optional[str]:
+    if value is None:
+        return None
+    cleaned = str(value).strip()
+    if not cleaned:
+        return None
+    normalized = cleaned.replace("1. Bundesliga Frauen", "VBL")
+    normalized = re.sub(r"\s{2,}", " ", normalized).strip()
+    return normalized or None
+
+
+def _strip_postal_code_prefix(text: str) -> str:
+    match = _POSTAL_CODE_PREFIX_RE.match(text)
+    if match:
+        return match.group("city").strip()
+    return text.strip()
+
+
+def _normalize_direct_comparison_location(value: Optional[str]) -> Optional[str]:
+    if value is None:
+        return None
+    cleaned = str(value).strip()
+    if not cleaned:
+        return None
+
+    trailing = cleaned.rstrip()
+    city_candidate: Optional[str] = None
+    if trailing.endswith(")"):
+        start = trailing.rfind("(")
+        if start != -1:
+            inner = trailing[start + 1 : -1].strip()
+            if inner:
+                stripped_city = _strip_postal_code_prefix(inner)
+                if stripped_city:
+                    city_candidate = stripped_city
+        trailing = trailing[:start].rstrip() if start != -1 else trailing
+        if city_candidate:
+            return city_candidate
+
+    postal_stripped = _strip_postal_code_prefix(cleaned)
+    if postal_stripped and postal_stripped != cleaned:
+        return postal_stripped
+
+    fallback = trailing.strip()
+    if fallback:
+        return fallback
+
+    return None
 
 
 def _http_get(
@@ -1213,6 +1264,7 @@ def parse_schedule(
     buffer = StringIO(csv_text)
     reader = csv.DictReader(buffer, delimiter=";", quotechar="\"")
     matches: List[Match] = []
+    fallback_competition = _normalize_competition_label(competition)
     for row in reader:
         try:
             kickoff = parse_kickoff(row["Datum"], row["Uhrzeit"])
@@ -1228,7 +1280,10 @@ def parse_schedule(
         attendance = _normalize_schedule_field(row.get("Zuschauerzahl"))
         referee_entries = _parse_referee_field(row.get("Schiedsgericht"))
 
-        match_competition = _normalize_schedule_field(row.get("Wettbewerb")) or competition
+        competition_field = _normalize_schedule_field(row.get("Wettbewerb"))
+        match_competition = (
+            _normalize_competition_label(competition_field) or fallback_competition
+        )
 
         matches.append(
             Match(
@@ -2797,8 +2852,11 @@ def prepare_direct_comparison(
                 away_team = str(away_team_raw).strip() if away_team_raw else ""
 
                 round_label = str(match_entry.get("round") or "").strip() or None
-                competition = str(match_entry.get("competition") or "").strip() or None
-                location = str(match_entry.get("location") or "").strip() or None
+                competition = _normalize_competition_label(
+                    match_entry.get("competition")
+                )
+                location_raw = str(match_entry.get("location") or "").strip()
+                location = _normalize_direct_comparison_location(location_raw)
 
                 result_payload = match_entry.get("result")
                 result_sets: Optional[str] = None
