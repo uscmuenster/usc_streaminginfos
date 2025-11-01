@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import csv
 from dataclasses import dataclass
 from datetime import time, timedelta
+from pathlib import Path
 
 REFERENCE_KICKOFF_TIME = time.fromisoformat("19:00:00")
 
@@ -23,45 +25,29 @@ class BroadcastPlanEntry:
     note: str
 
 
-BROADCAST_PLAN: tuple[BroadcastPlanEntry, ...] = (
-    BroadcastPlanEntry(
-        planned_time=_parse_time("18:40:00"),
-        duration=_parse_duration("00:05:00"),
-        note="LIGA Grafik-Tafel: \"Die Übertragung startet in Kürze\" → Signal auf Plattform.",
-    ),
-    BroadcastPlanEntry(
-        planned_time=_parse_time("18:45:00"),
-        duration=_parse_duration("00:00:30"),
-        note="Volleyball – Opening Title + DYN VBL Opener",
-    ),
-    BroadcastPlanEntry(
-        planned_time=_parse_time("18:45:30"),
-        duration=_parse_duration("00:08:30"),
-        note=(
-            "Beginn Kommentar; Bild-im-Bild mit K1. "
-            "Spieltagsübersicht und Rückblick, Tabelle, Schiedsrichter."
-        ),
-    ),
-    BroadcastPlanEntry(
-        planned_time=_parse_time("18:54:00"),
-        duration=_parse_duration("00:03:20"),
-        note="Werbung 1 (Regie: saubere K1, Kommentatoren: still).",
-    ),
-    BroadcastPlanEntry(
-        planned_time=_parse_time("18:57:20"),
-        duration=_parse_duration("00:01:40"),
-        note="Wiederbeginn Kommentar, Einlauf Spielerinnen",
-    ),
-    BroadcastPlanEntry(
-        planned_time=_parse_time("18:59:00"),
-        duration=_parse_duration("00:01:00"),
-        note="Aufstellungen der Mannschaften",
-    ),
-    BroadcastPlanEntry(
-        planned_time=_parse_time("19:00:00"),
-        duration=_parse_duration("00:30:00"),
-        note="Spielbeginn",
-    ),
+def _load_broadcast_plan_from_csv(csv_path: Path) -> tuple[BroadcastPlanEntry, ...]:
+    entries: list[BroadcastPlanEntry] = []
+    with csv_path.open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        for row in reader:
+            planned_time_raw = row.get("planned_time")
+            duration_raw = row.get("duration")
+            note = (row.get("note") or "").strip()
+            if not planned_time_raw or not duration_raw:
+                continue
+            entries.append(
+                BroadcastPlanEntry(
+                    planned_time=_parse_time(planned_time_raw),
+                    duration=_parse_duration(duration_raw),
+                    note=note,
+                )
+            )
+    return tuple(entries)
+
+
+_CSV_FILENAME = Path(__file__).with_suffix(".csv")
+BROADCAST_PLAN: tuple[BroadcastPlanEntry, ...] = _load_broadcast_plan_from_csv(
+    _CSV_FILENAME
 )
 
 __all__ = [
