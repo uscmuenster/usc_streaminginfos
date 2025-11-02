@@ -4025,7 +4025,7 @@ def build_html_report(
     next_home: Match,
     usc_recent: List[Match],
     opponent_recent: List[Match],
-    usc_next: Optional[Match] = None,
+    usc_upcoming: Optional[Sequence[Match]] = None,
     opponent_next: Optional[Match] = None,
     usc_news: Sequence[NewsItem],
     opponent_news: Sequence[NewsItem],
@@ -4064,7 +4064,7 @@ def build_html_report(
     opponent_url = get_team_homepage(next_home.away_team)
 
     def _combine_matches(
-        next_match: Optional[Match],
+        upcoming_matches: Optional[Sequence[Match]],
         recent_matches: List[Match],
         highlight_lookup: Mapping[str, str],
     ) -> str:
@@ -4072,8 +4072,14 @@ def build_html_report(
         seen: set[tuple[datetime, str, str]] = set()
 
         ordered: List[Match] = []
-        if next_match:
-            ordered.append(next_match)
+        next_match: Optional[Match] = None
+        if upcoming_matches:
+            upcoming_sorted = sorted(
+                upcoming_matches,
+                key=lambda match: match.kickoff,
+            )
+            ordered.extend(upcoming_sorted)
+            next_match = upcoming_sorted[0]
         ordered.extend(recent_matches)
 
         for match in ordered:
@@ -4113,9 +4119,16 @@ def build_html_report(
         "opponent": next_home.away_team,
     }
 
-    usc_items = _combine_matches(usc_next, usc_recent, highlight_targets)
+    usc_items = _combine_matches(usc_upcoming, usc_recent, highlight_targets)
+    opponent_upcoming: Optional[Sequence[Match]] = (
+        (opponent_next,)
+        if opponent_next
+        else None
+    )
     opponent_items = _combine_matches(
-        opponent_next, opponent_recent, highlight_targets
+        opponent_upcoming,
+        opponent_recent,
+        highlight_targets,
     )
 
     usc_news_items = format_news_list(usc_news)
