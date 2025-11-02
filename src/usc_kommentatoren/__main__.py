@@ -28,6 +28,7 @@ from .report import (
     find_last_matches_for_team,
     find_next_match_for_team,
     find_next_usc_home_match,
+    is_usc,
     load_schedule_from_file,
     prepare_direct_comparison,
 )
@@ -154,6 +155,25 @@ def main() -> int:
         reference=reference_time,
     )
 
+    usc_upcoming_matches: List["Match"] = []
+    if usc_next:
+        usc_upcoming_matches.append(usc_next)
+        if not is_usc(usc_next.host):
+            additional_home = find_next_usc_home_match(
+                matches,
+                reference=usc_next.kickoff + timedelta(seconds=1),
+            )
+            if (
+                additional_home
+                and not any(
+                    match.kickoff == additional_home.kickoff
+                    and match.home_team == additional_home.home_team
+                    and match.away_team == additional_home.away_team
+                    for match in usc_upcoming_matches
+                )
+            ):
+                usc_upcoming_matches.append(additional_home)
+
     usc_recent = find_last_matches_for_team(matches, USC_CANONICAL_NAME, limit=args.recent_limit)
     opponent_recent = find_last_matches_for_team(matches, next_home.away_team, limit=args.recent_limit)
 
@@ -274,8 +294,12 @@ def main() -> int:
     next_home = enrich_match(next_home, schedule_metadata, detail_cache)
     usc_recent = enrich_matches(usc_recent, schedule_metadata, detail_cache)
     opponent_recent = enrich_matches(opponent_recent, schedule_metadata, detail_cache)
-    if usc_next:
-        usc_next = enrich_match(usc_next, schedule_metadata, detail_cache)
+    if usc_upcoming_matches:
+        usc_upcoming_matches = [
+            enrich_match(match, schedule_metadata, detail_cache)
+            for match in usc_upcoming_matches
+        ]
+        usc_upcoming_matches.sort(key=lambda match: match.kickoff)
     if opponent_next:
         opponent_next = enrich_match(opponent_next, schedule_metadata, detail_cache)
 
@@ -295,7 +319,7 @@ def main() -> int:
         next_home=next_home,
         usc_recent=usc_recent,
         opponent_recent=opponent_recent,
-        usc_next=usc_next,
+        usc_upcoming=tuple(usc_upcoming_matches),
         opponent_next=opponent_next,
         usc_news=usc_news,
         opponent_news=opponent_news,
