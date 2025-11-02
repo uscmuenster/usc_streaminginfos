@@ -1917,6 +1917,11 @@ def _build_team_news_config() -> Dict[str, Dict[str, str]]:
             "url": "https://www.usc-muenster.de/feed/",
             "label": "Homepage USC Münster",
         },
+        normalize_name("Skurios Volleys Borken"): {
+            "type": "rss",
+            "url": "https://www.skurios-volleys-borken.de/blog/feed/",
+            "label": "Homepage Skurios Volleys Borken",
+        },
         normalize_name("ETV Hamburger Volksbank Volleys"): {
             "type": "etv",
             "url": "https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys/",
