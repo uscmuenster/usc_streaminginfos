@@ -53,6 +53,7 @@ BERLIN_TIMEZONE_NAME = "Europe/Berlin"
 BERLIN_TZ = ZoneInfo(BERLIN_TIMEZONE_NAME)
 USC_CANONICAL_NAME = "USC Münster"
 USC_HOMEPAGE = "https://www.usc-muenster.de/"
+TEAM_LINKS_CSV_PATH = Path(__file__).with_name("team_links.csv")
 _POSTAL_CODE_PREFIX_RE = re.compile(r"^\d{4,5}(?:[-/ ]\d{4,5})?\s+(?P<city>.+)$")
 
 # Farbkonfiguration für Hervorhebungen von USC und Gegner.
@@ -1448,6 +1449,32 @@ def normalize_name(value: str) -> str:
     return normalized
 
 
+def _load_team_links_csv() -> List[Dict[str, str]]:
+    if not TEAM_LINKS_CSV_PATH.exists():
+        return []
+
+    with TEAM_LINKS_CSV_PATH.open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        entries: List[Dict[str, str]] = []
+        for row in reader:
+            team_name = (row.get("team_name") or "").strip()
+            if not team_name:
+                continue
+            entries.append(
+                {
+                    "team_name": team_name,
+                    "homepage_url": (row.get("homepage_url") or "").strip(),
+                    "news_type": (row.get("news_type") or "").strip(),
+                    "news_url": (row.get("news_url") or "").strip(),
+                    "news_label": (row.get("news_label") or "").strip(),
+                }
+            )
+    return entries
+
+
+TEAM_LINKS_ROWS = _load_team_links_csv()
+
+
 def slugify_team_name(value: str) -> str:
     simplified = simplify_text(value)
     slug = re.sub(r"[^a-z0-9]+", "-", simplified)
@@ -1460,20 +1487,20 @@ def is_usc(name: str) -> bool:
 
 
 def _build_team_homepages() -> Dict[str, str]:
-    pairs = {
-        "Allianz MTV Stuttgart": "https://www.stuttgarts-schoenster-sport.de/",
-        "Binder Blaubären TSV Flacht": "https://binderblaubaeren.de/",
-        "Dresdner SC": "https://www.dscvolley.de/",
-        "ETV Hamburger Volksbank Volleys": "https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys/",
-        "Ladies in Black Aachen": "https://ladies-in-black.de/",
-        "SSC Palmberg Schwerin": "https://www.schweriner-sc.com/",
-        "Schwarz-Weiß Erfurt": "https://schwarz-weiss-erfurt.de/",
-        "Skurios Volleys Borken": "https://www.skurios-volleys-borken.de/",
-        "USC Münster": USC_HOMEPAGE,
-        "VC Wiesbaden": "https://www.vc-wiesbaden.de/",
-        "VfB Suhl LOTTO Thüringen": "https://volleyball-suhl.de/",
-    }
-    return {normalize_name(name): url for name, url in pairs.items()}
+    homepages: Dict[str, str] = {}
+    for entry in TEAM_LINKS_ROWS:
+        homepage = entry.get("homepage_url")
+        if not homepage:
+            continue
+        normalized = normalize_name(entry["team_name"])
+        if normalized:
+            homepages[normalized] = homepage
+
+    usc_key = normalize_name(USC_CANONICAL_NAME)
+    if usc_key not in homepages:
+        homepages[usc_key] = USC_HOMEPAGE
+
+    return homepages
 
 
 TEAM_HOMEPAGES = _build_team_homepages()
@@ -1911,23 +1938,20 @@ def get_team_keywords(team_name: str) -> KeywordSet:
 
 
 def _build_team_news_config() -> Dict[str, Dict[str, str]]:
-    return {
-        normalize_name(USC_CANONICAL_NAME): {
-            "type": "rss",
-            "url": "https://www.usc-muenster.de/feed/",
-            "label": "Homepage USC Münster",
-        },
-        normalize_name("Skurios Volleys Borken"): {
-            "type": "rss",
-            "url": "https://www.skurios-volleys-borken.de/blog/feed/",
-            "label": "Homepage Skurios Volleys Borken",
-        },
-        normalize_name("ETV Hamburger Volksbank Volleys"): {
-            "type": "etv",
-            "url": "https://www.etv-hamburg.de/de/etv-hamburger-volksbank-volleys/",
-            "label": "Homepage ETV Hamburger Volksbank Volleys",
-        },
-    }
+    config: Dict[str, Dict[str, str]] = {}
+    for entry in TEAM_LINKS_ROWS:
+        news_url = entry.get("news_url")
+        if not news_url:
+            continue
+        normalized = normalize_name(entry["team_name"])
+        news_type = entry.get("news_type") or "rss"
+        news_label = entry.get("news_label") or f"Homepage {entry['team_name']}"
+        config[normalized] = {
+            "type": news_type,
+            "url": news_url,
+            "label": news_label,
+        }
+    return config
 
 
 TEAM_NEWS_CONFIG = _build_team_news_config()
