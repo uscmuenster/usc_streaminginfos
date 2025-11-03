@@ -36,7 +36,7 @@ DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/Play
 DVV_POKAL_SCHEDULE_URL = "https://www.dvv-pokal.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311591"
 DEFAULT_ADDITIONAL_SCHEDULE_URLS: Tuple[str, ...] = (DVV_POKAL_SCHEDULE_URL,)
 SCHEDULE_COMPETITION_LABELS: Dict[str, str] = {
-    DEFAULT_SCHEDULE_URL: "VBL (Frauen-Volleyball-Bundesliga)",
+    DEFAULT_SCHEDULE_URL: "VBL",
     DVV_POKAL_SCHEDULE_URL: "DVV-Pokal",
 }
 SCHEDULE_PAGE_URL = (
