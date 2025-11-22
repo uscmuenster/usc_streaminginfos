@@ -1,0 +1,1429 @@
+{
+  "generated_at": "2025-11-22T04:24:53.024459+01:00",
+  "usc_team": "USC Münster",
+  "opponent_team": "Skurios Volleys Borken",
+  "matches": [
+    {
+      "focus": "usc",
+      "focus_team_code": "B",
+      "focus_team_name": "USC Münster",
+      "match_number": "2033",
+      "kickoff": "2025-11-15T17:15:00+01:00",
+      "date_label": "15.11.2025",
+      "home_team": "VfB Suhl LOTTO Thüringen",
+      "away_team": "USC Münster",
+      "competition": "1. Bundesliga Frauen",
+      "venue": "Sporthalle Wolfsgrube (98527 Suhl)",
+      "season": "2025/26",
+      "result": "3:0",
+      "home_code": "A",
+      "away_code": "B",
+      "set_scores": [
+        "25:14",
+        "25:21",
+        "28:26"
+      ],
+      "pdf_url": "https://distributor.sams-score.de/scoresheet/pdf/57350b7c-9ee4-47e9-b705-c3c0353a6aeb/2033",
+      "team_codes": {
+        "A": "VfB Suhl LOTTO Thüringen",
+        "B": "USC Münster"
+      },
+      "usc_code": "B",
+      "opponent_code": "A",
+      "teams": [
+        {
+          "code": "A",
+          "name": "VfB Suhl LOTTO Thüringen",
+          "is_focus": false,
+          "is_usc": false,
+          "is_opponent": false,
+          "setters": [
+            "2",
+            "3"
+          ]
+        },
+        {
+          "code": "B",
+          "name": "USC Münster",
+          "is_focus": true,
+          "is_usc": true,
+          "is_opponent": false,
+          "setters": [
+            "8",
+            "9"
+          ]
+        }
+      ],
+      "sets": [
+        {
+          "number": 1,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "11",
+                "full_name": "Berger, Laura",
+                "short_name": "Berger"
+              },
+              {
+                "slot": "II",
+                "number": "25",
+                "full_name": "Brancuska, Monika",
+                "short_name": "Brancuska"
+              },
+              {
+                "slot": "III",
+                "number": "8",
+                "full_name": "Mackenzie Foley",
+                "short_name": "Foley"
+              },
+              {
+                "slot": "IV",
+                "number": "4",
+                "full_name": "Roosa Laakkonen",
+                "short_name": "Laakkonen"
+              },
+              {
+                "slot": "V",
+                "number": "3",
+                "full_name": "Nagels, Lara",
+                "short_name": "Nagels"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Dotson, Sanaa",
+                "short_name": "Dotson"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "17",
+                "full_name": "Isabel Rebecca Martin",
+                "short_name": "Martin"
+              },
+              {
+                "slot": "II",
+                "number": "18",
+                "full_name": "Diane Seybering",
+                "short_name": "Seybering"
+              },
+              {
+                "slot": "III",
+                "number": "14",
+                "full_name": "Ford, Brianna",
+                "short_name": "Ford"
+              },
+              {
+                "slot": "IV",
+                "number": "10",
+                "full_name": "Strothoff, Amelie",
+                "short_name": "Strothoff"
+              },
+              {
+                "slot": "V",
+                "number": "12",
+                "full_name": "Anke Waelkens",
+                "short_name": "Waelkens"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Jordan, Emilia",
+                "short_name": "Jordan"
+              }
+            ]
+          },
+          "scores": {
+            "A": "25",
+            "B": "14"
+          },
+          "score_label": "25:14"
+        },
+        {
+          "number": 2,
+          "lineups": {
+            "B": [
+              {
+                "slot": "I",
+                "number": "10",
+                "full_name": "Strothoff, Amelie",
+                "short_name": "Strothoff"
+              },
+              {
+                "slot": "II",
+                "number": "18",
+                "full_name": "Diane Seybering",
+                "short_name": "Seybering"
+              },
+              {
+                "slot": "III",
+                "number": "14",
+                "full_name": "Ford, Brianna",
+                "short_name": "Ford"
+              },
+              {
+                "slot": "IV",
+                "number": "17",
+                "full_name": "Isabel Rebecca Martin",
+                "short_name": "Martin"
+              },
+              {
+                "slot": "V",
+                "number": "12",
+                "full_name": "Anke Waelkens",
+                "short_name": "Waelkens"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Jordan, Emilia",
+                "short_name": "Jordan"
+              }
+            ],
+            "A": [
+              {
+                "slot": "I",
+                "number": "9",
+                "full_name": "Dotson, Sanaa",
+                "short_name": "Dotson"
+              },
+              {
+                "slot": "II",
+                "number": "11",
+                "full_name": "Berger, Laura",
+                "short_name": "Berger"
+              },
+              {
+                "slot": "III",
+                "number": "25",
+                "full_name": "Brancuska, Monika",
+                "short_name": "Brancuska"
+              },
+              {
+                "slot": "IV",
+                "number": "8",
+                "full_name": "Mackenzie Foley",
+                "short_name": "Foley"
+              },
+              {
+                "slot": "V",
+                "number": "4",
+                "full_name": "Roosa Laakkonen",
+                "short_name": "Laakkonen"
+              },
+              {
+                "slot": "VI",
+                "number": "3",
+                "full_name": "Nagels, Lara",
+                "short_name": "Nagels"
+              }
+            ]
+          },
+          "scores": {
+            "B": "21",
+            "A": "25"
+          },
+          "score_label": "25:21"
+        },
+        {
+          "number": 3,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "11",
+                "full_name": "Berger, Laura",
+                "short_name": "Berger"
+              },
+              {
+                "slot": "II",
+                "number": "25",
+                "full_name": "Brancuska, Monika",
+                "short_name": "Brancuska"
+              },
+              {
+                "slot": "III",
+                "number": "8",
+                "full_name": "Mackenzie Foley",
+                "short_name": "Foley"
+              },
+              {
+                "slot": "IV",
+                "number": "4",
+                "full_name": "Roosa Laakkonen",
+                "short_name": "Laakkonen"
+              },
+              {
+                "slot": "V",
+                "number": "3",
+                "full_name": "Nagels, Lara",
+                "short_name": "Nagels"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Dotson, Sanaa",
+                "short_name": "Dotson"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "5",
+                "full_name": "Malm, Cecilia",
+                "short_name": "Malm"
+              },
+              {
+                "slot": "II",
+                "number": "18",
+                "full_name": "Diane Seybering",
+                "short_name": "Seybering"
+              },
+              {
+                "slot": "III",
+                "number": "14",
+                "full_name": "Ford, Brianna",
+                "short_name": "Ford"
+              },
+              {
+                "slot": "IV",
+                "number": "17",
+                "full_name": "Isabel Rebecca Martin",
+                "short_name": "Martin"
+              },
+              {
+                "slot": "V",
+                "number": "12",
+                "full_name": "Anke Waelkens",
+                "short_name": "Waelkens"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Jordan, Emilia",
+                "short_name": "Jordan"
+              }
+            ]
+          },
+          "scores": {
+            "A": "28",
+            "B": "26"
+          },
+          "score_label": "28:26"
+        }
+      ]
+    },
+    {
+      "focus": "usc",
+      "focus_team_code": "B",
+      "focus_team_name": "USC Münster",
+      "match_number": "2025",
+      "kickoff": "2025-11-01T19:30:00+01:00",
+      "date_label": "01.11.2025",
+      "home_team": "USC Münster",
+      "away_team": "Ladies in Black Aachen",
+      "competition": "1. Bundesliga Frauen",
+      "venue": "Sporthalle Berg Fidel (48153 Münster)",
+      "season": "2025/26",
+      "result": "1:3",
+      "home_code": "B",
+      "away_code": "A",
+      "set_scores": [
+        "22:25",
+        "19:25",
+        "25:21",
+        "22:25"
+      ],
+      "pdf_url": "https://distributor.sams-score.de/scoresheet/pdf/600d4775-5d46-41ab-a1de-5988f4728240/2025",
+      "team_codes": {
+        "B": "USC Münster",
+        "A": "Ladies in Black Aachen"
+      },
+      "usc_code": "B",
+      "opponent_code": "A",
+      "teams": [
+        {
+          "code": "B",
+          "name": "USC Münster",
+          "is_focus": true,
+          "is_usc": true,
+          "is_opponent": false,
+          "setters": [
+            "8",
+            "9"
+          ]
+        },
+        {
+          "code": "A",
+          "name": "Ladies in Black Aachen",
+          "is_focus": false,
+          "is_usc": false,
+          "is_opponent": false,
+          "setters": [
+            "3",
+            "5"
+          ]
+        }
+      ],
+      "sets": [
+        {
+          "number": 1,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "8",
+                "full_name": "Zoi Mavrommatis",
+                "short_name": "Mavrommatis"
+              },
+              {
+                "slot": "II",
+                "number": "18",
+                "full_name": "Lea Ambrosius",
+                "short_name": "Ambrosius"
+              },
+              {
+                "slot": "III",
+                "number": "5",
+                "full_name": "Glaab, Corina",
+                "short_name": "Glaab"
+              },
+              {
+                "slot": "IV",
+                "number": "11",
+                "full_name": "Ilieva, Tsvetelina",
+                "short_name": "Ilieva"
+              },
+              {
+                "slot": "V",
+                "number": "16",
+                "full_name": "Struka, Karmena",
+                "short_name": "Struka"
+              },
+              {
+                "slot": "VI",
+                "number": "1",
+                "full_name": "Celine Jebens",
+                "short_name": "Jebens"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "9",
+                "full_name": "Jordan, Emilia",
+                "short_name": "Jordan"
+              },
+              {
+                "slot": "II",
+                "number": "5",
+                "full_name": "Malm, Cecilia",
+                "short_name": "Malm"
+              },
+              {
+                "slot": "III",
+                "number": "18",
+                "full_name": "Diane Seybering",
+                "short_name": "Seybering"
+              },
+              {
+                "slot": "IV",
+                "number": "14",
+                "full_name": "Ford, Brianna",
+                "short_name": "Ford"
+              },
+              {
+                "slot": "V",
+                "number": "17",
+                "full_name": "Isabel Rebecca Martin",
+                "short_name": "Martin"
+              },
+              {
+                "slot": "VI",
+                "number": "3",
+                "full_name": "Spöler, Esther",
+                "short_name": "Spöler"
+              }
+            ]
+          },
+          "scores": {
+            "A": "25",
+            "B": "22"
+          },
+          "score_label": "22:25"
+        },
+        {
+          "number": 2,
+          "lineups": {
+            "B": [
+              {
+                "slot": "I",
+                "number": "5",
+                "full_name": "Malm, Cecilia",
+                "short_name": "Malm"
+              },
+              {
+                "slot": "II",
+                "number": "18",
+                "full_name": "Diane Seybering",
+                "short_name": "Seybering"
+              },
+              {
+                "slot": "III",
+                "number": "14",
+                "full_name": "Ford, Brianna",
+                "short_name": "Ford"
+              },
+              {
+                "slot": "IV",
+                "number": "17",
+                "full_name": "Isabel Rebecca Martin",
+                "short_name": "Martin"
+              },
+              {
+                "slot": "V",
+                "number": "3",
+                "full_name": "Spöler, Esther",
+                "short_name": "Spöler"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Jordan, Emilia",
+                "short_name": "Jordan"
+              }
+            ],
+            "A": [
+              {
+                "slot": "I",
+                "number": "8",
+                "full_name": "Zoi Mavrommatis",
+                "short_name": "Mavrommatis"
+              },
+              {
+                "slot": "II",
+                "number": "18",
+                "full_name": "Lea Ambrosius",
+                "short_name": "Ambrosius"
+              },
+              {
+                "slot": "III",
+                "number": "5",
+                "full_name": "Glaab, Corina",
+                "short_name": "Glaab"
+              },
+              {
+                "slot": "IV",
+                "number": "11",
+                "full_name": "Ilieva, Tsvetelina",
+                "short_name": "Ilieva"
+              },
+              {
+                "slot": "V",
+                "number": "16",
+                "full_name": "Struka, Karmena",
+                "short_name": "Struka"
+              },
+              {
+                "slot": "VI",
+                "number": "1",
+                "full_name": "Celine Jebens",
+                "short_name": "Jebens"
+              }
+            ]
+          },
+          "scores": {
+            "B": "19",
+            "A": "25"
+          },
+          "score_label": "19:25"
+        },
+        {
+          "number": 3,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "8",
+                "full_name": "Zoi Mavrommatis",
+                "short_name": "Mavrommatis"
+              },
+              {
+                "slot": "II",
+                "number": "18",
+                "full_name": "Lea Ambrosius",
+                "short_name": "Ambrosius"
+              },
+              {
+                "slot": "III",
+                "number": "5",
+                "full_name": "Glaab, Corina",
+                "short_name": "Glaab"
+              },
+              {
+                "slot": "IV",
+                "number": "11",
+                "full_name": "Ilieva, Tsvetelina",
+                "short_name": "Ilieva"
+              },
+              {
+                "slot": "V",
+                "number": "16",
+                "full_name": "Struka, Karmena",
+                "short_name": "Struka"
+              },
+              {
+                "slot": "VI",
+                "number": "1",
+                "full_name": "Celine Jebens",
+                "short_name": "Jebens"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "5",
+                "full_name": "Malm, Cecilia",
+                "short_name": "Malm"
+              },
+              {
+                "slot": "II",
+                "number": "18",
+                "full_name": "Diane Seybering",
+                "short_name": "Seybering"
+              },
+              {
+                "slot": "III",
+                "number": "14",
+                "full_name": "Ford, Brianna",
+                "short_name": "Ford"
+              },
+              {
+                "slot": "IV",
+                "number": "17",
+                "full_name": "Isabel Rebecca Martin",
+                "short_name": "Martin"
+              },
+              {
+                "slot": "V",
+                "number": "3",
+                "full_name": "Spöler, Esther",
+                "short_name": "Spöler"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Jordan, Emilia",
+                "short_name": "Jordan"
+              }
+            ]
+          },
+          "scores": {
+            "A": "21",
+            "B": "25"
+          },
+          "score_label": "25:21"
+        },
+        {
+          "number": 4,
+          "lineups": {
+            "B": [
+              {
+                "slot": "I",
+                "number": "5",
+                "full_name": "Malm, Cecilia",
+                "short_name": "Malm"
+              },
+              {
+                "slot": "II",
+                "number": "18",
+                "full_name": "Diane Seybering",
+                "short_name": "Seybering"
+              },
+              {
+                "slot": "III",
+                "number": "14",
+                "full_name": "Ford, Brianna",
+                "short_name": "Ford"
+              },
+              {
+                "slot": "IV",
+                "number": "17",
+                "full_name": "Isabel Rebecca Martin",
+                "short_name": "Martin"
+              },
+              {
+                "slot": "V",
+                "number": "3",
+                "full_name": "Spöler, Esther",
+                "short_name": "Spöler"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Jordan, Emilia",
+                "short_name": "Jordan"
+              }
+            ],
+            "A": [
+              {
+                "slot": "I",
+                "number": "8",
+                "full_name": "Zoi Mavrommatis",
+                "short_name": "Mavrommatis"
+              },
+              {
+                "slot": "II",
+                "number": "18",
+                "full_name": "Lea Ambrosius",
+                "short_name": "Ambrosius"
+              },
+              {
+                "slot": "III",
+                "number": "5",
+                "full_name": "Glaab, Corina",
+                "short_name": "Glaab"
+              },
+              {
+                "slot": "IV",
+                "number": "11",
+                "full_name": "Ilieva, Tsvetelina",
+                "short_name": "Ilieva"
+              },
+              {
+                "slot": "V",
+                "number": "16",
+                "full_name": "Struka, Karmena",
+                "short_name": "Struka"
+              },
+              {
+                "slot": "VI",
+                "number": "1",
+                "full_name": "Celine Jebens",
+                "short_name": "Jebens"
+              }
+            ]
+          },
+          "scores": {
+            "B": "22",
+            "A": "25"
+          },
+          "score_label": "22:25"
+        }
+      ]
+    },
+    {
+      "focus": "opponent",
+      "focus_team_code": "A",
+      "focus_team_name": "Skurios Volleys Borken",
+      "match_number": "2034",
+      "kickoff": "2025-11-16T16:00:00+01:00",
+      "date_label": "16.11.2025",
+      "home_team": "Ladies in Black Aachen",
+      "away_team": "Skurios Volleys Borken",
+      "competition": "1. Bundesliga Frauen",
+      "venue": "Neuköllner Straße (52068 Aachen)",
+      "season": "2025/26",
+      "result": "3:0",
+      "home_code": "B",
+      "away_code": "A",
+      "set_scores": [
+        "25:18",
+        "25:19",
+        "25:16"
+      ],
+      "pdf_url": "https://distributor.sams-score.de/scoresheet/pdf/9aa20bb8-6140-4d0d-ab11-c8fc8ee12dab/2034",
+      "team_codes": {
+        "B": "Ladies in Black Aachen",
+        "A": "Skurios Volleys Borken"
+      },
+      "usc_code": null,
+      "opponent_code": null,
+      "teams": [
+        {
+          "code": "B",
+          "name": "Ladies in Black Aachen",
+          "is_focus": false,
+          "is_usc": false,
+          "is_opponent": false,
+          "setters": [
+            "3",
+            "5"
+          ]
+        },
+        {
+          "code": "A",
+          "name": "Skurios Volleys Borken",
+          "is_focus": true,
+          "is_usc": false,
+          "is_opponent": true,
+          "setters": [
+            "9",
+            "10"
+          ]
+        }
+      ],
+      "sets": [
+        {
+          "number": 1,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "9",
+                "full_name": "Rudde, Hannah",
+                "short_name": "Rudde"
+              },
+              {
+                "slot": "II",
+                "number": "12",
+                "full_name": "Coenders, Fabienne",
+                "short_name": "Coenders"
+              },
+              {
+                "slot": "III",
+                "number": "3",
+                "full_name": "Luther, Doreen",
+                "short_name": "Luther"
+              },
+              {
+                "slot": "IV",
+                "number": "17",
+                "full_name": "Kastrup, Liza",
+                "short_name": "Kastrup"
+              },
+              {
+                "slot": "V",
+                "number": "15",
+                "full_name": "Piest, Madleen",
+                "short_name": "Piest"
+              },
+              {
+                "slot": "VI",
+                "number": "6",
+                "full_name": "Lara Kretschmer",
+                "short_name": "Kretschmer"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "18",
+                "full_name": "Lea Ambrosius",
+                "short_name": "Ambrosius"
+              },
+              {
+                "slot": "II",
+                "number": "5",
+                "full_name": "Glaab, Corina",
+                "short_name": "Glaab"
+              },
+              {
+                "slot": "III",
+                "number": "11",
+                "full_name": "Ilieva, Tsvetelina",
+                "short_name": "Ilieva"
+              },
+              {
+                "slot": "IV",
+                "number": "15",
+                "full_name": "Fallah, Sophia",
+                "short_name": "Fallah"
+              },
+              {
+                "slot": "V",
+                "number": "1",
+                "full_name": "Celine Jebens",
+                "short_name": "Jebens"
+              },
+              {
+                "slot": "VI",
+                "number": "8",
+                "full_name": "Zoi Mavrommatis",
+                "short_name": "Mavrommatis"
+              }
+            ]
+          },
+          "scores": {
+            "A": "18",
+            "B": "25"
+          },
+          "score_label": "25:18"
+        },
+        {
+          "number": 2,
+          "lineups": {
+            "B": [
+              {
+                "slot": "I",
+                "number": "5",
+                "full_name": "Glaab, Corina",
+                "short_name": "Glaab"
+              },
+              {
+                "slot": "II",
+                "number": "11",
+                "full_name": "Ilieva, Tsvetelina",
+                "short_name": "Ilieva"
+              },
+              {
+                "slot": "III",
+                "number": "15",
+                "full_name": "Fallah, Sophia",
+                "short_name": "Fallah"
+              },
+              {
+                "slot": "IV",
+                "number": "1",
+                "full_name": "Celine Jebens",
+                "short_name": "Jebens"
+              },
+              {
+                "slot": "V",
+                "number": "8",
+                "full_name": "Zoi Mavrommatis",
+                "short_name": "Mavrommatis"
+              },
+              {
+                "slot": "VI",
+                "number": "18",
+                "full_name": "Lea Ambrosius",
+                "short_name": "Ambrosius"
+              }
+            ],
+            "A": [
+              {
+                "slot": "I",
+                "number": "9",
+                "full_name": "Rudde, Hannah",
+                "short_name": "Rudde"
+              },
+              {
+                "slot": "II",
+                "number": "12",
+                "full_name": "Coenders, Fabienne",
+                "short_name": "Coenders"
+              },
+              {
+                "slot": "III",
+                "number": "3",
+                "full_name": "Luther, Doreen",
+                "short_name": "Luther"
+              },
+              {
+                "slot": "IV",
+                "number": "5",
+                "full_name": "Loker, Marika",
+                "short_name": "Loker"
+              },
+              {
+                "slot": "V",
+                "number": "15",
+                "full_name": "Piest, Madleen",
+                "short_name": "Piest"
+              },
+              {
+                "slot": "VI",
+                "number": "6",
+                "full_name": "Lara Kretschmer",
+                "short_name": "Kretschmer"
+              }
+            ]
+          },
+          "scores": {
+            "B": "25",
+            "A": "19"
+          },
+          "score_label": "25:19"
+        },
+        {
+          "number": 3,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "10",
+                "full_name": "Konjer, Chaine",
+                "short_name": "Konjer"
+              },
+              {
+                "slot": "II",
+                "number": "12",
+                "full_name": "Coenders, Fabienne",
+                "short_name": "Coenders"
+              },
+              {
+                "slot": "III",
+                "number": "3",
+                "full_name": "Luther, Doreen",
+                "short_name": "Luther"
+              },
+              {
+                "slot": "IV",
+                "number": "5",
+                "full_name": "Loker, Marika",
+                "short_name": "Loker"
+              },
+              {
+                "slot": "V",
+                "number": "11",
+                "full_name": "Mohr, Pia",
+                "short_name": "Mohr"
+              },
+              {
+                "slot": "VI",
+                "number": "6",
+                "full_name": "Lara Kretschmer",
+                "short_name": "Kretschmer"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "18",
+                "full_name": "Lea Ambrosius",
+                "short_name": "Ambrosius"
+              },
+              {
+                "slot": "II",
+                "number": "5",
+                "full_name": "Glaab, Corina",
+                "short_name": "Glaab"
+              },
+              {
+                "slot": "III",
+                "number": "11",
+                "full_name": "Ilieva, Tsvetelina",
+                "short_name": "Ilieva"
+              },
+              {
+                "slot": "IV",
+                "number": "15",
+                "full_name": "Fallah, Sophia",
+                "short_name": "Fallah"
+              },
+              {
+                "slot": "V",
+                "number": "1",
+                "full_name": "Celine Jebens",
+                "short_name": "Jebens"
+              },
+              {
+                "slot": "VI",
+                "number": "8",
+                "full_name": "Zoi Mavrommatis",
+                "short_name": "Mavrommatis"
+              }
+            ]
+          },
+          "scores": {
+            "A": "16",
+            "B": "25"
+          },
+          "score_label": "25:16"
+        }
+      ]
+    },
+    {
+      "focus": "opponent",
+      "focus_team_code": "B",
+      "focus_team_name": "Skurios Volleys Borken",
+      "match_number": "2027",
+      "kickoff": "2025-11-01T19:30:00+01:00",
+      "date_label": "01.11.2025",
+      "home_team": "Skurios Volleys Borken",
+      "away_team": "ETV Hamburger Volksbank Volleys",
+      "competition": "1. Bundesliga Frauen",
+      "venue": "Mergelsberg Sporthalle (46325 Borken)",
+      "season": "2025/26",
+      "result": "1:3",
+      "home_code": "B",
+      "away_code": "A",
+      "set_scores": [
+        "25:13",
+        "16:25",
+        "24:26",
+        "26:28"
+      ],
+      "pdf_url": "https://distributor.sams-score.de/scoresheet/pdf/e89fff23-b10d-41f1-84d0-4c2fa0c0e3c5/2027",
+      "team_codes": {
+        "B": "Skurios Volleys Borken",
+        "A": "ETV Hamburger Volksbank Volleys"
+      },
+      "usc_code": null,
+      "opponent_code": null,
+      "teams": [
+        {
+          "code": "B",
+          "name": "Skurios Volleys Borken",
+          "is_focus": true,
+          "is_usc": false,
+          "is_opponent": true,
+          "setters": [
+            "9",
+            "10"
+          ]
+        },
+        {
+          "code": "A",
+          "name": "ETV Hamburger Volksbank Volleys",
+          "is_focus": false,
+          "is_usc": false,
+          "is_opponent": false,
+          "setters": [
+            "8",
+            "9"
+          ]
+        }
+      ],
+      "sets": [
+        {
+          "number": 1,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "12",
+                "full_name": "Ammerman, Hannah",
+                "short_name": "Ammerman"
+              },
+              {
+                "slot": "II",
+                "number": "15",
+                "full_name": "Alexa Sophie Thaden",
+                "short_name": "Thaden"
+              },
+              {
+                "slot": "III",
+                "number": "7",
+                "full_name": "Körtzinger, Leonie",
+                "short_name": "Körtzinger"
+              },
+              {
+                "slot": "IV",
+                "number": "11",
+                "full_name": "Frobel, Svea",
+                "short_name": "Frobel"
+              },
+              {
+                "slot": "V",
+                "number": "5",
+                "full_name": "Hartig, Anna",
+                "short_name": "Hartig"
+              },
+              {
+                "slot": "VI",
+                "number": "8",
+                "full_name": "Zoe Konjer",
+                "short_name": "Konjer"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "9",
+                "full_name": "Rudde, Hannah",
+                "short_name": "Rudde"
+              },
+              {
+                "slot": "II",
+                "number": "12",
+                "full_name": "Coenders, Fabienne",
+                "short_name": "Coenders"
+              },
+              {
+                "slot": "III",
+                "number": "3",
+                "full_name": "Luther, Doreen",
+                "short_name": "Luther"
+              },
+              {
+                "slot": "IV",
+                "number": "5",
+                "full_name": "Loker, Marika",
+                "short_name": "Loker"
+              },
+              {
+                "slot": "V",
+                "number": "11",
+                "full_name": "Mohr, Pia",
+                "short_name": "Mohr"
+              },
+              {
+                "slot": "VI",
+                "number": "6",
+                "full_name": "Lara Kretschmer",
+                "short_name": "Kretschmer"
+              }
+            ]
+          },
+          "scores": {
+            "A": "13",
+            "B": "25"
+          },
+          "score_label": "25:13"
+        },
+        {
+          "number": 2,
+          "lineups": {
+            "B": [
+              {
+                "slot": "I",
+                "number": "9",
+                "full_name": "Rudde, Hannah",
+                "short_name": "Rudde"
+              },
+              {
+                "slot": "II",
+                "number": "12",
+                "full_name": "Coenders, Fabienne",
+                "short_name": "Coenders"
+              },
+              {
+                "slot": "III",
+                "number": "3",
+                "full_name": "Luther, Doreen",
+                "short_name": "Luther"
+              },
+              {
+                "slot": "IV",
+                "number": "5",
+                "full_name": "Loker, Marika",
+                "short_name": "Loker"
+              },
+              {
+                "slot": "V",
+                "number": "11",
+                "full_name": "Mohr, Pia",
+                "short_name": "Mohr"
+              },
+              {
+                "slot": "VI",
+                "number": "6",
+                "full_name": "Lara Kretschmer",
+                "short_name": "Kretschmer"
+              }
+            ],
+            "A": [
+              {
+                "slot": "I",
+                "number": "11",
+                "full_name": "Frobel, Svea",
+                "short_name": "Frobel"
+              },
+              {
+                "slot": "II",
+                "number": "15",
+                "full_name": "Alexa Sophie Thaden",
+                "short_name": "Thaden"
+              },
+              {
+                "slot": "III",
+                "number": "7",
+                "full_name": "Körtzinger, Leonie",
+                "short_name": "Körtzinger"
+              },
+              {
+                "slot": "IV",
+                "number": "12",
+                "full_name": "Ammerman, Hannah",
+                "short_name": "Ammerman"
+              },
+              {
+                "slot": "V",
+                "number": "5",
+                "full_name": "Hartig, Anna",
+                "short_name": "Hartig"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Klein, Luise",
+                "short_name": "Klein"
+              }
+            ]
+          },
+          "scores": {
+            "B": "16",
+            "A": "25"
+          },
+          "score_label": "16:25"
+        },
+        {
+          "number": 3,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "9",
+                "full_name": "Klein, Luise",
+                "short_name": "Klein"
+              },
+              {
+                "slot": "II",
+                "number": "11",
+                "full_name": "Frobel, Svea",
+                "short_name": "Frobel"
+              },
+              {
+                "slot": "III",
+                "number": "15",
+                "full_name": "Alexa Sophie Thaden",
+                "short_name": "Thaden"
+              },
+              {
+                "slot": "IV",
+                "number": "7",
+                "full_name": "Körtzinger, Leonie",
+                "short_name": "Körtzinger"
+              },
+              {
+                "slot": "V",
+                "number": "12",
+                "full_name": "Ammerman, Hannah",
+                "short_name": "Ammerman"
+              },
+              {
+                "slot": "VI",
+                "number": "5",
+                "full_name": "Hartig, Anna",
+                "short_name": "Hartig"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "12",
+                "full_name": "Coenders, Fabienne",
+                "short_name": "Coenders"
+              },
+              {
+                "slot": "II",
+                "number": "3",
+                "full_name": "Luther, Doreen",
+                "short_name": "Luther"
+              },
+              {
+                "slot": "III",
+                "number": "5",
+                "full_name": "Loker, Marika",
+                "short_name": "Loker"
+              },
+              {
+                "slot": "IV",
+                "number": "1",
+                "full_name": "Lena Bernhard",
+                "short_name": "Bernhard"
+              },
+              {
+                "slot": "V",
+                "number": "6",
+                "full_name": "Lara Kretschmer",
+                "short_name": "Kretschmer"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Rudde, Hannah",
+                "short_name": "Rudde"
+              }
+            ]
+          },
+          "scores": {
+            "A": "26",
+            "B": "24"
+          },
+          "score_label": "24:26"
+        },
+        {
+          "number": 4,
+          "lineups": {
+            "B": [
+              {
+                "slot": "I",
+                "number": "10",
+                "full_name": "Konjer, Chaine",
+                "short_name": "Konjer"
+              },
+              {
+                "slot": "II",
+                "number": "12",
+                "full_name": "Coenders, Fabienne",
+                "short_name": "Coenders"
+              },
+              {
+                "slot": "III",
+                "number": "3",
+                "full_name": "Luther, Doreen",
+                "short_name": "Luther"
+              },
+              {
+                "slot": "IV",
+                "number": "5",
+                "full_name": "Loker, Marika",
+                "short_name": "Loker"
+              },
+              {
+                "slot": "V",
+                "number": "1",
+                "full_name": "Lena Bernhard",
+                "short_name": "Bernhard"
+              },
+              {
+                "slot": "VI",
+                "number": "6",
+                "full_name": "Lara Kretschmer",
+                "short_name": "Kretschmer"
+              }
+            ],
+            "A": [
+              {
+                "slot": "I",
+                "number": "11",
+                "full_name": "Frobel, Svea",
+                "short_name": "Frobel"
+              },
+              {
+                "slot": "II",
+                "number": "15",
+                "full_name": "Alexa Sophie Thaden",
+                "short_name": "Thaden"
+              },
+              {
+                "slot": "III",
+                "number": "3",
+                "full_name": "Köster, Lina",
+                "short_name": "Köster"
+              },
+              {
+                "slot": "IV",
+                "number": "12",
+                "full_name": "Ammerman, Hannah",
+                "short_name": "Ammerman"
+              },
+              {
+                "slot": "V",
+                "number": "5",
+                "full_name": "Hartig, Anna",
+                "short_name": "Hartig"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Klein, Luise",
+                "short_name": "Klein"
+              }
+            ]
+          },
+          "scores": {
+            "B": "26",
+            "A": "28"
+          },
+          "score_label": "26:28"
+        }
+      ]
+    }
+  ]
+}
