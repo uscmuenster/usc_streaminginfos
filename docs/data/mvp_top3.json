@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-11-29T03:21:13.198839+00:00",
+  "generated_at": "2025-11-30T03:43:33.262318+00:00",
   "usc_team": "USC Münster",
   "opponent_team": "Skurios Volleys Borken",
   "limit": 3,
@@ -9,7 +9,7 @@
       "label": "alle Spielelemente / Top-Scorer",
       "usc": [
         {
-          "Rang": "13.",
+          "Rang": "14.",
           "column_1": "",
           "Name": "Spöler, Esther",
           "Sätze": "15",
@@ -25,7 +25,7 @@
           "ranking": "40"
         },
         {
-          "Rang": "15.",
+          "Rang": "16.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "18",
@@ -41,7 +41,7 @@
           "ranking": "76"
         },
         {
-          "Rang": "38.",
+          "Rang": "40.",
           "column_1": "",
           "Name": "Waelkens, Anke",
           "Sätze": "13",
@@ -75,7 +75,7 @@
           "ranking": "45"
         },
         {
-          "Rang": "21.",
+          "Rang": "22.",
           "column_1": "",
           "Name": "Kretschmer, Lara",
           "Sätze": "19",
@@ -91,7 +91,7 @@
           "ranking": "52"
         },
         {
-          "Rang": "26.",
+          "Rang": "30.",
           "column_1": "",
           "Name": "Loker, Marika",
           "Sätze": "19",
@@ -129,7 +129,7 @@
           "ranking": "27"
         },
         {
-          "Rang": "27.",
+          "Rang": "25.",
           "column_1": "",
           "Name": "Seybering, Diane",
           "Sätze": "17",
@@ -145,7 +145,7 @@
           "ranking": "47"
         },
         {
-          "Rang": "34.",
+          "Rang": "32.",
           "column_1": "",
           "Name": "Spöler, Esther",
           "Sätze": "15",
@@ -179,7 +179,7 @@
           "ranking": "21"
         },
         {
-          "Rang": "17.",
+          "Rang": "15.",
           "column_1": "",
           "Name": "Piest, Madleen",
           "Sätze": "12",
@@ -195,7 +195,7 @@
           "ranking": "19"
         },
         {
-          "Rang": "26.",
+          "Rang": "24.",
           "column_1": "",
           "Name": "Loker, Marika",
           "Sätze": "19",
@@ -217,7 +217,7 @@
       "label": "Annahme / Quote perfekte oder gute Annahme",
       "usc": [
         {
-          "Rang": "9.",
+          "Rang": "7.",
           "column_1": "",
           "Name": "Martin, Isabel Rebecca",
           "Sätze": "18",
@@ -233,7 +233,7 @@
           "ranking": "87 | 44,8%"
         },
         {
-          "Rang": "17.",
+          "Rang": "18.",
           "column_1": "",
           "Name": "Strothoff, Amelie",
           "Sätze": "13",
@@ -249,7 +249,7 @@
           "ranking": "42 | 38,1%"
         },
         {
-          "Rang": "25.",
+          "Rang": "26.",
           "column_1": "",
           "Name": "Molenaar, Pippa",
           "Sätze": "18",
@@ -283,7 +283,7 @@
           "ranking": "110 | 40,0%"
         },
         {
-          "Rang": "15.",
+          "Rang": "16.",
           "column_1": "",
           "Name": "Coenders, Fabienne",
           "Sätze": "18",
@@ -299,7 +299,7 @@
           "ranking": "94 | 38,3%"
         },
         {
-          "Rang": "18.",
+          "Rang": "19.",
           "column_1": "",
           "Name": "Mohr, Pia",
           "Sätze": "17",
@@ -321,7 +321,7 @@
       "label": "Aufschlag / Quote Aufschlagpunkte",
       "usc": [
         {
-          "Rang": "9.",
+          "Rang": "8.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "5",
@@ -337,7 +337,7 @@
           "ranking": "69"
         },
         {
-          "Rang": "14.",
+          "Rang": "13.",
           "column_1": "",
           "Name": "Waelkens, Anke",
           "Sätze": "5",
@@ -353,7 +353,7 @@
           "ranking": "29"
         },
         {
-          "Rang": "23.",
+          "Rang": "24.",
           "column_1": "",
           "Name": "Strothoff, Amelie",
           "Sätze": "5",
@@ -371,7 +371,7 @@
       ],
       "opponent": [
         {
-          "Rang": "4.",
+          "Rang": "3.",
           "column_1": "",
           "Name": "Gesquiere, Amber",
           "Sätze": "4",
@@ -387,7 +387,7 @@
           "ranking": "17"
         },
         {
-          "Rang": "15.",
+          "Rang": "14.",
           "column_1": "",
           "Name": "Rudde, Hannah",
           "Sätze": "6",
@@ -403,7 +403,7 @@
           "ranking": "37"
         },
         {
-          "Rang": "16.",
+          "Rang": "17.",
           "column_1": "",
           "Name": "Luther, Doreen",
           "Sätze": "4",
@@ -425,7 +425,7 @@
       "label": "Annahme / Annahmeeffizienz",
       "usc": [
         {
-          "Rang": "6.",
+          "Rang": "5.",
           "column_1": "",
           "Name": "Strothoff, Amelie",
           "Sätze": "13",
@@ -441,7 +441,7 @@
           "ranking": "42 | 33,3%"
         },
         {
-          "Rang": "16.",
+          "Rang": "17.",
           "column_1": "",
           "Name": "Molenaar, Pippa",
           "Sätze": "18",
@@ -457,7 +457,7 @@
           "ranking": "69 | 26,1%"
         },
         {
-          "Rang": "17.",
+          "Rang": "18.",
           "column_1": "",
           "Name": "Martin, Isabel Rebecca",
           "Sätze": "18",
@@ -475,7 +475,7 @@
       ],
       "opponent": [
         {
-          "Rang": "18.",
+          "Rang": "19.",
           "column_1": "",
           "Name": "Hansen, Ditte Kjær",
           "Sätze": "19",
@@ -545,7 +545,7 @@
           "ranking": "53"
         },
         {
-          "Rang": "29.",
+          "Rang": "28.",
           "column_1": "",
           "Name": "Martin, Isabel Rebecca",
           "Sätze": "18",
@@ -561,7 +561,7 @@
           "ranking": "103"
         },
         {
-          "Rang": "36.",
+          "Rang": "35.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "18",
@@ -595,7 +595,7 @@
           "ranking": "74"
         },
         {
-          "Rang": "34.",
+          "Rang": "33.",
           "column_1": "",
           "Name": "Coenders, Fabienne",
           "Sätze": "18",
@@ -611,7 +611,7 @@
           "ranking": "120"
         },
         {
-          "Rang": "35.",
+          "Rang": "34.",
           "column_1": "",
           "Name": "Loker, Marika",
           "Sätze": "19",
@@ -633,7 +633,7 @@
       "label": "Block / Blockpunkte",
       "usc": [
         {
-          "Rang": "13.",
+          "Rang": "15.",
           "column_1": "",
           "Name": "Waelkens, Anke",
           "Sätze": "13",
@@ -649,7 +649,7 @@
           "ranking": "0,8"
         },
         {
-          "Rang": "23.",
+          "Rang": "26.",
           "column_1": "",
           "Name": "Spöler, Esther",
           "Sätze": "15",
@@ -665,7 +665,7 @@
           "ranking": "0,4"
         },
         {
-          "Rang": "31.",
+          "Rang": "38.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "18",
@@ -683,7 +683,7 @@
       ],
       "opponent": [
         {
-          "Rang": "3.",
+          "Rang": "4.",
           "column_1": "",
           "Name": "Kretschmer, Lara",
           "Sätze": "19",
@@ -699,7 +699,7 @@
           "ranking": "0,8"
         },
         {
-          "Rang": "19.",
+          "Rang": "21.",
           "column_1": "",
           "Name": "Luther, Doreen",
           "Sätze": "13",
@@ -715,7 +715,7 @@
           "ranking": "0,6"
         },
         {
-          "Rang": "23.",
+          "Rang": "26.",
           "column_1": "",
           "Name": "Coenders, Fabienne",
           "Sätze": "18",
@@ -753,7 +753,7 @@
           "ranking": "69 | 10"
         },
         {
-          "Rang": "16.",
+          "Rang": "20.",
           "column_1": "",
           "Name": "Malm, Cecilia",
           "Sätze": "5",
@@ -769,7 +769,7 @@
           "ranking": "56 | 5"
         },
         {
-          "Rang": "21.",
+          "Rang": "23.",
           "column_1": "",
           "Name": "Jordan, Emilia",
           "Sätze": "5",
@@ -787,7 +787,7 @@
       ],
       "opponent": [
         {
-          "Rang": "13.",
+          "Rang": "14.",
           "column_1": "",
           "Name": "Coenders, Fabienne",
           "Sätze": "6",
@@ -803,7 +803,7 @@
           "ranking": "62 | 6"
         },
         {
-          "Rang": "16.",
+          "Rang": "20.",
           "column_1": "",
           "Name": "Rudde, Hannah",
           "Sätze": "6",
@@ -819,7 +819,7 @@
           "ranking": "37 | 5"
         },
         {
-          "Rang": "21.",
+          "Rang": "23.",
           "column_1": "",
           "Name": "Luther, Doreen",
           "Sätze": "4",
@@ -841,7 +841,7 @@
       "label": "Angriff / Quote Angriffspunkte",
       "usc": [
         {
-          "Rang": "2.",
+          "Rang": "3.",
           "column_1": "",
           "Name": "Spöler, Esther",
           "Sätze": "4",
@@ -857,7 +857,7 @@
           "ranking": "53"
         },
         {
-          "Rang": "19.",
+          "Rang": "21.",
           "column_1": "",
           "Name": "Martin, Isabel Rebecca",
           "Sätze": "5",
@@ -907,7 +907,7 @@
           "ranking": "74"
         },
         {
-          "Rang": "36.",
+          "Rang": "37.",
           "column_1": "",
           "Name": "Loker, Marika",
           "Sätze": "6",
@@ -923,7 +923,7 @@
           "ranking": "110"
         },
         {
-          "Rang": "48.",
+          "Rang": "49.",
           "column_1": "",
           "Name": "Coenders, Fabienne",
           "Sätze": "6",
@@ -945,7 +945,7 @@
       "label": "Angriff / Angriffspunkte",
       "usc": [
         {
-          "Rang": "7.",
+          "Rang": "9.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "18",
@@ -961,7 +961,7 @@
           "ranking": "172"
         },
         {
-          "Rang": "16.",
+          "Rang": "20.",
           "column_1": "",
           "Name": "Martin, Isabel Rebecca",
           "Sätze": "18",
@@ -977,7 +977,7 @@
           "ranking": "103"
         },
         {
-          "Rang": "29.",
+          "Rang": "32.",
           "column_1": "",
           "Name": "Spöler, Esther",
           "Sätze": "15",
@@ -995,7 +995,7 @@
       ],
       "opponent": [
         {
-          "Rang": "20.",
+          "Rang": "23.",
           "column_1": "",
           "Name": "Loker, Marika",
           "Sätze": "19",
@@ -1011,7 +1011,7 @@
           "ranking": "110"
         },
         {
-          "Rang": "22.",
+          "Rang": "24.",
           "column_1": "",
           "Name": "Kretschmer, Lara",
           "Sätze": "19",
@@ -1027,7 +1027,7 @@
           "ranking": "74"
         },
         {
-          "Rang": "27.",
+          "Rang": "30.",
           "column_1": "",
           "Name": "Coenders, Fabienne",
           "Sätze": "18",
@@ -1065,7 +1065,7 @@
           "ranking": "27 | 22,2%"
         },
         {
-          "Rang": "21.",
+          "Rang": "20.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "18",
@@ -1081,7 +1081,7 @@
           "ranking": "69 | 0,0%"
         },
         {
-          "Rang": "30.",
+          "Rang": "27.",
           "column_1": "",
           "Name": "Malm, Cecilia",
           "Sätze": "15",
@@ -1131,7 +1131,7 @@
           "ranking": "17 | 11,8%"
         },
         {
-          "Rang": "21.",
+          "Rang": "20.",
           "column_1": "",
           "Name": "Loker, Marika",
           "Sätze": "19",
