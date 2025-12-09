@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-08T03:39:40.759336+00:00",
+  "generated_at": "2025-12-09T03:35:36.355558+00:00",
   "usc_team": "USC Münster",
   "opponent_team": "Dresdner SC",
   "limit": 3,
@@ -17,12 +17,12 @@
           "Position": "Mittelblock",
           "Mannschaft": "Münster",
           "Nation": "Deutschland (GER)",
-          "Wert1": "97",
-          "Wert2": "2,2",
-          "Wert3": "51,5%",
+          "Wert1": "71",
+          "Wert2": "16",
+          "Wert3": "3,1",
           "Kennzahl": "55",
           "Wertung": "",
-          "ranking": "97"
+          "ranking": "71"
         },
         {
           "Rang": "17.",
@@ -33,12 +33,12 @@
           "Position": "Diagonal",
           "Mannschaft": "Münster",
           "Nation": "Vereinigte Staaten von Amerika (USA)",
-          "Wert1": "175",
-          "Wert2": "3,3",
-          "Wert3": "35,4%",
+          "Wert1": "78",
+          "Wert2": "49",
+          "Wert3": "4,1",
           "Kennzahl": "29",
           "Wertung": "",
-          "ranking": "175"
+          "ranking": "78"
         },
         {
           "Rang": "42.",
@@ -49,12 +49,12 @@
           "Position": "Mittelblock",
           "Mannschaft": "Münster",
           "Nation": "Belgien (BEL)",
-          "Wert1": "45",
-          "Wert2": "1,1",
-          "Wert3": "48,9%",
+          "Wert1": "38",
+          "Wert2": "24",
+          "Wert3": "1,9",
           "Kennzahl": "14",
           "Wertung": "",
-          "ranking": "45"
+          "ranking": "38"
         }
       ],
       "opponent": [
@@ -67,12 +67,12 @@
           "Position": "Diagonal",
           "Mannschaft": "Dresden",
           "Nation": "Lettland (LAT)",
-          "Wert1": "233",
-          "Wert2": "4,5",
-          "Wert3": "44,2%",
+          "Wert1": "109",
+          "Wert2": "36",
+          "Wert3": "4,7",
           "Kennzahl": "73",
           "Wertung": "",
-          "ranking": "233"
+          "ranking": "109"
         },
         {
           "Rang": "7.",
@@ -83,12 +83,12 @@
           "Position": "Außenangriff",
           "Mannschaft": "Dresden",
           "Nation": "Niederlande (NED)",
-          "Wert1": "142",
-          "Wert2": "2,3",
-          "Wert3": "37,3%",
+          "Wert1": "64",
+          "Wert2": "19",
+          "Wert3": "2,8",
           "Kennzahl": "45",
           "Wertung": "",
-          "ranking": "142"
+          "ranking": "64"
         },
         {
           "Rang": "14.",
@@ -99,12 +99,12 @@
           "Position": "Außenangriff",
           "Mannschaft": "Dresden",
           "Nation": "Japan (JPN)",
-          "Wert1": "183",
-          "Wert2": "3,3",
-          "Wert3": "42,1%",
+          "Wert1": "92",
+          "Wert2": "60",
+          "Wert3": "4",
           "Kennzahl": "32",
           "Wertung": "",
-          "ranking": "183"
+          "ranking": "92"
         }
       ]
     },
@@ -113,7 +113,7 @@
       "label": "Aufschlag / Quote Aufschläge mit Wirkung",
       "usc": [
         {
-          "Rang": "28.",
+          "Rang": "29.",
           "column_1": "",
           "Name": "Seybering, Diane",
           "Sätze": "25",
@@ -129,7 +129,7 @@
           "ranking": "76"
         },
         {
-          "Rang": "36.",
+          "Rang": "37.",
           "column_1": "",
           "Name": "Malm, Cecilia",
           "Sätze": "23",
@@ -145,7 +145,7 @@
           "ranking": "81"
         },
         {
-          "Rang": "38.",
+          "Rang": "39.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "19",
@@ -163,7 +163,7 @@
       ],
       "opponent": [
         {
-          "Rang": "12.",
+          "Rang": "13.",
           "column_1": "",
           "Name": "Levinska, Marta Kamēlija",
           "Sätze": "23",
@@ -179,7 +179,7 @@
           "ranking": "74"
         },
         {
-          "Rang": "23.",
+          "Rang": "24.",
           "column_1": "",
           "Name": "Pfeffer, Mette Marleen",
           "Sätze": "23",
@@ -195,7 +195,7 @@
           "ranking": "91"
         },
         {
-          "Rang": "37.",
+          "Rang": "38.",
           "column_1": "",
           "Name": "Winter, Larissa",
           "Sätze": "16",
@@ -225,12 +225,12 @@
           "Position": "Außenangriff",
           "Mannschaft": "Münster",
           "Nation": "Deutschland (GER)",
-          "Wert1": "61",
-          "Wert2": "4",
-          "Wert3": "0,2",
-          "Kennzahl": "44,8%",
-          "Wertung": "",
-          "ranking": "61"
+          "Wert1": "87",
+          "Wert2": "17",
+          "Wert3": "22",
+          "Kennzahl": "4,8",
+          "Wertung": "44,8%",
+          "ranking": "87 | 44,8%"
         },
         {
           "Rang": "13.",
@@ -241,12 +241,12 @@
           "Position": "Libero",
           "Mannschaft": "Münster",
           "Nation": "Niederlande (NED)",
-          "Wert1": "0",
-          "Wert2": "0",
-          "Wert3": "0",
-          "Kennzahl": "40,6%",
-          "Wertung": "",
-          "ranking": "0"
+          "Wert1": "106",
+          "Wert2": "18",
+          "Wert3": "25",
+          "Kennzahl": "4,1",
+          "Wertung": "40,6%",
+          "ranking": "106 | 40,6%"
         },
         {
           "Rang": "15.",
@@ -257,12 +257,12 @@
           "Position": "Außenangriff",
           "Mannschaft": "Münster",
           "Nation": "Deutschland (GER)",
-          "Wert1": "26",
-          "Wert2": "1",
-          "Wert3": "0,1",
-          "Kennzahl": "38,8%",
-          "Wertung": "",
-          "ranking": "26"
+          "Wert1": "49",
+          "Wert2": "8",
+          "Wert3": "11",
+          "Kennzahl": "6,1",
+          "Wertung": "38,8%",
+          "ranking": "49 | 38,8%"
         }
       ],
       "opponent": [
@@ -275,15 +275,15 @@
           "Position": "Libero",
           "Mannschaft": "Dresden",
           "Nation": "Deutschland (GER)",
-          "Wert1": "0",
-          "Wert2": "0",
-          "Wert3": "0",
-          "Kennzahl": "38,3%",
-          "Wertung": "",
-          "ranking": "0"
+          "Wert1": "120",
+          "Wert2": "23",
+          "Wert3": "23",
+          "Kennzahl": "5,2",
+          "Wertung": "38,3%",
+          "ranking": "120 | 38,3%"
         },
         {
-          "Rang": "18.",
+          "Rang": "19.",
           "column_1": "",
           "Name": "Kuipers, Jette",
           "Sätze": "23",
@@ -291,15 +291,15 @@
           "Position": "Außenangriff",
           "Mannschaft": "Dresden",
           "Nation": "Niederlande (NED)",
-          "Wert1": "83",
-          "Wert2": "5",
-          "Wert3": "0,2",
-          "Kennzahl": "37,8%",
-          "Wertung": "",
-          "ranking": "83"
+          "Wert1": "143",
+          "Wert2": "21",
+          "Wert3": "33",
+          "Kennzahl": "6,2",
+          "Wertung": "37,8%",
+          "ranking": "143 | 37,8%"
         },
         {
-          "Rang": "21.",
+          "Rang": "22.",
           "column_1": "",
           "Name": "Akimoto, Miku",
           "Sätze": "23",
@@ -307,12 +307,12 @@
           "Position": "Außenangriff",
           "Mannschaft": "Dresden",
           "Nation": "Japan (JPN)",
-          "Wert1": "85",
-          "Wert2": "13",
-          "Wert3": "0,6",
-          "Kennzahl": "36,5%",
-          "Wertung": "",
-          "ranking": "85"
+          "Wert1": "148",
+          "Wert2": "25",
+          "Wert3": "29",
+          "Kennzahl": "6,4",
+          "Wertung": "36,5%",
+          "ranking": "148 | 36,5%"
         }
       ]
     },
@@ -321,7 +321,7 @@
       "label": "Aufschlag / Quote Aufschlagpunkte",
       "usc": [
         {
-          "Rang": "10.",
+          "Rang": "11.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "6",
@@ -337,7 +337,7 @@
           "ranking": "69"
         },
         {
-          "Rang": "25.",
+          "Rang": "26.",
           "column_1": "",
           "Name": "Waelkens, Anke",
           "Sätze": "7",
@@ -353,7 +353,7 @@
           "ranking": "40"
         },
         {
-          "Rang": "32.",
+          "Rang": "33.",
           "column_1": "",
           "Name": "Seybering, Diane",
           "Sätze": "7",
@@ -371,7 +371,7 @@
       ],
       "opponent": [
         {
-          "Rang": "8.",
+          "Rang": "9.",
           "column_1": "",
           "Name": "Akimoto, Miku",
           "Sätze": "6",
@@ -387,7 +387,7 @@
           "ranking": "85"
         },
         {
-          "Rang": "38.",
+          "Rang": "39.",
           "column_1": "",
           "Name": "Winter, Larissa",
           "Sätze": "6",
@@ -403,7 +403,7 @@
           "ranking": "25"
         },
         {
-          "Rang": "57.",
+          "Rang": "58.",
           "column_1": "",
           "Name": "Grome, Emma",
           "Sätze": "6",
@@ -491,7 +491,7 @@
           "ranking": "143 | 28,7%"
         },
         {
-          "Rang": "18.",
+          "Rang": "19.",
           "column_1": "",
           "Name": "Akimoto, Miku",
           "Sätze": "23",
@@ -641,12 +641,12 @@
           "Position": "Mittelblock",
           "Mannschaft": "Münster",
           "Nation": "Deutschland (GER)",
-          "Wert1": "97",
-          "Wert2": "50",
-          "Wert3": "8",
-          "Kennzahl": "16",
+          "Wert1": "0,7",
+          "Wert2": "16",
+          "Wert3": "",
+          "Kennzahl": "",
           "Wertung": "",
-          "ranking": "97"
+          "ranking": "0,7"
         },
         {
           "Rang": "13.",
@@ -657,15 +657,15 @@
           "Position": "Mittelblock",
           "Mannschaft": "Münster",
           "Nation": "Belgien (BEL)",
-          "Wert1": "45",
-          "Wert2": "22",
-          "Wert3": "9",
-          "Kennzahl": "12",
+          "Wert1": "0,6",
+          "Wert2": "12",
+          "Wert3": "",
+          "Kennzahl": "",
           "Wertung": "",
-          "ranking": "45"
+          "ranking": "0,6"
         },
         {
-          "Rang": "30.",
+          "Rang": "31.",
           "column_1": "",
           "Name": "Malm, Cecilia",
           "Sätze": "23",
@@ -673,12 +673,12 @@
           "Position": "Außenangriff",
           "Mannschaft": "Münster",
           "Nation": "Schweden (SWE)",
-          "Wert1": "121",
-          "Wert2": "35",
-          "Wert3": "12",
-          "Kennzahl": "7",
+          "Wert1": "0,3",
+          "Wert2": "7",
+          "Wert3": "",
+          "Kennzahl": "",
           "Wertung": "",
-          "ranking": "121"
+          "ranking": "0,3"
         }
       ],
       "opponent": [
@@ -691,12 +691,12 @@
           "Position": "Mittelblock",
           "Mannschaft": "Dresden",
           "Nation": "Deutschland (GER)",
-          "Wert1": "45",
-          "Wert2": "22",
-          "Wert3": "7",
-          "Kennzahl": "28",
+          "Wert1": "1,2",
+          "Wert2": "28",
+          "Wert3": "",
+          "Kennzahl": "",
           "Wertung": "",
-          "ranking": "45"
+          "ranking": "1,2"
         },
         {
           "Rang": "13.",
@@ -707,12 +707,12 @@
           "Position": "Mittelblock",
           "Mannschaft": "Dresden",
           "Nation": "Kanada (CAN)",
-          "Wert1": "41",
-          "Wert2": "16",
-          "Wert3": "3",
-          "Kennzahl": "12",
+          "Wert1": "0,6",
+          "Wert2": "12",
+          "Wert3": "",
+          "Kennzahl": "",
           "Wertung": "",
-          "ranking": "41"
+          "ranking": "0,6"
         },
         {
           "Rang": "36.",
@@ -723,12 +723,12 @@
           "Position": "Zuspiel",
           "Mannschaft": "Dresden",
           "Nation": "Vereinigte Staaten von Amerika (USA)",
-          "Wert1": "7",
-          "Wert2": "1",
-          "Wert3": "1",
-          "Kennzahl": "6",
+          "Wert1": "0,3",
+          "Wert2": "6",
+          "Wert3": "",
+          "Kennzahl": "",
           "Wertung": "",
-          "ranking": "7"
+          "ranking": "0,3"
         }
       ]
     },
@@ -740,49 +740,49 @@
           "Rang": "9.",
           "column_1": "",
           "Name": "Ford, Brianna",
-          "Sätze": "19",
-          "Spiele": "6",
+          "Sätze": "6",
+          "Spiele": "27,5%",
           "Position": "Diagonal",
           "Mannschaft": "Münster",
           "Nation": "Vereinigte Staaten von Amerika (USA)",
-          "Wert1": "175",
-          "Wert2": "62",
-          "Wert3": "30",
-          "Kennzahl": "10",
-          "Wertung": "",
-          "ranking": "175"
+          "Wert1": "69",
+          "Wert2": "0,5",
+          "Wert3": "14,5%",
+          "Kennzahl": "19",
+          "Wertung": "10",
+          "ranking": "69 | 10"
         },
         {
           "Rang": "15.",
           "column_1": "",
           "Name": "Malm, Cecilia",
-          "Sätze": "23",
-          "Spiele": "7",
+          "Sätze": "7",
+          "Spiele": "28,4%",
           "Position": "Außenangriff",
           "Mannschaft": "Münster",
           "Nation": "Schweden (SWE)",
-          "Wert1": "121",
-          "Wert2": "35",
-          "Wert3": "12",
-          "Kennzahl": "7",
-          "Wertung": "",
-          "ranking": "121"
+          "Wert1": "81",
+          "Wert2": "0,3",
+          "Wert3": "8,6%",
+          "Kennzahl": "23",
+          "Wertung": "7",
+          "ranking": "81 | 7"
         },
         {
           "Rang": "15.",
           "column_1": "",
           "Name": "Seybering, Diane",
-          "Sätze": "25",
-          "Spiele": "7",
+          "Sätze": "7",
+          "Spiele": "28,9%",
           "Position": "Mittelblock",
           "Mannschaft": "Münster",
           "Nation": "Deutschland (GER)",
-          "Wert1": "40",
-          "Wert2": "19",
-          "Wert3": "4",
-          "Kennzahl": "7",
-          "Wertung": "",
-          "ranking": "40"
+          "Wert1": "76",
+          "Wert2": "0,3",
+          "Wert3": "9,2%",
+          "Kennzahl": "25",
+          "Wertung": "7",
+          "ranking": "76 | 7"
         }
       ],
       "opponent": [
@@ -790,49 +790,49 @@
           "Rang": "3.",
           "column_1": "",
           "Name": "Akimoto, Miku",
-          "Sätze": "23",
-          "Spiele": "6",
+          "Sätze": "6",
+          "Spiele": "25,9%",
           "Position": "Außenangriff",
           "Mannschaft": "Dresden",
           "Nation": "Japan (JPN)",
-          "Wert1": "183",
-          "Wert2": "77",
-          "Wert3": "28",
-          "Kennzahl": "13",
-          "Wertung": "",
-          "ranking": "183"
+          "Wert1": "85",
+          "Wert2": "0,6",
+          "Wert3": "15,3%",
+          "Kennzahl": "23",
+          "Wertung": "13",
+          "ranking": "85 | 13"
         },
         {
           "Rang": "19.",
           "column_1": "",
           "Name": "Grome, Emma",
-          "Sätze": "23",
-          "Spiele": "6",
+          "Sätze": "6",
+          "Spiele": "24,0%",
           "Position": "Zuspiel",
           "Mannschaft": "Dresden",
           "Nation": "Vereinigte Staaten von Amerika (USA)",
-          "Wert1": "7",
-          "Wert2": "1",
-          "Wert3": "1",
-          "Kennzahl": "6",
-          "Wertung": "",
-          "ranking": "7"
+          "Wert1": "96",
+          "Wert2": "0,3",
+          "Wert3": "6,3%",
+          "Kennzahl": "23",
+          "Wertung": "6",
+          "ranking": "96 | 6"
         },
         {
           "Rang": "30.",
           "column_1": "",
           "Name": "Kuipers, Jette",
-          "Sätze": "23",
-          "Spiele": "6",
+          "Sätze": "6",
+          "Spiele": "19,3%",
           "Position": "Außenangriff",
           "Mannschaft": "Dresden",
           "Nation": "Niederlande (NED)",
-          "Wert1": "142",
-          "Wert2": "53",
-          "Wert3": "12",
-          "Kennzahl": "5",
-          "Wertung": "",
-          "ranking": "142"
+          "Wert1": "83",
+          "Wert2": "0,2",
+          "Wert3": "6,0%",
+          "Kennzahl": "23",
+          "Wertung": "5",
+          "ranking": "83 | 5"
         }
       ]
     },
@@ -945,17 +945,17 @@
       "label": "Angriff / Angriffspunkte",
       "usc": [
         {
-          "Rang": "11.",
+          "Rang": "12.",
           "column_1": "",
           "Name": "Ford, Brianna",
-          "Sätze": "6",
-          "Spiele": "62",
+          "Sätze": "19",
+          "Spiele": "6",
           "Position": "Diagonal",
           "Mannschaft": "Münster",
           "Nation": "Vereinigte Staaten von Amerika (USA)",
           "Wert1": "175",
-          "Wert2": "30",
-          "Wert3": "19",
+          "Wert2": "3,3",
+          "Wert3": "35,4%",
           "Kennzahl": "62",
           "Wertung": "",
           "ranking": "175"
@@ -964,14 +964,14 @@
           "Rang": "20.",
           "column_1": "",
           "Name": "Spöler, Esther",
-          "Sätze": "6",
-          "Spiele": "50",
+          "Sätze": "23",
+          "Spiele": "6",
           "Position": "Mittelblock",
           "Mannschaft": "Münster",
           "Nation": "Deutschland (GER)",
           "Wert1": "97",
-          "Wert2": "8",
-          "Wert3": "23",
+          "Wert2": "2,2",
+          "Wert3": "51,5%",
           "Kennzahl": "50",
           "Wertung": "",
           "ranking": "97"
@@ -980,14 +980,14 @@
           "Rang": "25.",
           "column_1": "",
           "Name": "Martin, Isabel Rebecca",
-          "Sätze": "5",
-          "Spiele": "42",
+          "Sätze": "18",
+          "Spiele": "5",
           "Position": "Außenangriff",
           "Mannschaft": "Münster",
           "Nation": "Deutschland (GER)",
           "Wert1": "103",
-          "Wert2": "20",
-          "Wert3": "18",
+          "Wert2": "2,3",
+          "Wert3": "40,8%",
           "Kennzahl": "42",
           "Wertung": "",
           "ranking": "103"
@@ -998,46 +998,46 @@
           "Rang": "3.",
           "column_1": "",
           "Name": "Levinska, Marta Kamēlija",
-          "Sätze": "6",
-          "Spiele": "103",
+          "Sätze": "23",
+          "Spiele": "6",
           "Position": "Diagonal",
           "Mannschaft": "Dresden",
           "Nation": "Lettland (LAT)",
           "Wert1": "233",
-          "Wert2": "32",
-          "Wert3": "23",
+          "Wert2": "4,5",
+          "Wert3": "44,2%",
           "Kennzahl": "103",
           "Wertung": "",
           "ranking": "233"
         },
         {
-          "Rang": "6.",
+          "Rang": "7.",
           "column_1": "",
           "Name": "Akimoto, Miku",
-          "Sätze": "6",
-          "Spiele": "77",
+          "Sätze": "23",
+          "Spiele": "6",
           "Position": "Außenangriff",
           "Mannschaft": "Dresden",
           "Nation": "Japan (JPN)",
           "Wert1": "183",
-          "Wert2": "28",
-          "Wert3": "23",
+          "Wert2": "3,3",
+          "Wert3": "42,1%",
           "Kennzahl": "77",
           "Wertung": "",
           "ranking": "183"
         },
         {
-          "Rang": "16.",
+          "Rang": "17.",
           "column_1": "",
           "Name": "Kuipers, Jette",
-          "Sätze": "6",
-          "Spiele": "53",
+          "Sätze": "23",
+          "Spiele": "6",
           "Position": "Außenangriff",
           "Mannschaft": "Dresden",
           "Nation": "Niederlande (NED)",
           "Wert1": "142",
-          "Wert2": "12",
-          "Wert3": "23",
+          "Wert2": "2,3",
+          "Wert3": "37,3%",
           "Kennzahl": "53",
           "Wertung": "",
           "ranking": "142"
@@ -1049,7 +1049,7 @@
       "label": "Aufschlag / Aufschlageffizienz",
       "usc": [
         {
-          "Rang": "16.",
+          "Rang": "17.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "19",
@@ -1065,7 +1065,7 @@
           "ranking": "69 | 0,0%"
         },
         {
-          "Rang": "27.",
+          "Rang": "28.",
           "column_1": "",
           "Name": "Strothoff, Amelie",
           "Sätze": "21",
@@ -1081,7 +1081,7 @@
           "ranking": "62 | -3,2%"
         },
         {
-          "Rang": "29.",
+          "Rang": "30.",
           "column_1": "",
           "Name": "Seybering, Diane",
           "Sätze": "25",
@@ -1099,7 +1099,7 @@
       ],
       "opponent": [
         {
-          "Rang": "13.",
+          "Rang": "14.",
           "column_1": "",
           "Name": "Winter, Larissa",
           "Sätze": "16",
@@ -1115,7 +1115,7 @@
           "ranking": "25 | 4,0%"
         },
         {
-          "Rang": "16.",
+          "Rang": "17.",
           "column_1": "",
           "Name": "Levinska, Marta Kamēlija",
           "Sätze": "23",
