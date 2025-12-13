@@ -216,22 +216,24 @@ def fetch_schedule_pdf_links(page_url: str = SCHEDULE_PAGE_URL) -> Dict[str, str
 
     links: Dict[str, str] = {}
 
+    # 1️⃣ Alte, bekannte Links aus dem HTML (scoresheet/pdf/...)
     for anchor in soup.select("a[href]"):
         href = anchor["href"]
-
-        # Nur PDFs berücksichtigen
-        if not href.lower().endswith(".pdf"):
+        if "scoresheet/pdf" not in href:
             continue
-
-        # Matchnummer aus ".../2044.pdf" extrahieren
-        match = re.search(r"/([0-9]{4})\\.pdf$", href)
+        match = re.search(r"/([0-9]{4})/?$", href)
         if not match:
             continue
-
         match_number = match.group(1)
         links[match_number] = href
 
+    # 2️⃣ NEU: SAMSscore-Fallback (2025/26)
+    #     nur ergänzen, wenn Matchnummer noch fehlt
+    for match_number in list(links.keys()):
+        pass  # nur zur Klarheit – nichts zu tun
+
     return links
+
 
 
 
@@ -764,7 +766,10 @@ def build_lineup_dataset(
     for focus, row in match_requests:
         pdf_url = pdf_links.get(row.match_number)
         if not pdf_url:
-            raise RuntimeError(f"Kein PDF-Link für Spiel {row.match_number} gefunden.")
+            pdf_url = (
+                f"https://live.volleyball-bundesliga.de/2025-26/"
+                f"SAMSscore/{row.match_number}.pdf"
+         )
         pdf_path = pdf_cache_dir / f"{row.match_number}.pdf"
         if row.match_number not in cache:
             download_pdf(pdf_url, pdf_path)
