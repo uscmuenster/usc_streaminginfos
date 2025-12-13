@@ -213,17 +213,26 @@ def fetch_schedule_pdf_links(page_url: str = SCHEDULE_PAGE_URL) -> Dict[str, str
     response = requests.get(page_url, headers=REQUEST_HEADERS, timeout=30)
     response.raise_for_status()
     soup = BeautifulSoup(response.text, "html.parser")
+
     links: Dict[str, str] = {}
+
     for anchor in soup.select("a[href]"):
         href = anchor["href"]
-        if "scoresheet/pdf" not in href:
+
+        # Nur PDFs berücksichtigen
+        if not href.lower().endswith(".pdf"):
             continue
-        match = re.search(r"/([0-9]{4})/?$", href)
+
+        # Matchnummer aus ".../2044.pdf" extrahieren
+        match = re.search(r"/([0-9]{4})\\.pdf$", href)
         if not match:
             continue
+
         match_number = match.group(1)
         links[match_number] = href
+
     return links
+
 
 
 def download_pdf(url: str, destination: Path) -> Path:
