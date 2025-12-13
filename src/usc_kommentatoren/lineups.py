@@ -258,7 +258,28 @@ def extract_lineups_from_pdf(pdf_path: Path) -> MatchLineups:
                     tables.append(table)
 
         if not tables:
-            raise ValueError(f"Keine Satz-Tabellen in {pdf_path} gefunden.")
+            # SAMSscore-PDFs enthalten keine Aufstellungen
+            # → leere Aufstellung zurückgeben statt Abbruch
+            team_codes = {"A": "", "B": ""}
+            return MatchLineups(
+                match=ScheduleRow(
+                    match_number="0",
+                    kickoff=datetime.now(tz=BERLIN_TZ),
+                    home_team="",
+                    away_team="",
+                    competition="",
+                    venue="",
+                    season="",
+                    result_label="",
+                    score=None,
+                    total_points=None,
+                    set_scores=(),
+            ),
+        pdf_url="",
+        team_names=team_codes,
+        sets=[],
+        rosters={},
+    )
 
         team_codes = _extract_team_codes(pdf.pages[0])
         rosters = _extract_rosters(pdf, team_codes)
