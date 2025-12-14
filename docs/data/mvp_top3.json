@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-13T03:33:15.668868+00:00",
+  "generated_at": "2025-12-14T03:45:38.302194+00:00",
   "usc_team": "USC Münster",
   "opponent_team": "Dresdner SC",
   "limit": 3,
@@ -9,7 +9,7 @@
       "label": "alle Spielelemente / Top-Scorer",
       "usc": [
         {
-          "Rang": "5.",
+          "Rang": "6.",
           "column_1": "",
           "Name": "Spöler, Esther",
           "Sätze": "23",
@@ -25,7 +25,7 @@
           "ranking": "71"
         },
         {
-          "Rang": "19.",
+          "Rang": "20.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "19",
@@ -41,7 +41,7 @@
           "ranking": "78"
         },
         {
-          "Rang": "44.",
+          "Rang": "46.",
           "column_1": "",
           "Name": "Waelkens, Anke",
           "Sätze": "20",
@@ -75,7 +75,7 @@
           "ranking": "116"
         },
         {
-          "Rang": "8.",
+          "Rang": "9.",
           "column_1": "",
           "Name": "Kuipers, Jette",
           "Sätze": "25",
@@ -91,7 +91,7 @@
           "ranking": "66"
         },
         {
-          "Rang": "10.",
+          "Rang": "12.",
           "column_1": "",
           "Name": "Akimoto, Miku",
           "Sätze": "25",
@@ -113,7 +113,7 @@
       "label": "Aufschlag / Quote Aufschläge mit Wirkung",
       "usc": [
         {
-          "Rang": "29.",
+          "Rang": "27.",
           "column_1": "",
           "Name": "Seybering, Diane",
           "Sätze": "25",
@@ -129,7 +129,7 @@
           "ranking": "76"
         },
         {
-          "Rang": "36.",
+          "Rang": "34.",
           "column_1": "",
           "Name": "Malm, Cecilia",
           "Sätze": "23",
@@ -145,7 +145,7 @@
           "ranking": "81"
         },
         {
-          "Rang": "37.",
+          "Rang": "38.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "19",
@@ -163,7 +163,7 @@
       ],
       "opponent": [
         {
-          "Rang": "13.",
+          "Rang": "12.",
           "column_1": "",
           "Name": "Levinska, Marta Kamēlija",
           "Sätze": "25",
@@ -195,7 +195,7 @@
           "ranking": "107"
         },
         {
-          "Rang": "32.",
+          "Rang": "29.",
           "column_1": "",
           "Name": "Winter, Larissa",
           "Sätze": "18",
@@ -217,7 +217,7 @@
       "label": "Annahme / Quote perfekte oder gute Annahme",
       "usc": [
         {
-          "Rang": "7.",
+          "Rang": "6.",
           "column_1": "",
           "Name": "Martin, Isabel Rebecca",
           "Sätze": "18",
@@ -233,7 +233,7 @@
           "ranking": "87 | 44,8%"
         },
         {
-          "Rang": "14.",
+          "Rang": "15.",
           "column_1": "",
           "Name": "Molenaar, Pippa",
           "Sätze": "26",
@@ -267,7 +267,7 @@
       ],
       "opponent": [
         {
-          "Rang": "12.",
+          "Rang": "11.",
           "column_1": "",
           "Name": "Lorber Fijok, Lorena",
           "Sätze": "6",
@@ -299,7 +299,7 @@
           "ranking": "126 | 38,9%"
         },
         {
-          "Rang": "20.",
+          "Rang": "21.",
           "column_1": "",
           "Name": "Kuipers, Jette",
           "Sätze": "25",
@@ -321,7 +321,7 @@
       "label": "Aufschlag / Quote Aufschlagpunkte",
       "usc": [
         {
-          "Rang": "11.",
+          "Rang": "10.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "6",
@@ -337,7 +337,7 @@
           "ranking": "69"
         },
         {
-          "Rang": "26.",
+          "Rang": "25.",
           "column_1": "",
           "Name": "Waelkens, Anke",
           "Sätze": "7",
@@ -353,7 +353,7 @@
           "ranking": "40"
         },
         {
-          "Rang": "32.",
+          "Rang": "30.",
           "column_1": "",
           "Name": "Seybering, Diane",
           "Sätze": "7",
@@ -371,7 +371,7 @@
       ],
       "opponent": [
         {
-          "Rang": "10.",
+          "Rang": "8.",
           "column_1": "",
           "Name": "Akimoto, Miku",
           "Sätze": "7",
@@ -387,7 +387,7 @@
           "ranking": "88"
         },
         {
-          "Rang": "46.",
+          "Rang": "47.",
           "column_1": "",
           "Name": "Entius, Rosa",
           "Sätze": "7",
@@ -403,7 +403,7 @@
           "ranking": "14"
         },
         {
-          "Rang": "46.",
+          "Rang": "47.",
           "column_1": "",
           "Name": "Winter, Larissa",
           "Sätze": "7",
@@ -425,7 +425,7 @@
       "label": "Annahme / Annahmeeffizienz",
       "usc": [
         {
-          "Rang": "12.",
+          "Rang": "11.",
           "column_1": "",
           "Name": "Molenaar, Pippa",
           "Sätze": "26",
@@ -457,7 +457,7 @@
           "ranking": "87 | 25,3%"
         },
         {
-          "Rang": "23.",
+          "Rang": "24.",
           "column_1": "",
           "Name": "Kömmling, Elena",
           "Sätze": "8",
@@ -491,7 +491,7 @@
           "ranking": "30 | 33,3%"
         },
         {
-          "Rang": "15.",
+          "Rang": "16.",
           "column_1": "",
           "Name": "Kuipers, Jette",
           "Sätze": "25",
@@ -507,7 +507,7 @@
           "ranking": "158 | 26,6%"
         },
         {
-          "Rang": "19.",
+          "Rang": "20.",
           "column_1": "",
           "Name": "Nestler, Patricia",
           "Sätze": "26",
@@ -545,7 +545,7 @@
           "ranking": "97"
         },
         {
-          "Rang": "7.",
+          "Rang": "8.",
           "column_1": "",
           "Name": "Seybering, Diane",
           "Sätze": "25",
@@ -579,7 +579,7 @@
       ],
       "opponent": [
         {
-          "Rang": "5.",
+          "Rang": "6.",
           "column_1": "",
           "Name": "Pfeffer, Mette Marleen",
           "Sätze": "26",
@@ -665,7 +665,7 @@
           "ranking": "0,6"
         },
         {
-          "Rang": "31.",
+          "Rang": "35.",
           "column_1": "",
           "Name": "Malm, Cecilia",
           "Sätze": "23",
@@ -715,7 +715,7 @@
           "ranking": "0,6"
         },
         {
-          "Rang": "38.",
+          "Rang": "39.",
           "column_1": "",
           "Name": "Grome, Emma",
           "Sätze": "26",
@@ -753,7 +753,7 @@
           "ranking": "69 | 10"
         },
         {
-          "Rang": "15.",
+          "Rang": "18.",
           "column_1": "",
           "Name": "Malm, Cecilia",
           "Sätze": "7",
@@ -769,7 +769,7 @@
           "ranking": "81 | 7"
         },
         {
-          "Rang": "15.",
+          "Rang": "18.",
           "column_1": "",
           "Name": "Seybering, Diane",
           "Sätze": "7",
@@ -803,7 +803,7 @@
           "ranking": "88 | 13"
         },
         {
-          "Rang": "21.",
+          "Rang": "22.",
           "column_1": "",
           "Name": "Grome, Emma",
           "Sätze": "7",
@@ -819,7 +819,7 @@
           "ranking": "106 | 6"
         },
         {
-          "Rang": "21.",
+          "Rang": "22.",
           "column_1": "",
           "Name": "Pfeffer, Mette Marleen",
           "Sätze": "7",
@@ -841,7 +841,7 @@
       "label": "Angriff / Quote Angriffspunkte",
       "usc": [
         {
-          "Rang": "5.",
+          "Rang": "6.",
           "column_1": "",
           "Name": "Spöler, Esther",
           "Sätze": "6",
@@ -873,7 +873,7 @@
           "ranking": "45"
         },
         {
-          "Rang": "9.",
+          "Rang": "10.",
           "column_1": "",
           "Name": "Seybering, Diane",
           "Sätze": "7",
@@ -907,7 +907,7 @@
           "ranking": "55"
         },
         {
-          "Rang": "15.",
+          "Rang": "17.",
           "column_1": "",
           "Name": "Levinska, Marta Kamēlija",
           "Sätze": "7",
@@ -923,7 +923,7 @@
           "ranking": "242"
         },
         {
-          "Rang": "20.",
+          "Rang": "19.",
           "column_1": "",
           "Name": "Akimoto, Miku",
           "Sätze": "7",
@@ -961,7 +961,7 @@
           "ranking": "175"
         },
         {
-          "Rang": "21.",
+          "Rang": "23.",
           "column_1": "",
           "Name": "Spöler, Esther",
           "Sätze": "23",
@@ -977,7 +977,7 @@
           "ranking": "97"
         },
         {
-          "Rang": "26.",
+          "Rang": "29.",
           "column_1": "",
           "Name": "Martin, Isabel Rebecca",
           "Sätze": "18",
@@ -1027,7 +1027,7 @@
           "ranking": "191"
         },
         {
-          "Rang": "16.",
+          "Rang": "18.",
           "column_1": "",
           "Name": "Kuipers, Jette",
           "Sätze": "25",
@@ -1049,7 +1049,7 @@
       "label": "Aufschlag / Aufschlageffizienz",
       "usc": [
         {
-          "Rang": "17.",
+          "Rang": "18.",
           "column_1": "",
           "Name": "Ford, Brianna",
           "Sätze": "19",
@@ -1065,7 +1065,7 @@
           "ranking": "69 | 0,0%"
         },
         {
-          "Rang": "28.",
+          "Rang": "26.",
           "column_1": "",
           "Name": "Strothoff, Amelie",
           "Sätze": "21",
@@ -1081,7 +1081,7 @@
           "ranking": "62 | -3,2%"
         },
         {
-          "Rang": "30.",
+          "Rang": "27.",
           "column_1": "",
           "Name": "Seybering, Diane",
           "Sätze": "25",
@@ -1099,7 +1099,7 @@
       ],
       "opponent": [
         {
-          "Rang": "13.",
+          "Rang": "15.",
           "column_1": "",
           "Name": "Winter, Larissa",
           "Sätze": "18",
@@ -1115,7 +1115,7 @@
           "ranking": "28 | 3,6%"
         },
         {
-          "Rang": "16.",
+          "Rang": "17.",
           "column_1": "",
           "Name": "Levinska, Marta Kamēlija",
           "Sätze": "25",
