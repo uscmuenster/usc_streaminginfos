@@ -1,8 +1,320 @@
 {
-  "generated_at": "2025-12-17T04:40:28.699913+01:00",
+  "generated_at": "2025-12-18T04:41:31.375153+01:00",
   "usc_team": "USC Münster",
   "opponent_team": "Allianz MTV Stuttgart",
   "matches": [
+    {
+      "focus": "usc",
+      "focus_team_code": "B",
+      "focus_team_name": "USC Münster",
+      "match_number": "2067",
+      "kickoff": "2025-12-17T17:30:00+01:00",
+      "date_label": "17.12.2025",
+      "home_team": "SSC Palmberg Schwerin",
+      "away_team": "USC Münster",
+      "competition": "1. Bundesliga Frauen",
+      "venue": "Palmberg Arena (19059 Schwerin)",
+      "season": "2025/26",
+      "result": "3:0",
+      "home_code": "A",
+      "away_code": "B",
+      "set_scores": [
+        "25:22",
+        "25:16",
+        "25:22"
+      ],
+      "pdf_url": "https://distributor.sams-score.de/scoresheet/pdf/aebe9135-5a6b-4121-a4ee-5a1e19cefe5b/2067",
+      "team_codes": {
+        "A": "SSC Palmberg Schwerin",
+        "B": "USC Münster"
+      },
+      "usc_code": "B",
+      "opponent_code": "A",
+      "teams": [
+        {
+          "code": "A",
+          "name": "SSC Palmberg Schwerin",
+          "is_focus": false,
+          "is_usc": false,
+          "is_opponent": false,
+          "setters": [
+            "12",
+            "17"
+          ]
+        },
+        {
+          "code": "B",
+          "name": "USC Münster",
+          "is_focus": true,
+          "is_usc": true,
+          "is_opponent": false,
+          "setters": [
+            "8",
+            "9"
+          ]
+        }
+      ],
+      "sets": [
+        {
+          "number": 1,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "17",
+                "full_name": "Jaksetic, Vedrana",
+                "short_name": "Jaksetic"
+              },
+              {
+                "slot": "II",
+                "number": "11",
+                "full_name": "Hölzig, Annegret",
+                "short_name": "Hölzig"
+              },
+              {
+                "slot": "III",
+                "number": "4",
+                "full_name": "ten Brinke, Marije",
+                "short_name": "ten Brinke"
+              },
+              {
+                "slot": "IV",
+                "number": "15",
+                "full_name": "Mia Kirchhoff",
+                "short_name": "Kirchhoff"
+              },
+              {
+                "slot": "V",
+                "number": "20",
+                "full_name": "Helena Kok",
+                "short_name": "Kok"
+              },
+              {
+                "slot": "VI",
+                "number": "8",
+                "full_name": "Britte Mayke Stuut",
+                "short_name": "Stuut"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "10",
+                "full_name": "Strothoff, Amelie",
+                "short_name": "Strothoff"
+              },
+              {
+                "slot": "II",
+                "number": "18",
+                "full_name": "Diane Seybering",
+                "short_name": "Seybering"
+              },
+              {
+                "slot": "III",
+                "number": "14",
+                "full_name": "Ford, Brianna",
+                "short_name": "Ford"
+              },
+              {
+                "slot": "IV",
+                "number": "7",
+                "full_name": "Kömmling, Elena",
+                "short_name": "Kömmling"
+              },
+              {
+                "slot": "V",
+                "number": "3",
+                "full_name": "Spöler, Esther",
+                "short_name": "Spöler"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Jordan, Emilia",
+                "short_name": "Jordan"
+              }
+            ]
+          },
+          "scores": {
+            "A": "25",
+            "B": "22"
+          },
+          "score_label": "25:22"
+        },
+        {
+          "number": 2,
+          "lineups": {
+            "B": [
+              {
+                "slot": "I",
+                "number": "10",
+                "full_name": "Strothoff, Amelie",
+                "short_name": "Strothoff"
+              },
+              {
+                "slot": "II",
+                "number": "18",
+                "full_name": "Diane Seybering",
+                "short_name": "Seybering"
+              },
+              {
+                "slot": "III",
+                "number": "14",
+                "full_name": "Ford, Brianna",
+                "short_name": "Ford"
+              },
+              {
+                "slot": "IV",
+                "number": "7",
+                "full_name": "Kömmling, Elena",
+                "short_name": "Kömmling"
+              },
+              {
+                "slot": "V",
+                "number": "3",
+                "full_name": "Spöler, Esther",
+                "short_name": "Spöler"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Jordan, Emilia",
+                "short_name": "Jordan"
+              }
+            ],
+            "A": [
+              {
+                "slot": "I",
+                "number": "17",
+                "full_name": "Jaksetic, Vedrana",
+                "short_name": "Jaksetic"
+              },
+              {
+                "slot": "II",
+                "number": "11",
+                "full_name": "Hölzig, Annegret",
+                "short_name": "Hölzig"
+              },
+              {
+                "slot": "III",
+                "number": "4",
+                "full_name": "ten Brinke, Marije",
+                "short_name": "ten Brinke"
+              },
+              {
+                "slot": "IV",
+                "number": "15",
+                "full_name": "Mia Kirchhoff",
+                "short_name": "Kirchhoff"
+              },
+              {
+                "slot": "V",
+                "number": "20",
+                "full_name": "Helena Kok",
+                "short_name": "Kok"
+              },
+              {
+                "slot": "VI",
+                "number": "8",
+                "full_name": "Britte Mayke Stuut",
+                "short_name": "Stuut"
+              }
+            ]
+          },
+          "scores": {
+            "B": "16",
+            "A": "25"
+          },
+          "score_label": "25:16"
+        },
+        {
+          "number": 3,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "17",
+                "full_name": "Jaksetic, Vedrana",
+                "short_name": "Jaksetic"
+              },
+              {
+                "slot": "II",
+                "number": "11",
+                "full_name": "Hölzig, Annegret",
+                "short_name": "Hölzig"
+              },
+              {
+                "slot": "III",
+                "number": "4",
+                "full_name": "ten Brinke, Marije",
+                "short_name": "ten Brinke"
+              },
+              {
+                "slot": "IV",
+                "number": "15",
+                "full_name": "Mia Kirchhoff",
+                "short_name": "Kirchhoff"
+              },
+              {
+                "slot": "V",
+                "number": "20",
+                "full_name": "Helena Kok",
+                "short_name": "Kok"
+              },
+              {
+                "slot": "VI",
+                "number": "8",
+                "full_name": "Britte Mayke Stuut",
+                "short_name": "Stuut"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "10",
+                "full_name": "Strothoff, Amelie",
+                "short_name": "Strothoff"
+              },
+              {
+                "slot": "II",
+                "number": "18",
+                "full_name": "Diane Seybering",
+                "short_name": "Seybering"
+              },
+              {
+                "slot": "III",
+                "number": "14",
+                "full_name": "Ford, Brianna",
+                "short_name": "Ford"
+              },
+              {
+                "slot": "IV",
+                "number": "5",
+                "full_name": "Malm, Cecilia",
+                "short_name": "Malm"
+              },
+              {
+                "slot": "V",
+                "number": "3",
+                "full_name": "Spöler, Esther",
+                "short_name": "Spöler"
+              },
+              {
+                "slot": "VI",
+                "number": "9",
+                "full_name": "Jordan, Emilia",
+                "short_name": "Jordan"
+              }
+            ]
+          },
+          "scores": {
+            "A": "25",
+            "B": "22"
+          },
+          "score_label": "25:22"
+        }
+      ]
+    },
     {
       "focus": "usc",
       "focus_team_code": "B",
@@ -489,55 +801,6 @@
           "score_label": "15:12"
         }
       ]
-    },
-    {
-      "focus": "usc",
-      "focus_team_code": null,
-      "focus_team_name": "USC Münster",
-      "match_number": "2044",
-      "kickoff": "2025-12-06T18:00:00+01:00",
-      "date_label": "06.12.2025",
-      "home_team": "VC Wiesbaden",
-      "away_team": "USC Münster",
-      "competition": "1. Bundesliga Frauen",
-      "venue": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-      "season": "2025/26",
-      "result": "3:2",
-      "home_code": null,
-      "away_code": null,
-      "set_scores": [
-        "15:25",
-        "25:19",
-        "16:25",
-        "25:14",
-        "20:18"
-      ],
-      "pdf_url": "https://live.volleyball-bundesliga.de/2025-26/SAMSscore/2044.pdf",
-      "team_codes": {
-        "A": "",
-        "B": ""
-      },
-      "usc_code": null,
-      "opponent_code": null,
-      "teams": [
-        {
-          "code": "A",
-          "name": "",
-          "is_focus": false,
-          "is_usc": false,
-          "is_opponent": false,
-          "setters": []
-        },
-        {
-          "code": "B",
-          "name": "",
-          "is_focus": false,
-          "is_usc": false,
-          "is_opponent": false,
-          "setters": []
-        }
-      ],
-      "sets": []
     },
     {
       "focus": "opponent",
