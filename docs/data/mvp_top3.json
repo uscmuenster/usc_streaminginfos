@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-31T03:45:29.673391+00:00",
+  "generated_at": "2026-01-01T03:58:37.071624+00:00",
   "usc_team": "USC Münster",
   "opponent_team": "Binder Blaubären TSV Flacht",
   "limit": 3,
@@ -995,23 +995,7 @@
       ],
       "opponent": [
         {
-          "Rang": "43.",
-          "column_1": "",
-          "Name": "Schammer, Britta",
-          "Sätze": "31",
-          "Spiele": "10",
-          "Position": "Mittelblock",
-          "Mannschaft": "Flacht",
-          "Nation": "Deutschland (GER)",
-          "Wert1": "59",
-          "Wert2": "0,7",
-          "Wert3": "39,0%",
-          "Kennzahl": "39,0%",
-          "Wertung": "",
-          "ranking": "59"
-        },
-        {
-          "Rang": "49.",
+          "Rang": "7.",
           "column_1": "",
           "Name": "Neuhaus, Frauke",
           "Sätze": "31",
@@ -1022,25 +1006,41 @@
           "Wert1": "283",
           "Wert2": "3,3",
           "Wert3": "36,4%",
-          "Kennzahl": "36,4%",
+          "Kennzahl": "103",
           "Wertung": "",
           "ranking": "283"
         },
         {
-          "Rang": "50.",
+          "Rang": "49.",
           "column_1": "",
-          "Name": "Vogel, Roxana",
-          "Sätze": "29",
+          "Name": "Kögler, Hanna",
+          "Sätze": "28",
           "Spiele": "10",
-          "Position": "Zuspiel",
+          "Position": "Außenangriff",
           "Mannschaft": "Flacht",
           "Nation": "Deutschland (GER)",
-          "Wert1": "44",
-          "Wert2": "0,6",
-          "Wert3": "36,4%",
-          "Kennzahl": "36,4%",
+          "Wert1": "146",
+          "Wert2": "1,3",
+          "Wert3": "25,3%",
+          "Kennzahl": "37",
           "Wertung": "",
-          "ranking": "44"
+          "ranking": "146"
+        },
+        {
+          "Rang": "64.",
+          "column_1": "",
+          "Name": "Marjanovic, Sara",
+          "Sätze": "21",
+          "Spiele": "9",
+          "Position": "Außenangriff",
+          "Mannschaft": "Flacht",
+          "Nation": "Deutschland (GER)",
+          "Wert1": "105",
+          "Wert2": "1,2",
+          "Wert3": "24,8%",
+          "Kennzahl": "26",
+          "Wertung": "",
+          "ranking": "105"
         }
       ]
     },
