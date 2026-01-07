@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-06T03:47:20.873156+00:00",
+  "generated_at": "2026-01-07T03:47:34.000372+00:00",
   "usc_team": "USC Münster",
   "opponent_team": "Binder Blaubären TSV Flacht",
   "limit": 3,
@@ -787,23 +787,7 @@
       ],
       "opponent": [
         {
-          "Rang": "5.",
-          "column_1": "",
-          "Name": "Zuber, Saskia",
-          "Sätze": "8",
-          "Spiele": "41,7%",
-          "Position": "Zuspiel",
-          "Mannschaft": "Flacht",
-          "Nation": "Deutschland (GER)",
-          "Wert1": "12",
-          "Wert2": "0,1",
-          "Wert3": "16,7%",
-          "Kennzahl": "14",
-          "Wertung": "41,7%",
-          "ranking": "12 | 41,7%"
-        },
-        {
-          "Rang": "16.",
+          "Rang": "18.",
           "column_1": "",
           "Name": "Neuhaus, Frauke",
           "Sätze": "10",
@@ -815,24 +799,40 @@
           "Wert2": "0,3",
           "Wert3": "10,5%",
           "Kennzahl": "31",
-          "Wertung": "32,6%",
-          "ranking": "86 | 32,6%"
+          "Wertung": "9",
+          "ranking": "86 | 9"
         },
         {
-          "Rang": "42.",
+          "Rang": "32.",
           "column_1": "",
-          "Name": "Kögler, Hanna",
+          "Name": "Lobzhanidze, Lizzy Irine",
           "Sätze": "10",
-          "Spiele": "27,4%",
-          "Position": "Außenangriff",
+          "Spiele": "25,3%",
+          "Position": "Mittelblock",
+          "Mannschaft": "Flacht",
+          "Nation": "Georgien (GEO)",
+          "Wert1": "95",
+          "Wert2": "0,2",
+          "Wert3": "7,4%",
+          "Kennzahl": "31",
+          "Wertung": "7",
+          "ranking": "95 | 7"
+        },
+        {
+          "Rang": "51.",
+          "column_1": "",
+          "Name": "Vogel, Roxana",
+          "Sätze": "10",
+          "Spiele": "25,0%",
+          "Position": "Zuspiel",
           "Mannschaft": "Flacht",
           "Nation": "Deutschland (GER)",
-          "Wert1": "73",
-          "Wert2": "0,1",
-          "Wert3": "4,1%",
-          "Kennzahl": "28",
-          "Wertung": "27,4%",
-          "ranking": "73 | 27,4%"
+          "Wert1": "72",
+          "Wert2": "0,2",
+          "Wert3": "6,9%",
+          "Kennzahl": "29",
+          "Wertung": "5",
+          "ranking": "72 | 5"
         }
       ]
     },
@@ -891,39 +891,39 @@
       ],
       "opponent": [
         {
-          "Rang": "35.",
+          "Rang": "5.",
           "column_1": "",
-          "Name": "Stäbler, Alina",
-          "Sätze": "6",
-          "Spiele": "0",
-          "Position": "Libero",
+          "Name": "Zuber, Saskia",
+          "Sätze": "8",
+          "Spiele": "1",
+          "Position": "Zuspiel",
           "Mannschaft": "Flacht",
           "Nation": "Deutschland (GER)",
-          "Wert1": "0",
-          "Wert2": "0",
+          "Wert1": "4",
+          "Wert2": "3",
           "Wert3": "14",
-          "Kennzahl": "31,0%",
+          "Kennzahl": "41,7%",
           "Wertung": "",
-          "ranking": "0"
+          "ranking": "4"
         },
         {
-          "Rang": "36.",
+          "Rang": "16.",
           "column_1": "",
-          "Name": "Büdenbender, Leonie",
-          "Sätze": "7",
-          "Spiele": "0",
-          "Position": "Libero",
+          "Name": "Neuhaus, Frauke",
+          "Sätze": "10",
+          "Spiele": "103",
+          "Position": "Diagonal",
           "Mannschaft": "Flacht",
           "Nation": "Deutschland (GER)",
-          "Wert1": "0",
-          "Wert2": "0",
-          "Wert3": "19",
-          "Kennzahl": "30,9%",
+          "Wert1": "283",
+          "Wert2": "66",
+          "Wert3": "31",
+          "Kennzahl": "32,6%",
           "Wertung": "",
-          "ranking": "0"
+          "ranking": "283"
         },
         {
-          "Rang": "41.",
+          "Rang": "42.",
           "column_1": "",
           "Name": "Kögler, Hanna",
           "Sätze": "10",
@@ -934,7 +934,7 @@
           "Wert1": "146",
           "Wert2": "13",
           "Wert3": "28",
-          "Kennzahl": "27,7%",
+          "Kennzahl": "27,4%",
           "Wertung": "",
           "ranking": "146"
         }
@@ -995,23 +995,39 @@
       ],
       "opponent": [
         {
-          "Rang": "7.",
+          "Rang": "35.",
           "column_1": "",
-          "Name": "Neuhaus, Frauke",
-          "Sätze": "31",
-          "Spiele": "10",
-          "Position": "Diagonal",
+          "Name": "Stäbler, Alina",
+          "Sätze": "14",
+          "Spiele": "6",
+          "Position": "Libero",
           "Mannschaft": "Flacht",
           "Nation": "Deutschland (GER)",
-          "Wert1": "283",
-          "Wert2": "3,3",
-          "Wert3": "36,4%",
-          "Kennzahl": "103",
+          "Wert1": "0",
+          "Wert2": "0",
+          "Wert3": "0,0%",
+          "Kennzahl": "31,0%",
           "Wertung": "",
-          "ranking": "283"
+          "ranking": "0"
         },
         {
-          "Rang": "51.",
+          "Rang": "36.",
+          "column_1": "",
+          "Name": "Büdenbender, Leonie",
+          "Sätze": "19",
+          "Spiele": "7",
+          "Position": "Libero",
+          "Mannschaft": "Flacht",
+          "Nation": "Deutschland (GER)",
+          "Wert1": "0",
+          "Wert2": "0",
+          "Wert3": "0,0%",
+          "Kennzahl": "30,9%",
+          "Wertung": "",
+          "ranking": "0"
+        },
+        {
+          "Rang": "41.",
           "column_1": "",
           "Name": "Kögler, Hanna",
           "Sätze": "28",
@@ -1022,25 +1038,9 @@
           "Wert1": "146",
           "Wert2": "1,3",
           "Wert3": "25,3%",
-          "Kennzahl": "37",
+          "Kennzahl": "27,7%",
           "Wertung": "",
           "ranking": "146"
-        },
-        {
-          "Rang": "64.",
-          "column_1": "",
-          "Name": "Marjanovic, Sara",
-          "Sätze": "21",
-          "Spiele": "9",
-          "Position": "Außenangriff",
-          "Mannschaft": "Flacht",
-          "Nation": "Deutschland (GER)",
-          "Wert1": "105",
-          "Wert2": "1,2",
-          "Wert3": "24,8%",
-          "Kennzahl": "26",
-          "Wertung": "",
-          "ranking": "105"
         }
       ]
     },
@@ -1099,7 +1099,7 @@
       ],
       "opponent": [
         {
-          "Rang": "11.",
+          "Rang": "7.",
           "column_1": "",
           "Name": "Zuber, Saskia",
           "Sätze": "14",
@@ -1111,11 +1111,11 @@
           "Wert2": "2",
           "Wert3": "2",
           "Kennzahl": "41,7%",
-          "Wertung": "8,3%",
-          "ranking": "12 | 8,3%"
+          "Wertung": "16,7%",
+          "ranking": "12 | 16,7%"
         },
         {
-          "Rang": "20.",
+          "Rang": "24.",
           "column_1": "",
           "Name": "Neuhaus, Frauke",
           "Sätze": "31",
@@ -1127,24 +1127,24 @@
           "Wert2": "9",
           "Wert3": "13",
           "Kennzahl": "32,6%",
-          "Wertung": "-1,2%",
-          "ranking": "86 | -1,2%"
+          "Wertung": "10,5%",
+          "ranking": "86 | 10,5%"
         },
         {
-          "Rang": "44.",
+          "Rang": "49.",
           "column_1": "",
-          "Name": "Kögler, Hanna",
-          "Sätze": "28",
+          "Name": "Lobzhanidze, Lizzy Irine",
+          "Sätze": "31",
           "Spiele": "10",
-          "Position": "Außenangriff",
+          "Position": "Mittelblock",
           "Mannschaft": "Flacht",
-          "Nation": "Deutschland (GER)",
-          "Wert1": "73",
-          "Wert2": "3",
-          "Wert3": "14",
-          "Kennzahl": "27,4%",
-          "Wertung": "-9,6%",
-          "ranking": "73 | -9,6%"
+          "Nation": "Georgien (GEO)",
+          "Wert1": "95",
+          "Wert2": "7",
+          "Wert3": "5",
+          "Kennzahl": "25,3%",
+          "Wertung": "7,4%",
+          "ranking": "95 | 7,4%"
         }
       ]
     }
