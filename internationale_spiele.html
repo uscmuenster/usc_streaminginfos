@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Internationale Spiele deutscher Frauen-Teams</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --font-scale: 1;
+      --bg: #f8fafc;
+      --text: #1f2937;
+      --accent: #004c54;
+      --card-bg: #ffffff;
+      --card-shadow: rgba(15, 23, 42, 0.12);
+      --border: rgba(148, 163, 184, 0.4);
+    }
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: calc(var(--font-scale) * clamp(0.95rem, 1.8vw, 1.05rem));
+      line-height: 1.6;
+    }
+    main {
+      max-width: 68rem;
+      margin: 0 auto;
+      padding: clamp(1rem, 4vw, 2.75rem);
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.6rem, 2vw, 1rem);
+      margin-bottom: clamp(1.1rem, 3vw, 1.7rem);
+    }
+    header nav {
+      margin-bottom: clamp(0.2rem, 1vw, 0.5rem);
+    }
+    header nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+      background: #ecfdf5;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    header nav a:hover,
+    header nav a:focus-visible {
+      background: var(--accent);
+      color: #ffffff;
+      outline: none;
+    }
+    h1 {
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+      font-size: calc(var(--font-scale) * clamp(1.8rem, 4.8vw, 2.65rem));
+      color: var(--accent);
+    }
+    h2 {
+      margin: clamp(1.5rem, 4vw, 2.25rem) 0 clamp(0.75rem, 2vw, 1.25rem) 0;
+      font-size: calc(var(--font-scale) * clamp(1.3rem, 3.6vw, 1.75rem));
+    }
+    h3 {
+      margin: clamp(0.85rem, 2.4vw, 1.6rem) 0 clamp(0.6rem, 1.8vw, 1.1rem) 0;
+      font-size: calc(var(--font-scale) * clamp(1.1rem, 2.8vw, 1.45rem));
+    }
+    h4 {
+      margin: clamp(0.5rem, 1.6vw, 0.9rem) 0;
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.2rem));
+    }
+    .meta {
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #475569;
+      margin-bottom: clamp(1.1rem, 3vw, 1.7rem);
+    }
+    .competition {
+      background: var(--card-bg);
+      border-radius: 1rem;
+      padding: clamp(1.25rem, 3vw, 1.85rem);
+      box-shadow: 0 14px 32px var(--card-shadow);
+      margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+    }
+    .competition-source a {
+      color: #0f766e;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .competition-source a:hover,
+    .competition-source a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+    .team-section {
+      margin-top: clamp(1rem, 3vw, 1.5rem);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      background: #f8fafc;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }
+    .team-section:first-of-type {
+      margin-top: clamp(0.75rem, 2.4vw, 1.1rem);
+    }
+    .team-section summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      padding: clamp(0.85rem, 2.6vw, 1.15rem) clamp(1rem, 3vw, 1.5rem);
+      font-size: calc(var(--font-scale) * clamp(1.05rem, 2.6vw, 1.4rem));
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(15, 23, 42, 0.02);
+    }
+    .team-section summary::-webkit-details-marker {
+      display: none;
+    }
+    .team-section summary::after {
+      content: "▾";
+      font-size: 0.85em;
+      margin-left: auto;
+      transition: transform 0.2s ease;
+    }
+    .team-section[open] summary::after {
+      transform: rotate(-180deg);
+    }
+    .team-name {
+      flex-shrink: 0;
+    }
+    .team-meta {
+      font-size: calc(var(--font-scale) * 0.92rem);
+      color: #475569;
+      font-weight: 500;
+    }
+    .team-section-content {
+      padding: clamp(0.95rem, 2.8vw, 1.35rem) clamp(1.05rem, 3vw, 1.6rem) clamp(1.15rem, 3.2vw, 1.65rem);
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+      display: grid;
+      gap: clamp(0.85rem, 2.6vw, 1.4rem);
+    }
+    .match-group {
+      margin: 0;
+      border: 1px solid var(--border);
+      border-radius: 0.85rem;
+      background: #f8fafc;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }
+    .match-group summary {
+      cursor: pointer;
+      padding: clamp(0.8rem, 2.4vw, 1rem) clamp(0.9rem, 2.6vw, 1.2rem);
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.2rem));
+      font-weight: 600;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      list-style: none;
+    }
+    .match-group summary::-webkit-details-marker {
+      display: none;
+    }
+    .match-group summary::after {
+      content: "▾";
+      font-size: 0.85em;
+      margin-left: auto;
+      transition: transform 0.2s ease;
+    }
+    .match-group[open] summary::after {
+      transform: rotate(-180deg);
+    }
+    .match-content {
+      padding: 0 clamp(0.9rem, 2.6vw, 1.2rem) clamp(1rem, 3vw, 1.4rem);
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+    }
+    .match-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: clamp(0.75rem, 2.4vw, 1.1rem);
+    }
+    .match-card {
+      background: #f1f5f9;
+      border-radius: 0.85rem;
+      padding: clamp(0.85rem, 2.6vw, 1.25rem) clamp(0.95rem, 2.8vw, 1.5rem);
+      display: grid;
+      gap: 0.4rem;
+    }
+    .match-header {
+      font-weight: 600;
+      color: #1e3a8a;
+    }
+    .match-pairing {
+      font-weight: 500;
+    }
+    .match-score {
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * 0.9rem);
+    }
+    .match-meta {
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #475569;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .match-meta a {
+      color: #0f172a;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .match-meta a:hover,
+    .match-meta a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+    .group-empty {
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #64748b;
+      margin: 0;
+    }
+    .footnote {
+      margin-top: clamp(1.4rem, 3vw, 2.2rem);
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #475569;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <nav aria-label="Navigation">
+        <a href="index.html">⟵ zurück zur Übersicht</a>
+      </nav>
+      <h1>Internationale Spiele deutscher Frauen-Teams</h1>
+    </header>
+    <p class="meta">Letzte Aktualisierung: 11.01.2026 04:03 Uhr</p>
+    <p class="footnote">Alle Angaben stammen aus den offiziellen Ergebnis-Feeds der CEV. Startzeiten werden ohne Zeitzonenangabe veröffentlicht und entsprechen der dort ausgewiesenen Ortszeit.</p>
+  <section class="competition">
+    <h2>CEV Champions League Volley 2025/26 (Frauen)</h2>
+    <p class="competition-source">Quelle: <a href="https://championsleague.cev.eu/en/women/" rel="noopener" target="_blank">Offizielle CEV-Wettbewerbsseite</a></p>
+  <details class="team-section" open>
+    <summary>
+      <span class="team-name">DRESDNER SC</span>
+      <span class="team-meta">3 anstehend · 3 abgeschlossen</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 4</div>
+              <div class="match-pairing">Auswärtsspiel bei A. Carraro Prosecco DOC CONEGLIANO (Italy)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">15.01.2026 20:30 Uhr (CEV-Angabe) | Palaverde VILLORBA - TREVISO | <a href="https://www.cev.eu/match-centres/2026-european-cups/cev-champions-league-volley-2026-women/clvw-59-a-carraro-prosecco-doc-conegliano-v-dresdner-sc/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 5</div>
+              <div class="match-pairing">Heimspiel gegen ŁKS Commercecon ŁÓDŹ (Poland)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">28.01.2026 19:00 Uhr (CEV-Angabe) | Margon Arena DRESDEN | <a href="https://www.cev.eu/match-centres/2026-european-cups/cev-champions-league-volley-2026-women/clvw-62-dresdner-sc-v-lks-commercecon-lodz/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 6</div>
+              <div class="match-pairing">Heimspiel gegen ANKARA Zeren Spor Kulübü (Turkey)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">04.02.2026 19:00 Uhr (CEV-Angabe) | Margon Arena DRESDEN | <a href="https://www.cev.eu/match-centres/2026-european-cups/cev-champions-league-volley-2026-women/clvw-64-dresdner-sc-v-ankara-zeren-spor-kuluebue/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+              </ul>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 3</div>
+              <div class="match-pairing">Auswärtsspiel bei ANKARA Zeren Spor Kulübü (Turkey)</div>
+              <div class="match-score">Sätze: 0:3 – (&amp;lt;span&amp;gt;26-24&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-18&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-16&amp;lt;/span&amp;gt;)</div>
+              <div class="match-meta">07.01.2026 17:00 Uhr (CEV-Angabe) | TVF Ziraat Bankkart Volleyball Hall ANKARA / A | <a href="https://www.cev.eu/match-centres/2026-european-cups/cev-champions-league-volley-2026-women/clvw-58-ankara-zeren-spor-kuluebue-v-dresdner-sc/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 2</div>
+              <div class="match-pairing">Heimspiel gegen A. Carraro Prosecco DOC CONEGLIANO (Italy)</div>
+              <div class="match-score">Sätze: 0:3 – (&amp;lt;span&amp;gt;12-25&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;17-25&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;17-25&amp;lt;/span&amp;gt;)</div>
+              <div class="match-meta">02.12.2025 19:00 Uhr (CEV-Angabe) | Margon Arena DRESDEN | <a href="https://www.cev.eu/match-centres/2026-european-cups/cev-champions-league-volley-2026-women/clvw-55-dresdner-sc-v-a-carraro-prosecco-doc-conegliano/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 1</div>
+              <div class="match-pairing">Auswärtsspiel bei ŁKS Commercecon ŁÓDŹ (Poland)</div>
+              <div class="match-score">Sätze: 3:1 – (&amp;lt;span&amp;gt;24-26&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;20-25&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-17&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;23-25&amp;lt;/span&amp;gt;)</div>
+              <div class="match-meta">26.11.2025 20:30 Uhr (CEV-Angabe) | ŁÓDŹ Sport Arena | <a href="https://www.cev.eu/match-centres/2026-european-cups/cev-champions-league-volley-2026-women/clvw-54-lks-commercecon-lodz-v-dresdner-sc/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+              </ul>
+            </div>
+          </details>
+    </div>
+  </details>
+  <details class="team-section" open>
+    <summary>
+      <span class="team-name">SSC Palmberg SCHWERIN</span>
+      <span class="team-meta">3 anstehend · 3 abgeschlossen</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 4</div>
+              <div class="match-pairing">Heimspiel gegen Maritza PLOVDIV (Bulgaria)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">15.01.2026 18:00 Uhr (CEV-Angabe) | PALMBERG Arena SCHWERIN | <a href="https://www.cev.eu/match-centres/2026-european-cups/cev-champions-league-volley-2026-women/clvw-72-ssc-palmberg-schwerin-v-maritza-plovdiv/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 5</div>
+              <div class="match-pairing">Auswärtsspiel bei LEVALLOIS PARIS Saint Cloud (France)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">28.01.2026 20:00 Uhr (CEV-Angabe) | Palais des sports Marcel Cerdan LEVALLOIS PERRET | <a href="https://www.cev.eu/match-centres/2026-european-cups/cev-champions-league-volley-2026-women/clvw-74-levallois-paris-saint-cloud-v-ssc-palmberg-schwerin/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 6</div>
+              <div class="match-pairing">Auswärtsspiel bei KS Developres RZESZÓW (Poland)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">04.02.2026 18:00 Uhr (CEV-Angabe) | RCWS Podpromie RZESZÓW | <a href="https://www.cev.eu/match-centres/2026-european-cups/cev-champions-league-volley-2026-women/clvw-75-ks-developres-rzeszow-v-ssc-palmberg-schwerin/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+              </ul>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 3</div>
+              <div class="match-pairing">Heimspiel gegen KS Developres RZESZÓW (Poland)</div>
+              <div class="match-score">Sätze: 2:3 – (&amp;lt;span&amp;gt;19-25&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-22&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;20-25&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-22&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;12-15&amp;lt;/span&amp;gt;)</div>
+              <div class="match-meta">08.01.2026 18:00 Uhr (CEV-Angabe) | PALMBERG Arena SCHWERIN | <a href="https://www.cev.eu/match-centres/2026-european-cups/cev-champions-league-volley-2026-women/clvw-69-ssc-palmberg-schwerin-v-ks-developres-rzeszow/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 2</div>
+              <div class="match-pairing">Auswärtsspiel bei Maritza PLOVDIV (Bulgaria)</div>
+              <div class="match-score">Sätze: 3:2 – (&amp;lt;span&amp;gt;21-25&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-22&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-22&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;20-25&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;12-15&amp;lt;/span&amp;gt;)</div>
+              <div class="match-meta">02.12.2025 18:30 Uhr (CEV-Angabe) | Kolodruma Sport Hall PLOVDIV | <a href="https://www.cev.eu/match-centres/2026-european-cups/cev-champions-league-volley-2026-women/clvw-68-maritza-plovdiv-v-ssc-palmberg-schwerin/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">4th Round · Leg 1</div>
+              <div class="match-pairing">Heimspiel gegen LEVALLOIS PARIS Saint Cloud (France)</div>
+              <div class="match-score">Sätze: 3:1 – (&amp;lt;span&amp;gt;25-22&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;17-25&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-15&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-20&amp;lt;/span&amp;gt;)</div>
+              <div class="match-meta">27.11.2025 18:00 Uhr (CEV-Angabe) | PALMBERG Arena SCHWERIN | <a href="https://www.cev.eu/match-centres/2026-european-cups/cev-champions-league-volley-2026-women/clvw-66-ssc-palmberg-schwerin-v-levallois-paris-saint-cloud/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+              </ul>
+            </div>
+          </details>
+    </div>
+  </details>
+  </section>
+  <section class="competition">
+    <h2>CEV Volleyball Cup 2025/26 (Frauen)</h2>
+    <p class="competition-source">Quelle: <a href="https://www.cev.eu/club/volleyball-cup/2026/women/" rel="noopener" target="_blank">Offizielle CEV-Wettbewerbsseite</a></p>
+  <details class="team-section" open>
+    <summary>
+      <span class="team-name">Allianz MTV STUTTGART</span>
+      <span class="team-meta">3 anstehend · 1 abgeschlossen</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">Main Phase · Away Matches</div>
+              <div class="match-pairing">Heimspiel gegen THY ISTANBUL (Turkey)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">14.01.2026 19:30 Uhr (CEV-Angabe) | SCHARRena STUTTGART | <a href="/match-centres/2026-european-cups/cev-volleyball-cup-2026-women/ccw-44-allianz-mtv-stuttgart-v-thy-istanbul/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">Main Phase · Home Matches</div>
+              <div class="match-pairing">Auswärtsspiel bei Loser Matches 2nd Round CLVW 01/02 (Bye)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">Termin noch nicht festgelegt</div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">Main Phase · Away Matches</div>
+              <div class="match-pairing">Heimspiel gegen Loser Matches 2nd Round CLVW 01/02 (Bye)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">Termin noch nicht festgelegt | SCHARRena STUTTGART</div>
+            </li>
+              </ul>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">Main Phase · Home Matches</div>
+              <div class="match-pairing">Auswärtsspiel bei THY ISTANBUL (Turkey)</div>
+              <div class="match-score">Sätze: 2:3 – (&amp;lt;span&amp;gt;25-20&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-21&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-27&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;19-25&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;15-9&amp;lt;/span&amp;gt;)</div>
+              <div class="match-meta">06.01.2026 17:00 Uhr (CEV-Angabe) | Burhan Felek Voleybol Salonu ISTANBUL | <a href="/match-centres/2026-european-cups/cev-volleyball-cup-2026-women/ccw-43-thy-istanbul-v-allianz-mtv-stuttgart/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+              </ul>
+            </div>
+          </details>
+    </div>
+  </details>
+  <details class="team-section" open>
+    <summary>
+      <span class="team-name">VfB SUHL Thüringen</span>
+      <span class="team-meta">1 anstehend · 3 abgeschlossen</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">Main Phase · Away Matches</div>
+              <div class="match-pairing">Auswärtsspiel bei C.S.O. VOLUNTARI 2005 (Romania)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">15.01.2026 19:00 Uhr (CEV-Angabe) | Sala Polivalenta BUCHAREST | <a href="/match-centres/2026-european-cups/cev-volleyball-cup-2026-women/ccw-48-cso-voluntari-2005-v-vfb-suhl-thueringen/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+              </ul>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">Main Phase · Home Matches</div>
+              <div class="match-pairing">Heimspiel gegen C.S.O. VOLUNTARI 2005 (Romania)</div>
+              <div class="match-score">Sätze: 3:1 – (&amp;lt;span&amp;gt;23-25&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-18&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-18&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-20&amp;lt;/span&amp;gt;)</div>
+              <div class="match-meta">07.01.2026 19:00 Uhr (CEV-Angabe) | Sporthalle Wolfsgrube SUHL | <a href="/match-centres/2026-european-cups/cev-volleyball-cup-2026-women/ccw-47-vfb-suhl-thueringen-v-cso-voluntari-2005/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">Main Phase · Away Matches</div>
+              <div class="match-pairing">Auswärtsspiel bei Dinamo BUCURESTI (Romania)</div>
+              <div class="match-score">Sätze: 2:3 – (&amp;lt;span&amp;gt;25-22&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;24-26&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-18&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;23-25&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;15-13&amp;lt;/span&amp;gt;)</div>
+              <div class="match-meta">02.12.2025 17:00 Uhr (CEV-Angabe) | Dinamo BUCURESTI | <a href="/match-centres/2026-european-cups/cev-volleyball-cup-2026-women/ccw-30-dinamo-bucuresti-v-vfb-suhl-thueringen/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">Main Phase · Home Matches</div>
+              <div class="match-pairing">Heimspiel gegen Dinamo BUCURESTI (Romania)</div>
+              <div class="match-score">Sätze: 3:1 – (&amp;lt;span&amp;gt;25-22&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-22&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;19-25&amp;lt;/span&amp;gt;, &amp;lt;span&amp;gt;25-21&amp;lt;/span&amp;gt;)</div>
+              <div class="match-meta">25.11.2025 19:00 Uhr (CEV-Angabe) | Sporthalle Wolfsgrube SUHL | <a href="/match-centres/2026-european-cups/cev-volleyball-cup-2026-women-8/ccw-29-vfb-suhl-thueringen-v-dinamo-bucuresti/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+              </ul>
+            </div>
+          </details>
+    </div>
+  </details>
+  </section>
+  <section class="competition">
+    <h2>CEV Volleyball Challenge Cup 2025/26 (Frauen)</h2>
+    <p class="competition-source">Quelle: <a href="https://www.cev.eu/club/volleyball-challenge-cup/2026/women/" rel="noopener" target="_blank">Offizielle CEV-Wettbewerbsseite</a></p>
+  <details class="team-section" open>
+    <summary>
+      <span class="team-name">SC POTSDAM</span>
+      <span class="team-meta">2 anstehend</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <ul class="match-list">
+            <li class="match-card">
+              <div class="match-header">Main Phase · Away Matches</div>
+              <div class="match-pairing">Heimspiel gegen C.S.M LUGOJ (Romania)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">03.12.2025 19:00 Uhr (CEV-Angabe) | MBS Arena POTSDAM | <a href="/match-centres/2026-european-cups/cev-volleyball-challenge-cup-2026-women/chcw-42-sc-potsdam-v-csm-lugoj/" rel="noopener" target="_blank">Match-Centre</a></div>
+            </li>
+            <li class="match-card">
+              <div class="match-header">Main Phase · Home Matches</div>
+              <div class="match-pairing">Auswärtsspiel bei C.S.M LUGOJ (Romania)</div>
+              <div class="match-score">Noch nicht gespielt</div>
+              <div class="match-meta">Termin noch nicht festgelegt</div>
+            </li>
+              </ul>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+    </div>
+  </details>
+  </section>
+  </main>
+</body>
+</html>
+
+<!-- Build 442c1f6 2026-01-11T04:07:24Z -->
