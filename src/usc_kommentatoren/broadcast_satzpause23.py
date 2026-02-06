@@ -31,12 +31,12 @@ BROADCAST_PLAN: tuple[BroadcastPlanEntry, ...] = (
     ),
     BroadcastPlanEntry(
         planned_time=_parse_time("19:30:20"),
-        duration=_parse_duration("00:05:20"),
+        duration=_parse_duration("00:05:15"),
         note="Werbung 2 (Regie: saubere K1, Kommentatoren: still).",
     ),
     BroadcastPlanEntry(
-        planned_time=_parse_time("19:35:40"),
-        duration=_parse_duration("00:00:20"),
+        planned_time=_parse_time("19:35:35"),
+        duration=_parse_duration("00:00:25"),
         note="20 Sekunden Wiedereinstieg vor dem 3. Satz",
     ),
     BroadcastPlanEntry(
