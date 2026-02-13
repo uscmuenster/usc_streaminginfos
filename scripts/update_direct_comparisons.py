@@ -160,6 +160,17 @@ def parse_date(value: str | None) -> str | None:
         return None
 
 
+def parse_match_date(row: Row) -> str | None:
+    combined_raw = row.get("Datum und Uhrzeit")
+    combined = (combined_raw or "").strip()
+    if combined:
+        try:
+            return datetime.strptime(combined, "%d.%m.%Y, %H:%M:%S").date().isoformat()
+        except ValueError:
+            pass
+    return parse_date(row.get("Datum"))
+
+
 def clean_dict(data: MutableMapping[str, object]) -> Dict[str, object]:
     return {key: value for key, value in data.items() if value is not None}
 
@@ -195,7 +206,7 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
 
                 round_label = row.get("ST")
                 competition = row.get("Spielrunde")
-                date_iso = parse_date(row.get("Datum"))
+                date_iso = parse_match_date(row)
                 location = row.get("Austragungsort") or None
                 points_str = None
                 if points_pair:
