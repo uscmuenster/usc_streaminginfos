@@ -120,7 +120,15 @@ def parse_schedule(csv_text: str) -> List[ScheduleRow]:
         if not match_number:
             continue
         try:
-            kickoff = parse_kickoff(row["Datum"], row["Uhrzeit"])
+            if "Datum und Uhrzeit" in row:
+                raw = (row.get("Datum und Uhrzeit") or "").strip()
+                if not raw:
+                    continue
+                kickoff = datetime.strptime(raw, "%d.%m.%Y, %H:%M:%S").replace(
+                    tzinfo=BERLIN_TZ
+                )
+            else:
+                kickoff = parse_kickoff(row["Datum"], row["Uhrzeit"])
         except (KeyError, ValueError):
             continue
         home_team = (row.get("Mannschaft 1") or "").strip()
@@ -990,4 +998,3 @@ def main() -> int:
 
 if __name__ == "__main__":  # pragma: no cover
     raise SystemExit(main())
-
