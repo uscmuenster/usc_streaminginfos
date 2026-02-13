@@ -1306,7 +1306,15 @@ def parse_schedule(
     fallback_competition = _normalize_competition_label(competition)
     for row in reader:
         try:
-            kickoff = parse_kickoff(row["Datum"], row["Uhrzeit"])
+            if "Datum und Uhrzeit" in row:
+                raw = (row.get("Datum und Uhrzeit") or "").strip()
+                if not raw:
+                    continue
+                kickoff = datetime.strptime(raw, "%d.%m.%Y, %H:%M:%S").replace(
+                    tzinfo=BERLIN_TZ
+                )
+            else:
+                kickoff = parse_kickoff(row["Datum"], row["Uhrzeit"])
         except (KeyError, ValueError):
             continue
 
