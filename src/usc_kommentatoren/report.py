@@ -1201,7 +1201,13 @@ def _download_roster_text(
         retries=retries,
         delay_seconds=delay_seconds,
     )
-    return response.content.decode("latin-1")
+    raw = response.content
+    for encoding in ("utf-8", "latin-1"):
+        try:
+            return raw.decode(encoding)
+        except UnicodeDecodeError:
+            continue
+    return raw.decode("utf-8", errors="replace")
 
 OFFICIAL_ROLE_PRIORITY: Tuple[str, ...] = (
     "Trainer",
