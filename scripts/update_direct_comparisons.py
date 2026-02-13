@@ -74,7 +74,18 @@ def fetch_csv_rows(url: str) -> Iterator[Row]:
     decoded = response.text
     reader = csv.DictReader(decoded.splitlines(), delimiter=";")
     for row in reader:
-        yield row
+        yield {
+            (key or "").strip().lstrip("\ufeff"): value
+            for key, value in row.items()
+        }
+
+
+def get_first_value(row: Row, keys: Sequence[str]) -> str | None:
+    for key in keys:
+        value = row.get(key)
+        if value is not None:
+            return value
+    return None
 
 
 def parse_pair(value: str | None) -> tuple[int, int] | None:
@@ -91,16 +102,16 @@ def parse_pair(value: str | None) -> tuple[int, int] | None:
 
 
 def extract_sets(row: Row) -> tuple[int, int] | None:
-    direct = parse_pair(row.get("Satzpunkte"))
+    direct = parse_pair(get_first_value(row, ("Satzpunkte",)))
     if direct:
         return direct
-    ergebnis = row.get("Ergebnis")
+    ergebnis = get_first_value(row, ("Ergebnis",))
     if ergebnis and "/" in ergebnis:
         sets_part = ergebnis.split("/", 1)[0]
         direct = parse_pair(sets_part)
         if direct:
             return direct
-    combined = row.get("Austragungsort/Ergebnis")
+    combined = get_first_value(row, ("Austragungsort/Ergebnis",))
     if combined and "/" in combined:
         sets_part = combined.split("/", 1)[0]
         direct = parse_pair(sets_part)
@@ -110,16 +121,16 @@ def extract_sets(row: Row) -> tuple[int, int] | None:
 
 
 def extract_points(row: Row) -> tuple[int, int] | None:
-    points = parse_pair(row.get("Ballpunkte"))
+    points = parse_pair(get_first_value(row, ("Ballpunkte",)))
     if points:
         return points
-    ergebnis = row.get("Ergebnis")
+    ergebnis = get_first_value(row, ("Ergebnis",))
     if ergebnis and "/" in ergebnis:
         _, points_part = ergebnis.split("/", 1)
         points = parse_pair(points_part)
         if points:
             return points
-    combined = row.get("Austragungsort/Ergebnis")
+    combined = get_first_value(row, ("Austragungsort/Ergebnis",))
     if combined and "/" in combined:
         _, points_part = combined.split("/", 1)
         points = parse_pair(points_part)
@@ -168,14 +179,30 @@ def parse_date(value: str | None) -> str | None:
 
 
 def parse_match_date(row: Row) -> str | None:
-    combined_raw = row.get("Datum und Uhrzeit")
+    combined_raw = get_first_value(row, ("Datum und Uhrzeit",))
     combined = (combined_raw or "").strip()
     if combined:
+        for pattern in ("%d.%m.%Y, %H:%M:%S", "%d.%m.%Y, %H:%M"):
+            try:
+                return datetime.strptime(combined, pattern).date().isoformat()
+            except ValueError:
+                continue
+
+    legacy_date = parse_date(get_first_value(row, ("Datum",)))
+    if not legacy_date:
+        return None
+
+    # Legacy exports split date and time into separate columns.
+    legacy_time_raw = get_first_value(row, ("Uhrzeit",))
+    legacy_time = (legacy_time_raw or "").strip()
+    if not legacy_time:
+        return legacy_date
+    for pattern in ("%H:%M:%S", "%H:%M"):
         try:
-            return datetime.strptime(combined, "%d.%m.%Y, %H:%M:%S").date().isoformat()
+            return datetime.strptime(f"{legacy_date} {legacy_time}", f"%Y-%m-%d {pattern}").date().isoformat()
         except ValueError:
-            pass
-    return parse_date(row.get("Datum"))
+            continue
+    return legacy_date
 
 
 def clean_dict(data: MutableMapping[str, object]) -> Dict[str, object]:
@@ -211,10 +238,10 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
                 else:
                     usc_points = opponent_points = None
 
-                round_label = row.get("ST")
-                competition = row.get("Spielrunde")
+                round_label = get_first_value(row, ("ST",))
+                competition = get_first_value(row, ("Spielrunde",))
                 date_iso = parse_match_date(row)
-                location = row.get("Austragungsort") or None
+                location = get_first_value(row, ("Austragungsort",)) or None
                 points_str = None
                 if points_pair:
                     points_str = f"{points_pair[0]}:{points_pair[1]}"
