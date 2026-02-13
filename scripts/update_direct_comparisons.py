@@ -128,6 +128,13 @@ def extract_points(row: Row) -> tuple[int, int] | None:
     return None
 
 
+def extract_sets_text(row: Row) -> str | None:
+    sets_pair = extract_sets(row)
+    if not sets_pair:
+        return None
+    return f"{sets_pair[0]}:{sets_pair[1]}"
+
+
 def extract_set_ballpoints(row: Row) -> Tuple[Tuple[int, int], ...]:
     scores: List[Tuple[int, int]] = []
     for index in range(1, 6):
@@ -158,6 +165,17 @@ def parse_date(value: str | None) -> str | None:
         return datetime.strptime(value, "%d.%m.%Y").date().isoformat()
     except ValueError:
         return None
+
+
+def parse_match_date(row: Row) -> str | None:
+    combined_raw = row.get("Datum und Uhrzeit")
+    combined = (combined_raw or "").strip()
+    if combined:
+        try:
+            return datetime.strptime(combined, "%d.%m.%Y, %H:%M:%S").date().isoformat()
+        except ValueError:
+            pass
+    return parse_date(row.get("Datum"))
 
 
 def clean_dict(data: MutableMapping[str, object]) -> Dict[str, object]:
@@ -195,7 +213,7 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
 
                 round_label = row.get("ST")
                 competition = row.get("Spielrunde")
-                date_iso = parse_date(row.get("Datum"))
+                date_iso = parse_match_date(row)
                 location = row.get("Austragungsort") or None
                 points_str = None
                 if points_pair:
@@ -228,7 +246,7 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
                         "set_scores": set_scores_value,
                         "result": clean_dict(
                             {
-                                "sets": row.get("Satzpunkte") or (row.get("Ergebnis") or "").split("/", 1)[0].strip() or None,
+                                "sets": row.get("Satzpunkte") or extract_sets_text(row),
                                 "points": points_str,
                             }
                         ),
