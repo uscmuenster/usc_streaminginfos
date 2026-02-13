@@ -16,12 +16,12 @@ import requests
 from bs4 import BeautifulSoup
 
 from .report import (
-    BERLIN_TZ,
     DEFAULT_SCHEDULE_URL,
     REQUEST_HEADERS,
     USC_CANONICAL_NAME,
     collect_team_roster,
-    parse_kickoff,
+    extract_schedule_result_label,
+    parse_schedule_kickoff,
 )
 
 SCHEDULE_PAGE_URL = (
@@ -120,15 +120,7 @@ def parse_schedule(csv_text: str) -> List[ScheduleRow]:
         if not match_number:
             continue
         try:
-            if "Datum und Uhrzeit" in row:
-                raw = (row.get("Datum und Uhrzeit") or "").strip()
-                if not raw:
-                    continue
-                kickoff = datetime.strptime(raw, "%d.%m.%Y, %H:%M:%S").replace(
-                    tzinfo=BERLIN_TZ
-                )
-            else:
-                kickoff = parse_kickoff(row["Datum"], row["Uhrzeit"])
+            kickoff = parse_schedule_kickoff(row)
         except (KeyError, ValueError):
             continue
         home_team = (row.get("Mannschaft 1") or "").strip()
@@ -136,7 +128,7 @@ def parse_schedule(csv_text: str) -> List[ScheduleRow]:
         competition = (row.get("Spielrunde") or "").strip()
         venue = (row.get("Austragungsort") or "").strip()
         season = (row.get("Saison") or "").strip()
-        result_label = (row.get("Ergebnis") or "").strip()
+        result_label = extract_schedule_result_label(row)
 
         score = (row.get("Satzpunkte") or "").strip() or None
         total_points = (row.get("Ballpunkte") or "").strip() or None

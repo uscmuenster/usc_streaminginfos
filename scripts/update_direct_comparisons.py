@@ -128,6 +128,13 @@ def extract_points(row: Row) -> tuple[int, int] | None:
     return None
 
 
+def extract_sets_text(row: Row) -> str | None:
+    sets_pair = extract_sets(row)
+    if not sets_pair:
+        return None
+    return f"{sets_pair[0]}:{sets_pair[1]}"
+
+
 def extract_set_ballpoints(row: Row) -> Tuple[Tuple[int, int], ...]:
     scores: List[Tuple[int, int]] = []
     for index in range(1, 6):
@@ -239,7 +246,7 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
                         "set_scores": set_scores_value,
                         "result": clean_dict(
                             {
-                                "sets": row.get("Satzpunkte") or (row.get("Ergebnis") or "").split("/", 1)[0].strip() or None,
+                                "sets": row.get("Satzpunkte") or extract_sets_text(row),
                                 "points": points_str,
                             }
                         ),

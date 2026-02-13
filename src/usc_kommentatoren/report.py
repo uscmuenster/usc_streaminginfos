@@ -1306,15 +1306,7 @@ def parse_schedule(
     fallback_competition = _normalize_competition_label(competition)
     for row in reader:
         try:
-            if "Datum und Uhrzeit" in row:
-                raw = (row.get("Datum und Uhrzeit") or "").strip()
-                if not raw:
-                    continue
-                kickoff = datetime.strptime(raw, "%d.%m.%Y, %H:%M:%S").replace(
-                    tzinfo=BERLIN_TZ
-                )
-            else:
-                kickoff = parse_kickoff(row["Datum"], row["Uhrzeit"])
+            kickoff = parse_schedule_kickoff(row)
         except (KeyError, ValueError):
             continue
 
@@ -1392,6 +1384,28 @@ def parse_kickoff(date_str: str, time_str: str) -> datetime:
     return kickoff.replace(tzinfo=BERLIN_TZ)
 
 
+def parse_schedule_kickoff(row: Dict[str, str]) -> datetime:
+    combined_raw = (row.get("Datum und Uhrzeit") or "").strip()
+    if combined_raw:
+        kickoff = datetime.strptime(combined_raw, "%d.%m.%Y, %H:%M:%S")
+        return kickoff.replace(tzinfo=BERLIN_TZ)
+    return parse_kickoff(row["Datum"], row["Uhrzeit"])
+
+
+def extract_schedule_result_label(row: Dict[str, str]) -> str:
+    result = (row.get("Ergebnis") or "").strip()
+    if result:
+        return result
+    combined = (row.get("Austragungsort/Ergebnis") or "").strip()
+    if not combined:
+        return ""
+    parts = [part.strip() for part in combined.split("/") if part.strip()]
+    for part in parts:
+        if RESULT_PATTERN.match(part):
+            return part
+    return ""
+
+
 RESULT_PATTERN = re.compile(
     r"\s*(?P<score>\d+:\d+)"
     r"(?:\s*/\s*(?P<points>\d+:\d+))?"
@@ -1426,7 +1440,7 @@ def _parse_result_text(raw: str | None) -> Optional[MatchResult]:
 
 
 def build_match_result(row: Dict[str, str]) -> Optional[MatchResult]:
-    fallback = _parse_result_text(row.get("Ergebnis"))
+    fallback = _parse_result_text(extract_schedule_result_label(row))
 
     score = (row.get("Satzpunkte") or "").strip()
     total_points = (row.get("Ballpunkte") or "").strip()
