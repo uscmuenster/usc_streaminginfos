@@ -80,8 +80,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--schedule-path",
         type=Path,
-        default=Path("data/schedule.csv"),
-        help="Local path to store the downloaded schedule CSV.",
+        default=Path("data"),
+        help="Directory (or CSV path) to store the downloaded schedule CSV.",
     )
     parser.add_argument(
         "--roster-dir",
@@ -126,11 +126,11 @@ def main() -> int:
     parser = build_parser()
     args = parser.parse_args()
 
-    download_schedule(
+    schedule_file = download_schedule(
         args.schedule_path,
         url=args.schedule_url,
     )
-    matches = load_schedule_from_file(args.schedule_path)
+    matches = load_schedule_from_file(schedule_file)
     try:
         schedule_metadata = fetch_schedule_match_metadata()
     except Exception as exc:  # pragma: no cover - network failure
