@@ -16,6 +16,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .report import (
+    BERLIN_TZ,
     DEFAULT_SCHEDULE_URL,
     REQUEST_HEADERS,
     USC_CANONICAL_NAME,
