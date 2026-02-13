@@ -39,6 +39,7 @@ SCHEDULE_COMPETITION_LABELS: Dict[str, str] = {
     DEFAULT_SCHEDULE_URL: "VBL",
     DVV_POKAL_SCHEDULE_URL: "DVV-Pokal",
 }
+FILENAME_TIMESTAMP_RE = re.compile(r"_(\d{4}-\d{2}-\d{2}_\d{2}-\d{2})\.csv$")
 SCHEDULE_PAGE_URL = (
     "https://www.volleyball-bundesliga.de/cms/home/"
     "1_bundesliga_frauen/statistik/hauptrunde/spielplan.xhtml?playingScheduleMode=full"
@@ -689,6 +690,34 @@ def _combine_schedule_csv_texts(
     return output.getvalue()
 
 
+def _normalize_schedule_filename(original_name: str) -> str:
+    name = original_name.strip().strip('"')
+    normalized = FILENAME_TIMESTAMP_RE.sub(".csv", name)
+    return normalized or "schedule.csv"
+
+
+def _extract_filename_from_content_disposition(value: str) -> Optional[str]:
+    if not value:
+        return None
+    match = re.search(r'filename="?([^";]+)"?', value)
+    if not match:
+        return None
+    return _normalize_schedule_filename(match.group(1))
+
+
+def _resolve_schedule_destination(
+    destination: Path,
+    *,
+    content_disposition: str = "",
+) -> Path:
+    if destination.suffix.lower() == ".csv":
+        return destination
+    filename = _extract_filename_from_content_disposition(content_disposition)
+    if not filename:
+        filename = "schedule.csv"
+    return destination / filename
+
+
 def fetch_schedule(
     url: str = DEFAULT_SCHEDULE_URL,
     *,
@@ -728,9 +757,10 @@ def download_schedule(
 ) -> Path:
     urls = _resolve_schedule_urls(url, DEFAULT_ADDITIONAL_SCHEDULE_URLS)
     csv_sources: List[Tuple[str, Optional[str]]] = []
+    primary_content_disposition = ""
     for schedule_url in urls:
         try:
-            csv_text = _download_schedule_text(
+            response = _http_get(
                 schedule_url,
                 retries=retries,
                 delay_seconds=delay_seconds,
@@ -743,14 +773,22 @@ def download_schedule(
                 file=sys.stderr,
             )
         else:
+            if schedule_url == url:
+                primary_content_disposition = response.headers.get(
+                    "Content-Disposition", ""
+                )
             competition_label = _infer_competition_label(
                 schedule_url, primary_url=url
             )
-            csv_sources.append((csv_text, competition_label))
+            csv_sources.append((response.text, competition_label))
     combined = _combine_schedule_csv_texts(csv_sources)
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(combined, encoding="utf-8")
-    return destination
+    target_path = _resolve_schedule_destination(
+        destination,
+        content_disposition=primary_content_disposition,
+    )
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    target_path.write_text(combined, encoding="utf-8")
+    return target_path
 
 
 def fetch_schedule_match_metadata(
