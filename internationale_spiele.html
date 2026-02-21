@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Internationale Spiele deutscher Frauen-Teams</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --font-scale: 1;
+      --bg: #f8fafc;
+      --text: #1f2937;
+      --accent: #004c54;
+      --card-bg: #ffffff;
+      --card-shadow: rgba(15, 23, 42, 0.12);
+      --border: rgba(148, 163, 184, 0.4);
+    }
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: calc(var(--font-scale) * clamp(0.95rem, 1.8vw, 1.05rem));
+      line-height: 1.6;
+    }
+    main {
+      max-width: 68rem;
+      margin: 0 auto;
+      padding: clamp(1rem, 4vw, 2.75rem);
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.6rem, 2vw, 1rem);
+      margin-bottom: clamp(1.1rem, 3vw, 1.7rem);
+    }
+    header nav {
+      margin-bottom: clamp(0.2rem, 1vw, 0.5rem);
+    }
+    header nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+      background: #ecfdf5;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    header nav a:hover,
+    header nav a:focus-visible {
+      background: var(--accent);
+      color: #ffffff;
+      outline: none;
+    }
+    h1 {
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+      font-size: calc(var(--font-scale) * clamp(1.8rem, 4.8vw, 2.65rem));
+      color: var(--accent);
+    }
+    h2 {
+      margin: clamp(1.5rem, 4vw, 2.25rem) 0 clamp(0.75rem, 2vw, 1.25rem) 0;
+      font-size: calc(var(--font-scale) * clamp(1.3rem, 3.6vw, 1.75rem));
+    }
+    h3 {
+      margin: clamp(0.85rem, 2.4vw, 1.6rem) 0 clamp(0.6rem, 1.8vw, 1.1rem) 0;
+      font-size: calc(var(--font-scale) * clamp(1.1rem, 2.8vw, 1.45rem));
+    }
+    h4 {
+      margin: clamp(0.5rem, 1.6vw, 0.9rem) 0;
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.2rem));
+    }
+    .meta {
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #475569;
+      margin-bottom: clamp(1.1rem, 3vw, 1.7rem);
+    }
+    .competition {
+      background: var(--card-bg);
+      border-radius: 1rem;
+      padding: clamp(1.25rem, 3vw, 1.85rem);
+      box-shadow: 0 14px 32px var(--card-shadow);
+      margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+    }
+    .competition-source a {
+      color: #0f766e;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .competition-source a:hover,
+    .competition-source a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+    .team-section {
+      margin-top: clamp(1rem, 3vw, 1.5rem);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      background: #f8fafc;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }
+    .team-section:first-of-type {
+      margin-top: clamp(0.75rem, 2.4vw, 1.1rem);
+    }
+    .team-section summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      padding: clamp(0.85rem, 2.6vw, 1.15rem) clamp(1rem, 3vw, 1.5rem);
+      font-size: calc(var(--font-scale) * clamp(1.05rem, 2.6vw, 1.4rem));
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(15, 23, 42, 0.02);
+    }
+    .team-section summary::-webkit-details-marker {
+      display: none;
+    }
+    .team-section summary::after {
+      content: "▾";
+      font-size: 0.85em;
+      margin-left: auto;
+      transition: transform 0.2s ease;
+    }
+    .team-section[open] summary::after {
+      transform: rotate(-180deg);
+    }
+    .team-name {
+      flex-shrink: 0;
+    }
+    .team-meta {
+      font-size: calc(var(--font-scale) * 0.92rem);
+      color: #475569;
+      font-weight: 500;
+    }
+    .team-section-content {
+      padding: clamp(0.95rem, 2.8vw, 1.35rem) clamp(1.05rem, 3vw, 1.6rem) clamp(1.15rem, 3.2vw, 1.65rem);
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+      display: grid;
+      gap: clamp(0.85rem, 2.6vw, 1.4rem);
+    }
+    .match-group {
+      margin: 0;
+      border: 1px solid var(--border);
+      border-radius: 0.85rem;
+      background: #f8fafc;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }
+    .match-group summary {
+      cursor: pointer;
+      padding: clamp(0.8rem, 2.4vw, 1rem) clamp(0.9rem, 2.6vw, 1.2rem);
+      font-size: calc(var(--font-scale) * clamp(1rem, 2.4vw, 1.2rem));
+      font-weight: 600;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      list-style: none;
+    }
+    .match-group summary::-webkit-details-marker {
+      display: none;
+    }
+    .match-group summary::after {
+      content: "▾";
+      font-size: 0.85em;
+      margin-left: auto;
+      transition: transform 0.2s ease;
+    }
+    .match-group[open] summary::after {
+      transform: rotate(-180deg);
+    }
+    .match-content {
+      padding: 0 clamp(0.9rem, 2.6vw, 1.2rem) clamp(1rem, 3vw, 1.4rem);
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+    }
+    .match-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: clamp(0.75rem, 2.4vw, 1.1rem);
+    }
+    .match-card {
+      background: #f1f5f9;
+      border-radius: 0.85rem;
+      padding: clamp(0.85rem, 2.6vw, 1.25rem) clamp(0.95rem, 2.8vw, 1.5rem);
+      display: grid;
+      gap: 0.4rem;
+    }
+    .match-header {
+      font-weight: 600;
+      color: #1e3a8a;
+    }
+    .match-pairing {
+      font-weight: 500;
+    }
+    .match-score {
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * 0.9rem);
+    }
+    .match-meta {
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #475569;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .match-meta a {
+      color: #0f172a;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .match-meta a:hover,
+    .match-meta a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+    .group-empty {
+      font-size: calc(var(--font-scale) * 0.9rem);
+      color: #64748b;
+      margin: 0;
+    }
+    .footnote {
+      margin-top: clamp(1.4rem, 3vw, 2.2rem);
+      font-size: calc(var(--font-scale) * 0.85rem);
+      color: #475569;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <nav aria-label="Navigation">
+        <a href="index.html">⟵ zurück zur Übersicht</a>
+      </nav>
+      <h1>Internationale Spiele deutscher Frauen-Teams</h1>
+    </header>
+    <p class="meta">Letzte Aktualisierung: 21.02.2026 04:18 Uhr</p>
+    <p class="footnote">Alle Angaben stammen aus den offiziellen Ergebnis-Feeds der CEV. Startzeiten werden ohne Zeitzonenangabe veröffentlicht und entsprechen der dort ausgewiesenen Ortszeit.</p>
+  <section class="competition">
+    <h2>CEV Champions League Volley 2025/26 (Frauen)</h2>
+    <p class="competition-source">Quelle: <a href="https://championsleague.cev.eu/en/women/" rel="noopener" target="_blank">Offizielle CEV-Wettbewerbsseite</a></p>
+  <details class="team-section">
+    <summary>
+      <span class="team-name">DRESDNER SC</span>
+      <span class="team-meta">Keine gemeldeten Spiele</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+    </div>
+  </details>
+  <details class="team-section">
+    <summary>
+      <span class="team-name">SSC Palmberg SCHWERIN</span>
+      <span class="team-meta">Keine gemeldeten Spiele</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+    </div>
+  </details>
+  </section>
+  <section class="competition">
+    <h2>CEV Volleyball Cup 2025/26 (Frauen)</h2>
+    <p class="competition-source">Quelle: <a href="https://www.cev.eu/club/volleyball-cup/2026/women/" rel="noopener" target="_blank">Offizielle CEV-Wettbewerbsseite</a></p>
+  <details class="team-section">
+    <summary>
+      <span class="team-name">Allianz MTV STUTTGART</span>
+      <span class="team-meta">Keine gemeldeten Spiele</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+    </div>
+  </details>
+  <details class="team-section">
+    <summary>
+      <span class="team-name">VfB SUHL Thüringen</span>
+      <span class="team-meta">Keine gemeldeten Spiele</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+    </div>
+  </details>
+  </section>
+  <section class="competition">
+    <h2>CEV Volleyball Challenge Cup 2025/26 (Frauen)</h2>
+    <p class="competition-source">Quelle: <a href="https://www.cev.eu/club/volleyball-challenge-cup/2026/women/" rel="noopener" target="_blank">Offizielle CEV-Wettbewerbsseite</a></p>
+  <details class="team-section">
+    <summary>
+      <span class="team-name">SC POTSDAM</span>
+      <span class="team-meta">Keine gemeldeten Spiele</span>
+    </summary>
+    <div class="team-section-content">
+          <details class="match-group">
+            <summary>Anstehende Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+          <details class="match-group">
+            <summary>Abgeschlossene Spiele</summary>
+            <div class="match-content">
+              <p class="group-empty">Keine Einträge vorhanden.</p>
+            </div>
+          </details>
+    </div>
+  </details>
+  </section>
+  </main>
+</body>
+</html>
+
+<!-- Build 09333d0 2026-02-21T04:23:49Z -->
