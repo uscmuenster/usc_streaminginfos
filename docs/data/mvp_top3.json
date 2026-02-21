@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-20T04:22:36.660928+00:00",
+  "generated_at": "2026-02-21T04:14:00.368126+00:00",
   "usc_team": "USC Münster",
   "opponent_team": "VC Wiesbaden",
   "limit": 3,
@@ -10,7 +10,7 @@
       "usc": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -26,7 +26,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -60,7 +60,7 @@
       "opponent": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -76,7 +76,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -114,7 +114,7 @@
       "usc": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -130,7 +130,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -164,7 +164,7 @@
       "opponent": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -180,7 +180,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -218,7 +218,7 @@
       "usc": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -234,7 +234,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -268,7 +268,7 @@
       "opponent": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -284,7 +284,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -322,7 +322,7 @@
       "usc": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -338,7 +338,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -371,36 +371,36 @@
       ],
       "opponent": [
         {
-          "Rang": "3.",
+          "Rang": "–",
           "column_1": "",
-          "Name": "Dordevic, Jovana",
-          "Sätze": "8",
-          "Spiele": "3",
-          "Position": "Außenangriff",
+          "Name": "–",
+          "Sätze": "–",
+          "Spiele": "–",
+          "Position": "–",
           "Mannschaft": "Wiesbaden",
-          "Nation": "Deutschland (GER)",
-          "Wert1": "18",
-          "Wert2": "0,2",
-          "Wert3": "16",
-          "Kennzahl": "16,7%",
-          "Wertung": "",
-          "ranking": "18"
+          "Nation": "–",
+          "Wert1": "–",
+          "Wert2": "–",
+          "Wert3": "–",
+          "Kennzahl": "–",
+          "Wertung": "–",
+          "ranking": "– | –"
         },
         {
-          "Rang": "3.",
+          "Rang": "–",
           "column_1": "",
-          "Name": "Dordevic, Jovana",
-          "Sätze": "8",
-          "Spiele": "3",
-          "Position": "Außenangriff",
+          "Name": "–",
+          "Sätze": "–",
+          "Spiele": "–",
+          "Position": "–",
           "Mannschaft": "Wiesbaden",
-          "Nation": "Deutschland (GER)",
-          "Wert1": "18",
-          "Wert2": "0,2",
-          "Wert3": "16",
-          "Kennzahl": "16,7%",
-          "Wertung": "",
-          "ranking": "18"
+          "Nation": "–",
+          "Wert1": "–",
+          "Wert2": "–",
+          "Wert3": "–",
+          "Kennzahl": "–",
+          "Wertung": "–",
+          "ranking": "– | –"
         },
         {
           "Rang": "–",
@@ -426,7 +426,7 @@
       "usc": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -442,7 +442,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -476,7 +476,7 @@
       "opponent": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -492,7 +492,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -530,7 +530,7 @@
       "usc": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -546,7 +546,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -580,7 +580,7 @@
       "opponent": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -596,7 +596,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -634,7 +634,7 @@
       "usc": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -650,7 +650,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -684,7 +684,7 @@
       "opponent": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -700,7 +700,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -738,7 +738,7 @@
       "usc": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -754,7 +754,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -788,7 +788,7 @@
       "opponent": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -804,7 +804,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -842,7 +842,7 @@
       "usc": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -858,7 +858,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -892,7 +892,7 @@
       "opponent": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -908,7 +908,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -946,7 +946,7 @@
       "usc": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -962,7 +962,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -996,7 +996,7 @@
       "opponent": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -1012,7 +1012,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -1050,7 +1050,7 @@
       "usc": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -1066,7 +1066,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -1100,7 +1100,7 @@
       "opponent": [
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
@@ -1116,7 +1116,7 @@
         },
         {
           "Rang": "–",
-          "column_1": "–",
+          "column_1": "",
           "Name": "–",
           "Sätze": "–",
           "Spiele": "–",
