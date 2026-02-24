@@ -21,6 +21,7 @@ from .report import (
     REQUEST_HEADERS,
     USC_CANONICAL_NAME,
     collect_team_roster,
+    _decode_csv_bytes_robust,
     extract_schedule_result_label,
     parse_schedule_kickoff,
 )
@@ -110,7 +111,7 @@ def _find_team_code(team_names: Dict[str, str], target_name: str) -> Optional[st
 def fetch_schedule_csv(url: str = DEFAULT_SCHEDULE_URL) -> str:
     response = requests.get(url, headers=REQUEST_HEADERS, timeout=30)
     response.raise_for_status()
-    return response.text
+    return _decode_csv_bytes_robust(response.content)
 
 
 def parse_schedule(csv_text: str) -> List[ScheduleRow]:
