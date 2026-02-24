@@ -583,7 +583,16 @@ def _download_schedule_text(
         retries=retries,
         delay_seconds=delay_seconds,
     )
-    return response.text
+    return _decode_csv_bytes_robust(response.content)
+
+
+def _decode_csv_bytes_robust(raw: bytes) -> str:
+    for encoding in ("utf-8-sig", "cp1252", "latin-1"):
+        try:
+            return raw.decode(encoding)
+        except UnicodeDecodeError:
+            continue
+    return raw.decode("utf-8", errors="replace")
 
 
 def _resolve_schedule_urls(
@@ -780,7 +789,9 @@ def download_schedule(
             competition_label = _infer_competition_label(
                 schedule_url, primary_url=url
             )
-            csv_sources.append((response.text, competition_label))
+            csv_sources.append(
+                (_decode_csv_bytes_robust(response.content), competition_label)
+            )
     combined = _combine_schedule_csv_texts(csv_sources)
     target_path = _resolve_schedule_destination(
         destination,
@@ -1201,13 +1212,7 @@ def _download_roster_text(
         retries=retries,
         delay_seconds=delay_seconds,
     )
-    raw = response.content
-    for encoding in ("utf-8", "latin-1"):
-        try:
-            return raw.decode(encoding)
-        except UnicodeDecodeError:
-            continue
-    return raw.decode("utf-8", errors="replace")
+    return _decode_csv_bytes_robust(response.content)
 
 OFFICIAL_ROLE_PRIORITY: Tuple[str, ...] = (
     "Trainer",
@@ -1297,7 +1302,7 @@ def collect_team_roster(
 def load_schedule_from_file(
     path: Path, *, competition: Optional[str] = None
 ) -> List[Match]:
-    csv_text = path.read_text(encoding="utf-8")
+    csv_text = _decode_csv_bytes_robust(path.read_bytes())
     return parse_schedule(csv_text, competition=competition)
 
 
@@ -1519,22 +1524,22 @@ def _load_team_links_csv() -> List[Dict[str, str]]:
     if not TEAM_LINKS_CSV_PATH.exists():
         return []
 
-    with TEAM_LINKS_CSV_PATH.open(newline="", encoding="utf-8") as handle:
-        reader = csv.DictReader(handle)
-        entries: List[Dict[str, str]] = []
-        for row in reader:
-            team_name = (row.get("team_name") or "").strip()
-            if not team_name:
-                continue
-            entries.append(
-                {
-                    "team_name": team_name,
-                    "homepage_url": (row.get("homepage_url") or "").strip(),
-                    "news_type": (row.get("news_type") or "").strip(),
-                    "news_url": (row.get("news_url") or "").strip(),
-                    "news_label": (row.get("news_label") or "").strip(),
-                }
-            )
+    csv_text = _decode_csv_bytes_robust(TEAM_LINKS_CSV_PATH.read_bytes())
+    reader = csv.DictReader(StringIO(csv_text))
+    entries: List[Dict[str, str]] = []
+    for row in reader:
+        team_name = (row.get("team_name") or "").strip()
+        if not team_name:
+            continue
+        entries.append(
+            {
+                "team_name": team_name,
+                "homepage_url": (row.get("homepage_url") or "").strip(),
+                "news_type": (row.get("news_type") or "").strip(),
+                "news_url": (row.get("news_url") or "").strip(),
+                "news_label": (row.get("news_label") or "").strip(),
+            }
+        )
     return entries
 
 
