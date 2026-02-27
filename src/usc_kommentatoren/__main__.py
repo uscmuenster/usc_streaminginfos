@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from dataclasses import replace
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -353,7 +354,18 @@ def main() -> int:
             args.mvp_output.write_text(payload + "\n", encoding="utf-8")
 
     detail_cache: Dict[str, Dict[str, object]] = {}
+    next_home_original = next_home
     next_home = enrich_match(next_home, schedule_metadata, detail_cache)
+    if not next_home.home_team and next_home_original.home_team:
+        next_home = replace(next_home, home_team=next_home_original.home_team)
+    if not next_home.away_team and next_home_original.away_team:
+        next_home = replace(next_home, away_team=next_home_original.away_team)
+    if not next_home.host and next_home_original.host:
+        next_home = replace(next_home, host=next_home_original.host)
+    if not next_home.competition and next_home_original.competition:
+        next_home = replace(next_home, competition=next_home_original.competition)
+    if not next_home.location and next_home_original.location:
+        next_home = replace(next_home, location=next_home_original.location)
     usc_recent = enrich_matches(usc_recent, schedule_metadata, detail_cache)
     opponent_recent = enrich_matches(opponent_recent, schedule_metadata, detail_cache)
     if usc_upcoming_matches:

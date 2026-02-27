@@ -4240,7 +4240,7 @@ def build_html_report(
     mvp_rankings: Optional[Mapping[str, Mapping[str, Any]]] = None,
     direct_comparison: Optional[DirectComparisonData] = None,
 ) -> str:
-    heading = pretty_name(next_home.away_team)
+    heading = pretty_name(next_home.away_team) or "Noch nicht veröffentlicht"
     kickoff_raw = next_home.kickoff
     if kickoff_raw.tzinfo is None:
         kickoff_raw = kickoff_raw.replace(tzinfo=BERLIN_TZ)
@@ -4255,7 +4255,7 @@ def build_html_report(
     kickoff_label = f"{kickoff} Uhr"
     countdown_iso = kickoff_dt.isoformat(timespec="seconds")
     match_day = kickoff_dt.date()
-    location = pretty_name(next_home.location)
+    location = pretty_name(next_home.location) or "noch nicht veröffentlicht"
     usc_url = get_team_homepage(USC_CANONICAL_NAME) or USC_HOMEPAGE
     opponent_url = get_team_homepage(next_home.away_team)
 
