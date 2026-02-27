@@ -163,22 +163,28 @@ def main() -> int:
         )
 
     if next_home_ics:
-        if next_home and (
-            next_home.kickoff != next_home_ics.kickoff
-            or next_home.home_team != next_home_ics.home_team
-            or next_home.away_team != next_home_ics.away_team
-        ):
+        has_csv_deviation = bool(
+            next_home
+            and (
+                next_home.kickoff != next_home_ics.kickoff
+                or next_home.home_team != next_home_ics.home_team
+                or next_home.away_team != next_home_ics.away_team
+            )
+        )
+
+        if has_csv_deviation:
             print(
                 "Hinweis: Abweichung zwischen CSV und ICS beim nächsten USC-Heimspiel "
                 f"(CSV: {next_home.home_team} vs. {next_home.away_team} {next_home.kickoff.isoformat()} | "
                 f"ICS: {next_home_ics.home_team} vs. {next_home_ics.away_team} {next_home_ics.kickoff.isoformat()}). "
-                "Der Gegner wird aus der ICS-Datei übernommen.",
+                "Gegner sowie Datum/Uhrzeit werden aus der ICS-Datei übernommen.",
                 file=sys.stderr,
             )
 
         if next_home:
             next_home = replace(
                 next_home,
+                kickoff=next_home_ics.kickoff,
                 away_team=next_home_ics.away_team or next_home.away_team,
             )
             if not next_home.home_team:
