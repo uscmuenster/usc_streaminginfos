@@ -1414,6 +1414,12 @@ def fetch_ics_schedule(url: str = DEFAULT_SCHEDULE_ICS_URL) -> str:
 
 
 def _unfold_ics_lines(ics_text: str) -> List[str]:
+    # Manche Exportpfade liefern ICS-Inhalte als "escaped" String mit
+    # literalen "\\n"-Zeichen statt echten Zeilenumbrüchen.
+    # In diesem Fall normalisieren wir den Text vor dem eigentlichen Parsing.
+    if "\\n" in ics_text and "\n" not in ics_text:
+        ics_text = ics_text.replace("\\n", "\n")
+
     unfolded: List[str] = []
     for raw_line in ics_text.splitlines():
         if raw_line.startswith((" ", "\t")) and unfolded:
@@ -1441,9 +1447,10 @@ def _get_ics_field(event: Dict[str, str], field_name: str) -> Optional[str]:
 def _parse_ics_summary_teams(summary: str) -> Tuple[str, str]:
     normalized_summary = _decode_ics_text(summary)
     teams_part = normalized_summary.split(",", 1)[0].strip()
-    if " vs. " not in teams_part:
+    separator_match = re.search(r"\s+(?:vs?\.?|gegen|-)\s+", teams_part, flags=re.IGNORECASE)
+    if not separator_match:
         return "", ""
-    home_team_raw, away_team_raw = teams_part.split(" vs. ", 1)
+    home_team_raw, away_team_raw = teams_part.split(separator_match.group(0), 1)
     return home_team_raw.strip(), away_team_raw.strip()
 
 
