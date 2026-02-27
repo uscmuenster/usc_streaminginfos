@@ -172,20 +172,19 @@ def main() -> int:
                 "Hinweis: Abweichung zwischen CSV und ICS beim nächsten USC-Heimspiel "
                 f"(CSV: {next_home.home_team} vs. {next_home.away_team} {next_home.kickoff.isoformat()} | "
                 f"ICS: {next_home_ics.home_team} vs. {next_home_ics.away_team} {next_home_ics.kickoff.isoformat()}). "
-                "Es werden die ICS-Daten verwendet.",
+                "Der Gegner wird aus der ICS-Datei übernommen.",
                 file=sys.stderr,
             )
 
         if next_home:
-            next_home = Match(
-                kickoff=next_home_ics.kickoff,
-                home_team=next_home_ics.home_team,
-                away_team=next_home_ics.away_team,
-                host=next_home_ics.home_team,
-                location=next_home.location,
-                result=None,
-                competition=next_home.competition,
+            next_home = replace(
+                next_home,
+                away_team=next_home_ics.away_team or next_home.away_team,
             )
+            if not next_home.home_team:
+                next_home = replace(next_home, home_team=next_home_ics.home_team)
+            if not next_home.host:
+                next_home = replace(next_home, host=next_home_ics.home_team)
         else:
             next_home = Match(
                 kickoff=next_home_ics.kickoff,
