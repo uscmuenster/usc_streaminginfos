@@ -1428,6 +1428,25 @@ def _decode_ics_text(value: str) -> str:
     return decoded.strip()
 
 
+def _get_ics_field(event: Dict[str, str], field_name: str) -> Optional[str]:
+    if field_name in event:
+        return event[field_name]
+    prefix = f"{field_name};"
+    for key, value in event.items():
+        if key.startswith(prefix):
+            return value
+    return None
+
+
+def _parse_ics_summary_teams(summary: str) -> Tuple[str, str]:
+    normalized_summary = _decode_ics_text(summary)
+    teams_part = normalized_summary.split(",", 1)[0].strip()
+    if " vs. " not in teams_part:
+        return "", ""
+    home_team_raw, away_team_raw = teams_part.split(" vs. ", 1)
+    return home_team_raw.strip(), away_team_raw.strip()
+
+
 def parse_ics_schedule(ics_text: str) -> List[IcsScheduleEvent]:
     lines = _unfold_ics_lines(ics_text)
     events: List[Dict[str, str]] = []
@@ -1448,18 +1467,12 @@ def parse_ics_schedule(ics_text: str) -> List[IcsScheduleEvent]:
 
     parsed_events: List[IcsScheduleEvent] = []
     for event in events:
-        summary_raw = event.get("SUMMARY")
-        start_raw = event.get("DTSTART;TZID=Europe/Berlin") or event.get("DTSTART")
+        summary_raw = _get_ics_field(event, "SUMMARY")
+        start_raw = _get_ics_field(event, "DTSTART")
         if not summary_raw or not start_raw:
             continue
 
-        summary = _decode_ics_text(summary_raw)
-        teams_part = summary.split(",", 1)[0]
-        if " vs. " not in teams_part:
-            continue
-        home_team_raw, away_team_raw = teams_part.split(" vs. ", 1)
-        home_team = home_team_raw.strip()
-        away_team = away_team_raw.strip()
+        home_team, away_team = _parse_ics_summary_teams(summary_raw)
         if not home_team or not away_team:
             continue
 
