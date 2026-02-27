@@ -9,10 +9,12 @@ from typing import Dict, List, Optional
 
 from .mvp import collect_mvp_rankings
 from .report import (
+    DEFAULT_SCHEDULE_ICS_URL,
     DEFAULT_SCHEDULE_URL,
     NEWS_LOOKBACK_DAYS,
     USC_CANONICAL_NAME,
     BERLIN_TZ,
+    Match,
     THEME_COLORS,
     build_html_report,
     collect_instagram_links,
@@ -24,12 +26,15 @@ from .report import (
     enrich_match,
     enrich_matches,
     fetch_schedule_match_metadata,
+    fetch_ics_schedule,
     download_schedule,
     find_last_matches_for_team,
     find_next_match_for_team,
     find_next_usc_home_match,
+    find_next_usc_home_match_in_ics,
     is_usc,
     load_schedule_from_file,
+    parse_ics_schedule,
     prepare_direct_comparison,
 )
 
@@ -42,6 +47,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--schedule-url",
         default=DEFAULT_SCHEDULE_URL,
         help="CSV export URL of the Volleyball Bundesliga schedule.",
+    )
+    parser.add_argument(
+        "--schedule-ics-url",
+        default=DEFAULT_SCHEDULE_ICS_URL,
+        help="ICS-URL des Spielplans für den Abgleich des nächsten Heimspiels.",
     )
     parser.add_argument(
         "--output",
@@ -140,6 +150,51 @@ def main() -> int:
         )
         schedule_metadata = {}
     next_home = find_next_usc_home_match(matches)
+    next_home_ics = None
+    try:
+        ics_text = fetch_ics_schedule(args.schedule_ics_url)
+        ics_events = parse_ics_schedule(ics_text)
+        next_home_ics = find_next_usc_home_match_in_ics(ics_events)
+    except Exception as exc:  # pragma: no cover - network failure
+        print(
+            f"Warnung: ICS-Spielplan konnte nicht geladen werden: {exc}",
+            file=sys.stderr,
+        )
+
+    if next_home_ics and (
+        not next_home
+        or next_home.kickoff != next_home_ics.kickoff
+        or next_home.home_team != next_home_ics.home_team
+        or next_home.away_team != next_home_ics.away_team
+    ):
+        if next_home:
+            print(
+                "Hinweis: Abweichung zwischen CSV und ICS beim nächsten USC-Heimspiel "
+                f"(CSV: {next_home.home_team} vs. {next_home.away_team} {next_home.kickoff.isoformat()} | "
+                f"ICS: {next_home_ics.home_team} vs. {next_home_ics.away_team} {next_home_ics.kickoff.isoformat()}). "
+                "Es werden die ICS-Daten verwendet.",
+                file=sys.stderr,
+            )
+            next_home = Match(
+                kickoff=next_home_ics.kickoff,
+                home_team=next_home_ics.home_team,
+                away_team=next_home_ics.away_team,
+                host=next_home_ics.home_team,
+                location=next_home.location,
+                result=None,
+                competition=next_home.competition,
+            )
+        else:
+            next_home = Match(
+                kickoff=next_home_ics.kickoff,
+                home_team=next_home_ics.home_team,
+                away_team=next_home_ics.away_team,
+                host=next_home_ics.home_team,
+                location="",
+                result=None,
+                competition=None,
+            )
+
     if not next_home:
         raise SystemExit("Kein zukünftiges Heimspiel des USC Münster gefunden.")
 

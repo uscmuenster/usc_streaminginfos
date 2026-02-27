@@ -33,6 +33,7 @@ from .broadcast_satzpause23 import BROADCAST_PLAN as SECOND_SET_BREAK_PLAN
 from .broadcast_spielende import BROADCAST_PLAN as POST_MATCH_PLAN
 
 DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
+DEFAULT_SCHEDULE_ICS_URL = "https://www.volleyball-bundesliga.de/iCal/matchSeries/matches.ical?matchSeriesId=776311171&calenderType=ics"
 DVV_POKAL_SCHEDULE_URL = "https://www.dvv-pokal.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311591"
 DEFAULT_ADDITIONAL_SCHEDULE_URLS: Tuple[str, ...] = (DVV_POKAL_SCHEDULE_URL,)
 SCHEDULE_COMPETITION_LABELS: Dict[str, str] = {
@@ -220,6 +221,13 @@ class Match:
     @property
     def is_finished(self) -> bool:
         return self.result is not None
+
+
+@dataclass(frozen=True)
+class IcsScheduleEvent:
+    kickoff: datetime
+    home_team: str
+    away_team: str
 
 
 @dataclass(frozen=True)
@@ -1393,6 +1401,95 @@ def parse_kickoff(date_str: str, time_str: str) -> datetime:
     combined = f"{date_str.strip()} {time_str.strip()}"
     kickoff = datetime.strptime(combined, "%d.%m.%Y %H:%M:%S")
     return kickoff.replace(tzinfo=BERLIN_TZ)
+
+
+def fetch_ics_schedule(url: str = DEFAULT_SCHEDULE_ICS_URL) -> str:
+    response = requests.get(url, headers=REQUEST_HEADERS, timeout=30)
+    response.raise_for_status()
+    return response.text
+
+
+def _unfold_ics_lines(ics_text: str) -> List[str]:
+    unfolded: List[str] = []
+    for raw_line in ics_text.splitlines():
+        if raw_line.startswith((" ", "\t")) and unfolded:
+            unfolded[-1] = f"{unfolded[-1]}{raw_line[1:]}"
+        else:
+            unfolded.append(raw_line)
+    return unfolded
+
+
+def _decode_ics_text(value: str) -> str:
+    decoded = value.replace("\\,", ",").replace("\\;", ";").replace("\\n", "\n")
+    return decoded.strip()
+
+
+def parse_ics_schedule(ics_text: str) -> List[IcsScheduleEvent]:
+    lines = _unfold_ics_lines(ics_text)
+    events: List[Dict[str, str]] = []
+    current: Optional[Dict[str, str]] = None
+    for line in lines:
+        if line == "BEGIN:VEVENT":
+            current = {}
+            continue
+        if line == "END:VEVENT":
+            if current is not None:
+                events.append(current)
+            current = None
+            continue
+        if current is None or ":" not in line:
+            continue
+        key, value = line.split(":", 1)
+        current[key] = value
+
+    parsed_events: List[IcsScheduleEvent] = []
+    for event in events:
+        summary_raw = event.get("SUMMARY")
+        start_raw = event.get("DTSTART;TZID=Europe/Berlin") or event.get("DTSTART")
+        if not summary_raw or not start_raw:
+            continue
+
+        summary = _decode_ics_text(summary_raw)
+        teams_part = summary.split(",", 1)[0]
+        if " vs. " not in teams_part:
+            continue
+        home_team_raw, away_team_raw = teams_part.split(" vs. ", 1)
+        home_team = home_team_raw.strip()
+        away_team = away_team_raw.strip()
+        if not home_team or not away_team:
+            continue
+
+        kickoff_text = start_raw.strip()
+        kickoff_format = "%Y%m%dT%H%M%S" if len(kickoff_text) == 15 else "%Y%m%dT%H%M"
+        try:
+            kickoff = datetime.strptime(kickoff_text, kickoff_format).replace(tzinfo=BERLIN_TZ)
+        except ValueError:
+            continue
+        parsed_events.append(
+            IcsScheduleEvent(
+                kickoff=kickoff,
+                home_team=home_team,
+                away_team=away_team,
+            )
+        )
+
+    parsed_events.sort(key=lambda event: event.kickoff)
+    return parsed_events
+
+
+def find_next_usc_home_match_in_ics(
+    events: Sequence[IcsScheduleEvent],
+    *,
+    reference: Optional[datetime] = None,
+) -> Optional[IcsScheduleEvent]:
+    now = reference or datetime.now(tz=BERLIN_TZ)
+    future_home_games = [
+        event
+        for event in events
+        if event.kickoff >= now and is_usc(event.home_team)
+    ]
+    future_home_games.sort(key=lambda event: event.kickoff)
+    return future_home_games[0] if future_home_games else None
 
 
 def parse_schedule_kickoff(row: Dict[str, str]) -> datetime:
