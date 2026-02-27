@@ -1319,7 +1319,11 @@ def parse_schedule(
     *,
     competition: Optional[str] = None,
 ) -> List[Match]:
-    buffer = StringIO(csv_text)
+    valid_lines: List[str] = []
+    for raw_line in csv_text.splitlines():
+        if raw_line.count('"') % 2 == 0:
+            valid_lines.append(raw_line)
+    buffer = StringIO("\n".join(valid_lines))
     reader = csv.DictReader(buffer, delimiter=";", quotechar="\"")
     matches: List[Match] = []
     fallback_competition = _normalize_competition_label(competition)
