@@ -3161,7 +3161,7 @@ def find_next_usc_home_match(matches: Iterable[Match], *, reference: Optional[da
     future_home_games = [
         match
         for match in matches
-        if is_usc(match.host) and match.kickoff >= now
+        if match.kickoff >= now and (is_usc(match.host) or is_usc(match.home_team))
     ]
     future_home_games.sort(key=lambda match: match.kickoff)
     return future_home_games[0] if future_home_games else None
