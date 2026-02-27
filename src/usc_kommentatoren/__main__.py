@@ -161,13 +161,12 @@ def main() -> int:
             file=sys.stderr,
         )
 
-    if next_home_ics and (
-        not next_home
-        or next_home.kickoff != next_home_ics.kickoff
-        or next_home.home_team != next_home_ics.home_team
-        or next_home.away_team != next_home_ics.away_team
-    ):
-        if next_home:
+    if next_home_ics:
+        if next_home and (
+            next_home.kickoff != next_home_ics.kickoff
+            or next_home.home_team != next_home_ics.home_team
+            or next_home.away_team != next_home_ics.away_team
+        ):
             print(
                 "Hinweis: Abweichung zwischen CSV und ICS beim nächsten USC-Heimspiel "
                 f"(CSV: {next_home.home_team} vs. {next_home.away_team} {next_home.kickoff.isoformat()} | "
@@ -175,6 +174,8 @@ def main() -> int:
                 "Es werden die ICS-Daten verwendet.",
                 file=sys.stderr,
             )
+
+        if next_home:
             next_home = Match(
                 kickoff=next_home_ics.kickoff,
                 home_team=next_home_ics.home_team,
@@ -194,6 +195,12 @@ def main() -> int:
                 result=None,
                 competition=None,
             )
+
+    if next_home and not next_home.away_team:
+        print(
+            "Warnung: Kein Gegner im nächsten Heimspiel gefunden – vermutlich CSV-Fehler.",
+            file=sys.stderr,
+        )
 
     if not next_home:
         raise SystemExit("Kein zukünftiges Heimspiel des USC Münster gefunden.")
