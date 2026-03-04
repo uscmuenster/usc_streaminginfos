@@ -9,6 +9,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 import mimetypes
 import sys
+import zipfile
 from html import escape, unescape
 from io import BytesIO, StringIO
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
@@ -266,6 +267,129 @@ class RosterMember:
                 continue
             return parsed.date()
         return None
+
+
+def load_name_pronunciations(path: Path) -> Dict[str, Dict[str, str]]:
+    if not path.exists():
+        return {}
+
+    try:
+        workbook = zipfile.ZipFile(path)
+    except (OSError, zipfile.BadZipFile):
+        return {}
+
+    with workbook:
+        try:
+            workbook_xml = workbook.read("xl/workbook.xml")
+            rels_xml = workbook.read("xl/_rels/workbook.xml.rels")
+        except KeyError:
+            return {}
+
+        shared_strings: List[str] = []
+        if "xl/sharedStrings.xml" in workbook.namelist():
+            root = ET.fromstring(workbook.read("xl/sharedStrings.xml"))
+            ns = {"x": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+            for item in root.findall("x:si", ns):
+                parts = [node.text or "" for node in item.findall(".//x:t", ns)]
+                shared_strings.append("".join(parts))
+
+        wb_root = ET.fromstring(workbook_xml)
+        rels_root = ET.fromstring(rels_xml)
+        wb_ns = {"x": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+        rel_ns = {"r": "http://schemas.openxmlformats.org/package/2006/relationships"}
+
+        rel_target_by_id: Dict[str, str] = {}
+        for rel in rels_root.findall("r:Relationship", rel_ns):
+            rel_id = rel.get("Id")
+            target = rel.get("Target")
+            if rel_id and target:
+                rel_target_by_id[rel_id] = target
+
+        pronunciations: Dict[str, Dict[str, str]] = {}
+
+        for sheet in wb_root.findall("x:sheets/x:sheet", wb_ns):
+            rel_id = sheet.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id")
+            sheet_name = (sheet.get("name") or "").strip()
+            if not rel_id:
+                continue
+            target = rel_target_by_id.get(rel_id)
+            if not target:
+                continue
+            sheet_path = f"xl/{target}" if not target.startswith("xl/") else target
+            try:
+                sheet_xml = workbook.read(sheet_path)
+            except KeyError:
+                continue
+
+            sheet_root = ET.fromstring(sheet_xml)
+            headers: Dict[str, str] = {}
+            rows: List[Dict[str, str]] = []
+            sheet_ns = {"x": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+
+            for row in sheet_root.findall("x:sheetData/x:row", sheet_ns):
+                row_values: Dict[str, str] = {}
+                for cell in row.findall("x:c", sheet_ns):
+                    ref = cell.get("r") or ""
+                    col_ref = "".join(ch for ch in ref if ch.isalpha())
+                    if not col_ref:
+                        continue
+                    text = ""
+                    t = cell.get("t")
+                    value_node = cell.find("x:v", sheet_ns)
+                    if t == "inlineStr":
+                        inline = cell.find("x:is/x:t", sheet_ns)
+                        text = (inline.text or "") if inline is not None else ""
+                    elif t == "s" and value_node is not None:
+                        raw = (value_node.text or "").strip()
+                        if raw.isdigit():
+                            index = int(raw)
+                            if 0 <= index < len(shared_strings):
+                                text = shared_strings[index]
+                    elif value_node is not None:
+                        text = value_node.text or ""
+                    if text:
+                        row_values[col_ref] = text.strip()
+
+                if not row_values:
+                    continue
+
+                if not headers:
+                    headers = {
+                        col: value.strip().lower()
+                        for col, value in row_values.items()
+                        if value.strip()
+                    }
+                    continue
+
+                parsed_row: Dict[str, str] = {}
+                for col, value in row_values.items():
+                    key = headers.get(col)
+                    if key:
+                        parsed_row[key] = value.strip()
+                if parsed_row:
+                    rows.append(parsed_row)
+
+            for entry in rows:
+                team_name = (
+                    entry.get("team")
+                    or entry.get("mannschaft")
+                    or entry.get("verein")
+                    or sheet_name
+                )
+                first_name = (entry.get("vorname") or "").strip()
+                last_name = (entry.get("nachname") or "").strip()
+                first_pron = (entry.get("aussprache vorname") or "").strip()
+                last_pron = (entry.get("aussprache nachname") or "").strip()
+                if not team_name or not first_name or not last_name:
+                    continue
+                pron_parts = [part for part in (first_pron, last_pron) if part]
+                if not pron_parts:
+                    continue
+                team_key = normalize_name(team_name)
+                name_key = normalize_name(f"{first_name} {last_name}")
+                pronunciations.setdefault(team_key, {})[name_key] = " ".join(pron_parts)
+
+        return pronunciations
 
 
 @dataclass(frozen=True)
@@ -3924,7 +4048,10 @@ def calculate_age(birthdate: date, reference: date) -> Optional[int]:
 
 
 def format_roster_list(
-    roster: Sequence[RosterMember], *, match_date: Optional[date] = None
+    roster: Sequence[RosterMember],
+    *,
+    match_date: Optional[date] = None,
+    name_pronunciations: Optional[Mapping[str, str]] = None,
 ) -> str:
     if not roster:
         return "<li>Keine Kaderdaten gefunden.</li>"
@@ -3943,7 +4070,13 @@ def format_roster_list(
             number_display = number.strip()
         else:
             number_display = "Staff"
-        name_html = escape(member.name)
+        member_name = member.name.strip()
+        pronunciation = None
+        if name_pronunciations:
+            pronunciation = name_pronunciations.get(normalize_name(member_name))
+        if pronunciation:
+            member_name = f"{member_name} ({pronunciation})"
+        name_html = escape(member_name)
         height_display: Optional[str] = None
         if member.height and not member.is_official:
             height_value = member.height.strip()
@@ -4259,6 +4392,7 @@ def build_html_report(
     match_stats: Optional[Mapping[str, Sequence[MatchStatsTotals]]] = None,
     mvp_rankings: Optional[Mapping[str, Mapping[str, Any]]] = None,
     direct_comparison: Optional[DirectComparisonData] = None,
+    opponent_name_pronunciations: Optional[Mapping[str, str]] = None,
 ) -> str:
     heading = pretty_name(next_home.away_team) or "Noch nicht veröffentlicht"
     kickoff_raw = next_home.kickoff
@@ -4355,7 +4489,11 @@ def build_html_report(
         season_results, next_home.away_team
     )
     usc_roster_items = format_roster_list(usc_roster, match_date=match_day)
-    opponent_roster_items = format_roster_list(opponent_roster, match_date=match_day)
+    opponent_roster_items = format_roster_list(
+        opponent_roster,
+        match_date=match_day,
+        name_pronunciations=opponent_name_pronunciations,
+    )
     usc_transfer_items = format_transfer_list(usc_transfers)
     opponent_transfer_items = format_transfer_list(opponent_transfers)
     mvp_section_html = format_mvp_rankings_section(
