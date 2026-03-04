@@ -35,6 +35,8 @@ from .report import (
     find_next_usc_home_match_in_ics,
     is_usc,
     load_schedule_from_file,
+    load_name_pronunciations,
+    normalize_name,
     parse_ics_schedule,
     prepare_direct_comparison,
 )
@@ -117,6 +119,12 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=Path("docs/data/direct_comparisons.json"),
         help="Pfad zur JSON-Datei mit direkten Vergleichen (Standard: docs/data/direct_comparisons.json).",
+    )
+    parser.add_argument(
+        "--pronunciations-path",
+        type=Path,
+        default=Path("docs/data/bundesliga_kommentatorenliste.xlsx"),
+        help="Pfad zur XLSX-Datei mit Aussprachen (Standard: docs/data/bundesliga_kommentatorenliste.xlsx).",
     )
     parser.add_argument(
         "--recent-limit",
@@ -394,6 +402,14 @@ def main() -> int:
         next_home.away_team,
     )
 
+    opponent_name_pronunciations: Dict[str, str] = {}
+    if args.pronunciations_path:
+        all_pronunciations = load_name_pronunciations(args.pronunciations_path)
+        opponent_name_pronunciations = all_pronunciations.get(
+            normalize_name(next_home.away_team),
+            {},
+        )
+
     report_kwargs = dict(
         next_home=next_home,
         usc_recent=usc_recent,
@@ -415,6 +431,7 @@ def main() -> int:
         match_stats=match_stats_map,
         mvp_rankings=mvp_rankings_data,
         direct_comparison=direct_comparison_data,
+        opponent_name_pronunciations=opponent_name_pronunciations,
     )
 
     html = build_html_report(**report_kwargs)
