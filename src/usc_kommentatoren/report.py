@@ -10,6 +10,7 @@ from pathlib import Path
 import mimetypes
 import sys
 import zipfile
+import unicodedata
 from html import escape, unescape
 from io import BytesIO, StringIO
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
@@ -1755,9 +1756,14 @@ def normalize_name(value: str) -> str:
         "ú": "u",
         "ù": "u",
         "û": "u",
+        "æ": "ae",
+        "œ": "oe",
+        "ø": "o",
     }
     for source, target in replacements.items():
         normalized = normalized.replace(source, target)
+    normalized = unicodedata.normalize("NFKD", normalized)
+    normalized = "".join(char for char in normalized if not unicodedata.combining(char))
     normalized = normalized.replace("muenster", "munster")
     normalized = normalized.replace("mnster", "munster")
     normalized = re.sub(r"[^a-z0-9]+", " ", normalized)
