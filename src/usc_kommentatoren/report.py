@@ -1735,35 +1735,16 @@ def build_match_result(row: Dict[str, str]) -> Optional[MatchResult]:
 
 
 def normalize_name(value: str) -> str:
-    normalized = value.lower()
+    normalized = unicodedata.normalize("NFKD", value.lower())
+    normalized = "".join(char for char in normalized if not unicodedata.combining(char))
     replacements = {
-        "ä": "ae",
-        "ö": "oe",
-        "ü": "ue",
         "ß": "ss",
-        "á": "a",
-        "à": "a",
-        "â": "a",
-        "é": "e",
-        "è": "e",
-        "ê": "e",
-        "í": "i",
-        "ì": "i",
-        "î": "i",
-        "ó": "o",
-        "ò": "o",
-        "ô": "o",
-        "ú": "u",
-        "ù": "u",
-        "û": "u",
         "æ": "ae",
         "œ": "oe",
         "ø": "o",
     }
     for source, target in replacements.items():
         normalized = normalized.replace(source, target)
-    normalized = unicodedata.normalize("NFKD", normalized)
-    normalized = "".join(char for char in normalized if not unicodedata.combining(char))
     normalized = normalized.replace("muenster", "munster")
     normalized = normalized.replace("mnster", "munster")
     normalized = re.sub(r"[^a-z0-9]+", " ", normalized)
