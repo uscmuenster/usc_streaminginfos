@@ -898,12 +898,12 @@ def _serialize_dataset(
 ) -> Dict[str, object]:
     serialized: List[Dict[str, object]] = []
     for focus, match in matches:
-        # Generic home/opponent code detection based on configured home_team
-        home_team_code = _find_team_code(match.team_names, home_team)
+        # Team code for the configured home team from config.json
+        configured_home_team_code = _find_team_code(match.team_names, home_team)
         opponent_code = _find_team_code(match.team_names, opponent_team) if opponent_team else None
         # Generic fallback: if still not found, check which scheduled team is the
         # configured home team and look up its PDF code accordingly.
-        if home_team_code is None:
+        if configured_home_team_code is None:
             home_norm = _normalize_team_name(home_team)
             scheduled_home_norm = _normalize_team_name(match.match.home_team)
             scheduled_away_norm = _normalize_team_name(match.match.away_team)
@@ -912,17 +912,17 @@ def _serialize_dataset(
                 or home_norm in scheduled_home_norm
                 or scheduled_home_norm in home_norm
             ):
-                home_team_code = _find_team_code(match.team_names, match.match.home_team)
+                configured_home_team_code = _find_team_code(match.team_names, match.match.home_team)
             elif (
                 scheduled_away_norm == home_norm
                 or home_norm in scheduled_away_norm
                 or scheduled_away_norm in home_norm
             ):
-                home_team_code = _find_team_code(match.team_names, match.match.away_team)
+                configured_home_team_code = _find_team_code(match.team_names, match.match.away_team)
         if opponent_code is None and opponent_team:
             # The opponent in the scheduled match is the one that isn't the home team
             for code, name in match.team_names.items():
-                if code != home_team_code:
+                if code != configured_home_team_code:
                     opponent_code = code
                     break
         home_code = _find_team_code(match.team_names, match.match.home_team)
@@ -930,7 +930,7 @@ def _serialize_dataset(
 
         focus_code: Optional[str] = None
         if focus == "home":
-            focus_code = home_team_code
+            focus_code = configured_home_team_code
         elif focus == "opponent":
             focus_code = None
             if opponent_team:
@@ -949,7 +949,8 @@ def _serialize_dataset(
                 "code": code,
                 "name": normalized,
                 "is_focus": focus_code is not None and code == focus_code,
-                "is_home": home_team_code is not None and code == home_team_code,
+                # Match-local home marker (scheduled Mannschaft 1), not configured home team.
+                "is_home": home_code is not None and code == home_code,
                 "is_opponent": bool(opponent_team and _simplify(normalized) == _simplify(opponent_team)),
                 "setters": list(setters),
             }
@@ -1058,7 +1059,7 @@ def _serialize_dataset(
                 "set_scores": set_score_labels,
                 "pdf_url": match.pdf_url,
                 "team_codes": match.team_names,
-                "home_team_code": home_team_code,
+                "home_team_code": configured_home_team_code,
                 "opponent_code": opponent_code,
                 "teams": list(teams_meta.values()),
                 "sets": serialized_sets,

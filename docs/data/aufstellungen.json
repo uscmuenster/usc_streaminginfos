@@ -626,7 +626,49 @@
             "A": "25",
             "B": "23"
           },
-          "score_label": "23:25"
+          "score_label": "25:19"
+        }
+      ]
+    },
+    {
+      "focus": "opponent",
+      "focus_team_code": "A",
+      "focus_team_name": "Allianz MTV Stuttgart",
+      "match_number": "2116",
+      "kickoff": "2026-03-04T19:30:00+01:00",
+      "date_label": "04.03.2026",
+      "home_team": "Allianz MTV Stuttgart",
+      "away_team": "VC Wiesbaden",
+      "competition": "1. Bundesliga Frauen",
+      "venue": "SCHARRena Stuttgart (70372 Stuttgart)",
+      "season": "2025/26",
+      "result": "3:0",
+      "home_code": "A",
+      "away_code": "B",
+      "set_scores": [
+        "27:25",
+        "25:17",
+        "25:17"
+      ],
+      "pdf_url": "https://distributor.sams-score.de/scoresheet/pdf/082bf0eb-b556-491d-bc6a-2a5dd206aa33/2116",
+      "team_codes": {
+        "A": "Allianz MTV Stuttgart",
+        "B": "VC Wiesbaden"
+      },
+      "home_team_code": null,
+      "opponent_code": "A",
+      "teams": [
+        {
+          "code": "A",
+          "name": "Allianz MTV Stuttgart",
+          "is_focus": true,
+          "is_home": true,
+          "is_opponent": true,
+          "setters": [
+            "10",
+            "15",
+            "19"
+          ]
         },
         {
           "number": 4,
@@ -832,10 +874,10 @@
       "teams": [
         {
           "code": "A",
-          "name": "SSC Palmberg Schwerin",
-          "is_focus": true,
-          "is_home": false,
-          "is_opponent": true,
+          "name": "VfB Suhl LOTTO Thüringen",
+          "is_focus": false,
+          "is_home": true,
+          "is_opponent": false,
           "setters": [
             "12",
             "17"
