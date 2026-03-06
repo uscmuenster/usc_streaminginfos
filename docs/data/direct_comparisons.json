@@ -1,6 +1,6 @@
 {
-  "team": "VC Wiesbaden",
-  "generated_at": "2026-03-06T19:30:58Z",
+  "team": "USC Münster",
+  "generated_at": "2026-03-06T19:37:41Z",
   "seasons": [
     {
       "season": "2025/26",
@@ -8,59 +8,37 @@
         {
           "team": "Allianz MTV Stuttgart",
           "summary": {
-            "matches_played": 2,
+            "matches_played": 1,
             "home_wins": 0,
-            "opponent_wins": 2,
-            "home_sets_for": 0,
-            "opponent_sets_for": 6,
-            "home_points_for": 119,
-            "opponent_points_for": 152
+            "opponent_wins": 1,
+            "home_sets_for": 1,
+            "opponent_sets_for": 3,
+            "home_points_for": 86,
+            "opponent_points_for": 99
           },
           "matches": [
             {
-              "match_id": "2050",
-              "date": "2025-12-12",
-              "home_team": "VC Wiesbaden",
+              "match_id": "2055",
+              "date": "2025-12-20",
+              "home_team": "USC Münster",
               "away_team": "Allianz MTV Stuttgart",
-              "round": "Spieltag 12",
+              "round": "Spieltag 14",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "22:25",
-                "20:25",
-                "18:25"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "60:75"
-              },
-              "home_sets": 0,
-              "opponent_sets": 3,
-              "home_points": 60,
-              "opponent_points": 75,
-              "home_won": false
-            },
-            {
-              "match_id": "2116",
-              "date": "2026-03-04",
-              "home_team": "Allianz MTV Stuttgart",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 21",
-              "competition": "1. Bundesliga Frauen",
-              "location": "SCHARRena Stuttgart (70372 Stuttgart)",
-              "set_scores": [
-                "25:27",
                 "17:25",
-                "17:25"
+                "19:25",
+                "25:22",
+                "25:27"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "77:59"
+                "sets": "1:3",
+                "points": "86:99"
               },
-              "home_sets": 0,
+              "home_sets": 1,
               "opponent_sets": 3,
-              "home_points": 59,
-              "opponent_points": 77,
+              "home_points": 86,
+              "opponent_points": 99,
               "home_won": false
             }
           ]
@@ -69,60 +47,60 @@
           "team": "Binder Blaubären TSV Flacht",
           "summary": {
             "matches_played": 2,
-            "home_wins": 1,
-            "opponent_wins": 1,
-            "home_sets_for": 4,
-            "opponent_sets_for": 3,
-            "home_points_for": 163,
-            "opponent_points_for": 135
+            "home_wins": 2,
+            "opponent_wins": 0,
+            "home_sets_for": 6,
+            "opponent_sets_for": 1,
+            "home_points_for": 172,
+            "opponent_points_for": 132
           },
           "matches": [
             {
-              "match_id": "2095",
-              "date": "2025-11-01",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Binder Blaubären TSV Flacht",
-              "round": "Spieltag 8",
+              "match_id": "2011",
+              "date": "2025-10-15",
+              "home_team": "Binder Blaubären TSV Flacht",
+              "away_team": "USC Münster",
+              "round": "Spieltag 2",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Heckengäusporthalle II (71287 Weissach)",
               "set_scores": [
-                "25:11",
-                "25:9",
-                "25:19"
+                "25:14",
+                "25:15",
+                "25:20"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "75:39"
+                "sets": "0:3",
+                "points": "49:75"
               },
               "home_sets": 3,
               "opponent_sets": 0,
               "home_points": 75,
-              "opponent_points": 39,
+              "opponent_points": 49,
               "home_won": true
             },
             {
-              "match_id": "2029",
-              "date": "2026-02-01",
-              "home_team": "Binder Blaubären TSV Flacht",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 7",
+              "match_id": "2077",
+              "date": "2026-01-18",
+              "home_team": "USC Münster",
+              "away_team": "Binder Blaubären TSV Flacht",
+              "round": "Spieltag 17",
               "competition": "1. Bundesliga Frauen",
-              "location": "Heckengäusporthalle II (71287 Weissach)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "25:21",
-                "23:25",
                 "21:25",
-                "19:25"
+                "26:24",
+                "25:18",
+                "25:16"
               ],
               "result": {
                 "sets": "3:1",
-                "points": "96:88"
+                "points": "97:83"
               },
-              "home_sets": 1,
-              "opponent_sets": 3,
-              "home_points": 88,
-              "opponent_points": 96,
-              "home_won": false
+              "home_sets": 3,
+              "opponent_sets": 1,
+              "home_points": 97,
+              "opponent_points": 83,
+              "home_won": true
             }
           ]
         },
@@ -130,57 +108,59 @@
           "team": "Dresdner SC",
           "summary": {
             "matches_played": 2,
-            "home_wins": 0,
-            "opponent_wins": 2,
-            "home_sets_for": 0,
-            "opponent_sets_for": 6,
-            "home_points_for": 96,
-            "opponent_points_for": 150
+            "home_wins": 1,
+            "opponent_wins": 1,
+            "home_sets_for": 3,
+            "opponent_sets_for": 5,
+            "home_points_for": 160,
+            "opponent_points_for": 182
           },
           "matches": [
             {
-              "match_id": "2014",
-              "date": "2025-10-24",
+              "match_id": "2049",
+              "date": "2025-12-13",
+              "home_team": "USC Münster",
+              "away_team": "Dresdner SC",
+              "round": "Spieltag 12",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "17:25",
+                "25:22",
+                "25:23",
+                "21:25",
+                "15:12"
+              ],
+              "result": {
+                "sets": "3:2",
+                "points": "103:107"
+              },
+              "home_sets": 3,
+              "opponent_sets": 2,
+              "home_points": 103,
+              "opponent_points": 107,
+              "home_won": true
+            },
+            {
+              "match_id": "2115",
+              "date": "2026-03-04",
               "home_team": "Dresdner SC",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 3",
+              "away_team": "USC Münster",
+              "round": "Spieltag 21",
               "competition": "1. Bundesliga Frauen",
               "location": "Margon Arena (01277 Dresden)",
               "set_scores": [
-                "16:25",
-                "17:25",
+                "22:25",
+                "19:25",
                 "16:25"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:49"
+                "points": "75:57"
               },
               "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 49,
-              "opponent_points": 75,
-              "home_won": false
-            },
-            {
-              "match_id": "2080",
-              "date": "2026-01-21",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Dresdner SC",
-              "round": "Spieltag 4",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "15:25",
-                "15:25",
-                "17:25"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "47:75"
-              },
-              "home_sets": 0,
-              "opponent_sets": 3,
-              "home_points": 47,
+              "home_points": 57,
               "opponent_points": 75,
               "home_won": false
             }
@@ -189,36 +169,59 @@
         {
           "team": "ETV Hamburger Volksbank Volleys",
           "summary": {
-            "matches_played": 1,
-            "home_wins": 1,
+            "matches_played": 2,
+            "home_wins": 2,
             "opponent_wins": 0,
-            "home_sets_for": 3,
+            "home_sets_for": 6,
             "opponent_sets_for": 0,
-            "home_points_for": 76,
-            "opponent_points_for": 60
+            "home_points_for": 151,
+            "opponent_points_for": 106
           },
           "matches": [
             {
-              "match_id": "2062",
-              "date": "2025-12-27",
-              "home_team": "VC Wiesbaden",
+              "match_id": "2013",
+              "date": "2025-10-26",
+              "home_team": "USC Münster",
               "away_team": "ETV Hamburger Volksbank Volleys",
-              "round": "Spieltag 16",
+              "round": "Spieltag 3",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "25:16",
-                "25:20",
-                "26:24"
+                "26:24",
+                "25:15",
+                "25:16"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "76:60"
+                "points": "76:55"
               },
               "home_sets": 3,
               "opponent_sets": 0,
               "home_points": 76,
-              "opponent_points": 60,
+              "opponent_points": 55,
+              "home_won": true
+            },
+            {
+              "match_id": "2079",
+              "date": "2026-01-21",
+              "home_team": "ETV Hamburger Volksbank Volleys",
+              "away_team": "USC Münster",
+              "round": "Spieltag 4",
+              "competition": "1. Bundesliga Frauen",
+              "location": "ETV Sporthalle Hoheluft (22529 Hamburg)",
+              "set_scores": [
+                "25:16",
+                "25:19",
+                "25:16"
+              ],
+              "result": {
+                "sets": "0:3",
+                "points": "51:75"
+              },
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 75,
+              "opponent_points": 51,
               "home_won": true
             }
           ]
@@ -227,97 +230,120 @@
           "team": "Ladies in Black Aachen",
           "summary": {
             "matches_played": 2,
-            "home_wins": 0,
-            "opponent_wins": 2,
-            "home_sets_for": 3,
-            "opponent_sets_for": 6,
-            "home_points_for": 193,
-            "opponent_points_for": 202
+            "home_wins": 1,
+            "opponent_wins": 1,
+            "home_sets_for": 4,
+            "opponent_sets_for": 3,
+            "home_points_for": 163,
+            "opponent_points_for": 158
           },
           "matches": [
             {
-              "match_id": "2004",
-              "date": "2025-10-11",
-              "home_team": "Ladies in Black Aachen",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 1",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Neuköllner Straße (52068 Aachen)",
-              "set_scores": [
-                "26:24",
-                "23:25",
-                "25:19",
-                "23:25",
-                "12:15"
-              ],
-              "result": {
-                "sets": "3:2",
-                "points": "108:109"
-              },
-              "home_sets": 2,
-              "opponent_sets": 3,
-              "home_points": 109,
-              "opponent_points": 108,
-              "home_won": false
-            },
-            {
-              "match_id": "2070",
-              "date": "2026-01-11",
-              "home_team": "VC Wiesbaden",
+              "match_id": "2025",
+              "date": "2025-11-01",
+              "home_team": "USC Münster",
               "away_team": "Ladies in Black Aachen",
-              "round": "Spieltag 13",
+              "round": "Spieltag 7",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "25:18",
-                "20:25",
-                "15:25",
-                "24:26"
+                "22:25",
+                "19:25",
+                "25:21",
+                "22:25"
               ],
               "result": {
                 "sets": "1:3",
-                "points": "84:94"
+                "points": "88:96"
               },
               "home_sets": 1,
               "opponent_sets": 3,
-              "home_points": 84,
-              "opponent_points": 94,
+              "home_points": 88,
+              "opponent_points": 96,
               "home_won": false
+            },
+            {
+              "match_id": "2091",
+              "date": "2026-01-31",
+              "home_team": "Ladies in Black Aachen",
+              "away_team": "USC Münster",
+              "round": "Spieltag 8",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Neuköllner Straße (52068 Aachen)",
+              "set_scores": [
+                "25:23",
+                "25:18",
+                "25:21"
+              ],
+              "result": {
+                "sets": "0:3",
+                "points": "62:75"
+              },
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 75,
+              "opponent_points": 62,
+              "home_won": true
             }
           ]
         },
         {
           "team": "SSC Palmberg Schwerin",
           "summary": {
-            "matches_played": 1,
-            "home_wins": 0,
+            "matches_played": 2,
+            "home_wins": 1,
             "opponent_wins": 1,
-            "home_sets_for": 0,
-            "opponent_sets_for": 3,
-            "home_points_for": 62,
-            "opponent_points_for": 75
+            "home_sets_for": 3,
+            "opponent_sets_for": 5,
+            "home_points_for": 166,
+            "opponent_points_for": 181
           },
           "matches": [
             {
-              "match_id": "2060",
-              "date": "2025-12-20",
+              "match_id": "2001",
+              "date": "2025-10-12",
+              "home_team": "USC Münster",
+              "away_team": "SSC Palmberg Schwerin",
+              "round": "Spieltag 1",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "20:25",
+                "25:22",
+                "21:25",
+                "25:21",
+                "15:13"
+              ],
+              "result": {
+                "sets": "3:2",
+                "points": "106:106"
+              },
+              "home_sets": 3,
+              "opponent_sets": 2,
+              "home_points": 106,
+              "opponent_points": 106,
+              "home_won": true
+            },
+            {
+              "match_id": "2067",
+              "date": "2025-12-17",
               "home_team": "SSC Palmberg Schwerin",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 14",
+              "away_team": "USC Münster",
+              "round": "Spieltag 13",
               "competition": "1. Bundesliga Frauen",
               "location": "Palmberg Arena (19059 Schwerin)",
               "set_scores": [
-                "21:25",
-                "21:25",
-                "20:25"
+                "22:25",
+                "16:25",
+                "22:25"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:62"
+                "points": "75:60"
               },
               "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 62,
+              "home_points": 60,
               "opponent_points": 75,
               "home_won": false
             }
@@ -326,62 +352,37 @@
         {
           "team": "Schwarz-Weiß Erfurt",
           "summary": {
-            "matches_played": 2,
+            "matches_played": 1,
             "home_wins": 1,
-            "opponent_wins": 1,
+            "opponent_wins": 0,
             "home_sets_for": 3,
-            "opponent_sets_for": 5,
-            "home_points_for": 148,
-            "opponent_points_for": 182
+            "opponent_sets_for": 0,
+            "home_points_for": 75,
+            "opponent_points_for": 51
           },
           "matches": [
             {
-              "match_id": "2020",
-              "date": "2025-10-28",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Schwarz-Weiß Erfurt",
-              "round": "Spieltag 5",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "25:22",
-                "25:22",
-                "18:25",
-                "11:25",
-                "15:13"
-              ],
-              "result": {
-                "sets": "3:2",
-                "points": "94:107"
-              },
-              "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 94,
-              "opponent_points": 107,
-              "home_won": true
-            },
-            {
-              "match_id": "2086",
-              "date": "2026-01-23",
+              "match_id": "2066",
+              "date": "2025-12-27",
               "home_team": "Schwarz-Weiß Erfurt",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 6",
+              "away_team": "USC Münster",
+              "round": "Spieltag 16",
               "competition": "1. Bundesliga Frauen",
               "location": "Riethsporthalle (99089 Erfurt)",
               "set_scores": [
-                "17:25",
-                "21:25",
-                "16:25"
+                "25:11",
+                "25:18",
+                "25:22"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "75:54"
+                "sets": "0:3",
+                "points": "51:75"
               },
-              "home_sets": 0,
-              "opponent_sets": 3,
-              "home_points": 54,
-              "opponent_points": 75,
-              "home_won": false
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 75,
+              "opponent_points": 51,
+              "home_won": true
             }
           ]
         },
@@ -393,68 +394,68 @@
             "opponent_wins": 0,
             "home_sets_for": 6,
             "opponent_sets_for": 0,
-            "home_points_for": 150,
-            "opponent_points_for": 99
+            "home_points_for": 155,
+            "opponent_points_for": 116
           },
           "matches": [
             {
-              "match_id": "2008",
-              "date": "2025-10-19",
-              "home_team": "VC Wiesbaden",
+              "match_id": "2037",
+              "date": "2025-11-29",
+              "home_team": "USC Münster",
               "away_team": "Skurios Volleys Borken",
-              "round": "Spieltag 2",
+              "round": "Spieltag 10",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "25:13",
-                "25:19",
-                "25:19"
+                "30:28",
+                "25:18",
+                "25:20"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:51"
+                "points": "80:66"
               },
               "home_sets": 3,
               "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 51,
+              "home_points": 80,
+              "opponent_points": 66,
               "home_won": true
             },
             {
-              "match_id": "2074",
-              "date": "2026-01-18",
+              "match_id": "2103",
+              "date": "2026-02-14",
               "home_team": "Skurios Volleys Borken",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 17",
+              "away_team": "USC Münster",
+              "round": "Spieltag 19",
               "competition": "1. Bundesliga Frauen",
               "location": "Mergelsberg Sporthalle (46325 Borken)",
               "set_scores": [
-                "25:15",
-                "25:17",
-                "25:16"
+                "25:14",
+                "25:22",
+                "25:14"
               ],
               "result": {
                 "sets": "0:3",
-                "points": "48:75"
+                "points": "50:75"
               },
               "home_sets": 3,
               "opponent_sets": 0,
               "home_points": 75,
-              "opponent_points": 48,
+              "opponent_points": 50,
               "home_won": true
             }
           ]
         },
         {
-          "team": "USC Münster",
+          "team": "VC Wiesbaden",
           "summary": {
             "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 4,
-            "home_points_for": 194,
-            "opponent_points_for": 199
+            "home_wins": 0,
+            "opponent_wins": 2,
+            "home_sets_for": 4,
+            "opponent_sets_for": 6,
+            "home_points_for": 199,
+            "opponent_points_for": 194
           },
           "matches": [
             {
@@ -466,21 +467,21 @@
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "15:25",
-                "25:19",
-                "16:25",
-                "25:14",
-                "20:18"
+                "25:15",
+                "19:25",
+                "25:16",
+                "14:25",
+                "18:20"
               ],
               "result": {
                 "sets": "3:2",
                 "points": "101:101"
               },
-              "home_sets": 3,
-              "opponent_sets": 2,
+              "home_sets": 2,
+              "opponent_sets": 3,
               "home_points": 101,
               "opponent_points": 101,
-              "home_won": true
+              "home_won": false
             },
             {
               "match_id": "2110",
@@ -491,21 +492,21 @@
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "25:17",
-                "13:25",
-                "25:23",
-                "15:25",
-                "15:8"
+                "17:25",
+                "25:13",
+                "23:25",
+                "25:15",
+                "8:15"
               ],
               "result": {
                 "sets": "2:3",
                 "points": "98:93"
               },
-              "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 93,
-              "opponent_points": 98,
-              "home_won": true
+              "home_sets": 2,
+              "opponent_sets": 3,
+              "home_points": 98,
+              "opponent_points": 93,
+              "home_won": false
             }
           ]
         },
@@ -517,55 +518,55 @@
             "opponent_wins": 2,
             "home_sets_for": 1,
             "opponent_sets_for": 6,
-            "home_points_for": 138,
-            "opponent_points_for": 174
+            "home_points_for": 147,
+            "opponent_points_for": 169
           },
           "matches": [
             {
-              "match_id": "2039",
-              "date": "2025-11-28",
+              "match_id": "2033",
+              "date": "2025-11-15",
               "home_team": "VfB Suhl LOTTO Thüringen",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 10",
+              "away_team": "USC Münster",
+              "round": "Spieltag 9",
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle Wolfsgrube (98527 Suhl)",
               "set_scores": [
-                "25:23",
-                "15:25",
-                "23:25",
-                "18:25"
+                "14:25",
+                "21:25",
+                "26:28"
               ],
               "result": {
-                "sets": "3:1",
-                "points": "98:81"
-              },
-              "home_sets": 1,
-              "opponent_sets": 3,
-              "home_points": 81,
-              "opponent_points": 98,
-              "home_won": false
-            },
-            {
-              "match_id": "2105",
-              "date": "2026-02-14",
-              "home_team": "VC Wiesbaden",
-              "away_team": "VfB Suhl LOTTO Thüringen",
-              "round": "Spieltag 19",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "24:26",
-                "19:25",
-                "14:25"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "57:76"
+                "sets": "3:0",
+                "points": "78:61"
               },
               "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 57,
-              "opponent_points": 76,
+              "home_points": 61,
+              "opponent_points": 78,
+              "home_won": false
+            },
+            {
+              "match_id": "2099",
+              "date": "2026-02-07",
+              "home_team": "USC Münster",
+              "away_team": "VfB Suhl LOTTO Thüringen",
+              "round": "Spieltag 18",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "25:15",
+                "18:25",
+                "19:25",
+                "24:26"
+              ],
+              "result": {
+                "sets": "1:3",
+                "points": "86:91"
+              },
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 86,
+              "opponent_points": 91,
               "home_won": false
             }
           ]
@@ -581,82 +582,80 @@
             "matches_played": 3,
             "home_wins": 0,
             "opponent_wins": 3,
-            "home_sets_for": 3,
+            "home_sets_for": 1,
             "opponent_sets_for": 9,
-            "home_points_for": 210,
-            "opponent_points_for": 276
+            "home_points_for": 179,
+            "opponent_points_for": 246
           },
           "matches": [
             {
-              "match_id": "2012",
-              "date": "2024-10-05",
-              "home_team": "Allianz MTV Stuttgart",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 3",
+              "match_id": "2007",
+              "date": "2024-10-02",
+              "home_team": "USC Münster",
+              "away_team": "Allianz MTV Stuttgart",
+              "round": "Spieltag 2",
               "competition": "1. Bundesliga Frauen",
-              "location": "SCHARRena Stuttgart (70372 Stuttgart)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "18:25",
-                "10:25",
-                "14:25"
+                "21:25",
+                "23:25",
+                "13:25"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "75:42"
+                "sets": "0:3",
+                "points": "57:75"
               },
               "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 42,
+              "home_points": 57,
               "opponent_points": 75,
               "home_won": false
             },
             {
-              "match_id": "2057",
-              "date": "2024-12-07",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Allianz MTV Stuttgart",
-              "round": "Spieltag 12",
+              "match_id": "2052",
+              "date": "2024-12-04",
+              "home_team": "Allianz MTV Stuttgart",
+              "away_team": "USC Münster",
+              "round": "Spieltag 11",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "SCHARRena Stuttgart (70372 Stuttgart)",
               "set_scores": [
-                "17:25",
-                "25:22",
-                "17:25",
+                "11:25",
+                "15:25",
                 "19:25"
               ],
               "result": {
-                "sets": "1:3",
-                "points": "78:97"
+                "sets": "3:0",
+                "points": "75:45"
               },
-              "home_sets": 1,
+              "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 78,
-              "opponent_points": 97,
+              "home_points": 45,
+              "opponent_points": 75,
               "home_won": false
             },
             {
-              "match_id": "2112",
-              "date": "2025-02-12",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Allianz MTV Stuttgart",
-              "round": "Spieltag 23",
+              "match_id": "2134",
+              "date": "2025-03-15",
+              "home_team": "Allianz MTV Stuttgart",
+              "away_team": "USC Münster",
+              "round": "Spieltag 27",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "SCHARRena Stuttgart (70372 Stuttgart)",
               "set_scores": [
-                "25:20",
-                "24:26",
-                "8:25",
-                "25:18",
-                "8:15"
+                "22:25",
+                "13:25",
+                "25:21",
+                "17:25"
               ],
               "result": {
-                "sets": "2:3",
-                "points": "90:104"
+                "sets": "3:1",
+                "points": "96:77"
               },
-              "home_sets": 2,
+              "home_sets": 1,
               "opponent_sets": 3,
-              "home_points": 90,
-              "opponent_points": 104,
+              "home_points": 77,
+              "opponent_points": 96,
               "home_won": false
             }
           ]
@@ -669,79 +668,79 @@
             "opponent_wins": 3,
             "home_sets_for": 2,
             "opponent_sets_for": 9,
-            "home_points_for": 225,
-            "opponent_points_for": 266
+            "home_points_for": 227,
+            "opponent_points_for": 263
           },
           "matches": [
             {
-              "match_id": "2016",
-              "date": "2024-10-12",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Dresdner SC",
-              "round": "Spieltag 4",
+              "match_id": "2015",
+              "date": "2024-10-05",
+              "home_team": "Dresdner SC",
+              "away_team": "USC Münster",
+              "round": "Spieltag 3",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Margon Arena (01277 Dresden)",
               "set_scores": [
-                "25:20",
-                "24:26",
+                "25:27",
+                "22:25",
+                "16:25"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "77:63"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 63,
+              "opponent_points": 77,
+              "home_won": false
+            },
+            {
+              "match_id": "2060",
+              "date": "2024-12-08",
+              "home_team": "USC Münster",
+              "away_team": "Dresdner SC",
+              "round": "Spieltag 12",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "18:25",
                 "22:25",
                 "20:25"
               ],
               "result": {
-                "sets": "1:3",
-                "points": "91:96"
-              },
-              "home_sets": 1,
-              "opponent_sets": 3,
-              "home_points": 91,
-              "opponent_points": 96,
-              "home_won": false
-            },
-            {
-              "match_id": "2061",
-              "date": "2024-12-14",
-              "home_team": "Dresdner SC",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 13",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Margon Arena (01277 Dresden)",
-              "set_scores": [
-                "23:25",
-                "24:26",
-                "25:19",
-                "16:25"
-              ],
-              "result": {
-                "sets": "3:1",
-                "points": "95:88"
-              },
-              "home_sets": 1,
-              "opponent_sets": 3,
-              "home_points": 88,
-              "opponent_points": 95,
-              "home_won": false
-            },
-            {
-              "match_id": "2132",
-              "date": "2025-03-15",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Dresdner SC",
-              "round": "Spieltag 27",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "12:25",
-                "17:25",
-                "17:25"
-              ],
-              "result": {
                 "sets": "0:3",
-                "points": "46:75"
+                "points": "60:75"
               },
               "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 46,
+              "home_points": 60,
               "opponent_points": 75,
+              "home_won": false
+            },
+            {
+              "match_id": "2107",
+              "date": "2025-02-08",
+              "home_team": "USC Münster",
+              "away_team": "Dresdner SC",
+              "round": "Spieltag 22",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "25:21",
+                "25:23",
+                "25:27",
+                "20:25",
+                "9:15"
+              ],
+              "result": {
+                "sets": "2:3",
+                "points": "104:111"
+              },
+              "home_sets": 2,
+              "opponent_sets": 3,
+              "home_points": 104,
+              "opponent_points": 111,
               "home_won": false
             }
           ]
@@ -752,82 +751,83 @@
             "matches_played": 3,
             "home_wins": 2,
             "opponent_wins": 1,
-            "home_sets_for": 8,
-            "opponent_sets_for": 4,
-            "home_points_for": 273,
-            "opponent_points_for": 251
+            "home_sets_for": 6,
+            "opponent_sets_for": 7,
+            "home_points_for": 298,
+            "opponent_points_for": 291
           },
           "matches": [
             {
-              "match_id": "2024",
-              "date": "2024-10-19",
-              "home_team": "Ladies in Black Aachen",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 5",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Neuköllner Straße (52068 Aachen)",
-              "set_scores": [
-                "27:29",
-                "25:16",
-                "25:21",
-                "25:17"
-              ],
-              "result": {
-                "sets": "1:3",
-                "points": "83:102"
-              },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 102,
-              "opponent_points": 83,
-              "home_won": true
-            },
-            {
-              "match_id": "2069",
-              "date": "2024-12-21",
-              "home_team": "VC Wiesbaden",
+              "match_id": "2017",
+              "date": "2024-10-12",
+              "home_team": "USC Münster",
               "away_team": "Ladies in Black Aachen",
-              "round": "Spieltag 14",
+              "round": "Spieltag 4",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "18:25",
-                "25:22",
-                "20:25",
-                "25:21",
-                "7:15"
+                "22:25",
+                "27:29",
+                "20:25"
               ],
               "result": {
-                "sets": "2:3",
-                "points": "95:108"
+                "sets": "0:3",
+                "points": "69:79"
               },
-              "home_sets": 2,
+              "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 95,
-              "opponent_points": 108,
+              "home_points": 69,
+              "opponent_points": 79,
               "home_won": false
             },
             {
-              "match_id": "2100",
-              "date": "2025-01-29",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Ladies in Black Aachen",
-              "round": "Spieltag 20",
+              "match_id": "2062",
+              "date": "2024-12-14",
+              "home_team": "Ladies in Black Aachen",
+              "away_team": "USC Münster",
+              "round": "Spieltag 13",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Neuköllner Straße (52068 Aachen)",
               "set_scores": [
-                "26:24",
-                "25:18",
-                "25:18"
+                "32:30",
+                "22:25",
+                "23:25",
+                "25:22",
+                "15:10"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "76:60"
+                "sets": "2:3",
+                "points": "112:117"
               },
               "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 76,
-              "opponent_points": 60,
+              "opponent_sets": 2,
+              "home_points": 117,
+              "opponent_points": 112,
+              "home_won": true
+            },
+            {
+              "match_id": "2120",
+              "date": "2025-02-15",
+              "home_team": "USC Münster",
+              "away_team": "Ladies in Black Aachen",
+              "round": "Spieltag 24",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "23:25",
+                "23:25",
+                "25:15",
+                "25:21",
+                "16:14"
+              ],
+              "result": {
+                "sets": "3:2",
+                "points": "112:100"
+              },
+              "home_sets": 3,
+              "opponent_sets": 2,
+              "home_points": 112,
+              "opponent_points": 100,
               "home_won": true
             }
           ]
@@ -836,82 +836,82 @@
           "team": "SC Potsdam",
           "summary": {
             "matches_played": 3,
-            "home_wins": 1,
-            "opponent_wins": 2,
-            "home_sets_for": 3,
-            "opponent_sets_for": 7,
-            "home_points_for": 220,
-            "opponent_points_for": 236
+            "home_wins": 0,
+            "opponent_wins": 3,
+            "home_sets_for": 1,
+            "opponent_sets_for": 9,
+            "home_points_for": 189,
+            "opponent_points_for": 252
           },
           "matches": [
             {
-              "match_id": "2036",
-              "date": "2024-11-02",
-              "home_team": "SC Potsdam",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 8",
+              "match_id": "2027",
+              "date": "2024-10-26",
+              "home_team": "USC Münster",
+              "away_team": "SC Potsdam",
+              "round": "Spieltag 6",
               "competition": "1. Bundesliga Frauen",
-              "location": "MBS Arena Potsdam (14471 Potsdam)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "22:25",
-                "18:25",
-                "20:25"
+                "11:25",
+                "21:25",
+                "22:25"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "75:60"
+                "sets": "0:3",
+                "points": "54:75"
               },
               "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 60,
+              "home_points": 54,
               "opponent_points": 75,
               "home_won": false
             },
             {
-              "match_id": "2081",
-              "date": "2025-01-11",
-              "home_team": "VC Wiesbaden",
-              "away_team": "SC Potsdam",
-              "round": "Spieltag 17",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "25:23",
-                "25:23",
-                "22:25",
-                "25:15"
-              ],
-              "result": {
-                "sets": "3:1",
-                "points": "97:86"
-              },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 97,
-              "opponent_points": 86,
-              "home_won": true
-            },
-            {
-              "match_id": "2109",
-              "date": "2025-02-08",
+              "match_id": "2072",
+              "date": "2024-12-29",
               "home_team": "SC Potsdam",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 22",
+              "away_team": "USC Münster",
+              "round": "Spieltag 15",
               "competition": "1. Bundesliga Frauen",
               "location": "MBS Arena Potsdam (14471 Potsdam)",
               "set_scores": [
                 "21:25",
-                "19:25",
-                "23:25"
+                "10:25",
+                "17:25"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:63"
+                "points": "75:48"
               },
               "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 63,
+              "home_points": 48,
               "opponent_points": 75,
+              "home_won": false
+            },
+            {
+              "match_id": "2128",
+              "date": "2025-03-08",
+              "home_team": "USC Münster",
+              "away_team": "SC Potsdam",
+              "round": "Spieltag 26",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "19:25",
+                "29:27",
+                "18:25",
+                "21:25"
+              ],
+              "result": {
+                "sets": "1:3",
+                "points": "87:102"
+              },
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 87,
+              "opponent_points": 102,
               "home_won": false
             }
           ]
@@ -922,79 +922,81 @@
             "matches_played": 3,
             "home_wins": 0,
             "opponent_wins": 3,
-            "home_sets_for": 0,
+            "home_sets_for": 2,
             "opponent_sets_for": 9,
-            "home_points_for": 164,
-            "opponent_points_for": 225
+            "home_points_for": 214,
+            "opponent_points_for": 257
           },
           "matches": [
             {
-              "match_id": "2004",
-              "date": "2024-09-28",
+              "match_id": "2087",
+              "date": "2024-11-16",
               "home_team": "SSC Palmberg Schwerin",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 1",
+              "away_team": "USC Münster",
+              "round": "Spieltag 18",
               "competition": "1. Bundesliga Frauen",
               "location": "Palmberg Arena (19059 Schwerin)",
               "set_scores": [
-                "17:25",
+                "19:25",
                 "21:25",
-                "19:25"
+                "16:25"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:57"
+                "points": "75:56"
               },
               "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 57,
+              "home_points": 56,
               "opponent_points": 75,
               "home_won": false
             },
             {
-              "match_id": "2049",
-              "date": "2024-11-30",
-              "home_team": "VC Wiesbaden",
+              "match_id": "2042",
+              "date": "2025-01-18",
+              "home_team": "USC Münster",
               "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 10",
+              "round": "Spieltag 9",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "22:25",
                 "19:25",
-                "20:25"
+                "19:25",
+                "17:25"
               ],
               "result": {
                 "sets": "0:3",
-                "points": "61:75"
+                "points": "55:75"
               },
               "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 61,
+              "home_points": 55,
               "opponent_points": 75,
               "home_won": false
             },
             {
-              "match_id": "2094",
-              "date": "2025-01-25",
+              "match_id": "2114",
+              "date": "2025-02-12",
               "home_team": "SSC Palmberg Schwerin",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 19",
+              "away_team": "USC Münster",
+              "round": "Spieltag 23",
               "competition": "1. Bundesliga Frauen",
               "location": "Palmberg Arena (19059 Schwerin)",
               "set_scores": [
-                "13:25",
-                "15:25",
-                "18:25"
+                "22:25",
+                "20:25",
+                "25:17",
+                "27:25",
+                "9:15"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "75:46"
+                "sets": "3:2",
+                "points": "107:103"
               },
-              "home_sets": 0,
+              "home_sets": 2,
               "opponent_sets": 3,
-              "home_points": 46,
-              "opponent_points": 75,
+              "home_points": 103,
+              "opponent_points": 107,
               "home_won": false
             }
           ]
@@ -1003,96 +1005,97 @@
           "team": "Schwarz-Weiß Erfurt",
           "summary": {
             "matches_played": 3,
-            "home_wins": 2,
-            "opponent_wins": 1,
-            "home_sets_for": 6,
-            "opponent_sets_for": 4,
-            "home_points_for": 227,
-            "opponent_points_for": 214
+            "home_wins": 3,
+            "opponent_wins": 0,
+            "home_sets_for": 9,
+            "opponent_sets_for": 2,
+            "home_points_for": 268,
+            "opponent_points_for": 222
           },
           "matches": [
             {
-              "match_id": "2026",
-              "date": "2024-10-26",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Schwarz-Weiß Erfurt",
-              "round": "Spieltag 6",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "25:23",
-                "25:23",
-                "25:18"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:64"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 64,
-              "home_won": true
-            },
-            {
-              "match_id": "2071",
-              "date": "2024-12-28",
+              "match_id": "2023",
+              "date": "2024-10-18",
               "home_team": "Schwarz-Weiß Erfurt",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 15",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Riethsporthalle (99089 Erfurt)",
-              "set_scores": [
-                "22:25",
-                "25:17",
-                "25:12",
-                "25:21"
-              ],
-              "result": {
-                "sets": "1:3",
-                "points": "75:97"
-              },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 97,
-              "opponent_points": 75,
-              "home_won": true
-            },
-            {
-              "match_id": "2119",
-              "date": "2025-02-15",
-              "home_team": "Schwarz-Weiß Erfurt",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 24",
+              "away_team": "USC Münster",
+              "round": "Spieltag 5",
               "competition": "1. Bundesliga Frauen",
               "location": "Riethsporthalle (99089 Erfurt)",
               "set_scores": [
                 "21:25",
-                "18:25",
-                "16:25"
+                "25:17",
+                "25:22",
+                "25:19"
+              ],
+              "result": {
+                "sets": "1:3",
+                "points": "83:96"
+              },
+              "home_sets": 3,
+              "opponent_sets": 1,
+              "home_points": 96,
+              "opponent_points": 83,
+              "home_won": true
+            },
+            {
+              "match_id": "2068",
+              "date": "2025-01-15",
+              "home_team": "USC Münster",
+              "away_team": "Schwarz-Weiß Erfurt",
+              "round": "Spieltag 14",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "25:22",
+                "29:27",
+                "25:16"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:55"
+                "points": "79:65"
               },
-              "home_sets": 0,
-              "opponent_sets": 3,
-              "home_points": 55,
-              "opponent_points": 75,
-              "home_won": false
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 79,
+              "opponent_points": 65,
+              "home_won": true
+            },
+            {
+              "match_id": "2095",
+              "date": "2025-01-25",
+              "home_team": "USC Münster",
+              "away_team": "Schwarz-Weiß Erfurt",
+              "round": "Spieltag 19",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "18:25",
+                "25:10",
+                "25:17",
+                "25:22"
+              ],
+              "result": {
+                "sets": "3:1",
+                "points": "93:74"
+              },
+              "home_sets": 3,
+              "opponent_sets": 1,
+              "home_points": 93,
+              "opponent_points": 74,
+              "home_won": true
             }
           ]
         },
         {
-          "team": "USC Münster",
+          "team": "VC Wiesbaden",
           "summary": {
             "matches_played": 3,
-            "home_wins": 2,
-            "opponent_wins": 1,
-            "home_sets_for": 8,
-            "opponent_sets_for": 6,
-            "home_points_for": 294,
-            "opponent_points_for": 296
+            "home_wins": 1,
+            "opponent_wins": 2,
+            "home_sets_for": 6,
+            "opponent_sets_for": 8,
+            "home_points_for": 296,
+            "opponent_points_for": 294
           },
           "matches": [
             {
@@ -1104,21 +1107,21 @@
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "25:20",
-                "19:25",
+                "20:25",
                 "25:19",
-                "15:25",
-                "15:7"
+                "19:25",
+                "25:15",
+                "7:15"
               ],
               "result": {
                 "sets": "2:3",
                 "points": "96:99"
               },
-              "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 99,
-              "opponent_points": 96,
-              "home_won": true
+              "home_sets": 2,
+              "opponent_sets": 3,
+              "home_points": 96,
+              "opponent_points": 99,
+              "home_won": false
             },
             {
               "match_id": "2077",
@@ -1129,21 +1132,21 @@
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "20:25",
-                "15:25",
-                "27:25",
-                "25:21",
-                "13:15"
+                "25:20",
+                "25:15",
+                "25:27",
+                "21:25",
+                "15:13"
               ],
               "result": {
                 "sets": "2:3",
                 "points": "100:111"
               },
-              "home_sets": 2,
-              "opponent_sets": 3,
-              "home_points": 100,
-              "opponent_points": 111,
-              "home_won": false
+              "home_sets": 3,
+              "opponent_sets": 2,
+              "home_points": 111,
+              "opponent_points": 100,
+              "home_won": true
             },
             {
               "match_id": "2124",
@@ -1154,20 +1157,20 @@
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "20:25",
                 "25:20",
-                "25:21",
-                "25:23"
+                "20:25",
+                "21:25",
+                "23:25"
               ],
               "result": {
                 "sets": "3:1",
                 "points": "95:89"
               },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 95,
-              "opponent_points": 89,
-              "home_won": true
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 89,
+              "opponent_points": 95,
+              "home_won": false
             }
           ]
         },
@@ -1177,80 +1180,81 @@
             "matches_played": 3,
             "home_wins": 1,
             "opponent_wins": 2,
-            "home_sets_for": 3,
-            "opponent_sets_for": 7,
-            "home_points_for": 233,
-            "opponent_points_for": 238
+            "home_sets_for": 5,
+            "opponent_sets_for": 6,
+            "home_points_for": 237,
+            "opponent_points_for": 260
           },
           "matches": [
             {
-              "match_id": "2006",
-              "date": "2024-10-02",
-              "home_team": "VC Wiesbaden",
-              "away_team": "VfB Suhl LOTTO Thüringen",
-              "round": "Spieltag 2",
+              "match_id": "2003",
+              "date": "2024-09-28",
+              "home_team": "VfB Suhl LOTTO Thüringen",
+              "away_team": "USC Münster",
+              "round": "Spieltag 1",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Sporthalle Wolfsgrube (98527 Suhl)",
               "set_scores": [
-                "27:29",
-                "25:16",
-                "25:20",
-                "25:21"
+                "26:24",
+                "25:18",
+                "25:22"
               ],
               "result": {
-                "sets": "3:1",
-                "points": "102:86"
+                "sets": "0:3",
+                "points": "64:76"
               },
               "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 102,
-              "opponent_points": 86,
+              "opponent_sets": 0,
+              "home_points": 76,
+              "opponent_points": 64,
               "home_won": true
             },
             {
-              "match_id": "2051",
-              "date": "2024-12-04",
-              "home_team": "VfB Suhl LOTTO Thüringen",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 11",
+              "match_id": "2048",
+              "date": "2024-11-29",
+              "home_team": "USC Münster",
+              "away_team": "VfB Suhl LOTTO Thüringen",
+              "round": "Spieltag 10",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle Wolfsgrube (98527 Suhl)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "19:25",
-                "25:27",
-                "21:25"
+                "17:25",
+                "25:22",
+                "24:26",
+                "17:25"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "77:65"
+                "sets": "1:3",
+                "points": "83:98"
               },
-              "home_sets": 0,
+              "home_sets": 1,
               "opponent_sets": 3,
-              "home_points": 65,
-              "opponent_points": 77,
+              "home_points": 83,
+              "opponent_points": 98,
               "home_won": false
             },
             {
-              "match_id": "2129",
-              "date": "2025-03-08",
+              "match_id": "2104",
+              "date": "2025-02-01",
               "home_team": "VfB Suhl LOTTO Thüringen",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 26",
+              "away_team": "USC Münster",
+              "round": "Spieltag 21",
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle Wolfsgrube (98527 Suhl)",
               "set_scores": [
-                "22:25",
-                "22:25",
-                "22:25"
+                "20:25",
+                "25:23",
+                "19:25",
+                "14:25"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "75:66"
+                "sets": "3:1",
+                "points": "98:78"
               },
-              "home_sets": 0,
+              "home_sets": 1,
               "opponent_sets": 3,
-              "home_points": 66,
-              "opponent_points": 75,
+              "home_points": 78,
+              "opponent_points": 98,
               "home_won": false
             }
           ]
@@ -1266,59 +1270,58 @@
             "matches_played": 2,
             "home_wins": 0,
             "opponent_wins": 2,
-            "home_sets_for": 3,
+            "home_sets_for": 2,
             "opponent_sets_for": 6,
-            "home_points_for": 178,
-            "opponent_points_for": 208
+            "home_points_for": 147,
+            "opponent_points_for": 180
           },
           "matches": [
             {
-              "match_id": "2003",
-              "date": "2023-10-06",
-              "home_team": "Allianz MTV Stuttgart",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 1",
+              "match_id": "2006",
+              "date": "2023-10-11",
+              "home_team": "USC Münster",
+              "away_team": "Allianz MTV Stuttgart",
+              "round": "Spieltag 2",
               "competition": "1. Bundesliga Frauen",
-              "location": "SCHARRena Stuttgart (70372 Stuttgart)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "25:20",
-                "17:25",
-                "25:22",
-                "23:25",
-                "15:17"
+                "22:25",
+                "11:25",
+                "16:25"
               ],
               "result": {
-                "sets": "3:2",
-                "points": "109:105"
+                "sets": "0:3",
+                "points": "49:75"
               },
-              "home_sets": 2,
+              "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 105,
-              "opponent_points": 109,
+              "home_points": 49,
+              "opponent_points": 75,
               "home_won": false
             },
             {
-              "match_id": "2048",
-              "date": "2023-12-16",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Allianz MTV Stuttgart",
-              "round": "Spieltag 10",
+              "match_id": "2051",
+              "date": "2023-12-23",
+              "home_team": "Allianz MTV Stuttgart",
+              "away_team": "USC Münster",
+              "round": "Spieltag 11",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "SCHARRena Stuttgart (70372 Stuttgart)",
               "set_scores": [
-                "12:25",
-                "20:25",
-                "26:24",
-                "15:25"
+                "25:17",
+                "18:25",
+                "19:25",
+                "25:23",
+                "11:15"
               ],
               "result": {
-                "sets": "1:3",
-                "points": "73:99"
+                "sets": "3:2",
+                "points": "105:98"
               },
-              "home_sets": 1,
+              "home_sets": 2,
               "opponent_sets": 3,
-              "home_points": 73,
-              "opponent_points": 99,
+              "home_points": 98,
+              "opponent_points": 105,
               "home_won": false
             }
           ]
@@ -1329,56 +1332,57 @@
             "matches_played": 2,
             "home_wins": 0,
             "opponent_wins": 2,
-            "home_sets_for": 0,
+            "home_sets_for": 1,
             "opponent_sets_for": 6,
-            "home_points_for": 113,
-            "opponent_points_for": 150
+            "home_points_for": 138,
+            "opponent_points_for": 171
           },
           "matches": [
             {
-              "match_id": "2007",
-              "date": "2023-10-11",
-              "home_team": "VC Wiesbaden",
+              "match_id": "2057",
+              "date": "2023-10-21",
+              "home_team": "USC Münster",
               "away_team": "Dresdner SC",
-              "round": "Spieltag 2",
+              "round": "Spieltag 12",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "21:25",
-                "21:25",
-                "17:25"
+                "18:25",
+                "18:25",
+                "18:25"
               ],
               "result": {
                 "sets": "0:3",
-                "points": "59:75"
-              },
-              "home_sets": 0,
-              "opponent_sets": 3,
-              "home_points": 59,
-              "opponent_points": 75,
-              "home_won": false
-            },
-            {
-              "match_id": "2052",
-              "date": "2023-12-22",
-              "home_team": "Dresdner SC",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 11",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Margon Arena (01277 Dresden)",
-              "set_scores": [
-                "15:25",
-                "18:25",
-                "21:25"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:54"
+                "points": "54:75"
               },
               "home_sets": 0,
               "opponent_sets": 3,
               "home_points": 54,
               "opponent_points": 75,
+              "home_won": false
+            },
+            {
+              "match_id": "2012",
+              "date": "2023-12-30",
+              "home_team": "Dresdner SC",
+              "away_team": "USC Münster",
+              "round": "Spieltag 3",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Margon Arena (01277 Dresden)",
+              "set_scores": [
+                "17:25",
+                "25:21",
+                "23:25",
+                "19:25"
+              ],
+              "result": {
+                "sets": "3:1",
+                "points": "96:84"
+              },
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 84,
+              "opponent_points": 96,
               "home_won": false
             }
           ]
@@ -1389,105 +1393,105 @@
             "matches_played": 4,
             "home_wins": 3,
             "opponent_wins": 1,
-            "home_sets_for": 11,
-            "opponent_sets_for": 4,
-            "home_points_for": 356,
-            "opponent_points_for": 306
+            "home_sets_for": 10,
+            "opponent_sets_for": 5,
+            "home_points_for": 358,
+            "opponent_points_for": 335
           },
           "matches": [
             {
-              "match_id": "2015",
-              "date": "2023-10-21",
-              "home_team": "Ladies in Black Aachen",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 3",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Neuköllner Straße (52068 Aachen)",
-              "set_scores": [
-                "26:24",
-                "25:21",
-                "25:23"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "68:76"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 76,
-              "opponent_points": 68,
-              "home_won": true
-            },
-            {
-              "match_id": "2060",
-              "date": "2023-12-30",
-              "home_team": "VC Wiesbaden",
+              "match_id": "2016",
+              "date": "2023-10-28",
+              "home_team": "USC Münster",
               "away_team": "Ladies in Black Aachen",
-              "round": "Spieltag 12",
+              "round": "Spieltag 4",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "25:17",
-                "25:15",
-                "25:13"
+                "25:9",
+                "25:19",
+                "25:21"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:45"
+                "points": "75:49"
               },
               "home_sets": 3,
               "opponent_sets": 0,
               "home_points": 75,
-              "opponent_points": 45,
+              "opponent_points": 49,
               "home_won": true
             },
             {
-              "match_id": "2304",
-              "date": "2024-02-17",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Ladies in Black Aachen",
-              "round": "Spieltag 3",
-              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "match_id": "2061",
+              "date": "2024-01-17",
+              "home_team": "Ladies in Black Aachen",
+              "away_team": "USC Münster",
+              "round": "Spieltag 13",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Neuköllner Straße (52068 Aachen)",
               "set_scores": [
-                "25:16",
-                "28:26",
-                "23:25",
                 "19:25",
-                "14:16"
+                "30:32",
+                "25:23",
+                "16:25"
               ],
               "result": {
-                "sets": "2:3",
-                "points": "109:108"
+                "sets": "3:1",
+                "points": "105:90"
               },
-              "home_sets": 2,
+              "home_sets": 1,
               "opponent_sets": 3,
-              "home_points": 109,
-              "opponent_points": 108,
+              "home_points": 90,
+              "opponent_points": 105,
               "home_won": false
             },
             {
-              "match_id": "2310",
-              "date": "2024-03-16",
+              "match_id": "2303",
+              "date": "2024-02-14",
               "home_team": "Ladies in Black Aachen",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 6",
+              "away_team": "USC Münster",
+              "round": "Spieltag 2",
               "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
               "location": "Neuköllner Straße (52068 Aachen)",
               "set_scores": [
-                "25:18",
-                "21:25",
-                "25:22",
-                "25:20"
+                "25:23",
+                "25:21",
+                "17:25",
+                "26:24"
               ],
               "result": {
                 "sets": "1:3",
-                "points": "85:96"
+                "points": "93:93"
               },
               "home_sets": 3,
               "opponent_sets": 1,
-              "home_points": 96,
-              "opponent_points": 85,
+              "home_points": 93,
+              "opponent_points": 93,
+              "home_won": true
+            },
+            {
+              "match_id": "2309",
+              "date": "2024-03-10",
+              "home_team": "USC Münster",
+              "away_team": "Ladies in Black Aachen",
+              "round": "Spieltag 5",
+              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "25:20",
+                "25:27",
+                "25:21",
+                "25:20"
+              ],
+              "result": {
+                "sets": "3:1",
+                "points": "100:88"
+              },
+              "home_sets": 3,
+              "opponent_sets": 1,
+              "home_points": 100,
+              "opponent_points": 88,
               "home_won": true
             }
           ]
@@ -1496,393 +1500,99 @@
           "team": "Rote Raben Vilsbiburg",
           "summary": {
             "matches_played": 4,
-            "home_wins": 4,
-            "opponent_wins": 0,
-            "home_sets_for": 12,
-            "opponent_sets_for": 5,
-            "home_points_for": 389,
-            "opponent_points_for": 385
-          },
-          "matches": [
-            {
-              "match_id": "2040",
-              "date": "2023-12-28",
-              "home_team": "Rote Raben Vilsbiburg",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 8",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Ballsporthalle Vilsbiburg (84137 Vilsbiburg)",
-              "set_scores": [
-                "28:26",
-                "30:28",
-                "26:24"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "78:84"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 84,
-              "opponent_points": 78,
-              "home_won": true
-            },
-            {
-              "match_id": "2085",
-              "date": "2024-01-27",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Rote Raben Vilsbiburg",
-              "round": "Spieltag 17",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "25:23",
-                "27:29",
-                "25:21",
-                "22:25",
-                "15:12"
-              ],
-              "result": {
-                "sets": "3:2",
-                "points": "114:110"
-              },
-              "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 114,
-              "opponent_points": 110,
-              "home_won": true
-            },
-            {
-              "match_id": "2302",
-              "date": "2024-02-14",
-              "home_team": "Rote Raben Vilsbiburg",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 2",
-              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
-              "location": "Ballsporthalle Vilsbiburg (84137 Vilsbiburg)",
-              "set_scores": [
-                "25:22",
-                "13:25",
-                "25:16",
-                "19:25",
-                "15:11"
-              ],
-              "result": {
-                "sets": "2:3",
-                "points": "99:97"
-              },
-              "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 97,
-              "opponent_points": 99,
-              "home_won": true
-            },
-            {
-              "match_id": "2308",
-              "date": "2024-03-09",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Rote Raben Vilsbiburg",
-              "round": "Spieltag 5",
-              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "29:27",
-                "15:25",
-                "25:23",
-                "25:23"
-              ],
-              "result": {
-                "sets": "3:1",
-                "points": "94:98"
-              },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 94,
-              "opponent_points": 98,
-              "home_won": true
-            }
-          ]
-        },
-        {
-          "team": "SC Potsdam",
-          "summary": {
-            "matches_played": 2,
-            "home_wins": 0,
-            "opponent_wins": 2,
-            "home_sets_for": 1,
-            "opponent_sets_for": 6,
-            "home_points_for": 127,
-            "opponent_points_for": 170
-          },
-          "matches": [
-            {
-              "match_id": "2023",
-              "date": "2023-11-11",
-              "home_team": "SC Potsdam",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 5",
-              "competition": "1. Bundesliga Frauen",
-              "location": "MBS Arena Potsdam (14471 Potsdam)",
-              "set_scores": [
-                "22:25",
-                "25:20",
-                "18:25",
-                "22:25"
-              ],
-              "result": {
-                "sets": "3:1",
-                "points": "95:87"
-              },
-              "home_sets": 1,
-              "opponent_sets": 3,
-              "home_points": 87,
-              "opponent_points": 95,
-              "home_won": false
-            },
-            {
-              "match_id": "2068",
-              "date": "2024-01-14",
-              "home_team": "VC Wiesbaden",
-              "away_team": "SC Potsdam",
-              "round": "Spieltag 14",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "23:25",
-                "10:25",
-                "7:25"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "40:75"
-              },
-              "home_sets": 0,
-              "opponent_sets": 3,
-              "home_points": 40,
-              "opponent_points": 75,
-              "home_won": false
-            }
-          ]
-        },
-        {
-          "team": "SSC Palmberg Schwerin",
-          "summary": {
-            "matches_played": 2,
-            "home_wins": 0,
-            "opponent_wins": 2,
-            "home_sets_for": 4,
-            "opponent_sets_for": 6,
-            "home_points_for": 196,
-            "opponent_points_for": 220
-          },
-          "matches": [
-            {
-              "match_id": "2017",
-              "date": "2023-10-28",
-              "home_team": "VC Wiesbaden",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 4",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "14:25",
-                "25:19",
-                "18:25",
-                "25:18",
-                "19:21"
-              ],
-              "result": {
-                "sets": "2:3",
-                "points": "101:108"
-              },
-              "home_sets": 2,
-              "opponent_sets": 3,
-              "home_points": 101,
-              "opponent_points": 108,
-              "home_won": false
-            },
-            {
-              "match_id": "2062",
-              "date": "2024-01-06",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 13",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
-                "25:23",
-                "21:25",
-                "15:25",
-                "26:24",
-                "8:15"
-              ],
-              "result": {
-                "sets": "3:2",
-                "points": "112:95"
-              },
-              "home_sets": 2,
-              "opponent_sets": 3,
-              "home_points": 95,
-              "opponent_points": 112,
-              "home_won": false
-            }
-          ]
-        },
-        {
-          "team": "USC Münster",
-          "summary": {
-            "matches_played": 4,
             "home_wins": 3,
             "opponent_wins": 1,
-            "home_sets_for": 9,
-            "opponent_sets_for": 5,
-            "home_points_for": 339,
-            "opponent_points_for": 318
+            "home_sets_for": 11,
+            "opponent_sets_for": 6,
+            "home_points_for": 371,
+            "opponent_points_for": 356
           },
           "matches": [
             {
-              "match_id": "2032",
-              "date": "2023-11-25",
-              "home_team": "VC Wiesbaden",
-              "away_team": "USC Münster",
-              "round": "Spieltag 7",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "17:25",
-                "25:18",
-                "25:20",
-                "33:31"
-              ],
-              "result": {
-                "sets": "3:1",
-                "points": "100:94"
-              },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 100,
-              "opponent_points": 94,
-              "home_won": true
-            },
-            {
-              "match_id": "2077",
-              "date": "2024-01-24",
+              "match_id": "2041",
+              "date": "2023-12-09",
               "home_team": "USC Münster",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 16",
+              "away_team": "Rote Raben Vilsbiburg",
+              "round": "Spieltag 9",
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
+                "25:17",
+                "25:20",
+                "15:25",
+                "25:22"
+              ],
+              "result": {
+                "sets": "3:1",
+                "points": "90:84"
+              },
+              "home_sets": 3,
+              "opponent_sets": 1,
+              "home_points": 90,
+              "opponent_points": 84,
+              "home_won": true
+            },
+            {
+              "match_id": "2086",
+              "date": "2024-02-03",
+              "home_team": "Rote Raben Vilsbiburg",
+              "away_team": "USC Münster",
+              "round": "Spieltag 18",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Ballsporthalle Vilsbiburg (84137 Vilsbiburg)",
+              "set_scores": [
+                "25:21",
+                "25:18",
                 "23:25",
-                "25:19",
-                "25:16",
-                "27:25"
+                "25:22"
               ],
               "result": {
                 "sets": "1:3",
-                "points": "85:100"
+                "points": "86:98"
               },
               "home_sets": 3,
               "opponent_sets": 1,
-              "home_points": 100,
-              "opponent_points": 85,
+              "home_points": 98,
+              "opponent_points": 86,
               "home_won": true
             },
             {
-              "match_id": "2300",
-              "date": "2024-02-10",
-              "home_team": "VC Wiesbaden",
-              "away_team": "USC Münster",
-              "round": "Spieltag 1",
-              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "30:28",
-                "26:24",
-                "25:12"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "81:64"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 81,
-              "opponent_points": 64,
-              "home_won": true
-            },
-            {
-              "match_id": "2306",
-              "date": "2024-02-24",
+              "match_id": "2305",
+              "date": "2024-02-18",
               "home_team": "USC Münster",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 4",
+              "away_team": "Rote Raben Vilsbiburg",
+              "round": "Spieltag 3",
               "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
               "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "19:25",
-                "19:25",
-                "20:25"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:58"
-              },
-              "home_sets": 0,
-              "opponent_sets": 3,
-              "home_points": 58,
-              "opponent_points": 75,
-              "home_won": false
-            }
-          ]
-        },
-        {
-          "team": "VC Neuwied 77",
-          "summary": {
-            "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 1,
-            "home_points_for": 170,
-            "opponent_points_for": 123
-          },
-          "matches": [
-            {
-              "match_id": "2027",
-              "date": "2023-11-18",
-              "home_team": "VC Wiesbaden",
-              "away_team": "VC Neuwied 77",
-              "round": "Spieltag 6",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "25:12",
+                "25:22",
+                "18:25",
                 "25:14",
-                "25:12"
+                "12:25",
+                "8:15"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "75:38"
+                "sets": "2:3",
+                "points": "88:101"
               },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 38,
-              "home_won": true
+              "home_sets": 2,
+              "opponent_sets": 3,
+              "home_points": 88,
+              "opponent_points": 101,
+              "home_won": false
             },
             {
-              "match_id": "2072",
-              "date": "2024-01-20",
-              "home_team": "VC Neuwied 77",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 15",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle des Rhein-Wied-Gymnasiums Neuwied (56564 Neuwied)",
+              "match_id": "2311",
+              "date": "2024-03-15",
+              "home_team": "Rote Raben Vilsbiburg",
+              "away_team": "USC Münster",
+              "round": "Spieltag 6",
+              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
+              "location": "Ballsporthalle Vilsbiburg (84137 Vilsbiburg)",
               "set_scores": [
                 "25:18",
-                "25:21",
                 "20:25",
+                "25:21",
                 "25:21"
               ],
               "result": {
@@ -1898,63 +1608,350 @@
           ]
         },
         {
+          "team": "SC Potsdam",
+          "summary": {
+            "matches_played": 2,
+            "home_wins": 1,
+            "opponent_wins": 1,
+            "home_sets_for": 3,
+            "opponent_sets_for": 3,
+            "home_points_for": 136,
+            "opponent_points_for": 128
+          },
+          "matches": [
+            {
+              "match_id": "2026",
+              "date": "2023-11-18",
+              "home_team": "USC Münster",
+              "away_team": "SC Potsdam",
+              "round": "Spieltag 6",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "24:26",
+                "20:25",
+                "17:25"
+              ],
+              "result": {
+                "sets": "0:3",
+                "points": "61:76"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 61,
+              "opponent_points": 76,
+              "home_won": false
+            },
+            {
+              "match_id": "2071",
+              "date": "2024-01-03",
+              "home_team": "SC Potsdam",
+              "away_team": "USC Münster",
+              "round": "Spieltag 15",
+              "competition": "1. Bundesliga Frauen",
+              "location": "MBS Arena Potsdam (14471 Potsdam)",
+              "set_scores": [
+                "25:19",
+                "25:21",
+                "25:12"
+              ],
+              "result": {
+                "sets": "0:3",
+                "points": "52:75"
+              },
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 75,
+              "opponent_points": 52,
+              "home_won": true
+            }
+          ]
+        },
+        {
+          "team": "SSC Palmberg Schwerin",
+          "summary": {
+            "matches_played": 2,
+            "home_wins": 0,
+            "opponent_wins": 2,
+            "home_sets_for": 1,
+            "opponent_sets_for": 6,
+            "home_points_for": 128,
+            "opponent_points_for": 172
+          },
+          "matches": [
+            {
+              "match_id": "2024",
+              "date": "2023-11-11",
+              "home_team": "SSC Palmberg Schwerin",
+              "away_team": "USC Münster",
+              "round": "Spieltag 5",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Palmberg Arena (19059 Schwerin)",
+              "set_scores": [
+                "17:25",
+                "17:25",
+                "19:25"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "75:53"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 53,
+              "opponent_points": 75,
+              "home_won": false
+            },
+            {
+              "match_id": "2069",
+              "date": "2024-01-13",
+              "home_team": "USC Münster",
+              "away_team": "SSC Palmberg Schwerin",
+              "round": "Spieltag 14",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "25:22",
+                "19:25",
+                "20:25",
+                "11:25"
+              ],
+              "result": {
+                "sets": "1:3",
+                "points": "75:97"
+              },
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 75,
+              "opponent_points": 97,
+              "home_won": false
+            }
+          ]
+        },
+        {
+          "team": "VC Neuwied 77",
+          "summary": {
+            "matches_played": 2,
+            "home_wins": 2,
+            "opponent_wins": 0,
+            "home_sets_for": 6,
+            "opponent_sets_for": 0,
+            "home_points_for": 150,
+            "opponent_points_for": 98
+          },
+          "matches": [
+            {
+              "match_id": "2036",
+              "date": "2023-12-02",
+              "home_team": "VC Neuwied 77",
+              "away_team": "USC Münster",
+              "round": "Spieltag 8",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle des Rhein-Wied-Gymnasiums Neuwied (56564 Neuwied)",
+              "set_scores": [
+                "25:14",
+                "25:17",
+                "25:19"
+              ],
+              "result": {
+                "sets": "0:3",
+                "points": "50:75"
+              },
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 75,
+              "opponent_points": 50,
+              "home_won": true
+            },
+            {
+              "match_id": "2081",
+              "date": "2024-01-27",
+              "home_team": "USC Münster",
+              "away_team": "VC Neuwied 77",
+              "round": "Spieltag 17",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "25:11",
+                "25:21",
+                "25:16"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "75:48"
+              },
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 75,
+              "opponent_points": 48,
+              "home_won": true
+            }
+          ]
+        },
+        {
+          "team": "VC Wiesbaden",
+          "summary": {
+            "matches_played": 4,
+            "home_wins": 1,
+            "opponent_wins": 3,
+            "home_sets_for": 5,
+            "opponent_sets_for": 9,
+            "home_points_for": 318,
+            "opponent_points_for": 339
+          },
+          "matches": [
+            {
+              "match_id": "2032",
+              "date": "2023-11-25",
+              "home_team": "VC Wiesbaden",
+              "away_team": "USC Münster",
+              "round": "Spieltag 7",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "25:17",
+                "18:25",
+                "20:25",
+                "31:33"
+              ],
+              "result": {
+                "sets": "3:1",
+                "points": "100:94"
+              },
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 94,
+              "opponent_points": 100,
+              "home_won": false
+            },
+            {
+              "match_id": "2077",
+              "date": "2024-01-24",
+              "home_team": "USC Münster",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 16",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "25:23",
+                "19:25",
+                "16:25",
+                "25:27"
+              ],
+              "result": {
+                "sets": "1:3",
+                "points": "85:100"
+              },
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 85,
+              "opponent_points": 100,
+              "home_won": false
+            },
+            {
+              "match_id": "2300",
+              "date": "2024-02-10",
+              "home_team": "VC Wiesbaden",
+              "away_team": "USC Münster",
+              "round": "Spieltag 1",
+              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "28:30",
+                "24:26",
+                "12:25"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "81:64"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 64,
+              "opponent_points": 81,
+              "home_won": false
+            },
+            {
+              "match_id": "2306",
+              "date": "2024-02-24",
+              "home_team": "USC Münster",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 4",
+              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "25:19",
+                "25:19",
+                "25:20"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "75:58"
+              },
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 75,
+              "opponent_points": 58,
+              "home_won": true
+            }
+          ]
+        },
+        {
           "team": "VfB Suhl LOTTO Thüringen",
           "summary": {
             "matches_played": 2,
             "home_wins": 0,
             "opponent_wins": 2,
-            "home_sets_for": 2,
+            "home_sets_for": 0,
             "opponent_sets_for": 6,
-            "home_points_for": 166,
-            "opponent_points_for": 191
+            "home_points_for": 101,
+            "opponent_points_for": 150
           },
           "matches": [
             {
-              "match_id": "2042",
-              "date": "2023-12-09",
-              "home_team": "VC Wiesbaden",
-              "away_team": "VfB Suhl LOTTO Thüringen",
-              "round": "Spieltag 9",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "18:25",
-                "24:26",
-                "25:18",
-                "23:25"
-              ],
-              "result": {
-                "sets": "1:3",
-                "points": "90:94"
-              },
-              "home_sets": 1,
-              "opponent_sets": 3,
-              "home_points": 90,
-              "opponent_points": 94,
-              "home_won": false
-            },
-            {
-              "match_id": "2087",
-              "date": "2024-02-03",
+              "match_id": "2004",
+              "date": "2023-10-07",
               "home_team": "VfB Suhl LOTTO Thüringen",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 18",
+              "away_team": "USC Münster",
+              "round": "Spieltag 1",
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle Wolfsgrube (98527 Suhl)",
               "set_scores": [
-                "25:21",
-                "13:25",
-                "24:26",
-                "14:25"
+                "12:25",
+                "15:25",
+                "16:25"
               ],
               "result": {
-                "sets": "3:1",
-                "points": "97:76"
+                "sets": "3:0",
+                "points": "75:43"
               },
-              "home_sets": 1,
+              "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 76,
-              "opponent_points": 97,
+              "home_points": 43,
+              "opponent_points": 75,
+              "home_won": false
+            },
+            {
+              "match_id": "2049",
+              "date": "2023-12-16",
+              "home_team": "USC Münster",
+              "away_team": "VfB Suhl LOTTO Thüringen",
+              "round": "Spieltag 10",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "20:25",
+                "16:25",
+                "22:25"
+              ],
+              "result": {
+                "sets": "0:3",
+                "points": "58:75"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 58,
+              "opponent_points": 75,
               "home_won": false
             }
           ]
@@ -1970,58 +1967,56 @@
             "matches_played": 2,
             "home_wins": 0,
             "opponent_wins": 2,
-            "home_sets_for": 2,
+            "home_sets_for": 0,
             "opponent_sets_for": 6,
-            "home_points_for": 152,
-            "opponent_points_for": 204
+            "home_points_for": 126,
+            "opponent_points_for": 152
           },
           "matches": [
             {
-              "match_id": "2010",
-              "date": "2022-11-05",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Allianz MTV Stuttgart",
-              "round": "Spieltag 2",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "25:23",
-                "16:25",
-                "17:25",
-                "11:25"
-              ],
-              "result": {
-                "sets": "1:3",
-                "points": "69:98"
-              },
-              "home_sets": 1,
-              "opponent_sets": 3,
-              "home_points": 69,
-              "opponent_points": 98,
-              "home_won": false
-            },
-            {
-              "match_id": "2076",
-              "date": "2023-01-20",
+              "match_id": "2030",
+              "date": "2022-11-23",
               "home_team": "Allianz MTV Stuttgart",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 13",
+              "away_team": "USC Münster",
+              "round": "Spieltag 5",
               "competition": "1. Bundesliga Frauen",
               "location": "SCHARRena Stuttgart (70372 Stuttgart)",
               "set_scores": [
-                "18:25",
-                "18:25",
-                "33:31",
-                "14:25"
+                "23:25",
+                "22:25",
+                "17:25"
               ],
               "result": {
-                "sets": "3:1",
-                "points": "106:83"
+                "sets": "3:0",
+                "points": "75:62"
               },
-              "home_sets": 1,
+              "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 83,
-              "opponent_points": 106,
+              "home_points": 62,
+              "opponent_points": 75,
+              "home_won": false
+            },
+            {
+              "match_id": "2096",
+              "date": "2023-02-11",
+              "home_team": "USC Münster",
+              "away_team": "Allianz MTV Stuttgart",
+              "round": "Spieltag 16",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "20:25",
+                "19:25",
+                "25:27"
+              ],
+              "result": {
+                "sets": "0:3",
+                "points": "64:77"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 64,
+              "opponent_points": 77,
               "home_won": false
             }
           ]
@@ -2032,54 +2027,53 @@
             "matches_played": 2,
             "home_wins": 1,
             "opponent_wins": 1,
-            "home_sets_for": 5,
+            "home_sets_for": 4,
             "opponent_sets_for": 4,
-            "home_points_for": 197,
-            "opponent_points_for": 194
+            "home_points_for": 170,
+            "opponent_points_for": 188
           },
           "matches": [
             {
-              "match_id": "2022",
-              "date": "2022-11-19",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Dresdner SC",
-              "round": "Spieltag 4",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "20:25",
-                "23:25",
-                "25:23",
-                "25:18",
-                "11:15"
-              ],
-              "result": {
-                "sets": "2:3",
-                "points": "104:106"
-              },
-              "home_sets": 2,
-              "opponent_sets": 3,
-              "home_points": 104,
-              "opponent_points": 106,
-              "home_won": false
-            },
-            {
-              "match_id": "2088",
-              "date": "2023-02-04",
+              "match_id": "2055",
+              "date": "2022-12-30",
               "home_team": "Dresdner SC",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 15",
+              "away_team": "USC Münster",
+              "round": "Spieltag 10",
               "competition": "1. Bundesliga Frauen",
               "location": "Margon Arena (01277 Dresden)",
               "set_scores": [
-                "32:30",
-                "25:18",
-                "11:25",
-                "25:15"
+                "15:25",
+                "27:25",
+                "17:25",
+                "18:25"
               ],
               "result": {
-                "sets": "1:3",
-                "points": "88:93"
+                "sets": "3:1",
+                "points": "100:77"
+              },
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 77,
+              "opponent_points": 100,
+              "home_won": false
+            },
+            {
+              "match_id": "2121",
+              "date": "2023-03-25",
+              "home_team": "USC Münster",
+              "away_team": "Dresdner SC",
+              "round": "Spieltag 21",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "17:25",
+                "25:21",
+                "26:24",
+                "25:18"
+              ],
+              "result": {
+                "sets": "3:1",
+                "points": "93:88"
               },
               "home_sets": 3,
               "opponent_sets": 1,
@@ -2093,60 +2087,59 @@
           "team": "Ladies in Black Aachen",
           "summary": {
             "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 1,
-            "home_points_for": 170,
-            "opponent_points_for": 130
+            "home_wins": 0,
+            "opponent_wins": 2,
+            "home_sets_for": 0,
+            "opponent_sets_for": 6,
+            "home_points_for": 131,
+            "opponent_points_for": 151
           },
           "matches": [
             {
-              "match_id": "2064",
-              "date": "2023-01-07",
-              "home_team": "VC Wiesbaden",
-              "away_team": "Ladies in Black Aachen",
-              "round": "Spieltag 11",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "25:19",
-                "25:20",
-                "25:13"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:52"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 52,
-              "home_won": true
-            },
-            {
-              "match_id": "2130",
-              "date": "2023-04-01",
+              "match_id": "2015",
+              "date": "2022-11-09",
               "home_team": "Ladies in Black Aachen",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 22",
+              "away_team": "USC Münster",
+              "round": "Spieltag 3",
               "competition": "1. Bundesliga Frauen",
               "location": "Neuköllner Straße (52068 Aachen)",
               "set_scores": [
                 "20:25",
-                "25:12",
-                "25:22",
-                "25:19"
+                "24:26",
+                "23:25"
               ],
               "result": {
-                "sets": "1:3",
-                "points": "78:95"
+                "sets": "3:0",
+                "points": "76:67"
               },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 95,
-              "opponent_points": 78,
-              "home_won": true
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 67,
+              "opponent_points": 76,
+              "home_won": false
+            },
+            {
+              "match_id": "2081",
+              "date": "2023-01-28",
+              "home_team": "USC Münster",
+              "away_team": "Ladies in Black Aachen",
+              "round": "Spieltag 14",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "21:25",
+                "21:25",
+                "22:25"
+              ],
+              "result": {
+                "sets": "0:3",
+                "points": "64:75"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 64,
+              "opponent_points": 75,
+              "home_won": false
             }
           ]
         },
@@ -2157,34 +2150,33 @@
             "home_wins": 1,
             "opponent_wins": 0,
             "home_sets_for": 3,
-            "opponent_sets_for": 2,
-            "home_points_for": 112,
-            "opponent_points_for": 97
+            "opponent_sets_for": 1,
+            "home_points_for": 97,
+            "opponent_points_for": 89
           },
           "matches": [
             {
-              "match_id": "2028",
-              "date": "2022-11-23",
-              "home_team": "VC Wiesbaden",
+              "match_id": "2043",
+              "date": "2022-12-17",
+              "home_team": "USC Münster",
               "away_team": "NawaRo Straubing",
-              "round": "Spieltag 5",
+              "round": "Spieltag 8",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "25:18",
-                "25:13",
-                "27:29",
-                "20:25",
-                "15:12"
+                "25:20",
+                "25:20",
+                "21:25",
+                "26:24"
               ],
               "result": {
-                "sets": "3:2",
-                "points": "112:97"
+                "sets": "3:1",
+                "points": "97:89"
               },
               "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 112,
-              "opponent_points": 97,
+              "opponent_sets": 1,
+              "home_points": 97,
+              "opponent_points": 89,
               "home_won": true
             }
           ]
@@ -2195,58 +2187,59 @@
             "matches_played": 2,
             "home_wins": 1,
             "opponent_wins": 1,
-            "home_sets_for": 4,
+            "home_sets_for": 5,
             "opponent_sets_for": 3,
-            "home_points_for": 157,
-            "opponent_points_for": 157
+            "home_points_for": 172,
+            "opponent_points_for": 158
           },
           "matches": [
             {
-              "match_id": "2002",
-              "date": "2022-10-29",
-              "home_team": "Rote Raben Vilsbiburg",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 1",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Ballsporthalle Vilsbiburg (84137 Vilsbiburg)",
-              "set_scores": [
-                "17:25",
-                "17:25",
-                "25:21",
-                "23:25"
-              ],
-              "result": {
-                "sets": "3:1",
-                "points": "96:82"
-              },
-              "home_sets": 1,
-              "opponent_sets": 3,
-              "home_points": 82,
-              "opponent_points": 96,
-              "home_won": false
-            },
-            {
-              "match_id": "2068",
-              "date": "2023-01-15",
-              "home_team": "VC Wiesbaden",
+              "match_id": "2019",
+              "date": "2022-11-19",
+              "home_team": "USC Münster",
               "away_team": "Rote Raben Vilsbiburg",
-              "round": "Spieltag 12",
+              "round": "Spieltag 4",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "25:23",
-                "25:16",
-                "25:22"
+                "25:21",
+                "25:18",
+                "25:19"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:61"
+                "points": "75:58"
               },
               "home_sets": 3,
               "opponent_sets": 0,
               "home_points": 75,
-              "opponent_points": 61,
+              "opponent_points": 58,
               "home_won": true
+            },
+            {
+              "match_id": "2085",
+              "date": "2023-02-04",
+              "home_team": "Rote Raben Vilsbiburg",
+              "away_team": "USC Münster",
+              "round": "Spieltag 15",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Ballsporthalle Vilsbiburg (84137 Vilsbiburg)",
+              "set_scores": [
+                "25:19",
+                "25:16",
+                "13:25",
+                "22:25",
+                "12:15"
+              ],
+              "result": {
+                "sets": "3:2",
+                "points": "100:97"
+              },
+              "home_sets": 2,
+              "opponent_sets": 3,
+              "home_points": 97,
+              "opponent_points": 100,
+              "home_won": false
             }
           ]
         },
@@ -2256,57 +2249,58 @@
             "matches_played": 2,
             "home_wins": 0,
             "opponent_wins": 2,
-            "home_sets_for": 1,
+            "home_sets_for": 2,
             "opponent_sets_for": 6,
-            "home_points_for": 139,
-            "opponent_points_for": 174
+            "home_points_for": 157,
+            "opponent_points_for": 189
           },
           "matches": [
             {
-              "match_id": "2048",
-              "date": "2022-12-16",
-              "home_team": "SC Potsdam",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 8",
+              "match_id": "2061",
+              "date": "2023-01-07",
+              "home_team": "USC Münster",
+              "away_team": "SC Potsdam",
+              "round": "Spieltag 11",
               "competition": "1. Bundesliga Frauen",
-              "location": "MBS Arena Potsdam (14471 Potsdam)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "23:25",
-                "19:25",
-                "26:24",
-                "17:25"
+                "29:27",
+                "12:25",
+                "25:21",
+                "15:25",
+                "8:15"
               ],
               "result": {
-                "sets": "3:1",
-                "points": "99:85"
+                "sets": "2:3",
+                "points": "89:113"
               },
-              "home_sets": 1,
+              "home_sets": 2,
               "opponent_sets": 3,
-              "home_points": 85,
-              "opponent_points": 99,
+              "home_points": 89,
+              "opponent_points": 113,
               "home_won": false
             },
             {
-              "match_id": "2114",
-              "date": "2023-03-11",
-              "home_team": "VC Wiesbaden",
-              "away_team": "SC Potsdam",
-              "round": "Spieltag 19",
+              "match_id": "2127",
+              "date": "2023-04-01",
+              "home_team": "SC Potsdam",
+              "away_team": "USC Münster",
+              "round": "Spieltag 22",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "MBS Arena Potsdam (14471 Potsdam)",
               "set_scores": [
-                "19:25",
-                "13:25",
-                "22:25"
+                "21:25",
+                "23:25",
+                "24:26"
               ],
               "result": {
-                "sets": "0:3",
-                "points": "54:75"
+                "sets": "3:0",
+                "points": "76:68"
               },
               "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 54,
-              "opponent_points": 75,
+              "home_points": 68,
+              "opponent_points": 76,
               "home_won": false
             }
           ]
@@ -2319,56 +2313,56 @@
             "opponent_wins": 2,
             "home_sets_for": 2,
             "opponent_sets_for": 6,
-            "home_points_for": 169,
-            "opponent_points_for": 187
+            "home_points_for": 144,
+            "opponent_points_for": 170
           },
           "matches": [
             {
-              "match_id": "2032",
-              "date": "2022-11-30",
+              "match_id": "2050",
+              "date": "2022-12-27",
               "home_team": "SSC Palmberg Schwerin",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 6",
+              "away_team": "USC Münster",
+              "round": "Spieltag 9",
               "competition": "1. Bundesliga Frauen",
               "location": "Palmberg Arena (19059 Schwerin)",
               "set_scores": [
-                "28:30",
-                "23:25",
-                "18:25"
+                "16:25",
+                "19:25",
+                "19:25"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "80:69"
+                "points": "75:54"
               },
               "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 69,
-              "opponent_points": 80,
+              "home_points": 54,
+              "opponent_points": 75,
               "home_won": false
             },
             {
-              "match_id": "2098",
-              "date": "2023-02-18",
-              "home_team": "VC Wiesbaden",
+              "match_id": "2116",
+              "date": "2023-03-18",
+              "home_team": "USC Münster",
               "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 17",
+              "round": "Spieltag 20",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "25:20",
-                "23:25",
-                "14:25",
-                "25:22",
+                "19:25",
+                "25:17",
+                "25:13",
+                "8:25",
                 "13:15"
               ],
               "result": {
                 "sets": "2:3",
-                "points": "100:107"
+                "points": "90:95"
               },
               "home_sets": 2,
               "opponent_sets": 3,
-              "home_points": 100,
-              "opponent_points": 107,
+              "home_points": 90,
+              "opponent_points": 95,
               "home_won": false
             }
           ]
@@ -2380,122 +2374,60 @@
             "home_wins": 2,
             "opponent_wins": 0,
             "home_sets_for": 6,
-            "opponent_sets_for": 2,
-            "home_points_for": 178,
-            "opponent_points_for": 156
+            "opponent_sets_for": 4,
+            "home_points_for": 207,
+            "opponent_points_for": 209
           },
           "matches": [
             {
-              "match_id": "2058",
-              "date": "2022-12-30",
-              "home_team": "Schwarz-Weiß Erfurt",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 10",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Riethsporthalle (99089 Erfurt)",
-              "set_scores": [
-                "25:18",
-                "25:19",
-                "25:21"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "58:75"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 58,
-              "home_won": true
-            },
-            {
-              "match_id": "2124",
-              "date": "2023-03-24",
-              "home_team": "VC Wiesbaden",
+              "match_id": "2007",
+              "date": "2022-11-05",
+              "home_team": "USC Münster",
               "away_team": "Schwarz-Weiß Erfurt",
-              "round": "Spieltag 21",
+              "round": "Spieltag 2",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "21:25",
-                "17:25",
-                "25:15",
-                "25:22",
-                "15:11"
+                "25:21",
+                "26:24",
+                "19:25",
+                "19:25",
+                "15:13"
               ],
               "result": {
                 "sets": "3:2",
-                "points": "103:98"
+                "points": "104:108"
+              },
+              "home_sets": 3,
+              "opponent_sets": 2,
+              "home_points": 104,
+              "opponent_points": 108,
+              "home_won": true
+            },
+            {
+              "match_id": "2073",
+              "date": "2023-01-18",
+              "home_team": "Schwarz-Weiß Erfurt",
+              "away_team": "USC Münster",
+              "round": "Spieltag 13",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Riethsporthalle (99089 Erfurt)",
+              "set_scores": [
+                "17:25",
+                "21:25",
+                "25:20",
+                "25:22",
+                "15:9"
+              ],
+              "result": {
+                "sets": "2:3",
+                "points": "101:103"
               },
               "home_sets": 3,
               "opponent_sets": 2,
               "home_points": 103,
-              "opponent_points": 98,
+              "opponent_points": 101,
               "home_won": true
-            }
-          ]
-        },
-        {
-          "team": "USC Münster",
-          "summary": {
-            "matches_played": 2,
-            "home_wins": 0,
-            "opponent_wins": 2,
-            "home_sets_for": 4,
-            "opponent_sets_for": 6,
-            "home_points_for": 218,
-            "opponent_points_for": 220
-          },
-          "matches": [
-            {
-              "match_id": "2040",
-              "date": "2022-12-03",
-              "home_team": "VC Wiesbaden",
-              "away_team": "USC Münster",
-              "round": "Spieltag 7",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "26:28",
-                "19:25",
-                "33:31",
-                "25:23",
-                "12:15"
-              ],
-              "result": {
-                "sets": "2:3",
-                "points": "115:122"
-              },
-              "home_sets": 2,
-              "opponent_sets": 3,
-              "home_points": 115,
-              "opponent_points": 122,
-              "home_won": false
-            },
-            {
-              "match_id": "2106",
-              "date": "2023-03-04",
-              "home_team": "USC Münster",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 18",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle Berg Fidel (48153 Münster)",
-              "set_scores": [
-                "25:20",
-                "25:13",
-                "22:25",
-                "20:25",
-                "11:15"
-              ],
-              "result": {
-                "sets": "3:2",
-                "points": "98:103"
-              },
-              "home_sets": 2,
-              "opponent_sets": 3,
-              "home_points": 103,
-              "opponent_points": 98,
-              "home_won": false
             }
           ]
         },
@@ -2508,53 +2440,117 @@
             "home_sets_for": 6,
             "opponent_sets_for": 0,
             "home_points_for": 150,
-            "opponent_points_for": 89
+            "opponent_points_for": 113
           },
           "matches": [
             {
-              "match_id": "2052",
-              "date": "2022-12-27",
-              "home_team": "VC Wiesbaden",
-              "away_team": "VC Neuwied 77",
-              "round": "Spieltag 9",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "25:13",
-                "25:17",
-                "25:11"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:41"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 41,
-              "home_won": true
-            },
-            {
-              "match_id": "2118",
-              "date": "2023-03-18",
+              "match_id": "2005",
+              "date": "2022-10-29",
               "home_team": "VC Neuwied 77",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 20",
+              "away_team": "USC Münster",
+              "round": "Spieltag 1",
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle des Rhein-Wied-Gymnasiums Neuwied (56564 Neuwied)",
               "set_scores": [
-                "25:19",
-                "25:17",
-                "25:12"
+                "25:18",
+                "25:20",
+                "25:16"
               ],
               "result": {
                 "sets": "0:3",
-                "points": "48:75"
+                "points": "54:75"
               },
               "home_sets": 3,
               "opponent_sets": 0,
               "home_points": 75,
-              "opponent_points": 48,
+              "opponent_points": 54,
+              "home_won": true
+            },
+            {
+              "match_id": "2071",
+              "date": "2023-01-14",
+              "home_team": "USC Münster",
+              "away_team": "VC Neuwied 77",
+              "round": "Spieltag 12",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "25:20",
+                "25:22",
+                "25:17"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "75:59"
+              },
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 75,
+              "opponent_points": 59,
+              "home_won": true
+            }
+          ]
+        },
+        {
+          "team": "VC Wiesbaden",
+          "summary": {
+            "matches_played": 2,
+            "home_wins": 2,
+            "opponent_wins": 0,
+            "home_sets_for": 6,
+            "opponent_sets_for": 4,
+            "home_points_for": 220,
+            "opponent_points_for": 218
+          },
+          "matches": [
+            {
+              "match_id": "2040",
+              "date": "2022-12-03",
+              "home_team": "VC Wiesbaden",
+              "away_team": "USC Münster",
+              "round": "Spieltag 7",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "28:26",
+                "25:19",
+                "31:33",
+                "23:25",
+                "15:12"
+              ],
+              "result": {
+                "sets": "2:3",
+                "points": "115:122"
+              },
+              "home_sets": 3,
+              "opponent_sets": 2,
+              "home_points": 122,
+              "opponent_points": 115,
+              "home_won": true
+            },
+            {
+              "match_id": "2106",
+              "date": "2023-03-04",
+              "home_team": "USC Münster",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 18",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "20:25",
+                "13:25",
+                "25:22",
+                "25:20",
+                "15:11"
+              ],
+              "result": {
+                "sets": "3:2",
+                "points": "98:103"
+              },
+              "home_sets": 3,
+              "opponent_sets": 2,
+              "home_points": 98,
+              "opponent_points": 103,
               "home_won": true
             }
           ]
@@ -2566,57 +2562,58 @@
             "home_wins": 1,
             "opponent_wins": 1,
             "home_sets_for": 4,
-            "opponent_sets_for": 3,
-            "home_points_for": 172,
-            "opponent_points_for": 158
+            "opponent_sets_for": 4,
+            "home_points_for": 189,
+            "opponent_points_for": 182
           },
           "matches": [
             {
-              "match_id": "2017",
-              "date": "2022-11-09",
-              "home_team": "VfB Suhl LOTTO Thüringen",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 3",
+              "match_id": "2031",
+              "date": "2022-11-30",
+              "home_team": "USC Münster",
+              "away_team": "VfB Suhl LOTTO Thüringen",
+              "round": "Spieltag 6",
               "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle Wolfsgrube (98527 Suhl)",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
               "set_scores": [
-                "31:29",
+                "25:20",
                 "21:25",
-                "22:25",
-                "22:25"
+                "25:21",
+                "25:16"
               ],
               "result": {
                 "sets": "3:1",
-                "points": "104:96"
+                "points": "96:82"
+              },
+              "home_sets": 3,
+              "opponent_sets": 1,
+              "home_points": 96,
+              "opponent_points": 82,
+              "home_won": true
+            },
+            {
+              "match_id": "2097",
+              "date": "2023-02-18",
+              "home_team": "VfB Suhl LOTTO Thüringen",
+              "away_team": "USC Münster",
+              "round": "Spieltag 17",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Wolfsgrube (98527 Suhl)",
+              "set_scores": [
+                "25:23",
+                "25:27",
+                "22:25",
+                "21:25"
+              ],
+              "result": {
+                "sets": "3:1",
+                "points": "100:93"
               },
               "home_sets": 1,
               "opponent_sets": 3,
-              "home_points": 96,
-              "opponent_points": 104,
+              "home_points": 93,
+              "opponent_points": 100,
               "home_won": false
-            },
-            {
-              "match_id": "2083",
-              "date": "2023-01-28",
-              "home_team": "VC Wiesbaden",
-              "away_team": "VfB Suhl LOTTO Thüringen",
-              "round": "Spieltag 14",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
-              "set_scores": [
-                "25:15",
-                "25:15",
-                "26:24"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "76:54"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 76,
-              "opponent_points": 54,
-              "home_won": true
             }
           ]
         }
