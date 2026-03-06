@@ -3,7 +3,7 @@ name: HTML Report
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * *'  # täglich um 01:00 Uhr
+    - cron: '0 2 * * *'  # jede Nacht um 02:00 UTC
 
 permissions:
   contents: write   # erlaubt Push auf gh-pages
@@ -34,6 +34,15 @@ jobs:
       - name: ✅ Check sources compile
         run: python -m compileall src
 
+      - name: 🛠 Update MVP top 3 dataset
+        run: python scripts/update_mvp_top3.py
+
+      - name: 🛠 Update lineups dataset
+        run: python scripts/update_lineups.py
+
+      - name: 🛠 Update international matches overview
+        run: python scripts/update_international_matches.py
+
       - name: 🛠 Update direct comparisons dataset
         run: python scripts/update_direct_comparisons.py
 
@@ -49,17 +58,20 @@ jobs:
             echo "<!-- Build $COMMIT_HASH $(date -u +"%Y-%m-%dT%H:%M:%SZ") -->" >> "$f"
           done
 
-      - name: 💾 Commit updated data files to repository
+      - name: 💾 Commit updated files to repository
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
 
+          git add docs/data/mvp_top3.json
+          git add docs/data/aufstellungen.json
+          git add docs/internationale_spiele.html
           git add docs/data/direct_comparisons.json
           git add data/*.csv 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "Keine Änderungen an Datendateien zum Committen."
+            echo "Keine Änderungen zum Committen."
           else
-            git commit -m "chore(data): update schedule and direct comparisons"
+            git commit -m "chore(data): nightly refresh of all update artifacts"
             git push origin "HEAD:${{ github.ref_name }}"
           fi
 
