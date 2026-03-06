@@ -1534,12 +1534,21 @@ def _normalize_schedule_field(raw: Optional[str]) -> Optional[str]:
 
 def _fix_mojibake(value: str) -> str:
     """Repair common UTF-8/Latin-1 mojibake (e.g. "BlaubÃ¤ren" -> "Blaubären")."""
-    if not any(marker in value for marker in ("Ã", "Â", "â")):
+    if not value:
         return value
-    try:
-        repaired = value.encode("latin-1").decode("utf-8")
-    except UnicodeError:
-        return value
+
+    repaired = unescape(value).replace("\xa0", " ")
+    for _ in range(2):
+        if not any(marker in repaired for marker in ("Ã", "Â", "â")):
+            break
+        try:
+            candidate = repaired.encode("latin-1").decode("utf-8")
+        except UnicodeError:
+            break
+        if candidate == repaired:
+            break
+        repaired = candidate
+
     return repaired if repaired else value
 
 
@@ -1699,18 +1708,23 @@ def find_next_usc_home_match_in_ics(
 
 
 def parse_schedule_kickoff(row: Dict[str, str]) -> datetime:
-    combined_raw = (row.get("Datum und Uhrzeit") or "").strip()
+    combined_raw = _normalize_schedule_field(row.get("Datum und Uhrzeit")) or ""
     if combined_raw:
         kickoff = datetime.strptime(combined_raw, "%d.%m.%Y, %H:%M:%S")
         return kickoff.replace(tzinfo=BERLIN_TZ)
-    return parse_kickoff(row["Datum"], row["Uhrzeit"])
+
+    date_value = _normalize_schedule_field(row.get("Datum"))
+    time_value = _normalize_schedule_field(row.get("Uhrzeit"))
+    if not date_value or not time_value:
+        raise KeyError("Datum/Uhrzeit")
+    return parse_kickoff(date_value, time_value)
 
 
 def extract_schedule_result_label(row: Dict[str, str]) -> str:
-    result = (row.get("Ergebnis") or "").strip()
+    result = _normalize_schedule_field(row.get("Ergebnis")) or ""
     if result:
         return result
-    combined = (row.get("Austragungsort/Ergebnis") or "").strip()
+    combined = _normalize_schedule_field(row.get("Austragungsort/Ergebnis")) or ""
     if not combined:
         return ""
     parts = [part.strip() for part in combined.split("/") if part.strip()]

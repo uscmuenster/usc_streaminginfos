@@ -23,6 +23,7 @@ from .report import (
     USC_CANONICAL_NAME,
     collect_team_roster,
     _decode_csv_bytes_robust,
+    _normalize_schedule_field,
     extract_schedule_result_label,
     parse_schedule_kickoff,
 )
@@ -160,28 +161,28 @@ def parse_schedule(csv_text: str) -> List[ScheduleRow]:
     buffer = csv.DictReader(csv_text.splitlines(), delimiter=";", quotechar='"')
     rows: List[ScheduleRow] = []
     for row in buffer:
-        match_number = (row.get("#") or "").strip()
+        match_number = _normalize_schedule_field(row.get("#")) or ""
         if not match_number:
             continue
         try:
             kickoff = parse_schedule_kickoff(row)
         except (KeyError, ValueError):
             continue
-        home_team = (row.get("Mannschaft 1") or "").strip()
-        away_team = (row.get("Mannschaft 2") or "").strip()
-        competition = (row.get("Spielrunde") or "").strip()
-        venue = (row.get("Austragungsort") or "").strip()
-        season = (row.get("Saison") or "").strip()
+        home_team = _normalize_schedule_field(row.get("Mannschaft 1")) or ""
+        away_team = _normalize_schedule_field(row.get("Mannschaft 2")) or ""
+        competition = _normalize_schedule_field(row.get("Spielrunde")) or ""
+        venue = _normalize_schedule_field(row.get("Austragungsort")) or ""
+        season = _normalize_schedule_field(row.get("Saison")) or ""
         result_label = extract_schedule_result_label(row)
 
-        score = (row.get("Satzpunkte") or "").strip() or None
-        total_points = (row.get("Ballpunkte") or "").strip() or None
+        score = _normalize_schedule_field(row.get("Satzpunkte"))
+        total_points = _normalize_schedule_field(row.get("Ballpunkte"))
         set_scores: List[str] = []
         for index in range(1, 6):
             home_key = f"Satz {index} - Ballpunkte 1"
             away_key = f"Satz {index} - Ballpunkte 2"
-            home_points = (row.get(home_key) or "").strip()
-            away_points = (row.get(away_key) or "").strip()
+            home_points = _normalize_schedule_field(row.get(home_key)) or ""
+            away_points = _normalize_schedule_field(row.get(away_key)) or ""
             if home_points and away_points:
                 set_scores.append(f"{home_points}:{away_points}")
         rows.append(
