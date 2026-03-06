@@ -34,6 +34,9 @@ jobs:
       - name: ✅ Check sources compile
         run: python -m compileall src
 
+      - name: 🛠 Update direct comparisons dataset
+        run: python scripts/update_direct_comparisons.py
+
       - name: 🛠 Generate USC HTML report
         env:
           PYTHONPATH: src
@@ -51,11 +54,12 @@ jobs:
           git config user.name "github-actions"
           git config user.email "actions@github.com"
 
+          git add docs/data/direct_comparisons.json
           git add data/*.csv 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "Keine Änderungen an data/*.csv zum Committen."
+            echo "Keine Änderungen an Datendateien zum Committen."
           else
-            git commit -m "chore(data): update schedule csv files"
+            git commit -m "chore(data): update schedule and direct comparisons"
             git push origin "HEAD:${{ github.ref_name }}"
           fi
 
@@ -88,4 +92,3 @@ jobs:
           echo "Deployment erfolgreich auf 'gh-pages' abgeschlossen."
           echo "Prüfe Veröffentlichung unter:"
           echo "👉 https://${{ github.repository_owner }}.github.io/$(basename ${{ github.repository }})/"
-
