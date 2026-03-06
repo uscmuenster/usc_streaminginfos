@@ -389,3 +389,14 @@ def collect_mvp_rankings(
         }
 
     return data
+
+
+def collect_mvp_rankings_for_matchup(
+    *,
+    home_team: str,
+    opponent_team: str,
+    limit: int = 5,
+) -> Dict[str, Dict[str, List[List[str]]]]:
+    """Sammelt MVP-Rankings für ein Matchup aus Heimteam und Gegner."""
+
+    return collect_mvp_rankings([home_team, opponent_team], limit=limit)

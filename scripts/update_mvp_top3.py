@@ -16,7 +16,11 @@ def _add_src_to_path() -> None:
 
 _add_src_to_path()
 
-from usc_kommentatoren.mvp import MVP_INDICATORS, TEAM_RANKING_FILTERS, collect_mvp_rankings
+from usc_kommentatoren.mvp import (
+    MVP_INDICATORS,
+    TEAM_RANKING_FILTERS,
+    collect_mvp_rankings_for_matchup,
+)
 from usc_kommentatoren.report import normalize_name
 
 
@@ -41,14 +45,14 @@ def _load_team_information(lineups_path: Path) -> tuple[str, str]:
     except json.JSONDecodeError as exc:
         raise MVPDatasetError(f"Lineup dataset at '{lineups_path}' is not valid JSON.") from exc
 
-    usc_team = str(payload.get("usc_team") or "USC Münster")
+    home_team = str(payload.get("home_team") or payload.get("usc_team") or "USC Münster")
 
     opponent_team = payload.get("opponent_team")
 
     if not opponent_team:
         raise MVPDatasetError("Could not determine opponent team from lineup dataset.")
 
-    return usc_team, str(opponent_team)
+    return home_team, str(opponent_team)
 
 
 def _load_rankings_from_file(path: Path) -> Mapping[str, object]:
@@ -186,17 +190,17 @@ def _build_placeholder_row(
 
 def build_dataset(
     *,
-    usc_team: str,
+    home_team: str,
     opponent_team: str,
     limit: int = 3,
     rankings_data: Mapping[str, object] | None = None,
 ) -> Mapping[str, object]:
 
-    usc_label = _resolve_team_label(usc_team)
+    usc_label = _resolve_team_label(home_team)
     opponent_label = _resolve_team_label(opponent_team)
 
     if rankings_data is None:
-        rankings = collect_mvp_rankings([usc_team, opponent_team], limit=limit)
+        rankings = collect_mvp_rankings_for_matchup(home_team=home_team, opponent_team=opponent_team, limit=limit)
     else:
         rankings = rankings_data
 
@@ -236,7 +240,8 @@ def build_dataset(
 
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "usc_team": usc_team,
+        "home_team": home_team,
+        "usc_team": home_team,
         "opponent_team": opponent_team,
         "limit": limit,
         "indicators": indicators_payload,
@@ -257,10 +262,12 @@ def dump_dataset(dataset: Mapping[str, object], *, output_path: Path) -> None:
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
     parser = argparse.ArgumentParser(
-        description="Generate MVP Top 3 dataset for USC and opponent."
+        description="Generate MVP Top 3 dataset for home team and opponent."
     )
 
-    parser.add_argument("--usc-team")
+    parser.add_argument("--usc-team", dest="home_team")
+
+    parser.add_argument("--home-team", dest="home_team")
 
     parser.add_argument("--opponent-team")
 
@@ -294,14 +301,14 @@ def main(argv: Sequence[str] | None = None) -> None:
 
     args = parse_args(argv)
 
-    usc_team = args.usc_team
+    home_team = args.home_team
     opponent_team = args.opponent_team
 
-    if not usc_team or not opponent_team:
+    if not home_team or not opponent_team:
 
-        usc_team_ds, opponent_team_ds = _load_team_information(args.lineups_path)
+        home_team_ds, opponent_team_ds = _load_team_information(args.lineups_path)
 
-        usc_team = usc_team or usc_team_ds
+        home_team = home_team or home_team_ds
         opponent_team = opponent_team or opponent_team_ds
 
     rankings_override = None
@@ -310,7 +317,7 @@ def main(argv: Sequence[str] | None = None) -> None:
         rankings_override = _load_rankings_from_file(args.rankings_path)
 
     dataset = build_dataset(
-        usc_team=usc_team,
+        home_team=home_team,
         opponent_team=opponent_team,
         limit=args.limit,
         rankings_data=rankings_override,
