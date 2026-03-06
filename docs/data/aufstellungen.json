@@ -659,7 +659,7 @@
           "code": "A",
           "name": "Allianz MTV Stuttgart",
           "is_focus": true,
-          "is_home": false,
+          "is_home": true,
           "is_opponent": true,
           "setters": [
             "10",
@@ -974,7 +974,7 @@
           "code": "A",
           "name": "VfB Suhl LOTTO Thüringen",
           "is_focus": false,
-          "is_home": false,
+          "is_home": true,
           "is_opponent": false,
           "setters": [
             "2",
