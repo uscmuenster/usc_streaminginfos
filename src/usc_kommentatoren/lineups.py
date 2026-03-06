@@ -160,18 +160,47 @@ def parse_schedule(csv_text: str) -> List[ScheduleRow]:
     return rows
 
 
-def find_recent_usc_matches(rows: Sequence[ScheduleRow], limit: int = 2) -> List[ScheduleRow]:
-    usc_rows = [
+def find_recent_matches_for_home_team(
+    rows: Sequence[ScheduleRow],
+    home_team: str,
+    limit: int = 2,
+) -> List[ScheduleRow]:
+    """Gibt die letzten *limit* abgeschlossenen Spiele des Heimteams zurück."""
+    target = _simplify(home_team)
+    team_rows = [
         row
         for row in rows
         if row.is_finished
         and (
-            "usc" in _simplify(row.home_team)
-            or "usc" in _simplify(row.away_team)
+            target in _simplify(row.home_team)
+            or target in _simplify(row.away_team)
         )
     ]
-    usc_rows.sort(key=lambda row: row.kickoff, reverse=True)
-    return usc_rows[:limit]
+    team_rows.sort(key=lambda row: row.kickoff, reverse=True)
+    return team_rows[:limit]
+
+
+def find_recent_usc_matches(rows: Sequence[ScheduleRow], limit: int = 2) -> List[ScheduleRow]:
+    """Rückwärtskompatible Variante von find_recent_matches_for_home_team."""
+    return find_recent_matches_for_home_team(rows, USC_CANONICAL_NAME, limit=limit)
+
+
+def find_next_home_match_row(
+    rows: Sequence[ScheduleRow],
+    home_team: str,
+    *,
+    reference: Optional[datetime] = None,
+) -> Optional[ScheduleRow]:
+    """Gibt das nächste Heimspiel von *home_team* zurück."""
+    now = reference or datetime.now(tz=BERLIN_TZ)
+    target = _simplify(home_team)
+    home_games = [
+        row
+        for row in rows
+        if row.kickoff >= now and target in _simplify(row.home_team)
+    ]
+    home_games.sort(key=lambda row: row.kickoff)
+    return home_games[0] if home_games else None
 
 
 def find_next_usc_home_match_row(
@@ -179,14 +208,8 @@ def find_next_usc_home_match_row(
     *,
     reference: Optional[datetime] = None,
 ) -> Optional[ScheduleRow]:
-    now = reference or datetime.now(tz=BERLIN_TZ)
-    home_games = [
-        row
-        for row in rows
-        if row.kickoff >= now and "usc" in _simplify(row.home_team)
-    ]
-    home_games.sort(key=lambda row: row.kickoff)
-    return home_games[0] if home_games else None
+    """Rückwärtskompatible Variante von find_next_home_match_row."""
+    return find_next_home_match_row(rows, USC_CANONICAL_NAME, reference=reference)
 
 
 def find_recent_matches_for_team(
@@ -754,17 +777,18 @@ def build_lineup_dataset(
     output_path: Path = DEFAULT_OUTPUT_PATH,
     pdf_cache_dir: Path = PDF_CACHE_DIR,
     roster_cache_dir: Path = ROSTER_CACHE_DIR,
+    home_team: str = USC_CANONICAL_NAME,
 ) -> Dict[str, object]:
     csv_text = fetch_schedule_csv(schedule_csv_url)
     schedule_rows = parse_schedule(csv_text)
 
-    recent_rows = find_recent_usc_matches(schedule_rows, limit=limit)
+    recent_rows = find_recent_matches_for_home_team(schedule_rows, home_team, limit=limit)
     if not recent_rows:
-        raise RuntimeError("Keine abgeschlossenen USC-Spiele gefunden.")
+        raise RuntimeError(f"Keine abgeschlossenen Spiele von {home_team} gefunden.")
 
-    next_home_match = find_next_usc_home_match_row(schedule_rows)
+    next_home_match = find_next_home_match_row(schedule_rows, home_team)
     if not next_home_match:
-        raise RuntimeError("Kein zukünftiges USC-Heimspiel gefunden.")
+        raise RuntimeError(f"Kein zukünftiges Heimspiel von {home_team} gefunden.")
 
     opponent_name = next_home_match.away_team
 
@@ -811,7 +835,7 @@ def build_lineup_dataset(
 
     dataset = _serialize_dataset(
         matches,
-        usc_team=USC_CANONICAL_NAME,
+        usc_team=home_team,
         opponent_team=opponent_name,
         setter_lookup=setter_cache,
         roster_lookup=official_roster_cache,
