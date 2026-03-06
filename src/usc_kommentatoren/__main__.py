@@ -8,12 +8,12 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
 
+from .config_loader import AppConfig, load_config
 from .mvp import collect_mvp_rankings
 from .report import (
     DEFAULT_SCHEDULE_ICS_URL,
     DEFAULT_SCHEDULE_URL,
     NEWS_LOOKBACK_DAYS,
-    USC_CANONICAL_NAME,
     BERLIN_TZ,
     Match,
     THEME_COLORS,
@@ -31,9 +31,8 @@ from .report import (
     download_schedule,
     find_last_matches_for_team,
     find_next_match_for_team,
-    find_next_usc_home_match,
-    find_next_usc_home_match_in_ics,
-    is_usc,
+    find_next_home_match,
+    find_next_home_match_in_ics,
     load_schedule_from_file,
     load_name_pronunciations,
     normalize_name,
@@ -45,7 +44,13 @@ DEFAULT_OUTPUT_PATH = Path("docs/index.html")
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Generate USC Münster schedule report")
+    parser = argparse.ArgumentParser(description="Generate volleyball schedule report")
+    parser.add_argument(
+        "--config",
+        type=Path,
+        default=None,
+        help="Pfad zur config.json (Standard: config.json im Repo-Root).",
+    )
     parser.add_argument(
         "--schedule-url",
         default=DEFAULT_SCHEDULE_URL,
@@ -145,6 +150,9 @@ def main() -> int:
     parser = build_parser()
     args = parser.parse_args()
 
+    cfg: AppConfig = load_config(args.config)
+    home_team = cfg.home_team
+
     schedule_file = download_schedule(
         args.schedule_path,
         url=args.schedule_url,
@@ -158,12 +166,12 @@ def main() -> int:
             file=sys.stderr,
         )
         schedule_metadata = {}
-    next_home = find_next_usc_home_match(matches)
+    next_home = find_next_home_match(matches, home_team)
     next_home_ics = None
     try:
         ics_text = fetch_ics_schedule(args.schedule_ics_url)
         ics_events = parse_ics_schedule(ics_text)
-        next_home_ics = find_next_usc_home_match_in_ics(ics_events)
+        next_home_ics = find_next_home_match_in_ics(ics_events, home_team)
     except Exception as exc:  # pragma: no cover - network failure
         print(
             f"Warnung: ICS-Spielplan konnte nicht geladen werden: {exc}",
@@ -182,7 +190,7 @@ def main() -> int:
 
         if has_csv_deviation:
             print(
-                "Hinweis: Abweichung zwischen CSV und ICS beim nächsten USC-Heimspiel "
+                f"Hinweis: Abweichung zwischen CSV und ICS beim nächsten Heimspiel von {home_team} "
                 f"(CSV: {next_home.home_team} vs. {next_home.away_team} {next_home.kickoff.isoformat()} | "
                 f"ICS: {next_home_ics.home_team} vs. {next_home_ics.away_team} {next_home_ics.kickoff.isoformat()}). "
                 "Gegner sowie Datum/Uhrzeit werden aus der ICS-Datei übernommen.",
@@ -217,12 +225,12 @@ def main() -> int:
         )
 
     if not next_home:
-        raise SystemExit("Kein zukünftiges Heimspiel des USC Münster gefunden.")
+        raise SystemExit(f"Kein zukünftiges Heimspiel von {home_team} gefunden.")
 
     reference_time = next_home.kickoff + timedelta(seconds=1)
     usc_next = find_next_match_for_team(
         matches,
-        USC_CANONICAL_NAME,
+        home_team,
         reference=reference_time,
     )
     opponent_next = find_next_match_for_team(
@@ -234,9 +242,10 @@ def main() -> int:
     usc_upcoming_matches: List["Match"] = []
     if usc_next:
         usc_upcoming_matches.append(usc_next)
-        if not is_usc(usc_next.host):
-            additional_home = find_next_usc_home_match(
+        if normalize_name(usc_next.host) != normalize_name(home_team):
+            additional_home = find_next_home_match(
                 matches,
+                home_team,
                 reference=usc_next.kickoff + timedelta(seconds=1),
             )
             if (
@@ -250,22 +259,23 @@ def main() -> int:
             ):
                 usc_upcoming_matches.append(additional_home)
 
-    usc_recent = find_last_matches_for_team(matches, USC_CANONICAL_NAME, limit=args.recent_limit)
+    usc_recent = find_last_matches_for_team(matches, home_team, limit=args.recent_limit)
     opponent_recent = find_last_matches_for_team(matches, next_home.away_team, limit=args.recent_limit)
 
     usc_news, opponent_news = collect_team_news(
         next_home,
+        home_team=home_team,
         lookback_days=args.news_lookback,
     )
 
-    usc_instagram = collect_instagram_links(USC_CANONICAL_NAME)
+    usc_instagram = collect_instagram_links(home_team)
     opponent_instagram = collect_instagram_links(next_home.away_team)
 
     try:
-        usc_roster = collect_team_roster(USC_CANONICAL_NAME, args.roster_dir)
+        usc_roster = collect_team_roster(home_team, args.roster_dir)
     except Exception as exc:  # pragma: no cover - network failure
         print(
-            f"Warnung: Kader für {USC_CANONICAL_NAME} konnte nicht geladen werden: {exc}",
+            f"Warnung: Kader für {home_team} konnte nicht geladen werden: {exc}",
             file=sys.stderr,
         )
         usc_roster = []
@@ -279,10 +289,10 @@ def main() -> int:
         opponent_roster = []
 
     try:
-        usc_transfers = collect_team_transfers(USC_CANONICAL_NAME)
+        usc_transfers = collect_team_transfers(home_team)
     except Exception as exc:  # pragma: no cover - network failure
         print(
-            f"Warnung: Wechselbörse für {USC_CANONICAL_NAME} konnte nicht geladen werden: {exc}",
+            f"Warnung: Wechselbörse für {home_team} konnte nicht geladen werden: {exc}",
             file=sys.stderr,
         )
         usc_transfers = []
@@ -296,10 +306,10 @@ def main() -> int:
         opponent_transfers = []
 
     try:
-        usc_photo = collect_team_photo(USC_CANONICAL_NAME, args.photo_dir)
+        usc_photo = collect_team_photo(home_team, args.photo_dir)
     except Exception as exc:  # pragma: no cover - network failure
         print(
-            f"Warnung: Teamfoto für {USC_CANONICAL_NAME} konnte nicht geladen werden: {exc}",
+            f"Warnung: Teamfoto für {home_team} konnte nicht geladen werden: {exc}",
             file=sys.stderr,
         )
         usc_photo = None
@@ -353,7 +363,7 @@ def main() -> int:
     if args.mvp_output and not args.skip_mvp_output:
         try:
             mvp_rankings = collect_mvp_rankings(
-                [next_home.away_team, USC_CANONICAL_NAME]
+                [next_home.away_team, home_team]
             )
         except Exception as exc:  # pragma: no cover - network failure
             print(
@@ -432,6 +442,8 @@ def main() -> int:
         mvp_rankings=mvp_rankings_data,
         direct_comparison=direct_comparison_data,
         opponent_name_pronunciations=opponent_name_pronunciations,
+        home_team=home_team,
+        theme_primary=cfg.theme_primary,
     )
 
     html = build_html_report(**report_kwargs)
@@ -451,18 +463,19 @@ def main() -> int:
 
     output_relative = args.output.relative_to(output_dir).as_posix()
 
+    effective_theme_color = cfg.theme_primary or THEME_COLORS["mvp_overview_summary_bg"]
     manifest_path = output_dir / "manifest.webmanifest"
     start_url = f"./{app_relative}" if app_relative else f"./{output_relative}"
     manifest_payload = {
-        "name": "USC Streaminginfos",
-        "short_name": "USC Infos",
-        "description": "Aktuelle Informationen und Statistiken zu USC Münster.",
+        "name": f"{home_team} Streaminginfos",
+        "short_name": home_team,
+        "description": f"Aktuelle Informationen und Statistiken zu {home_team}.",
         "lang": "de",
         "start_url": start_url,
         "scope": "./",
         "display": "standalone",
-        "background_color": THEME_COLORS["mvp_overview_summary_bg"],
-        "theme_color": THEME_COLORS["mvp_overview_summary_bg"],
+        "background_color": effective_theme_color,
+        "theme_color": effective_theme_color,
         "orientation": "portrait-primary",
         "icons": [
             {

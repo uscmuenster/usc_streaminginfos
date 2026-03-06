@@ -1626,19 +1626,31 @@ def parse_ics_schedule(ics_text: str) -> List[IcsScheduleEvent]:
     return parsed_events
 
 
+def find_next_home_match_in_ics(
+    events: Sequence[IcsScheduleEvent],
+    home_team: str,
+    *,
+    reference: Optional[datetime] = None,
+) -> Optional[IcsScheduleEvent]:
+    """Gibt das nächste ICS-Heimspiel des angegebenen Teams zurück."""
+    now = reference or datetime.now(tz=BERLIN_TZ)
+    normalized = normalize_name(home_team)
+    future_home_games = [
+        event
+        for event in events
+        if event.kickoff >= now and normalize_name(event.home_team) == normalized
+    ]
+    future_home_games.sort(key=lambda event: event.kickoff)
+    return future_home_games[0] if future_home_games else None
+
+
 def find_next_usc_home_match_in_ics(
     events: Sequence[IcsScheduleEvent],
     *,
     reference: Optional[datetime] = None,
 ) -> Optional[IcsScheduleEvent]:
-    now = reference or datetime.now(tz=BERLIN_TZ)
-    future_home_games = [
-        event
-        for event in events
-        if event.kickoff >= now and is_usc(event.home_team)
-    ]
-    future_home_games.sort(key=lambda event: event.kickoff)
-    return future_home_games[0] if future_home_games else None
+    """Rückwärtskompatible Variante von find_next_home_match_in_ics für USC Münster."""
+    return find_next_home_match_in_ics(events, USC_CANONICAL_NAME, reference=reference)
 
 
 def parse_schedule_kickoff(row: Dict[str, str]) -> datetime:
@@ -2610,11 +2622,12 @@ def fetch_team_news(
 def collect_team_news(
     next_home: Match,
     *,
+    home_team: str = USC_CANONICAL_NAME,
     now: Optional[datetime] = None,
     lookback_days: int = NEWS_LOOKBACK_DAYS,
 ) -> Tuple[List[NewsItem], List[NewsItem]]:
     now = now or datetime.now(tz=BERLIN_TZ)
-    usc_news = fetch_team_news(USC_CANONICAL_NAME, now=now, lookback_days=lookback_days)
+    usc_news = fetch_team_news(home_team, now=now, lookback_days=lookback_days)
     opponent_news = fetch_team_news(next_home.away_team, now=now, lookback_days=lookback_days)
 
     vbl_articles = _fetch_vbl_articles(
@@ -2632,7 +2645,7 @@ def collect_team_news(
 
     combined_vbl = _deduplicate_news(vbl_articles + vbl_press)
 
-    usc_keywords = get_team_keywords(USC_CANONICAL_NAME)
+    usc_keywords = get_team_keywords(home_team)
     opponent_keywords = get_team_keywords(next_home.away_team)
 
     usc_vbl = _filter_by_keywords(combined_vbl, usc_keywords)
@@ -3388,15 +3401,31 @@ def get_team_short_label(name: str) -> str:
     return pretty_name(name)
 
 
-def find_next_usc_home_match(matches: Iterable[Match], *, reference: Optional[datetime] = None) -> Optional[Match]:
+def find_next_home_match(
+    matches: Iterable[Match],
+    home_team: str,
+    *,
+    reference: Optional[datetime] = None,
+) -> Optional[Match]:
+    """Gibt das nächste Heimspiel des angegebenen Teams zurück."""
     now = reference or datetime.now(tz=BERLIN_TZ)
+    normalized = normalize_name(home_team)
     future_home_games = [
         match
         for match in matches
-        if match.kickoff >= now and (is_usc(match.host) or is_usc(match.home_team))
+        if match.kickoff >= now
+        and (
+            normalize_name(match.host) == normalized
+            or normalize_name(match.home_team) == normalized
+        )
     ]
     future_home_games.sort(key=lambda match: match.kickoff)
     return future_home_games[0] if future_home_games else None
+
+
+def find_next_usc_home_match(matches: Iterable[Match], *, reference: Optional[datetime] = None) -> Optional[Match]:
+    """Rückwärtskompatible Variante von find_next_home_match für USC Münster."""
+    return find_next_home_match(matches, USC_CANONICAL_NAME, reference=reference)
 
 
 def find_last_matches_for_team(
@@ -4380,6 +4409,8 @@ def build_html_report(
     mvp_rankings: Optional[Mapping[str, Mapping[str, Any]]] = None,
     direct_comparison: Optional[DirectComparisonData] = None,
     opponent_name_pronunciations: Optional[Mapping[str, str]] = None,
+    home_team: str = USC_CANONICAL_NAME,
+    theme_primary: Optional[str] = None,
 ) -> str:
     heading = pretty_name(next_home.away_team) or "Noch nicht veröffentlicht"
     kickoff_raw = next_home.kickoff
@@ -4397,7 +4428,7 @@ def build_html_report(
     countdown_iso = kickoff_dt.isoformat(timespec="seconds")
     match_day = kickoff_dt.date()
     location = pretty_name(next_home.location) or "noch nicht veröffentlicht"
-    usc_url = get_team_homepage(USC_CANONICAL_NAME) or USC_HOMEPAGE
+    usc_url = get_team_homepage(home_team) or USC_HOMEPAGE
     opponent_url = get_team_homepage(next_home.away_team)
 
     def _combine_matches(
@@ -4452,7 +4483,7 @@ def build_html_report(
         return "\n      ".join(combined)
 
     highlight_targets = {
-        "usc": USC_CANONICAL_NAME,
+        "usc": home_team,
         "opponent": next_home.away_team,
     }
 
@@ -4485,7 +4516,7 @@ def build_html_report(
     opponent_transfer_items = format_transfer_list(opponent_transfers)
     mvp_section_html = format_mvp_rankings_section(
         mvp_rankings,
-        usc_name=USC_CANONICAL_NAME,
+        usc_name=home_team,
         opponent_name=next_home.away_team,
     )
     direct_comparison_html = format_direct_comparison_section(
@@ -4514,8 +4545,8 @@ def build_html_report(
     if usc_photo:
         usc_photo_block = (
             "          <figure class=\"team-photo\">"
-            f"<img src=\"{escape(usc_photo)}\" alt=\"Teamfoto {escape(USC_CANONICAL_NAME)}\" />"
-            f"<figcaption>Teamfoto {escape(USC_CANONICAL_NAME)}</figcaption>"
+            f"<img src=\"{escape(usc_photo)}\" alt=\"Teamfoto {escape(home_team)}\" />"
+            f"<figcaption>Teamfoto {escape(home_team)}</figcaption>"
             "</figure>\n"
         )
     countdown_summary_html = "\n".join(
@@ -4829,7 +4860,7 @@ def build_html_report(
     birthday_notes = collect_birthday_notes(
         match_day,
         (
-            (USC_CANONICAL_NAME, usc_roster),
+            (home_team, usc_roster),
             (heading, opponent_roster),
         ),
     )
@@ -4867,6 +4898,10 @@ def build_html_report(
     if not scale_value:
         scale_value = "1"
 
+    effective_theme_color = theme_primary or THEME_COLORS["mvp_overview_summary_bg"]
+    home_accent_css = f"\n      --home-accent: {escape(effective_theme_color)};"
+    home_team_escaped = escape(home_team)
+
     html = f"""<!DOCTYPE html>
 <html lang=\"de\">
 <head>
@@ -4875,18 +4910,18 @@ def build_html_report(
   <meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\">
   <meta http-equiv=\"Pragma\" content=\"no-cache\">
   <meta http-equiv=\"Expires\" content=\"0\">
-  <meta name=\"theme-color\" content=\"{THEME_COLORS['mvp_overview_summary_bg']}\">
+  <meta name=\"theme-color\" content=\"{effective_theme_color}\">
   <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"favicon.png\">
   <link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"favicon.png\">
   <link rel=\"apple-touch-icon\" href=\"favicon.png\">
   <link rel=\"manifest\" href=\"manifest.webmanifest\">
-  <title>Nächster USC-Heimgegner</title>
+  <title>Nächster Heimgegner: {home_team_escaped}</title>
   <style>
     :root {{
       color-scheme: light dark;
       --font-scale: {scale_value};
       --font-context-scale: 1;
-      --theme-color: {THEME_COLORS['mvp_overview_summary_bg']};
+      --theme-color: {effective_theme_color};{home_accent_css}
       --accordion-opponent-bg: {HIGHLIGHT_COLORS['opponent']['accordion_bg']};
       --accordion-opponent-shadow: {HIGHLIGHT_COLORS['opponent']['accordion_shadow']};
       --accordion-usc-bg: {HIGHLIGHT_COLORS['usc']['accordion_bg']};
@@ -4899,6 +4934,14 @@ def build_html_report(
       --usc-highlight-mvp-border: {HIGHLIGHT_COLORS['usc']['mvp_border']};
       --usc-highlight-mvp-score: {HIGHLIGHT_COLORS['usc']['mvp_score']};
       --usc-highlight-legend-dot: {HIGHLIGHT_COLORS['usc']['legend_dot']};
+      --home-highlight-row-bg: {HIGHLIGHT_COLORS['usc']['row_bg']};
+      --home-highlight-row-text: {HIGHLIGHT_COLORS['usc']['row_text']};
+      --home-highlight-card-border: {HIGHLIGHT_COLORS['usc']['card_border']};
+      --home-highlight-card-shadow: {HIGHLIGHT_COLORS['usc']['card_shadow']};
+      --home-highlight-mvp-bg: {HIGHLIGHT_COLORS['usc']['mvp_bg']};
+      --home-highlight-mvp-border: {HIGHLIGHT_COLORS['usc']['mvp_border']};
+      --home-highlight-mvp-score: {HIGHLIGHT_COLORS['usc']['mvp_score']};
+      --home-highlight-legend-dot: {HIGHLIGHT_COLORS['usc']['legend_dot']};
       --opponent-highlight-row-bg: {HIGHLIGHT_COLORS['opponent']['row_bg']};
       --opponent-highlight-row-text: {HIGHLIGHT_COLORS['opponent']['row_text']};
       --opponent-highlight-card-border: {HIGHLIGHT_COLORS['opponent']['card_border']};
@@ -4907,7 +4950,7 @@ def build_html_report(
       --opponent-highlight-mvp-border: {HIGHLIGHT_COLORS['opponent']['mvp_border']};
       --opponent-highlight-mvp-score: {HIGHLIGHT_COLORS['opponent']['mvp_score']};
       --opponent-highlight-legend-dot: {HIGHLIGHT_COLORS['opponent']['legend_dot']};
-      --mvp-overview-summary-bg: {THEME_COLORS['mvp_overview_summary_bg']};
+      --mvp-overview-summary-bg: {effective_theme_color};
     }}
     @media (display-mode: standalone), (display-mode: fullscreen) {{
       :root {{
@@ -6468,7 +6511,7 @@ def build_html_report(
 </head>
 <body>
   <main>
-    <h1>Nächster USC-Heimgegner:<br><span data-next-opponent>{escape(heading)}</span></h1>
+    <h1>Nächster Heimgegner ({home_team_escaped}):<br><span data-next-opponent>{escape(heading)}</span></h1>
 {hero_layout_html}
 {notes_html}
     <section>
@@ -6478,7 +6521,7 @@ def build_html_report(
       </ul>
     </section>
     <section>
-      <h2>Spiele: {escape(USC_CANONICAL_NAME)}</h2>
+      <h2>Spiele: {home_team_escaped}</h2>
       <ul class=\"match-list\">
         {usc_items}
       </ul>
@@ -6499,7 +6542,7 @@ def build_html_report(
         </div>
       </details>
       <details class=\"accordion\">
-        <summary>Kader {escape(USC_CANONICAL_NAME)}</summary>
+        <summary>Kader {home_team_escaped}</summary>
         <div class=\"accordion-content\">
 {usc_photo_block}          <ul class=\"roster-list\">
             {usc_roster_items}
@@ -6517,7 +6560,7 @@ def build_html_report(
         </div>
       </details>
       <details class=\"accordion\">
-        <summary>Wechselbörse {escape(USC_CANONICAL_NAME)}</summary>
+        <summary>Wechselbörse {home_team_escaped}</summary>
         <div class=\"accordion-content\">
           <ul class=\"transfer-list\">
             {usc_transfer_items}
@@ -6535,7 +6578,7 @@ def build_html_report(
         </div>
       </details>
       <details class=\"accordion\">
-        <summary>News von {escape(USC_CANONICAL_NAME)}</summary>
+        <summary>News von {home_team_escaped}</summary>
         <div class=\"accordion-content\">
           <ul class=\"news-list\">
             {usc_news_items}
@@ -6553,7 +6596,7 @@ def build_html_report(
           </ul>
         </article>
         <article class=\"instagram-card\">
-          <h3>{escape(USC_CANONICAL_NAME)}</h3>
+          <h3>{home_team_escaped}</h3>
           <ul class=\"instagram-list\">
             {usc_instagram_items}
           </ul>
@@ -6565,7 +6608,7 @@ def build_html_report(
   </main>
   <script>
     (() => {{
-      const themeColor = "{THEME_COLORS['mvp_overview_summary_bg']}";
+      const themeColor = "{effective_theme_color}";
       const themeMeta = document.querySelector('meta[name="theme-color"]');
       if (themeMeta) {{
         themeMeta.setAttribute("content", themeColor);
@@ -6832,6 +6875,8 @@ __all__ = [
     "fetch_schedule",
     "find_last_matches_for_team",
     "find_next_match_for_team",
+    "find_next_home_match",
+    "find_next_home_match_in_ics",
     "find_next_usc_home_match",
     "load_schedule_from_file",
     "parse_roster",

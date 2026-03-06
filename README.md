@@ -1,6 +1,6 @@
 # USC Streaminginfos
 
-Dieses Repository erzeugt täglich eine schlanke HTML-Seite zum Frauen-Bundesligateam des USC Münster und stellt zusätzliche Datensichten für Streams oder Social-Media-Betreuung bereit. Alle Informationen werden aus frei zugänglichen Quellen geladen – der Spielplan kommt aus dem öffentlichen CSV-Export der Volleyball Bundesliga, News werden von den Vereinsseiten sowie den VBL-Portalen geholt und internationale Partien direkt von der CEV aggregiert.
+Dieses Repository erzeugt täglich eine schlanke HTML-Seite für ein Volleyball-Team und stellt zusätzliche Datensichten für Streams oder Social-Media-Betreuung bereit. Das Tool ist generisch konfigurierbar (siehe `config.json`) – in der Standardkonfiguration ist es auf das Frauen-Bundesligateam des USC Münster ausgerichtet. Alle Informationen werden aus frei zugänglichen Quellen geladen – der Spielplan kommt aus dem öffentlichen CSV-Export der Volleyball Bundesliga, News werden von den Vereinsseiten sowie den VBL-Portalen geholt und internationale Partien direkt von der CEV aggregiert.
 
 ## Funktionsumfang
 
@@ -52,6 +52,51 @@ Zur Orientierung findest du hier die wichtigsten Verzeichnisse des Projekts im �
 * `scripts/`: Hilfsprogramme für wiederkehrende Aufgaben wie die Aktualisierung des Lineup-Datensatzes oder das Sammeln internationaler Spiele.【F:scripts/update_lineups.py†L1-L78】【F:scripts/update_international_matches.py†L1-L64】
 * `docs/`: Ausgabeordner für generierte HTML-Seiten, JSON-Datensätze und ergänzende Dokumentation rund um die Datenpipelines.【F:docs/lineups_workflow.md†L1-L37】
 * `.github/workflows/`: Automatisierte GitHub-Actions, die Berichte und Datensätze regelmäßig erzeugen und veröffentlichen.【F:.github/workflows/update-lineups.yml†L1-L34】
+
+## Konfiguration (`config.json`)
+
+Das Tool ist vollständig konfigurierbar und lässt sich für beliebige Vereine einsetzen. Die Konfiguration erfolgt über eine optionale Datei `config.json` im Repository-Root.
+
+### Struktur
+
+```json
+{
+  "home_team": "USC Münster",
+  "theme": {
+    "primary": "#0f766e"
+  }
+}
+```
+
+### Felder
+
+| Feld | Pflicht | Beschreibung |
+|---|---|---|
+| `home_team` | Nein | Name des Heimteams wie er im VBL-Spielplan steht (z. B. `"Dresdner SC"`). Fehlt das Feld oder die Datei, wird `"USC Münster"` als Standard verwendet. |
+| `theme.primary` | Nein | Primärfarbe als CSS-Farbwert (z. B. `"#0f766e"`). Beeinflusst `--theme-color`, `--home-accent`, `--mvp-overview-summary-bg` in den generierten HTML-Dateien sowie `theme_color`/`background_color` im PWA-Manifest. Fehlt der Wert, bleibt die Standard-Farbe erhalten. |
+
+### Für Forks
+
+Um das Repository für einen anderen Verein zu nutzen, passe `config.json` entsprechend an:
+
+```json
+{
+  "home_team": "Dresdner SC",
+  "theme": {
+    "primary": "#d4a017"
+  }
+}
+```
+
+Der `--config`-Parameter erlaubt es außerdem, zur Laufzeit eine alternative Konfigurationsdatei anzugeben:
+
+```bash
+PYTHONPATH=src python -m usc_kommentatoren --config /pfad/zu/mein_verein.json
+```
+
+### Rückwärtskompatibilität
+
+Ohne `config.json` verhält sich das Repository exakt wie bisher: USC Münster ist das Heimteam und die Standard-Farbgebung bleibt erhalten.
 
 ## Voraussetzungen
 

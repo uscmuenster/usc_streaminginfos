@@ -1,4 +1,4 @@
-"""Generate USC Münster volleyball reports from schedule CSV exports."""
+"""Generate volleyball reports from schedule CSV exports."""
 
 from .report import (
     DEFAULT_SCHEDULE_URL,
@@ -18,6 +18,7 @@ from .report import (
     fetch_team_news,
     find_last_matches_for_team,
     find_next_match_for_team,
+    find_next_home_match,
     find_next_usc_home_match,
     get_team_roster_url,
     load_schedule_from_file,
@@ -42,6 +43,7 @@ __all__ = [
     "fetch_team_news",
     "find_last_matches_for_team",
     "find_next_match_for_team",
+    "find_next_home_match",
     "find_next_usc_home_match",
     "get_team_roster_url",
     "load_schedule_from_file",

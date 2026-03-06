@@ -18,15 +18,21 @@ def _add_src_to_path() -> None:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Lädt die letzten USC-Spielberichtsbögen sowie die jüngsten Partien des "
+            "Lädt die letzten Spielberichtsbögen des Heimteams sowie die jüngsten Partien des "
             "nächsten Gegners und erzeugt den Lineup-Datensatz."
         ),
+    )
+    parser.add_argument(
+        "--config",
+        type=Path,
+        default=None,
+        help="Pfad zur config.json (Standard: config.json im Repo-Root).",
     )
     parser.add_argument(
         "--limit",
         type=int,
         default=2,
-        help="Anzahl der abgeschlossenen USC-Spiele, die ausgewertet werden (Standard: 2).",
+        help="Anzahl der abgeschlossenen Heimspiele, die ausgewertet werden (Standard: 2).",
     )
     parser.add_argument(
         "--schedule-url",
@@ -62,9 +68,12 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> int:
     _add_src_to_path()
     from usc_kommentatoren import lineups
+    from usc_kommentatoren.config_loader import load_config
 
     parser = build_parser()
     args = parser.parse_args()
+
+    cfg = load_config(args.config)
 
     dataset = lineups.build_lineup_dataset(
         limit=args.limit,
@@ -73,6 +82,7 @@ def main() -> int:
         output_path=args.output or lineups.DEFAULT_OUTPUT_PATH,
         pdf_cache_dir=args.cache_dir or lineups.PDF_CACHE_DIR,
         roster_cache_dir=args.roster_dir or lineups.ROSTER_CACHE_DIR,
+        home_team=cfg.home_team,
     )
 
     print(
