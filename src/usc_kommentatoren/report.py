@@ -3143,6 +3143,13 @@ def prepare_direct_comparison(
     if not isinstance(seasons_raw, Sequence):
         return None
 
+    payload_home_team_raw = payload.get("team") if isinstance(payload, Mapping) else None
+    payload_home_team = (
+        str(payload_home_team_raw).strip() if isinstance(payload_home_team_raw, str) else ""
+    )
+    configured_home_team = str(home_team).strip() if home_team else ""
+    effective_home_team = payload_home_team or configured_home_team or USC_CANONICAL_NAME
+
     normalized_target = normalize_name(opponent_name)
     if not normalized_target:
         return None
@@ -3381,7 +3388,7 @@ def prepare_direct_comparison(
                         date_label=date_label,
                         season=season_label,
                         home_team=match_home_team or opponent_label,
-                        away_team=match_away_team or home_team,
+                        away_team=match_away_team or effective_home_team,
                         round_label=round_label,
                         competition=competition,
                         location=location,

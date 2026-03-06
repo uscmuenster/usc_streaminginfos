@@ -883,6 +883,7 @@ def build_lineup_dataset(
         setter_lookup=setter_cache,
         roster_lookup=official_roster_cache,
     )
+
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(dataset, ensure_ascii=False, indent=2), encoding="utf-8")
     return dataset
