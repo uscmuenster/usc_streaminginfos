@@ -1589,7 +1589,9 @@ def parse_kickoff(date_str: str, time_str: str) -> datetime:
 def fetch_ics_schedule(url: str = DEFAULT_SCHEDULE_ICS_URL) -> str:
     response = requests.get(url, headers=REQUEST_HEADERS, timeout=30)
     response.raise_for_status()
-    return response.text
+    # ICS payloads are UTF-8, but some responses are served without a reliable
+    # charset header. Decode from bytes to avoid mojibake in team names.
+    return response.content.decode("utf-8", errors="replace")
 
 
 def _unfold_ics_lines(ics_text: str) -> List[str]:
@@ -1610,7 +1612,7 @@ def _unfold_ics_lines(ics_text: str) -> List[str]:
 
 def _decode_ics_text(value: str) -> str:
     decoded = value.replace("\\,", ",").replace("\\;", ";").replace("\\n", "\n")
-    return decoded.strip()
+    return _fix_mojibake(decoded).strip()
 
 
 def _get_ics_field(event: Dict[str, str], field_name: str) -> Optional[str]:
