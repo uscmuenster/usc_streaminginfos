@@ -1,6 +1,6 @@
 {
-  "team": "SSC Palmberg Schwerin",
-  "generated_at": "2026-03-06T19:13:27Z",
+  "team": "VC Wiesbaden",
+  "generated_at": "2026-03-06T19:21:20Z",
   "seasons": [
     {
       "season": "2025/26",
@@ -8,36 +8,59 @@
         {
           "team": "Allianz MTV Stuttgart",
           "summary": {
-            "matches_played": 1,
+            "matches_played": 2,
             "home_wins": 0,
-            "opponent_wins": 1,
+            "opponent_wins": 2,
             "home_sets_for": 0,
-            "opponent_sets_for": 3,
-            "home_points_for": 65,
-            "opponent_points_for": 76
+            "opponent_sets_for": 6,
+            "home_points_for": 119,
+            "opponent_points_for": 152
           },
           "matches": [
             {
-              "match_id": "2061",
-              "date": "2025-12-27",
-              "home_team": "Allianz MTV Stuttgart",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 16",
+              "match_id": "2050",
+              "date": "2025-12-12",
+              "home_team": "VC Wiesbaden",
+              "away_team": "Allianz MTV Stuttgart",
+              "round": "Spieltag 12",
               "competition": "1. Bundesliga Frauen",
-              "location": "SCHARRena Stuttgart (70372 Stuttgart)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "24:26",
-                "21:25",
-                "20:25"
+                "22:25",
+                "20:25",
+                "18:25"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "76:65"
+                "sets": "0:3",
+                "points": "60:75"
               },
               "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 65,
-              "opponent_points": 76,
+              "home_points": 60,
+              "opponent_points": 75,
+              "home_won": false
+            },
+            {
+              "match_id": "2116",
+              "date": "2026-03-04",
+              "home_team": "Allianz MTV Stuttgart",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 21",
+              "competition": "1. Bundesliga Frauen",
+              "location": "SCHARRena Stuttgart (70372 Stuttgart)",
+              "set_scores": [
+                "25:27",
+                "17:25",
+                "17:25"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "77:59"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 59,
+              "opponent_points": 77,
               "home_won": false
             }
           ]
@@ -46,59 +69,60 @@
           "team": "Binder Blaubären TSV Flacht",
           "summary": {
             "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 0,
-            "home_points_for": 150,
-            "opponent_points_for": 95
+            "home_wins": 1,
+            "opponent_wins": 1,
+            "home_sets_for": 4,
+            "opponent_sets_for": 3,
+            "home_points_for": 163,
+            "opponent_points_for": 135
           },
           "matches": [
             {
-              "match_id": "2041",
-              "date": "2025-11-29",
-              "home_team": "Binder Blaubären TSV Flacht",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 10",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Heckengäusporthalle II (71287 Weissach)",
-              "set_scores": [
-                "25:17",
-                "25:18",
-                "25:17"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "52:75"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 52,
-              "home_won": true
-            },
-            {
-              "match_id": "2107",
-              "date": "2026-02-13",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2095",
+              "date": "2025-11-01",
+              "home_team": "VC Wiesbaden",
               "away_team": "Binder Blaubären TSV Flacht",
-              "round": "Spieltag 19",
+              "round": "Spieltag 8",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:12",
-                "25:12",
+                "25:11",
+                "25:9",
                 "25:19"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:43"
+                "points": "75:39"
               },
               "home_sets": 3,
               "opponent_sets": 0,
               "home_points": 75,
-              "opponent_points": 43,
+              "opponent_points": 39,
               "home_won": true
+            },
+            {
+              "match_id": "2029",
+              "date": "2026-02-01",
+              "home_team": "Binder Blaubären TSV Flacht",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 7",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Heckengäusporthalle II (71287 Weissach)",
+              "set_scores": [
+                "25:21",
+                "23:25",
+                "21:25",
+                "19:25"
+              ],
+              "result": {
+                "sets": "3:1",
+                "points": "96:88"
+              },
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 88,
+              "opponent_points": 96,
+              "home_won": false
             }
           ]
         },
@@ -106,122 +130,95 @@
           "team": "Dresdner SC",
           "summary": {
             "matches_played": 2,
-            "home_wins": 1,
-            "opponent_wins": 1,
-            "home_sets_for": 5,
-            "opponent_sets_for": 4,
-            "home_points_for": 191,
-            "opponent_points_for": 196
+            "home_wins": 0,
+            "opponent_wins": 2,
+            "home_sets_for": 0,
+            "opponent_sets_for": 6,
+            "home_points_for": 96,
+            "opponent_points_for": 150
           },
           "matches": [
             {
-              "match_id": "2026",
-              "date": "2025-11-01",
+              "match_id": "2014",
+              "date": "2025-10-24",
               "home_team": "Dresdner SC",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 7",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 3",
               "competition": "1. Bundesliga Frauen",
               "location": "Margon Arena (01277 Dresden)",
               "set_scores": [
-                "23:25",
-                "25:21",
-                "26:24",
-                "20:25",
-                "6:15"
+                "16:25",
+                "17:25",
+                "16:25"
               ],
               "result": {
-                "sets": "3:2",
-                "points": "110:100"
+                "sets": "3:0",
+                "points": "75:49"
               },
-              "home_sets": 2,
+              "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 100,
-              "opponent_points": 110,
+              "home_points": 49,
+              "opponent_points": 75,
               "home_won": false
             },
             {
-              "match_id": "2092",
-              "date": "2026-01-31",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2080",
+              "date": "2026-01-21",
+              "home_team": "VC Wiesbaden",
               "away_team": "Dresdner SC",
-              "round": "Spieltag 8",
+              "round": "Spieltag 4",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "16:25",
-                "25:22",
-                "25:20",
-                "25:19"
+                "15:25",
+                "15:25",
+                "17:25"
               ],
               "result": {
-                "sets": "3:1",
-                "points": "91:86"
+                "sets": "0:3",
+                "points": "47:75"
               },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 91,
-              "opponent_points": 86,
-              "home_won": true
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 47,
+              "opponent_points": 75,
+              "home_won": false
             }
           ]
         },
         {
           "team": "ETV Hamburger Volksbank Volleys",
           "summary": {
-            "matches_played": 2,
-            "home_wins": 2,
+            "matches_played": 1,
+            "home_wins": 1,
             "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 1,
-            "home_points_for": 170,
-            "opponent_points_for": 114
+            "home_sets_for": 3,
+            "opponent_sets_for": 0,
+            "home_points_for": 76,
+            "opponent_points_for": 60
           },
           "matches": [
             {
-              "match_id": "2012",
-              "date": "2025-10-18",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2062",
+              "date": "2025-12-27",
+              "home_team": "VC Wiesbaden",
               "away_team": "ETV Hamburger Volksbank Volleys",
-              "round": "Spieltag 2",
+              "round": "Spieltag 16",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
                 "25:16",
-                "25:11",
-                "25:14"
+                "25:20",
+                "26:24"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:41"
+                "points": "76:60"
               },
               "home_sets": 3,
               "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 41,
-              "home_won": true
-            },
-            {
-              "match_id": "2078",
-              "date": "2026-01-17",
-              "home_team": "ETV Hamburger Volksbank Volleys",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 17",
-              "competition": "1. Bundesliga Frauen",
-              "location": "CU Arena (21147 Hamburg)",
-              "set_scores": [
-                "25:16",
-                "25:21",
-                "20:25",
-                "25:11"
-              ],
-              "result": {
-                "sets": "1:3",
-                "points": "73:95"
-              },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 95,
-              "opponent_points": 73,
+              "home_points": 76,
+              "opponent_points": 60,
               "home_won": true
             }
           ]
@@ -230,257 +227,75 @@
           "team": "Ladies in Black Aachen",
           "summary": {
             "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 1,
-            "home_points_for": 170,
-            "opponent_points_for": 146
+            "home_wins": 0,
+            "opponent_wins": 2,
+            "home_sets_for": 3,
+            "opponent_sets_for": 6,
+            "home_points_for": 193,
+            "opponent_points_for": 202
           },
           "matches": [
             {
-              "match_id": "2016",
-              "date": "2025-10-25",
+              "match_id": "2004",
+              "date": "2025-10-11",
               "home_team": "Ladies in Black Aachen",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 3",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 1",
               "competition": "1. Bundesliga Frauen",
               "location": "Neuköllner Straße (52068 Aachen)",
               "set_scores": [
-                "25:20",
-                "25:21",
-                "20:25",
-                "25:23"
-              ],
-              "result": {
-                "sets": "1:3",
-                "points": "89:95"
-              },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 95,
-              "opponent_points": 89,
-              "home_won": true
-            },
-            {
-              "match_id": "2082",
-              "date": "2026-01-21",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "Ladies in Black Aachen",
-              "round": "Spieltag 4",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
-                "25:19",
-                "25:17",
-                "25:21"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:57"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 57,
-              "home_won": true
-            }
-          ]
-        },
-        {
-          "team": "Schwarz-Weiß Erfurt",
-          "summary": {
-            "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 0,
-            "home_points_for": 150,
-            "opponent_points_for": 109
-          },
-          "matches": [
-            {
-              "match_id": "2036",
-              "date": "2025-11-14",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "Schwarz-Weiß Erfurt",
-              "round": "Spieltag 9",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
-                "25:20",
-                "25:20",
-                "25:19"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:59"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 59,
-              "home_won": true
-            },
-            {
-              "match_id": "2102",
-              "date": "2026-02-07",
-              "home_team": "Schwarz-Weiß Erfurt",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 18",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Riethsporthalle (99089 Erfurt)",
-              "set_scores": [
-                "25:12",
-                "25:21",
-                "25:17"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "50:75"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 50,
-              "home_won": true
-            }
-          ]
-        },
-        {
-          "team": "Skurios Volleys Borken",
-          "summary": {
-            "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 2,
-            "home_points_for": 185,
-            "opponent_points_for": 153
-          },
-          "matches": [
-            {
-              "match_id": "2024",
-              "date": "2025-10-29",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "Skurios Volleys Borken",
-              "round": "Spieltag 5",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
-                "25:15",
-                "25:23",
-                "25:17"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:55"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 55,
-              "home_won": true
-            },
-            {
-              "match_id": "2090",
-              "date": "2026-01-24",
-              "home_team": "Skurios Volleys Borken",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 6",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Mergelsberg Sporthalle (46325 Borken)",
-              "set_scores": [
-                "22:25",
+                "26:24",
                 "23:25",
-                "25:20",
                 "25:19",
-                "15:9"
-              ],
-              "result": {
-                "sets": "2:3",
-                "points": "98:110"
-              },
-              "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 110,
-              "opponent_points": 98,
-              "home_won": true
-            }
-          ]
-        },
-        {
-          "team": "USC Münster",
-          "summary": {
-            "matches_played": 2,
-            "home_wins": 1,
-            "opponent_wins": 1,
-            "home_sets_for": 5,
-            "opponent_sets_for": 3,
-            "home_points_for": 181,
-            "opponent_points_for": 166
-          },
-          "matches": [
-            {
-              "match_id": "2001",
-              "date": "2025-10-12",
-              "home_team": "USC Münster",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 1",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle Berg Fidel (48153 Münster)",
-              "set_scores": [
-                "25:20",
-                "22:25",
-                "25:21",
-                "21:25",
-                "13:15"
+                "23:25",
+                "12:15"
               ],
               "result": {
                 "sets": "3:2",
-                "points": "106:106"
+                "points": "108:109"
               },
               "home_sets": 2,
               "opponent_sets": 3,
-              "home_points": 106,
-              "opponent_points": 106,
+              "home_points": 109,
+              "opponent_points": 108,
               "home_won": false
             },
             {
-              "match_id": "2067",
-              "date": "2025-12-17",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "USC Münster",
+              "match_id": "2070",
+              "date": "2026-01-11",
+              "home_team": "VC Wiesbaden",
+              "away_team": "Ladies in Black Aachen",
               "round": "Spieltag 13",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:22",
-                "25:16",
-                "25:22"
+                "25:18",
+                "20:25",
+                "15:25",
+                "24:26"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "75:60"
+                "sets": "1:3",
+                "points": "84:94"
               },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 60,
-              "home_won": true
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 84,
+              "opponent_points": 94,
+              "home_won": false
             }
           ]
         },
         {
-          "team": "VC Wiesbaden",
+          "team": "SSC Palmberg Schwerin",
           "summary": {
             "matches_played": 1,
-            "home_wins": 1,
-            "opponent_wins": 0,
-            "home_sets_for": 3,
-            "opponent_sets_for": 0,
-            "home_points_for": 75,
-            "opponent_points_for": 62
+            "home_wins": 0,
+            "opponent_wins": 1,
+            "home_sets_for": 0,
+            "opponent_sets_for": 3,
+            "home_points_for": 62,
+            "opponent_points_for": 75
           },
           "matches": [
             {
@@ -492,18 +307,204 @@
               "competition": "1. Bundesliga Frauen",
               "location": "Palmberg Arena (19059 Schwerin)",
               "set_scores": [
-                "25:21",
-                "25:21",
-                "25:20"
+                "21:25",
+                "21:25",
+                "20:25"
               ],
               "result": {
                 "sets": "3:0",
                 "points": "75:62"
               },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 62,
+              "opponent_points": 75,
+              "home_won": false
+            }
+          ]
+        },
+        {
+          "team": "Schwarz-Weiß Erfurt",
+          "summary": {
+            "matches_played": 2,
+            "home_wins": 1,
+            "opponent_wins": 1,
+            "home_sets_for": 3,
+            "opponent_sets_for": 5,
+            "home_points_for": 148,
+            "opponent_points_for": 182
+          },
+          "matches": [
+            {
+              "match_id": "2020",
+              "date": "2025-10-28",
+              "home_team": "VC Wiesbaden",
+              "away_team": "Schwarz-Weiß Erfurt",
+              "round": "Spieltag 5",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "25:22",
+                "25:22",
+                "18:25",
+                "11:25",
+                "15:13"
+              ],
+              "result": {
+                "sets": "3:2",
+                "points": "94:107"
+              },
+              "home_sets": 3,
+              "opponent_sets": 2,
+              "home_points": 94,
+              "opponent_points": 107,
+              "home_won": true
+            },
+            {
+              "match_id": "2086",
+              "date": "2026-01-23",
+              "home_team": "Schwarz-Weiß Erfurt",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 6",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Riethsporthalle (99089 Erfurt)",
+              "set_scores": [
+                "17:25",
+                "21:25",
+                "16:25"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "75:54"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 54,
+              "opponent_points": 75,
+              "home_won": false
+            }
+          ]
+        },
+        {
+          "team": "Skurios Volleys Borken",
+          "summary": {
+            "matches_played": 2,
+            "home_wins": 2,
+            "opponent_wins": 0,
+            "home_sets_for": 6,
+            "opponent_sets_for": 0,
+            "home_points_for": 150,
+            "opponent_points_for": 99
+          },
+          "matches": [
+            {
+              "match_id": "2008",
+              "date": "2025-10-19",
+              "home_team": "VC Wiesbaden",
+              "away_team": "Skurios Volleys Borken",
+              "round": "Spieltag 2",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "25:13",
+                "25:19",
+                "25:19"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "75:51"
+              },
               "home_sets": 3,
               "opponent_sets": 0,
               "home_points": 75,
-              "opponent_points": 62,
+              "opponent_points": 51,
+              "home_won": true
+            },
+            {
+              "match_id": "2074",
+              "date": "2026-01-18",
+              "home_team": "Skurios Volleys Borken",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 17",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Mergelsberg Sporthalle (46325 Borken)",
+              "set_scores": [
+                "25:15",
+                "25:17",
+                "25:16"
+              ],
+              "result": {
+                "sets": "0:3",
+                "points": "48:75"
+              },
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 75,
+              "opponent_points": 48,
+              "home_won": true
+            }
+          ]
+        },
+        {
+          "team": "USC Münster",
+          "summary": {
+            "matches_played": 2,
+            "home_wins": 2,
+            "opponent_wins": 0,
+            "home_sets_for": 6,
+            "opponent_sets_for": 4,
+            "home_points_for": 194,
+            "opponent_points_for": 199
+          },
+          "matches": [
+            {
+              "match_id": "2044",
+              "date": "2025-12-06",
+              "home_team": "VC Wiesbaden",
+              "away_team": "USC Münster",
+              "round": "Spieltag 11",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "15:25",
+                "25:19",
+                "16:25",
+                "25:14",
+                "20:18"
+              ],
+              "result": {
+                "sets": "3:2",
+                "points": "101:101"
+              },
+              "home_sets": 3,
+              "opponent_sets": 2,
+              "home_points": 101,
+              "opponent_points": 101,
+              "home_won": true
+            },
+            {
+              "match_id": "2110",
+              "date": "2026-02-21",
+              "home_team": "USC Münster",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 20",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "25:17",
+                "13:25",
+                "25:23",
+                "15:25",
+                "15:8"
+              ],
+              "result": {
+                "sets": "2:3",
+                "points": "98:93"
+              },
+              "home_sets": 3,
+              "opponent_sets": 2,
+              "home_points": 93,
+              "opponent_points": 98,
               "home_won": true
             }
           ]
@@ -512,60 +513,60 @@
           "team": "VfB Suhl LOTTO Thüringen",
           "summary": {
             "matches_played": 2,
-            "home_wins": 1,
-            "opponent_wins": 1,
-            "home_sets_for": 4,
-            "opponent_sets_for": 3,
-            "home_points_for": 174,
-            "opponent_points_for": 166
+            "home_wins": 0,
+            "opponent_wins": 2,
+            "home_sets_for": 1,
+            "opponent_sets_for": 6,
+            "home_points_for": 138,
+            "opponent_points_for": 174
           },
           "matches": [
             {
-              "match_id": "2051",
-              "date": "2025-12-14",
+              "match_id": "2039",
+              "date": "2025-11-28",
               "home_team": "VfB Suhl LOTTO Thüringen",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 12",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 10",
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle Wolfsgrube (98527 Suhl)",
               "set_scores": [
+                "25:23",
+                "15:25",
                 "23:25",
-                "20:25",
-                "25:22",
-                "19:25"
+                "18:25"
               ],
               "result": {
                 "sets": "3:1",
-                "points": "97:87"
+                "points": "98:81"
               },
               "home_sets": 1,
               "opponent_sets": 3,
-              "home_points": 87,
-              "opponent_points": 97,
+              "home_points": 81,
+              "opponent_points": 98,
               "home_won": false
             },
             {
-              "match_id": "2117",
-              "date": "2026-03-04",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2105",
+              "date": "2026-02-14",
+              "home_team": "VC Wiesbaden",
               "away_team": "VfB Suhl LOTTO Thüringen",
-              "round": "Spieltag 21",
+              "round": "Spieltag 19",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "37:35",
-                "25:13",
-                "25:21"
+                "24:26",
+                "19:25",
+                "14:25"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "87:69"
+                "sets": "0:3",
+                "points": "57:76"
               },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 87,
-              "opponent_points": 69,
-              "home_won": true
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 57,
+              "opponent_points": 76,
+              "home_won": false
             }
           ]
         }
@@ -578,87 +579,84 @@
           "team": "Allianz MTV Stuttgart",
           "summary": {
             "matches_played": 3,
-            "home_wins": 1,
-            "opponent_wins": 2,
-            "home_sets_for": 7,
-            "opponent_sets_for": 8,
-            "home_points_for": 320,
-            "opponent_points_for": 332
+            "home_wins": 0,
+            "opponent_wins": 3,
+            "home_sets_for": 3,
+            "opponent_sets_for": 9,
+            "home_points_for": 210,
+            "opponent_points_for": 276
           },
           "matches": [
             {
-              "match_id": "2022",
-              "date": "2024-10-19",
+              "match_id": "2012",
+              "date": "2024-10-05",
               "home_team": "Allianz MTV Stuttgart",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 5",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 3",
               "competition": "1. Bundesliga Frauen",
               "location": "SCHARRena Stuttgart (70372 Stuttgart)",
               "set_scores": [
-                "20:25",
-                "17:25",
-                "25:23",
-                "25:15",
-                "8:15"
+                "18:25",
+                "10:25",
+                "14:25"
               ],
               "result": {
-                "sets": "3:2",
-                "points": "103:95"
+                "sets": "3:0",
+                "points": "75:42"
               },
-              "home_sets": 2,
+              "home_sets": 0,
               "opponent_sets": 3,
-              "home_points": 95,
-              "opponent_points": 103,
+              "home_points": 42,
+              "opponent_points": 75,
               "home_won": false
             },
             {
-              "match_id": "2067",
-              "date": "2024-12-21",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2057",
+              "date": "2024-12-07",
+              "home_team": "VC Wiesbaden",
               "away_team": "Allianz MTV Stuttgart",
-              "round": "Spieltag 14",
+              "round": "Spieltag 12",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "20:25",
-                "29:31",
-                "25:21",
-                "29:27",
-                "16:14"
+                "17:25",
+                "25:22",
+                "17:25",
+                "19:25"
               ],
               "result": {
-                "sets": "3:2",
-                "points": "119:118"
+                "sets": "1:3",
+                "points": "78:97"
               },
-              "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 119,
-              "opponent_points": 118,
-              "home_won": true
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 78,
+              "opponent_points": 97,
+              "home_won": false
             },
             {
-              "match_id": "2102",
-              "date": "2025-01-15",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2112",
+              "date": "2025-02-12",
+              "home_team": "VC Wiesbaden",
               "away_team": "Allianz MTV Stuttgart",
-              "round": "Spieltag 21",
+              "round": "Spieltag 23",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "19:25",
-                "25:22",
-                "25:23",
+                "25:20",
                 "24:26",
-                "13:15"
+                "8:25",
+                "25:18",
+                "8:15"
               ],
               "result": {
                 "sets": "2:3",
-                "points": "106:111"
+                "points": "90:104"
               },
               "home_sets": 2,
               "opponent_sets": 3,
-              "home_points": 106,
-              "opponent_points": 111,
+              "home_points": 90,
+              "opponent_points": 104,
               "home_won": false
             }
           ]
@@ -667,85 +665,84 @@
           "team": "Dresdner SC",
           "summary": {
             "matches_played": 3,
-            "home_wins": 2,
-            "opponent_wins": 1,
-            "home_sets_for": 8,
-            "opponent_sets_for": 4,
-            "home_points_for": 274,
-            "opponent_points_for": 236
+            "home_wins": 0,
+            "opponent_wins": 3,
+            "home_sets_for": 2,
+            "opponent_sets_for": 9,
+            "home_points_for": 225,
+            "opponent_points_for": 266
           },
           "matches": [
             {
-              "match_id": "2029",
-              "date": "2024-10-26",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2016",
+              "date": "2024-10-12",
+              "home_team": "VC Wiesbaden",
               "away_team": "Dresdner SC",
-              "round": "Spieltag 6",
+              "round": "Spieltag 4",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:18",
-                "19:25",
-                "25:14",
-                "20:25",
-                "12:15"
+                "25:20",
+                "24:26",
+                "22:25",
+                "20:25"
               ],
               "result": {
-                "sets": "2:3",
-                "points": "101:97"
+                "sets": "1:3",
+                "points": "91:96"
               },
-              "home_sets": 2,
+              "home_sets": 1,
               "opponent_sets": 3,
-              "home_points": 101,
-              "opponent_points": 97,
+              "home_points": 91,
+              "opponent_points": 96,
               "home_won": false
             },
             {
-              "match_id": "2074",
-              "date": "2024-12-28",
+              "match_id": "2061",
+              "date": "2024-12-14",
               "home_team": "Dresdner SC",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 15",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 13",
               "competition": "1. Bundesliga Frauen",
               "location": "Margon Arena (01277 Dresden)",
               "set_scores": [
-                "25:20",
-                "25:22",
-                "25:22"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "64:75"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 64,
-              "home_won": true
-            },
-            {
-              "match_id": "2122",
-              "date": "2025-02-22",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "Dresdner SC",
-              "round": "Spieltag 25",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
                 "23:25",
-                "25:9",
-                "25:23",
-                "25:18"
+                "24:26",
+                "25:19",
+                "16:25"
               ],
               "result": {
                 "sets": "3:1",
-                "points": "98:75"
+                "points": "95:88"
               },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 98,
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 88,
+              "opponent_points": 95,
+              "home_won": false
+            },
+            {
+              "match_id": "2132",
+              "date": "2025-03-15",
+              "home_team": "VC Wiesbaden",
+              "away_team": "Dresdner SC",
+              "round": "Spieltag 27",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "12:25",
+                "17:25",
+                "17:25"
+              ],
+              "result": {
+                "sets": "0:3",
+                "points": "46:75"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 46,
               "opponent_points": 75,
-              "home_won": true
+              "home_won": false
             }
           ]
         },
@@ -753,81 +750,84 @@
           "team": "Ladies in Black Aachen",
           "summary": {
             "matches_played": 3,
-            "home_wins": 3,
-            "opponent_wins": 0,
-            "home_sets_for": 9,
-            "opponent_sets_for": 0,
-            "home_points_for": 225,
-            "opponent_points_for": 164
+            "home_wins": 2,
+            "opponent_wins": 1,
+            "home_sets_for": 8,
+            "opponent_sets_for": 4,
+            "home_points_for": 273,
+            "opponent_points_for": 251
           },
           "matches": [
             {
-              "match_id": "2034",
-              "date": "2024-10-30",
+              "match_id": "2024",
+              "date": "2024-10-19",
               "home_team": "Ladies in Black Aachen",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 7",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 5",
               "competition": "1. Bundesliga Frauen",
               "location": "Neuköllner Straße (52068 Aachen)",
               "set_scores": [
-                "25:20",
-                "25:17",
-                "25:15"
+                "27:29",
+                "25:16",
+                "25:21",
+                "25:17"
               ],
               "result": {
-                "sets": "0:3",
-                "points": "52:75"
+                "sets": "1:3",
+                "points": "83:102"
               },
               "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 52,
+              "opponent_sets": 1,
+              "home_points": 102,
+              "opponent_points": 83,
               "home_won": true
             },
             {
-              "match_id": "2079",
-              "date": "2025-01-04",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2069",
+              "date": "2024-12-21",
+              "home_team": "VC Wiesbaden",
               "away_team": "Ladies in Black Aachen",
-              "round": "Spieltag 16",
+              "round": "Spieltag 14",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:14",
-                "25:19",
-                "25:23"
+                "18:25",
+                "25:22",
+                "20:25",
+                "25:21",
+                "7:15"
+              ],
+              "result": {
+                "sets": "2:3",
+                "points": "95:108"
+              },
+              "home_sets": 2,
+              "opponent_sets": 3,
+              "home_points": 95,
+              "opponent_points": 108,
+              "home_won": false
+            },
+            {
+              "match_id": "2100",
+              "date": "2025-01-29",
+              "home_team": "VC Wiesbaden",
+              "away_team": "Ladies in Black Aachen",
+              "round": "Spieltag 20",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "26:24",
+                "25:18",
+                "25:18"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:56"
+                "points": "76:60"
               },
               "home_sets": 3,
               "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 56,
-              "home_won": true
-            },
-            {
-              "match_id": "2131",
-              "date": "2025-03-15",
-              "home_team": "Ladies in Black Aachen",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 27",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Neuköllner Straße (52068 Aachen)",
-              "set_scores": [
-                "25:16",
-                "25:18",
-                "25:22"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "56:75"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 56,
+              "home_points": 76,
+              "opponent_points": 60,
               "home_won": true
             }
           ]
@@ -836,265 +836,96 @@
           "team": "SC Potsdam",
           "summary": {
             "matches_played": 3,
-            "home_wins": 3,
-            "opponent_wins": 0,
-            "home_sets_for": 9,
-            "opponent_sets_for": 2,
-            "home_points_for": 254,
-            "opponent_points_for": 211
+            "home_wins": 1,
+            "opponent_wins": 2,
+            "home_sets_for": 3,
+            "opponent_sets_for": 7,
+            "home_points_for": 220,
+            "opponent_points_for": 236
           },
           "matches": [
             {
-              "match_id": "2011",
-              "date": "2024-10-23",
-              "home_team": "SC Potsdam",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 3",
-              "competition": "1. Bundesliga Frauen",
-              "location": "MBS Arena Potsdam (14471 Potsdam)",
-              "set_scores": [
-                "25:20",
-                "25:22",
-                "25:20"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "62:75"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 62,
-              "home_won": true
-            },
-            {
-              "match_id": "2056",
-              "date": "2024-12-07",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "SC Potsdam",
-              "round": "Spieltag 12",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
-                "25:16",
-                "21:25",
-                "25:13",
-                "18:25",
-                "15:12"
-              ],
-              "result": {
-                "sets": "3:2",
-                "points": "104:91"
-              },
-              "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 104,
-              "opponent_points": 91,
-              "home_won": true
-            },
-            {
-              "match_id": "2096",
-              "date": "2025-01-29",
-              "home_team": "SC Potsdam",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 20",
-              "competition": "1. Bundesliga Frauen",
-              "location": "MBS Arena Potsdam (14471 Potsdam)",
-              "set_scores": [
-                "25:15",
-                "25:20",
-                "25:23"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "58:75"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 58,
-              "home_won": true
-            }
-          ]
-        },
-        {
-          "team": "Schwarz-Weiß Erfurt",
-          "summary": {
-            "matches_played": 3,
-            "home_wins": 3,
-            "opponent_wins": 0,
-            "home_sets_for": 9,
-            "opponent_sets_for": 0,
-            "home_points_for": 225,
-            "opponent_points_for": 157
-          },
-          "matches": [
-            {
-              "match_id": "2039",
+              "match_id": "2036",
               "date": "2024-11-02",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "Schwarz-Weiß Erfurt",
+              "home_team": "SC Potsdam",
+              "away_team": "VC Wiesbaden",
               "round": "Spieltag 8",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "MBS Arena Potsdam (14471 Potsdam)",
               "set_scores": [
-                "25:21",
-                "25:23",
-                "25:22"
+                "22:25",
+                "18:25",
+                "20:25"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:66"
+                "points": "75:60"
               },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 66,
-              "home_won": true
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 60,
+              "opponent_points": 75,
+              "home_won": false
             },
             {
-              "match_id": "2084",
+              "match_id": "2081",
               "date": "2025-01-11",
-              "home_team": "Schwarz-Weiß Erfurt",
-              "away_team": "SSC Palmberg Schwerin",
+              "home_team": "VC Wiesbaden",
+              "away_team": "SC Potsdam",
               "round": "Spieltag 17",
               "competition": "1. Bundesliga Frauen",
-              "location": "Riethsporthalle (99089 Erfurt)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:22",
-                "25:20",
-                "25:12"
+                "25:23",
+                "25:23",
+                "22:25",
+                "25:15"
               ],
               "result": {
-                "sets": "0:3",
-                "points": "54:75"
+                "sets": "3:1",
+                "points": "97:86"
               },
               "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 54,
+              "opponent_sets": 1,
+              "home_points": 97,
+              "opponent_points": 86,
               "home_won": true
             },
             {
-              "match_id": "2106",
+              "match_id": "2109",
               "date": "2025-02-08",
-              "home_team": "Schwarz-Weiß Erfurt",
-              "away_team": "SSC Palmberg Schwerin",
+              "home_team": "SC Potsdam",
+              "away_team": "VC Wiesbaden",
               "round": "Spieltag 22",
               "competition": "1. Bundesliga Frauen",
-              "location": "Riethsporthalle (99089 Erfurt)",
+              "location": "MBS Arena Potsdam (14471 Potsdam)",
               "set_scores": [
-                "25:17",
-                "25:8",
-                "25:12"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "37:75"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 37,
-              "home_won": true
-            }
-          ]
-        },
-        {
-          "team": "USC Münster",
-          "summary": {
-            "matches_played": 3,
-            "home_wins": 3,
-            "opponent_wins": 0,
-            "home_sets_for": 9,
-            "opponent_sets_for": 2,
-            "home_points_for": 257,
-            "opponent_points_for": 214
-          },
-          "matches": [
-            {
-              "match_id": "2087",
-              "date": "2024-11-16",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "USC Münster",
-              "round": "Spieltag 18",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
-                "25:19",
-                "25:21",
-                "25:16"
+                "21:25",
+                "19:25",
+                "23:25"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:56"
+                "points": "75:63"
               },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 56,
-              "home_won": true
-            },
-            {
-              "match_id": "2042",
-              "date": "2025-01-18",
-              "home_team": "USC Münster",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 9",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle Berg Fidel (48153 Münster)",
-              "set_scores": [
-                "25:19",
-                "25:19",
-                "25:17"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "55:75"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 55,
-              "home_won": true
-            },
-            {
-              "match_id": "2114",
-              "date": "2025-02-12",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "USC Münster",
-              "round": "Spieltag 23",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
-                "25:22",
-                "25:20",
-                "17:25",
-                "25:27",
-                "15:9"
-              ],
-              "result": {
-                "sets": "3:2",
-                "points": "107:103"
-              },
-              "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 107,
-              "opponent_points": 103,
-              "home_won": true
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 63,
+              "opponent_points": 75,
+              "home_won": false
             }
           ]
         },
         {
-          "team": "VC Wiesbaden",
+          "team": "SSC Palmberg Schwerin",
           "summary": {
             "matches_played": 3,
-            "home_wins": 3,
-            "opponent_wins": 0,
-            "home_sets_for": 9,
-            "opponent_sets_for": 0,
-            "home_points_for": 225,
-            "opponent_points_for": 164
+            "home_wins": 0,
+            "opponent_wins": 3,
+            "home_sets_for": 0,
+            "opponent_sets_for": 9,
+            "home_points_for": 164,
+            "opponent_points_for": 225
           },
           "matches": [
             {
@@ -1106,19 +937,19 @@
               "competition": "1. Bundesliga Frauen",
               "location": "Palmberg Arena (19059 Schwerin)",
               "set_scores": [
-                "25:17",
-                "25:21",
-                "25:19"
+                "17:25",
+                "21:25",
+                "19:25"
               ],
               "result": {
                 "sets": "3:0",
                 "points": "75:57"
               },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 57,
-              "home_won": true
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 57,
+              "opponent_points": 75,
+              "home_won": false
             },
             {
               "match_id": "2049",
@@ -1129,19 +960,19 @@
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:22",
-                "25:19",
-                "25:20"
+                "22:25",
+                "19:25",
+                "20:25"
               ],
               "result": {
                 "sets": "0:3",
                 "points": "61:75"
               },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 61,
-              "home_won": true
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 61,
+              "opponent_points": 75,
+              "home_won": false
             },
             {
               "match_id": "2094",
@@ -1152,18 +983,190 @@
               "competition": "1. Bundesliga Frauen",
               "location": "Palmberg Arena (19059 Schwerin)",
               "set_scores": [
-                "25:13",
-                "25:15",
-                "25:18"
+                "13:25",
+                "15:25",
+                "18:25"
               ],
               "result": {
                 "sets": "3:0",
                 "points": "75:46"
               },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 46,
+              "opponent_points": 75,
+              "home_won": false
+            }
+          ]
+        },
+        {
+          "team": "Schwarz-Weiß Erfurt",
+          "summary": {
+            "matches_played": 3,
+            "home_wins": 2,
+            "opponent_wins": 1,
+            "home_sets_for": 6,
+            "opponent_sets_for": 4,
+            "home_points_for": 227,
+            "opponent_points_for": 214
+          },
+          "matches": [
+            {
+              "match_id": "2026",
+              "date": "2024-10-26",
+              "home_team": "VC Wiesbaden",
+              "away_team": "Schwarz-Weiß Erfurt",
+              "round": "Spieltag 6",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "25:23",
+                "25:23",
+                "25:18"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "75:64"
+              },
               "home_sets": 3,
               "opponent_sets": 0,
               "home_points": 75,
-              "opponent_points": 46,
+              "opponent_points": 64,
+              "home_won": true
+            },
+            {
+              "match_id": "2071",
+              "date": "2024-12-28",
+              "home_team": "Schwarz-Weiß Erfurt",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 15",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Riethsporthalle (99089 Erfurt)",
+              "set_scores": [
+                "22:25",
+                "25:17",
+                "25:12",
+                "25:21"
+              ],
+              "result": {
+                "sets": "1:3",
+                "points": "75:97"
+              },
+              "home_sets": 3,
+              "opponent_sets": 1,
+              "home_points": 97,
+              "opponent_points": 75,
+              "home_won": true
+            },
+            {
+              "match_id": "2119",
+              "date": "2025-02-15",
+              "home_team": "Schwarz-Weiß Erfurt",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 24",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Riethsporthalle (99089 Erfurt)",
+              "set_scores": [
+                "21:25",
+                "18:25",
+                "16:25"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "75:55"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 55,
+              "opponent_points": 75,
+              "home_won": false
+            }
+          ]
+        },
+        {
+          "team": "USC Münster",
+          "summary": {
+            "matches_played": 3,
+            "home_wins": 2,
+            "opponent_wins": 1,
+            "home_sets_for": 8,
+            "opponent_sets_for": 6,
+            "home_points_for": 294,
+            "opponent_points_for": 296
+          },
+          "matches": [
+            {
+              "match_id": "2032",
+              "date": "2024-10-30",
+              "home_team": "USC Münster",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 7",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "25:20",
+                "19:25",
+                "25:19",
+                "15:25",
+                "15:7"
+              ],
+              "result": {
+                "sets": "2:3",
+                "points": "96:99"
+              },
+              "home_sets": 3,
+              "opponent_sets": 2,
+              "home_points": 99,
+              "opponent_points": 96,
+              "home_won": true
+            },
+            {
+              "match_id": "2077",
+              "date": "2025-01-05",
+              "home_team": "VC Wiesbaden",
+              "away_team": "USC Münster",
+              "round": "Spieltag 16",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "20:25",
+                "15:25",
+                "27:25",
+                "25:21",
+                "13:15"
+              ],
+              "result": {
+                "sets": "2:3",
+                "points": "100:111"
+              },
+              "home_sets": 2,
+              "opponent_sets": 3,
+              "home_points": 100,
+              "opponent_points": 111,
+              "home_won": false
+            },
+            {
+              "match_id": "2124",
+              "date": "2025-02-26",
+              "home_team": "VC Wiesbaden",
+              "away_team": "USC Münster",
+              "round": "Spieltag 25",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "20:25",
+                "25:20",
+                "25:21",
+                "25:23"
+              ],
+              "result": {
+                "sets": "3:1",
+                "points": "95:89"
+              },
+              "home_sets": 3,
+              "opponent_sets": 1,
+              "home_points": 95,
+              "opponent_points": 89,
               "home_won": true
             }
           ]
@@ -1172,85 +1175,83 @@
           "team": "VfB Suhl LOTTO Thüringen",
           "summary": {
             "matches_played": 3,
-            "home_wins": 2,
-            "opponent_wins": 1,
-            "home_sets_for": 8,
-            "opponent_sets_for": 4,
-            "home_points_for": 283,
-            "opponent_points_for": 254
+            "home_wins": 1,
+            "opponent_wins": 2,
+            "home_sets_for": 3,
+            "opponent_sets_for": 7,
+            "home_points_for": 233,
+            "opponent_points_for": 238
           },
           "matches": [
             {
-              "match_id": "2019",
-              "date": "2024-10-12",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2006",
+              "date": "2024-10-02",
+              "home_team": "VC Wiesbaden",
               "away_team": "VfB Suhl LOTTO Thüringen",
-              "round": "Spieltag 4",
+              "round": "Spieltag 2",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:17",
-                "25:14",
+                "27:29",
+                "25:16",
+                "25:20",
                 "25:21"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "75:52"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 52,
-              "home_won": true
-            },
-            {
-              "match_id": "2064",
-              "date": "2024-12-14",
-              "home_team": "VfB Suhl LOTTO Thüringen",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 13",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle Wolfsgrube (98527 Suhl)",
-              "set_scores": [
-                "18:25",
-                "25:23",
-                "18:25",
-                "25:13",
-                "13:15"
-              ],
-              "result": {
-                "sets": "3:2",
-                "points": "101:99"
-              },
-              "home_sets": 2,
-              "opponent_sets": 3,
-              "home_points": 99,
-              "opponent_points": 101,
-              "home_won": false
-            },
-            {
-              "match_id": "2116",
-              "date": "2025-02-15",
-              "home_team": "VfB Suhl LOTTO Thüringen",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 24",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle Wolfsgrube (98527 Suhl)",
-              "set_scores": [
-                "31:29",
-                "24:26",
-                "29:27",
-                "25:19"
-              ],
-              "result": {
-                "sets": "1:3",
-                "points": "101:109"
+                "sets": "3:1",
+                "points": "102:86"
               },
               "home_sets": 3,
               "opponent_sets": 1,
-              "home_points": 109,
-              "opponent_points": 101,
+              "home_points": 102,
+              "opponent_points": 86,
               "home_won": true
+            },
+            {
+              "match_id": "2051",
+              "date": "2024-12-04",
+              "home_team": "VfB Suhl LOTTO Thüringen",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 11",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Wolfsgrube (98527 Suhl)",
+              "set_scores": [
+                "19:25",
+                "25:27",
+                "21:25"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "77:65"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 65,
+              "opponent_points": 77,
+              "home_won": false
+            },
+            {
+              "match_id": "2129",
+              "date": "2025-03-08",
+              "home_team": "VfB Suhl LOTTO Thüringen",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 26",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Wolfsgrube (98527 Suhl)",
+              "set_scores": [
+                "22:25",
+                "22:25",
+                "22:25"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "75:66"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 66,
+              "opponent_points": 75,
+              "home_won": false
             }
           ]
         }
@@ -1265,60 +1266,59 @@
             "matches_played": 2,
             "home_wins": 0,
             "opponent_wins": 2,
-            "home_sets_for": 4,
+            "home_sets_for": 3,
             "opponent_sets_for": 6,
-            "home_points_for": 200,
-            "opponent_points_for": 220
+            "home_points_for": 178,
+            "opponent_points_for": 208
           },
           "matches": [
             {
-              "match_id": "2038",
-              "date": "2023-12-19",
+              "match_id": "2003",
+              "date": "2023-10-06",
               "home_team": "Allianz MTV Stuttgart",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 8",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 1",
               "competition": "1. Bundesliga Frauen",
               "location": "SCHARRena Stuttgart (70372 Stuttgart)",
               "set_scores": [
-                "13:25",
                 "25:20",
-                "20:25",
-                "28:26",
-                "12:15"
+                "17:25",
+                "25:22",
+                "23:25",
+                "15:17"
               ],
               "result": {
                 "sets": "3:2",
-                "points": "111:98"
+                "points": "109:105"
               },
               "home_sets": 2,
               "opponent_sets": 3,
-              "home_points": 98,
-              "opponent_points": 111,
+              "home_points": 105,
+              "opponent_points": 109,
               "home_won": false
             },
             {
-              "match_id": "2083",
-              "date": "2024-01-27",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2048",
+              "date": "2023-12-16",
+              "home_team": "VC Wiesbaden",
               "away_team": "Allianz MTV Stuttgart",
-              "round": "Spieltag 17",
+              "round": "Spieltag 10",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "22:25",
-                "25:21",
-                "25:23",
-                "17:25",
-                "13:15"
+                "12:25",
+                "20:25",
+                "26:24",
+                "15:25"
               ],
               "result": {
-                "sets": "2:3",
-                "points": "102:109"
+                "sets": "1:3",
+                "points": "73:99"
               },
-              "home_sets": 2,
+              "home_sets": 1,
               "opponent_sets": 3,
-              "home_points": 102,
-              "opponent_points": 109,
+              "home_points": 73,
+              "opponent_points": 99,
               "home_won": false
             }
           ]
@@ -1327,119 +1327,167 @@
           "team": "Dresdner SC",
           "summary": {
             "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 1,
-            "home_points_for": 179,
-            "opponent_points_for": 132
+            "home_wins": 0,
+            "opponent_wins": 2,
+            "home_sets_for": 0,
+            "opponent_sets_for": 6,
+            "home_points_for": 113,
+            "opponent_points_for": 150
           },
           "matches": [
             {
-              "match_id": "2044",
-              "date": "2023-12-09",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2007",
+              "date": "2023-10-11",
+              "home_team": "VC Wiesbaden",
               "away_team": "Dresdner SC",
-              "round": "Spieltag 9",
+              "round": "Spieltag 2",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:13",
-                "25:17",
-                "25:14"
+                "21:25",
+                "21:25",
+                "17:25"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "75:44"
+                "sets": "0:3",
+                "points": "59:75"
               },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 44,
-              "home_won": true
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 59,
+              "opponent_points": 75,
+              "home_won": false
             },
             {
-              "match_id": "2089",
-              "date": "2024-02-03",
+              "match_id": "2052",
+              "date": "2023-12-22",
               "home_team": "Dresdner SC",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 18",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 11",
               "competition": "1. Bundesliga Frauen",
               "location": "Margon Arena (01277 Dresden)",
               "set_scores": [
-                "31:29",
-                "23:25",
-                "25:23",
-                "25:11"
+                "15:25",
+                "18:25",
+                "21:25"
               ],
               "result": {
-                "sets": "1:3",
-                "points": "88:104"
+                "sets": "3:0",
+                "points": "75:54"
               },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 104,
-              "opponent_points": 88,
-              "home_won": true
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 54,
+              "opponent_points": 75,
+              "home_won": false
             }
           ]
         },
         {
           "team": "Ladies in Black Aachen",
           "summary": {
-            "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 0,
-            "home_points_for": 156,
-            "opponent_points_for": 127
+            "matches_played": 4,
+            "home_wins": 3,
+            "opponent_wins": 1,
+            "home_sets_for": 11,
+            "opponent_sets_for": 4,
+            "home_points_for": 356,
+            "opponent_points_for": 306
           },
           "matches": [
             {
-              "match_id": "2005",
-              "date": "2023-10-07",
+              "match_id": "2015",
+              "date": "2023-10-21",
               "home_team": "Ladies in Black Aachen",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 1",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 3",
               "competition": "1. Bundesliga Frauen",
               "location": "Neuköllner Straße (52068 Aachen)",
               "set_scores": [
-                "25:17",
-                "25:23",
-                "25:18"
+                "26:24",
+                "25:21",
+                "25:23"
               ],
               "result": {
                 "sets": "0:3",
-                "points": "58:75"
+                "points": "68:76"
+              },
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 76,
+              "opponent_points": 68,
+              "home_won": true
+            },
+            {
+              "match_id": "2060",
+              "date": "2023-12-30",
+              "home_team": "VC Wiesbaden",
+              "away_team": "Ladies in Black Aachen",
+              "round": "Spieltag 12",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "25:17",
+                "25:15",
+                "25:13"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "75:45"
               },
               "home_sets": 3,
               "opponent_sets": 0,
               "home_points": 75,
-              "opponent_points": 58,
+              "opponent_points": 45,
               "home_won": true
             },
             {
-              "match_id": "2050",
-              "date": "2023-12-16",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2304",
+              "date": "2024-02-17",
+              "home_team": "VC Wiesbaden",
               "away_team": "Ladies in Black Aachen",
-              "round": "Spieltag 10",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "round": "Spieltag 3",
+              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:18",
-                "31:29",
-                "25:22"
+                "25:16",
+                "28:26",
+                "23:25",
+                "19:25",
+                "14:16"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "81:69"
+                "sets": "2:3",
+                "points": "109:108"
+              },
+              "home_sets": 2,
+              "opponent_sets": 3,
+              "home_points": 109,
+              "opponent_points": 108,
+              "home_won": false
+            },
+            {
+              "match_id": "2310",
+              "date": "2024-03-16",
+              "home_team": "Ladies in Black Aachen",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 6",
+              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
+              "location": "Neuköllner Straße (52068 Aachen)",
+              "set_scores": [
+                "25:18",
+                "21:25",
+                "25:22",
+                "25:20"
+              ],
+              "result": {
+                "sets": "1:3",
+                "points": "85:96"
               },
               "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 81,
-              "opponent_points": 69,
+              "opponent_sets": 1,
+              "home_points": 96,
+              "opponent_points": 85,
               "home_won": true
             }
           ]
@@ -1447,59 +1495,110 @@
         {
           "team": "Rote Raben Vilsbiburg",
           "summary": {
-            "matches_played": 2,
-            "home_wins": 2,
+            "matches_played": 4,
+            "home_wins": 4,
             "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 0,
-            "home_points_for": 150,
-            "opponent_points_for": 107
+            "home_sets_for": 12,
+            "opponent_sets_for": 5,
+            "home_points_for": 389,
+            "opponent_points_for": 385
           },
           "matches": [
             {
-              "match_id": "2030",
-              "date": "2023-11-18",
+              "match_id": "2040",
+              "date": "2023-12-28",
               "home_team": "Rote Raben Vilsbiburg",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 6",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 8",
               "competition": "1. Bundesliga Frauen",
               "location": "Ballsporthalle Vilsbiburg (84137 Vilsbiburg)",
               "set_scores": [
-                "25:22",
-                "25:16",
-                "25:14"
+                "28:26",
+                "30:28",
+                "26:24"
               ],
               "result": {
                 "sets": "0:3",
-                "points": "52:75"
+                "points": "78:84"
               },
               "home_sets": 3,
               "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 52,
+              "home_points": 84,
+              "opponent_points": 78,
               "home_won": true
             },
             {
-              "match_id": "2075",
-              "date": "2024-01-20",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2085",
+              "date": "2024-01-27",
+              "home_team": "VC Wiesbaden",
               "away_team": "Rote Raben Vilsbiburg",
-              "round": "Spieltag 15",
+              "round": "Spieltag 17",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:22",
-                "25:18",
-                "25:15"
+                "25:23",
+                "27:29",
+                "25:21",
+                "22:25",
+                "15:12"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "75:55"
+                "sets": "3:2",
+                "points": "114:110"
               },
               "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 55,
+              "opponent_sets": 2,
+              "home_points": 114,
+              "opponent_points": 110,
+              "home_won": true
+            },
+            {
+              "match_id": "2302",
+              "date": "2024-02-14",
+              "home_team": "Rote Raben Vilsbiburg",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 2",
+              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
+              "location": "Ballsporthalle Vilsbiburg (84137 Vilsbiburg)",
+              "set_scores": [
+                "25:22",
+                "13:25",
+                "25:16",
+                "19:25",
+                "15:11"
+              ],
+              "result": {
+                "sets": "2:3",
+                "points": "99:97"
+              },
+              "home_sets": 3,
+              "opponent_sets": 2,
+              "home_points": 97,
+              "opponent_points": 99,
+              "home_won": true
+            },
+            {
+              "match_id": "2308",
+              "date": "2024-03-09",
+              "home_team": "VC Wiesbaden",
+              "away_team": "Rote Raben Vilsbiburg",
+              "round": "Spieltag 5",
+              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "29:27",
+                "15:25",
+                "25:23",
+                "25:23"
+              ],
+              "result": {
+                "sets": "3:1",
+                "points": "94:98"
+              },
+              "home_sets": 3,
+              "opponent_sets": 1,
+              "home_points": 94,
+              "opponent_points": 98,
               "home_won": true
             }
           ]
@@ -1508,194 +1607,73 @@
           "team": "SC Potsdam",
           "summary": {
             "matches_played": 2,
-            "home_wins": 1,
-            "opponent_wins": 1,
-            "home_sets_for": 4,
-            "opponent_sets_for": 3,
-            "home_points_for": 158,
-            "opponent_points_for": 155
+            "home_wins": 0,
+            "opponent_wins": 2,
+            "home_sets_for": 1,
+            "opponent_sets_for": 6,
+            "home_points_for": 127,
+            "opponent_points_for": 170
           },
           "matches": [
             {
-              "match_id": "2014",
-              "date": "2023-10-20",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "SC Potsdam",
-              "round": "Spieltag 3",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
-                "25:21",
-                "25:19",
-                "25:22"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:62"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 62,
-              "home_won": true
-            },
-            {
-              "match_id": "2059",
-              "date": "2023-12-30",
+              "match_id": "2023",
+              "date": "2023-11-11",
               "home_team": "SC Potsdam",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 12",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 5",
               "competition": "1. Bundesliga Frauen",
               "location": "MBS Arena Potsdam (14471 Potsdam)",
               "set_scores": [
-                "25:18",
                 "22:25",
-                "16:25",
-                "20:25"
+                "25:20",
+                "18:25",
+                "22:25"
               ],
               "result": {
                 "sets": "3:1",
-                "points": "93:83"
+                "points": "95:87"
               },
               "home_sets": 1,
               "opponent_sets": 3,
-              "home_points": 83,
-              "opponent_points": 93,
+              "home_points": 87,
+              "opponent_points": 95,
+              "home_won": false
+            },
+            {
+              "match_id": "2068",
+              "date": "2024-01-14",
+              "home_team": "VC Wiesbaden",
+              "away_team": "SC Potsdam",
+              "round": "Spieltag 14",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "23:25",
+                "10:25",
+                "7:25"
+              ],
+              "result": {
+                "sets": "0:3",
+                "points": "40:75"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 40,
+              "opponent_points": 75,
               "home_won": false
             }
           ]
         },
         {
-          "team": "USC Münster",
+          "team": "SSC Palmberg Schwerin",
           "summary": {
             "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 1,
-            "home_points_for": 172,
-            "opponent_points_for": 128
-          },
-          "matches": [
-            {
-              "match_id": "2024",
-              "date": "2023-11-11",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "USC Münster",
-              "round": "Spieltag 5",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
-                "25:17",
-                "25:17",
-                "25:19"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:53"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 53,
-              "home_won": true
-            },
-            {
-              "match_id": "2069",
-              "date": "2024-01-13",
-              "home_team": "USC Münster",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 14",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle Berg Fidel (48153 Münster)",
-              "set_scores": [
-                "22:25",
-                "25:19",
-                "25:20",
-                "25:11"
-              ],
-              "result": {
-                "sets": "1:3",
-                "points": "75:97"
-              },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 97,
-              "opponent_points": 75,
-              "home_won": true
-            }
-          ]
-        },
-        {
-          "team": "VC Neuwied 77",
-          "summary": {
-            "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 0,
-            "home_points_for": 150,
-            "opponent_points_for": 101
-          },
-          "matches": [
-            {
-              "match_id": "2009",
-              "date": "2023-10-11",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "VC Neuwied 77",
-              "round": "Spieltag 2",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
-                "25:13",
-                "25:13",
-                "25:21"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:47"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 47,
-              "home_won": true
-            },
-            {
-              "match_id": "2054",
-              "date": "2023-12-22",
-              "home_team": "VC Neuwied 77",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 11",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle des Rhein-Wied-Gymnasiums Neuwied (56564 Neuwied)",
-              "set_scores": [
-                "25:18",
-                "25:22",
-                "25:14"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "54:75"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 54,
-              "home_won": true
-            }
-          ]
-        },
-        {
-          "team": "VC Wiesbaden",
-          "summary": {
-            "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 4,
-            "home_points_for": 220,
-            "opponent_points_for": 196
+            "home_wins": 0,
+            "opponent_wins": 2,
+            "home_sets_for": 4,
+            "opponent_sets_for": 6,
+            "home_points_for": 196,
+            "opponent_points_for": 220
           },
           "matches": [
             {
@@ -1707,21 +1685,21 @@
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:14",
-                "19:25",
-                "25:18",
+                "14:25",
+                "25:19",
                 "18:25",
-                "21:19"
+                "25:18",
+                "19:21"
               ],
               "result": {
                 "sets": "2:3",
                 "points": "101:108"
               },
-              "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 108,
-              "opponent_points": 101,
-              "home_won": true
+              "home_sets": 2,
+              "opponent_sets": 3,
+              "home_points": 101,
+              "opponent_points": 108,
+              "home_won": false
             },
             {
               "match_id": "2062",
@@ -1732,20 +1710,189 @@
               "competition": "1. Bundesliga Frauen",
               "location": "Palmberg Arena (19059 Schwerin)",
               "set_scores": [
-                "23:25",
-                "25:21",
-                "25:15",
-                "24:26",
-                "15:8"
+                "25:23",
+                "21:25",
+                "15:25",
+                "26:24",
+                "8:15"
               ],
               "result": {
                 "sets": "3:2",
                 "points": "112:95"
               },
+              "home_sets": 2,
+              "opponent_sets": 3,
+              "home_points": 95,
+              "opponent_points": 112,
+              "home_won": false
+            }
+          ]
+        },
+        {
+          "team": "USC Münster",
+          "summary": {
+            "matches_played": 4,
+            "home_wins": 3,
+            "opponent_wins": 1,
+            "home_sets_for": 9,
+            "opponent_sets_for": 5,
+            "home_points_for": 339,
+            "opponent_points_for": 318
+          },
+          "matches": [
+            {
+              "match_id": "2032",
+              "date": "2023-11-25",
+              "home_team": "VC Wiesbaden",
+              "away_team": "USC Münster",
+              "round": "Spieltag 7",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "17:25",
+                "25:18",
+                "25:20",
+                "33:31"
+              ],
+              "result": {
+                "sets": "3:1",
+                "points": "100:94"
+              },
               "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 112,
-              "opponent_points": 95,
+              "opponent_sets": 1,
+              "home_points": 100,
+              "opponent_points": 94,
+              "home_won": true
+            },
+            {
+              "match_id": "2077",
+              "date": "2024-01-24",
+              "home_team": "USC Münster",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 16",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "23:25",
+                "25:19",
+                "25:16",
+                "27:25"
+              ],
+              "result": {
+                "sets": "1:3",
+                "points": "85:100"
+              },
+              "home_sets": 3,
+              "opponent_sets": 1,
+              "home_points": 100,
+              "opponent_points": 85,
+              "home_won": true
+            },
+            {
+              "match_id": "2300",
+              "date": "2024-02-10",
+              "home_team": "VC Wiesbaden",
+              "away_team": "USC Münster",
+              "round": "Spieltag 1",
+              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "30:28",
+                "26:24",
+                "25:12"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "81:64"
+              },
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 81,
+              "opponent_points": 64,
+              "home_won": true
+            },
+            {
+              "match_id": "2306",
+              "date": "2024-02-24",
+              "home_team": "USC Münster",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 4",
+              "competition": "1. Bundesliga Frauen Zwischenrunde 6-9",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "19:25",
+                "19:25",
+                "20:25"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "75:58"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 58,
+              "opponent_points": 75,
+              "home_won": false
+            }
+          ]
+        },
+        {
+          "team": "VC Neuwied 77",
+          "summary": {
+            "matches_played": 2,
+            "home_wins": 2,
+            "opponent_wins": 0,
+            "home_sets_for": 6,
+            "opponent_sets_for": 1,
+            "home_points_for": 170,
+            "opponent_points_for": 123
+          },
+          "matches": [
+            {
+              "match_id": "2027",
+              "date": "2023-11-18",
+              "home_team": "VC Wiesbaden",
+              "away_team": "VC Neuwied 77",
+              "round": "Spieltag 6",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "25:12",
+                "25:14",
+                "25:12"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "75:38"
+              },
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 75,
+              "opponent_points": 38,
+              "home_won": true
+            },
+            {
+              "match_id": "2072",
+              "date": "2024-01-20",
+              "home_team": "VC Neuwied 77",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 15",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle des Rhein-Wied-Gymnasiums Neuwied (56564 Neuwied)",
+              "set_scores": [
+                "25:18",
+                "25:21",
+                "20:25",
+                "25:21"
+              ],
+              "result": {
+                "sets": "1:3",
+                "points": "85:95"
+              },
+              "home_sets": 3,
+              "opponent_sets": 1,
+              "home_points": 95,
+              "opponent_points": 85,
               "home_won": true
             }
           ]
@@ -1754,60 +1901,61 @@
           "team": "VfB Suhl LOTTO Thüringen",
           "summary": {
             "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 1,
-            "home_points_for": 172,
-            "opponent_points_for": 129
+            "home_wins": 0,
+            "opponent_wins": 2,
+            "home_sets_for": 2,
+            "opponent_sets_for": 6,
+            "home_points_for": 166,
+            "opponent_points_for": 191
           },
           "matches": [
             {
-              "match_id": "2034",
-              "date": "2023-11-25",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2042",
+              "date": "2023-12-09",
+              "home_team": "VC Wiesbaden",
               "away_team": "VfB Suhl LOTTO Thüringen",
-              "round": "Spieltag 7",
+              "round": "Spieltag 9",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:16",
+                "18:25",
+                "24:26",
                 "25:18",
-                "25:18"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:52"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 52,
-              "home_won": true
-            },
-            {
-              "match_id": "2079",
-              "date": "2024-01-24",
-              "home_team": "VfB Suhl LOTTO Thüringen",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 16",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle Wolfsgrube (98527 Suhl)",
-              "set_scores": [
-                "25:23",
-                "25:18",
-                "22:25",
-                "25:11"
+                "23:25"
               ],
               "result": {
                 "sets": "1:3",
-                "points": "77:97"
+                "points": "90:94"
               },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 97,
-              "opponent_points": 77,
-              "home_won": true
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 90,
+              "opponent_points": 94,
+              "home_won": false
+            },
+            {
+              "match_id": "2087",
+              "date": "2024-02-03",
+              "home_team": "VfB Suhl LOTTO Thüringen",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 18",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Wolfsgrube (98527 Suhl)",
+              "set_scores": [
+                "25:21",
+                "13:25",
+                "24:26",
+                "14:25"
+              ],
+              "result": {
+                "sets": "3:1",
+                "points": "97:76"
+              },
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 76,
+              "opponent_points": 97,
+              "home_won": false
             }
           ]
         }
@@ -1824,56 +1972,56 @@
             "opponent_wins": 2,
             "home_sets_for": 2,
             "opponent_sets_for": 6,
-            "home_points_for": 166,
-            "opponent_points_for": 182
+            "home_points_for": 152,
+            "opponent_points_for": 204
           },
           "matches": [
             {
-              "match_id": "2086",
-              "date": "2022-11-19",
-              "home_team": "Allianz MTV Stuttgart",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 15",
+              "match_id": "2010",
+              "date": "2022-11-05",
+              "home_team": "VC Wiesbaden",
+              "away_team": "Allianz MTV Stuttgart",
+              "round": "Spieltag 2",
               "competition": "1. Bundesliga Frauen",
-              "location": "SCHARRena Stuttgart (70372 Stuttgart)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "24:26",
-                "24:26",
-                "19:25"
+                "25:23",
+                "16:25",
+                "17:25",
+                "11:25"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "77:67"
+                "sets": "1:3",
+                "points": "69:98"
               },
-              "home_sets": 0,
+              "home_sets": 1,
               "opponent_sets": 3,
-              "home_points": 67,
-              "opponent_points": 77,
+              "home_points": 69,
+              "opponent_points": 98,
               "home_won": false
             },
             {
-              "match_id": "2020",
-              "date": "2023-02-04",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "Allianz MTV Stuttgart",
-              "round": "Spieltag 4",
+              "match_id": "2076",
+              "date": "2023-01-20",
+              "home_team": "Allianz MTV Stuttgart",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 13",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "SCHARRena Stuttgart (70372 Stuttgart)",
               "set_scores": [
-                "16:25",
-                "22:25",
-                "25:20",
-                "25:20",
-                "11:15"
+                "18:25",
+                "18:25",
+                "33:31",
+                "14:25"
               ],
               "result": {
-                "sets": "2:3",
-                "points": "99:105"
+                "sets": "3:1",
+                "points": "106:83"
               },
-              "home_sets": 2,
+              "home_sets": 1,
               "opponent_sets": 3,
-              "home_points": 99,
-              "opponent_points": 105,
+              "home_points": 83,
+              "opponent_points": 106,
               "home_won": false
             }
           ]
@@ -1884,57 +2032,59 @@
             "matches_played": 2,
             "home_wins": 1,
             "opponent_wins": 1,
-            "home_sets_for": 4,
-            "opponent_sets_for": 3,
-            "home_points_for": 157,
-            "opponent_points_for": 135
+            "home_sets_for": 5,
+            "opponent_sets_for": 4,
+            "home_points_for": 197,
+            "opponent_points_for": 194
           },
           "matches": [
             {
-              "match_id": "2044",
-              "date": "2022-12-17",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2022",
+              "date": "2022-11-19",
+              "home_team": "VC Wiesbaden",
               "away_team": "Dresdner SC",
-              "round": "Spieltag 8",
+              "round": "Spieltag 4",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "16:25",
-                "18:25",
-                "25:14",
-                "23:25"
+                "20:25",
+                "23:25",
+                "25:23",
+                "25:18",
+                "11:15"
               ],
               "result": {
-                "sets": "1:3",
-                "points": "82:89"
+                "sets": "2:3",
+                "points": "104:106"
               },
-              "home_sets": 1,
+              "home_sets": 2,
               "opponent_sets": 3,
-              "home_points": 82,
-              "opponent_points": 89,
+              "home_points": 104,
+              "opponent_points": 106,
               "home_won": false
             },
             {
-              "match_id": "2110",
-              "date": "2023-03-11",
+              "match_id": "2088",
+              "date": "2023-02-04",
               "home_team": "Dresdner SC",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 19",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 15",
               "competition": "1. Bundesliga Frauen",
               "location": "Margon Arena (01277 Dresden)",
               "set_scores": [
-                "25:10",
-                "25:16",
-                "25:20"
+                "32:30",
+                "25:18",
+                "11:25",
+                "25:15"
               ],
               "result": {
-                "sets": "0:3",
-                "points": "46:75"
+                "sets": "1:3",
+                "points": "88:93"
               },
               "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 46,
+              "opponent_sets": 1,
+              "home_points": 93,
+              "opponent_points": 88,
               "home_won": true
             }
           ]
@@ -1946,55 +2096,56 @@
             "home_wins": 2,
             "opponent_wins": 0,
             "home_sets_for": 6,
-            "opponent_sets_for": 0,
-            "home_points_for": 150,
-            "opponent_points_for": 107
+            "opponent_sets_for": 1,
+            "home_points_for": 170,
+            "opponent_points_for": 130
           },
           "matches": [
             {
-              "match_id": "2008",
-              "date": "2022-11-05",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2064",
+              "date": "2023-01-07",
+              "home_team": "VC Wiesbaden",
               "away_team": "Ladies in Black Aachen",
-              "round": "Spieltag 2",
+              "round": "Spieltag 11",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:14",
                 "25:19",
-                "25:17"
+                "25:20",
+                "25:13"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:50"
+                "points": "75:52"
               },
               "home_sets": 3,
               "opponent_sets": 0,
               "home_points": 75,
-              "opponent_points": 50,
+              "opponent_points": 52,
               "home_won": true
             },
             {
-              "match_id": "2074",
-              "date": "2023-01-21",
+              "match_id": "2130",
+              "date": "2023-04-01",
               "home_team": "Ladies in Black Aachen",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 13",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 22",
               "competition": "1. Bundesliga Frauen",
               "location": "Neuköllner Straße (52068 Aachen)",
               "set_scores": [
-                "25:18",
-                "25:18",
-                "25:21"
+                "20:25",
+                "25:12",
+                "25:22",
+                "25:19"
               ],
               "result": {
-                "sets": "0:3",
-                "points": "57:75"
+                "sets": "1:3",
+                "points": "78:95"
               },
               "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 57,
+              "opponent_sets": 1,
+              "home_points": 95,
+              "opponent_points": 78,
               "home_won": true
             }
           ]
@@ -2006,32 +2157,34 @@
             "home_wins": 1,
             "opponent_wins": 0,
             "home_sets_for": 3,
-            "opponent_sets_for": 0,
-            "home_points_for": 75,
-            "opponent_points_for": 42
+            "opponent_sets_for": 2,
+            "home_points_for": 112,
+            "opponent_points_for": 97
           },
           "matches": [
             {
-              "match_id": "2039",
-              "date": "2022-12-03",
-              "home_team": "NawaRo Straubing",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 7",
+              "match_id": "2028",
+              "date": "2022-11-23",
+              "home_team": "VC Wiesbaden",
+              "away_team": "NawaRo Straubing",
+              "round": "Spieltag 5",
               "competition": "1. Bundesliga Frauen",
-              "location": "turmair Volleyballarena (94315 Straubing)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:8",
+                "25:18",
                 "25:13",
-                "25:21"
+                "27:29",
+                "20:25",
+                "15:12"
               ],
               "result": {
-                "sets": "0:3",
-                "points": "42:75"
+                "sets": "3:2",
+                "points": "112:97"
               },
               "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 42,
+              "opponent_sets": 2,
+              "home_points": 112,
+              "opponent_points": 97,
               "home_won": true
             }
           ]
@@ -2040,58 +2193,59 @@
           "team": "Rote Raben Vilsbiburg",
           "summary": {
             "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 0,
-            "home_points_for": 150,
-            "opponent_points_for": 101
+            "home_wins": 1,
+            "opponent_wins": 1,
+            "home_sets_for": 4,
+            "opponent_sets_for": 3,
+            "home_points_for": 157,
+            "opponent_points_for": 157
           },
           "matches": [
             {
-              "match_id": "2014",
-              "date": "2022-11-09",
+              "match_id": "2002",
+              "date": "2022-10-29",
               "home_team": "Rote Raben Vilsbiburg",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 3",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 1",
               "competition": "1. Bundesliga Frauen",
               "location": "Ballsporthalle Vilsbiburg (84137 Vilsbiburg)",
               "set_scores": [
-                "25:14",
-                "25:15",
-                "25:13"
+                "17:25",
+                "17:25",
+                "25:21",
+                "23:25"
               ],
               "result": {
-                "sets": "0:3",
-                "points": "42:75"
+                "sets": "3:1",
+                "points": "96:82"
               },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 42,
-              "home_won": true
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 82,
+              "opponent_points": 96,
+              "home_won": false
             },
             {
-              "match_id": "2080",
-              "date": "2023-01-28",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2068",
+              "date": "2023-01-15",
+              "home_team": "VC Wiesbaden",
               "away_team": "Rote Raben Vilsbiburg",
-              "round": "Spieltag 14",
+              "round": "Spieltag 12",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:17",
-                "25:21",
-                "25:21"
+                "25:23",
+                "25:16",
+                "25:22"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:59"
+                "points": "75:61"
               },
               "home_sets": 3,
               "opponent_sets": 0,
               "home_points": 75,
-              "opponent_points": 59,
+              "opponent_points": 61,
               "home_won": true
             }
           ]
@@ -2100,60 +2254,122 @@
           "team": "SC Potsdam",
           "summary": {
             "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 1,
-            "home_points_for": 170,
-            "opponent_points_for": 142
+            "home_wins": 0,
+            "opponent_wins": 2,
+            "home_sets_for": 1,
+            "opponent_sets_for": 6,
+            "home_points_for": 139,
+            "opponent_points_for": 174
           },
           "matches": [
             {
-              "match_id": "2060",
-              "date": "2022-12-30",
+              "match_id": "2048",
+              "date": "2022-12-16",
               "home_team": "SC Potsdam",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 10",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 8",
               "competition": "1. Bundesliga Frauen",
               "location": "MBS Arena Potsdam (14471 Potsdam)",
               "set_scores": [
-                "25:21",
-                "17:25",
-                "28:26",
-                "25:19"
+                "23:25",
+                "19:25",
+                "26:24",
+                "17:25"
               ],
               "result": {
-                "sets": "1:3",
-                "points": "91:95"
+                "sets": "3:1",
+                "points": "99:85"
               },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 95,
-              "opponent_points": 91,
-              "home_won": true
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 85,
+              "opponent_points": 99,
+              "home_won": false
             },
             {
-              "match_id": "2126",
-              "date": "2023-03-25",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2114",
+              "date": "2023-03-11",
+              "home_team": "VC Wiesbaden",
               "away_team": "SC Potsdam",
-              "round": "Spieltag 21",
+              "round": "Spieltag 19",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "19:25",
+                "13:25",
+                "22:25"
+              ],
+              "result": {
+                "sets": "0:3",
+                "points": "54:75"
+              },
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 54,
+              "opponent_points": 75,
+              "home_won": false
+            }
+          ]
+        },
+        {
+          "team": "SSC Palmberg Schwerin",
+          "summary": {
+            "matches_played": 2,
+            "home_wins": 0,
+            "opponent_wins": 2,
+            "home_sets_for": 2,
+            "opponent_sets_for": 6,
+            "home_points_for": 169,
+            "opponent_points_for": 187
+          },
+          "matches": [
+            {
+              "match_id": "2032",
+              "date": "2022-11-30",
+              "home_team": "SSC Palmberg Schwerin",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 6",
               "competition": "1. Bundesliga Frauen",
               "location": "Palmberg Arena (19059 Schwerin)",
               "set_scores": [
-                "25:17",
-                "25:18",
-                "25:16"
+                "28:30",
+                "23:25",
+                "18:25"
               ],
               "result": {
                 "sets": "3:0",
-                "points": "75:51"
+                "points": "80:69"
               },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 51,
-              "home_won": true
+              "home_sets": 0,
+              "opponent_sets": 3,
+              "home_points": 69,
+              "opponent_points": 80,
+              "home_won": false
+            },
+            {
+              "match_id": "2098",
+              "date": "2023-02-18",
+              "home_team": "VC Wiesbaden",
+              "away_team": "SSC Palmberg Schwerin",
+              "round": "Spieltag 17",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "25:20",
+                "23:25",
+                "14:25",
+                "25:22",
+                "13:15"
+              ],
+              "result": {
+                "sets": "2:3",
+                "points": "100:107"
+              },
+              "home_sets": 2,
+              "opponent_sets": 3,
+              "home_points": 100,
+              "opponent_points": 107,
+              "home_won": false
             }
           ]
         },
@@ -2164,55 +2380,57 @@
             "home_wins": 2,
             "opponent_wins": 0,
             "home_sets_for": 6,
-            "opponent_sets_for": 0,
-            "home_points_for": 150,
-            "opponent_points_for": 92
+            "opponent_sets_for": 2,
+            "home_points_for": 178,
+            "opponent_points_for": 156
           },
           "matches": [
             {
-              "match_id": "2004",
-              "date": "2022-10-29",
+              "match_id": "2058",
+              "date": "2022-12-30",
               "home_team": "Schwarz-Weiß Erfurt",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 1",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 10",
               "competition": "1. Bundesliga Frauen",
               "location": "Riethsporthalle (99089 Erfurt)",
               "set_scores": [
-                "25:9",
+                "25:18",
                 "25:19",
-                "25:17"
+                "25:21"
               ],
               "result": {
                 "sets": "0:3",
-                "points": "45:75"
+                "points": "58:75"
               },
               "home_sets": 3,
               "opponent_sets": 0,
               "home_points": 75,
-              "opponent_points": 45,
+              "opponent_points": 58,
               "home_won": true
             },
             {
-              "match_id": "2070",
-              "date": "2023-01-14",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2124",
+              "date": "2023-03-24",
+              "home_team": "VC Wiesbaden",
               "away_team": "Schwarz-Weiß Erfurt",
-              "round": "Spieltag 12",
+              "round": "Spieltag 21",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:16",
-                "25:16",
-                "25:15"
+                "21:25",
+                "17:25",
+                "25:15",
+                "25:22",
+                "15:11"
               ],
               "result": {
-                "sets": "3:0",
-                "points": "75:47"
+                "sets": "3:2",
+                "points": "103:98"
               },
               "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 47,
+              "opponent_sets": 2,
+              "home_points": 103,
+              "opponent_points": 98,
               "home_won": true
             }
           ]
@@ -2221,61 +2439,63 @@
           "team": "USC Münster",
           "summary": {
             "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 2,
-            "home_points_for": 170,
-            "opponent_points_for": 144
+            "home_wins": 0,
+            "opponent_wins": 2,
+            "home_sets_for": 4,
+            "opponent_sets_for": 6,
+            "home_points_for": 218,
+            "opponent_points_for": 220
           },
           "matches": [
             {
-              "match_id": "2050",
-              "date": "2022-12-27",
-              "home_team": "SSC Palmberg Schwerin",
+              "match_id": "2040",
+              "date": "2022-12-03",
+              "home_team": "VC Wiesbaden",
               "away_team": "USC Münster",
-              "round": "Spieltag 9",
+              "round": "Spieltag 7",
               "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "25:16",
-                "25:19",
-                "25:19"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:54"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 54,
-              "home_won": true
-            },
-            {
-              "match_id": "2116",
-              "date": "2023-03-18",
-              "home_team": "USC Münster",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 20",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Sporthalle Berg Fidel (48153 Münster)",
-              "set_scores": [
-                "25:19",
-                "17:25",
-                "13:25",
-                "25:8",
-                "15:13"
+                "26:28",
+                "19:25",
+                "33:31",
+                "25:23",
+                "12:15"
               ],
               "result": {
                 "sets": "2:3",
-                "points": "90:95"
+                "points": "115:122"
               },
-              "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 95,
-              "opponent_points": 90,
-              "home_won": true
+              "home_sets": 2,
+              "opponent_sets": 3,
+              "home_points": 115,
+              "opponent_points": 122,
+              "home_won": false
+            },
+            {
+              "match_id": "2106",
+              "date": "2023-03-04",
+              "home_team": "USC Münster",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 18",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "25:20",
+                "25:13",
+                "22:25",
+                "20:25",
+                "11:15"
+              ],
+              "result": {
+                "sets": "3:2",
+                "points": "98:103"
+              },
+              "home_sets": 2,
+              "opponent_sets": 3,
+              "home_points": 103,
+              "opponent_points": 98,
+              "home_won": false
             }
           ]
         },
@@ -2288,115 +2508,53 @@
             "home_sets_for": 6,
             "opponent_sets_for": 0,
             "home_points_for": 150,
-            "opponent_points_for": 94
+            "opponent_points_for": 89
           },
           "matches": [
             {
-              "match_id": "2128",
-              "date": "2023-01-08",
-              "home_team": "VC Neuwied 77",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 22",
-              "competition": "1. Bundesliga Frauen",
-              "location": "CGM ARENA (56075 Koblenz)",
-              "set_scores": [
-                "25:9",
-                "25:14",
-                "25:15"
-              ],
-              "result": {
-                "sets": "0:3",
-                "points": "38:75"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 38,
-              "home_won": true
-            },
-            {
-              "match_id": "2062",
-              "date": "2023-04-01",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "VC Neuwied 77",
-              "round": "Spieltag 11",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
-                "25:18",
-                "25:21",
-                "25:17"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "75:56"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 75,
-              "opponent_points": 56,
-              "home_won": true
-            }
-          ]
-        },
-        {
-          "team": "VC Wiesbaden",
-          "summary": {
-            "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 2,
-            "home_points_for": 187,
-            "opponent_points_for": 169
-          },
-          "matches": [
-            {
-              "match_id": "2032",
-              "date": "2022-11-30",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "VC Wiesbaden",
-              "round": "Spieltag 6",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
-                "30:28",
-                "25:23",
-                "25:18"
-              ],
-              "result": {
-                "sets": "3:0",
-                "points": "80:69"
-              },
-              "home_sets": 3,
-              "opponent_sets": 0,
-              "home_points": 80,
-              "opponent_points": 69,
-              "home_won": true
-            },
-            {
-              "match_id": "2098",
-              "date": "2023-02-18",
+              "match_id": "2052",
+              "date": "2022-12-27",
               "home_team": "VC Wiesbaden",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 17",
+              "away_team": "VC Neuwied 77",
+              "round": "Spieltag 9",
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
               "set_scores": [
-                "20:25",
-                "25:23",
-                "25:14",
-                "22:25",
-                "15:13"
+                "25:13",
+                "25:17",
+                "25:11"
               ],
               "result": {
-                "sets": "2:3",
-                "points": "100:107"
+                "sets": "3:0",
+                "points": "75:41"
               },
               "home_sets": 3,
-              "opponent_sets": 2,
-              "home_points": 107,
-              "opponent_points": 100,
+              "opponent_sets": 0,
+              "home_points": 75,
+              "opponent_points": 41,
+              "home_won": true
+            },
+            {
+              "match_id": "2118",
+              "date": "2023-03-18",
+              "home_team": "VC Neuwied 77",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 20",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle des Rhein-Wied-Gymnasiums Neuwied (56564 Neuwied)",
+              "set_scores": [
+                "25:19",
+                "25:17",
+                "25:12"
+              ],
+              "result": {
+                "sets": "0:3",
+                "points": "48:75"
+              },
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 75,
+              "opponent_points": 48,
               "home_won": true
             }
           ]
@@ -2405,60 +2563,59 @@
           "team": "VfB Suhl LOTTO Thüringen",
           "summary": {
             "matches_played": 2,
-            "home_wins": 2,
-            "opponent_wins": 0,
-            "home_sets_for": 6,
-            "opponent_sets_for": 2,
-            "home_points_for": 197,
-            "opponent_points_for": 184
+            "home_wins": 1,
+            "opponent_wins": 1,
+            "home_sets_for": 4,
+            "opponent_sets_for": 3,
+            "home_points_for": 172,
+            "opponent_points_for": 158
           },
           "matches": [
             {
-              "match_id": "2029",
-              "date": "2022-11-23",
+              "match_id": "2017",
+              "date": "2022-11-09",
               "home_team": "VfB Suhl LOTTO Thüringen",
-              "away_team": "SSC Palmberg Schwerin",
-              "round": "Spieltag 5",
+              "away_team": "VC Wiesbaden",
+              "round": "Spieltag 3",
               "competition": "1. Bundesliga Frauen",
               "location": "Sporthalle Wolfsgrube (98527 Suhl)",
               "set_scores": [
-                "28:26",
-                "20:25",
-                "26:24",
-                "27:25"
-              ],
-              "result": {
-                "sets": "1:3",
-                "points": "100:101"
-              },
-              "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 101,
-              "opponent_points": 100,
-              "home_won": true
-            },
-            {
-              "match_id": "2095",
-              "date": "2023-02-11",
-              "home_team": "SSC Palmberg Schwerin",
-              "away_team": "VfB Suhl LOTTO Thüringen",
-              "round": "Spieltag 16",
-              "competition": "1. Bundesliga Frauen",
-              "location": "Palmberg Arena (19059 Schwerin)",
-              "set_scores": [
-                "25:19",
+                "31:29",
                 "21:25",
-                "25:19",
-                "25:21"
+                "22:25",
+                "22:25"
               ],
               "result": {
                 "sets": "3:1",
-                "points": "96:84"
+                "points": "104:96"
+              },
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 96,
+              "opponent_points": 104,
+              "home_won": false
+            },
+            {
+              "match_id": "2083",
+              "date": "2023-01-28",
+              "home_team": "VC Wiesbaden",
+              "away_team": "VfB Suhl LOTTO Thüringen",
+              "round": "Spieltag 14",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle am Platz der Deutschen Einheit (65185 Wiesbaden)",
+              "set_scores": [
+                "25:15",
+                "25:15",
+                "26:24"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "76:54"
               },
               "home_sets": 3,
-              "opponent_sets": 1,
-              "home_points": 96,
-              "opponent_points": 84,
+              "opponent_sets": 0,
+              "home_points": 76,
+              "opponent_points": 54,
               "home_won": true
             }
           ]
