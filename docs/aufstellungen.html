@@ -11,8 +11,8 @@
       --card-shadow: rgba(15, 23, 42, 0.08);
       --accent: #0f766e;
       --accent-soft: #ccfbf1;
-      --usc: #047857;
-      --opponent: #1d4ed8;
+      --home: #047857;
+      --away: #1d4ed8;
     }
     *, *::before, *::after {
       box-sizing: border-box;
@@ -217,11 +217,11 @@
       transform: translateY(-2px);
       box-shadow: 0 18px 35px rgba(15, 23, 42, 0.12);
     }
-    .lineup-board.usc.is-focus {
+    .lineup-board.home.is-focus {
       border-color: #bbf7d0;
       background: linear-gradient(180deg, #ecfdf5 0%, #ffffff 100%);
     }
-    .lineup-board.opponent.is-focus {
+    .lineup-board.away.is-focus {
       border-color: #bfdbfe;
       background: linear-gradient(180deg, #e0f2fe 0%, #ffffff 100%);
     }
@@ -350,10 +350,10 @@
       .lineup-board h4 {
         color: #e2e8f0;
       }
-      .lineup-board.usc {
+      .lineup-board.home {
         border-color: rgba(16, 185, 129, 0.45);
       }
-      .lineup-board.usc.is-focus {
+      .lineup-board.home.is-focus {
         background: linear-gradient(
           180deg,
           rgba(4, 120, 87, 0.45) 0%,
@@ -361,10 +361,10 @@
         );
         box-shadow: 0 20px 44px rgba(4, 120, 87, 0.28);
       }
-      .lineup-board.opponent {
+      .lineup-board.away {
         border-color: rgba(147, 197, 253, 0.45);
       }
-      .lineup-board.opponent.is-focus {
+      .lineup-board.away.is-focus {
         background: linear-gradient(
           180deg,
           rgba(37, 99, 235, 0.45) 0%,
@@ -412,10 +412,10 @@
       <h1>Startaufstellungen der letzten Begegnungen</h1>
     </header>
 
-    <section aria-labelledby="usc-heading">
-      <h2 id="usc-heading">USC Münster – letzte Spiele</h2>
-      <div id="uscStatus" class="placeholder" role="status">Lade USC-Spiele …</div>
-      <ul id="uscMatchList" class="match-list" hidden></ul>
+    <section aria-labelledby="home-heading">
+      <h2 id="home-heading">Heimteam – letzte Spiele</h2>
+      <div id="homeStatus" class="placeholder" role="status">Lade Heimteam-Spiele …</div>
+      <ul id="homeMatchList" class="match-list" hidden></ul>
     </section>
 
     <section aria-labelledby="opponent-heading">
@@ -484,10 +484,11 @@
     };
 
     const updateStatusEl = document.getElementById("updateStatus");
-    const uscStatusEl = document.getElementById("uscStatus");
+    const homeStatusEl = document.getElementById("homeStatus");
     const opponentStatusEl = document.getElementById("opponentStatus");
-    const uscListEl = document.getElementById("uscMatchList");
+    const homeListEl = document.getElementById("homeMatchList");
     const opponentListEl = document.getElementById("opponentMatchList");
+    const homeHeadingEl = document.getElementById("home-heading");
     const opponentHeadingEl = document.getElementById("opponent-heading");
     const matchTemplate = document.getElementById("matchTemplate");
     const setTemplate = document.getElementById("setTemplate");
@@ -548,11 +549,11 @@
       if (team?.is_focus) {
         board.classList.add("is-focus");
       }
-      if (team?.is_usc) {
-        board.classList.add("usc");
+      if (team?.is_home) {
+        board.classList.add("home");
       }
       if (team?.is_opponent) {
-        board.classList.add("opponent");
+        board.classList.add("away");
       }
 
       const heading = document.createElement("h4");
@@ -663,7 +664,7 @@
             code,
             name: match.team_codes?.[code] || code,
             is_focus: false,
-            is_usc: false,
+            is_home: false,
             is_opponent: false,
             setters: [],
           };
@@ -710,7 +711,7 @@
 
     const handleError = () => {
       updateStatusEl.textContent = "⚠️ Daten konnten nicht geladen werden.";
-      uscStatusEl.textContent = "Beim Laden der USC-Spiele ist ein Fehler aufgetreten.";
+      homeStatusEl.textContent = "Beim Laden der Heimteam-Spiele ist ein Fehler aufgetreten.";
       opponentStatusEl.textContent = "Beim Laden der Gegner-Spiele ist ein Fehler aufgetreten.";
     };
 
@@ -732,9 +733,12 @@
         if (data?.opponent_team) {
           opponentHeadingEl.textContent = `${data.opponent_team} – letzte Spiele`;
         }
+        if (data?.home_team) {
+          homeHeadingEl.textContent = `${data.home_team} – letzte Spiele`;
+        }
 
         const grouped = {
-          usc: [],
+          home: [],
           opponent: [],
         };
 
@@ -742,12 +746,12 @@
           if (match.focus === "opponent") {
             grouped.opponent.push(match);
           } else {
-            grouped.usc.push(match);
+            grouped.home.push(match);
           }
         });
 
         const sorter = (a, b) => (b.kickoff_ts || 0) - (a.kickoff_ts || 0);
-        grouped.usc.sort(sorter);
+        grouped.home.sort(sorter);
         grouped.opponent.sort(sorter);
 
         if (data.generated_at) {
@@ -757,10 +761,10 @@
           updateStatusEl.textContent = "📁 Datengrundlage ohne Zeitstempel";
         }
 
-        renderMatchesForSection(grouped.usc, {
-          listEl: uscListEl,
-          statusEl: uscStatusEl,
-          emptyMessage: "Keine USC-Spiele gefunden.",
+        renderMatchesForSection(grouped.home, {
+          listEl: homeListEl,
+          statusEl: homeStatusEl,
+          emptyMessage: "Keine Heimteam-Spiele gefunden.",
         });
 
         renderMatchesForSection(grouped.opponent, {

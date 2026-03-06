@@ -455,32 +455,53 @@ class TransferItem:
 @dataclass(frozen=True)
 class DirectComparisonSummary:
     matches_played: int
-    usc_wins: int
+    home_wins: int
     opponent_wins: int
-    usc_sets_for: int
+    home_sets_for: int
     opponent_sets_for: int
-    usc_points_for: int
+    home_points_for: int
     opponent_points_for: int
 
     @property
-    def usc_losses(self) -> int:
+    def home_losses(self) -> int:
         return self.opponent_wins
 
     @property
     def opponent_losses(self) -> int:
-        return self.usc_wins
+        return self.home_wins
 
     @property
-    def usc_win_pct(self) -> Optional[float]:
+    def home_win_pct(self) -> Optional[float]:
         if self.matches_played <= 0:
             return None
-        return (self.usc_wins / self.matches_played) * 100
+        return (self.home_wins / self.matches_played) * 100
 
     @property
     def opponent_win_pct(self) -> Optional[float]:
         if self.matches_played <= 0:
             return None
         return (self.opponent_wins / self.matches_played) * 100
+
+    # --- Backward-compatibility aliases ---
+    @property
+    def usc_wins(self) -> int:
+        return self.home_wins
+
+    @property
+    def usc_losses(self) -> int:
+        return self.home_losses
+
+    @property
+    def usc_sets_for(self) -> int:
+        return self.home_sets_for
+
+    @property
+    def usc_points_for(self) -> int:
+        return self.home_points_for
+
+    @property
+    def usc_win_pct(self) -> Optional[float]:
+        return self.home_win_pct
 
 
 @dataclass(frozen=True)
@@ -497,11 +518,24 @@ class DirectComparisonMatch:
     result_sets: Optional[str]
     result_points: Optional[str]
     set_scores: Tuple[str, ...]
-    usc_sets: Optional[int]
+    home_sets: Optional[int]
     opponent_sets: Optional[int]
-    usc_points: Optional[int]
+    home_points: Optional[int]
     opponent_points: Optional[int]
-    usc_won: Optional[bool]
+    home_won: Optional[bool]
+
+    # --- Backward-compatibility aliases ---
+    @property
+    def usc_sets(self) -> Optional[int]:
+        return self.home_sets
+
+    @property
+    def usc_points(self) -> Optional[int]:
+        return self.home_points
+
+    @property
+    def usc_won(self) -> Optional[bool]:
+        return self.home_won
 
 
 @dataclass(frozen=True)
@@ -3073,7 +3107,7 @@ def _resolve_with_fallback(summary_value: int, fallback_value: int) -> int:
 
 
 def prepare_direct_comparison(
-    payload: Optional[Mapping[str, Any]], opponent_name: str
+    payload: Optional[Mapping[str, Any]], opponent_name: str, home_team: str = USC_CANONICAL_NAME
 ) -> Optional[DirectComparisonData]:
     if not payload or not opponent_name:
         return None
@@ -3090,20 +3124,20 @@ def prepare_direct_comparison(
 
     summary_totals = {
         "matches_played": 0,
-        "usc_wins": 0,
+        "home_wins": 0,
         "opponent_wins": 0,
-        "usc_sets_for": 0,
+        "home_sets_for": 0,
         "opponent_sets_for": 0,
-        "usc_points_for": 0,
+        "home_points_for": 0,
         "opponent_points_for": 0,
     }
     fallback_totals = {
         "matches_played": 0,
-        "usc_wins": 0,
+        "home_wins": 0,
         "opponent_wins": 0,
-        "usc_sets_for": 0,
+        "home_sets_for": 0,
         "opponent_sets_for": 0,
-        "usc_points_for": 0,
+        "home_points_for": 0,
         "opponent_points_for": 0,
     }
 
@@ -3143,21 +3177,29 @@ def prepare_direct_comparison(
                 summary_totals["matches_played"] += _coerce_int(
                     summary_payload.get("matches_played")
                 )
-                summary_totals["usc_wins"] += _coerce_int(summary_payload.get("usc_wins"))
+                # Read new `home_wins` key, fall back to legacy `usc_wins`
+                home_wins_value = summary_payload.get("home_wins")
+                if home_wins_value is None:
+                    home_wins_value = summary_payload.get("usc_wins")
+                summary_totals["home_wins"] += _coerce_int(home_wins_value)
                 opponent_wins_value = summary_payload.get("opponent_wins")
                 if opponent_wins_value is None:
                     opponent_wins_value = summary_payload.get("usc_losses")
                 summary_totals["opponent_wins"] += _coerce_int(opponent_wins_value)
-                summary_totals["usc_sets_for"] += _coerce_int(
-                    summary_payload.get("usc_sets_for")
-                )
+                # Read new `home_sets_for` key, fall back to legacy `usc_sets_for`
+                home_sets_value = summary_payload.get("home_sets_for")
+                if home_sets_value is None:
+                    home_sets_value = summary_payload.get("usc_sets_for")
+                summary_totals["home_sets_for"] += _coerce_int(home_sets_value)
                 opponent_sets_value = summary_payload.get("opponent_sets_for")
                 if opponent_sets_value is None:
                     opponent_sets_value = summary_payload.get("usc_sets_against")
                 summary_totals["opponent_sets_for"] += _coerce_int(opponent_sets_value)
-                summary_totals["usc_points_for"] += _coerce_int(
-                    summary_payload.get("usc_points_for")
-                )
+                # Read new `home_points_for` key, fall back to legacy `usc_points_for`
+                home_points_value = summary_payload.get("home_points_for")
+                if home_points_value is None:
+                    home_points_value = summary_payload.get("usc_points_for")
+                summary_totals["home_points_for"] += _coerce_int(home_points_value)
                 opponent_points_value = summary_payload.get("opponent_points_for")
                 if opponent_points_value is None:
                     opponent_points_value = summary_payload.get("usc_points_against")
@@ -3227,20 +3269,27 @@ def prepare_direct_comparison(
                     if normalized_scores:
                         set_scores = tuple(normalized_scores)
 
-                usc_sets_optional = _coerce_optional_int(match_entry.get("usc_sets"))
+                # Read new `home_sets` / `home_points` / `home_won` keys, fall back to legacy `usc_*`
+                home_sets_optional = _coerce_optional_int(
+                    match_entry.get("home_sets") if match_entry.get("home_sets") is not None
+                    else match_entry.get("usc_sets")
+                )
                 opponent_sets_optional = _coerce_optional_int(
                     match_entry.get("opponent_sets")
                 )
-                usc_sets_value = usc_sets_optional if usc_sets_optional is not None else 0
+                home_sets_value = home_sets_optional if home_sets_optional is not None else 0
                 opponent_sets_value = (
                     opponent_sets_optional if opponent_sets_optional is not None else 0
                 )
-                usc_points_optional = _coerce_optional_int(match_entry.get("usc_points"))
+                home_points_optional = _coerce_optional_int(
+                    match_entry.get("home_points") if match_entry.get("home_points") is not None
+                    else match_entry.get("usc_points")
+                )
                 opponent_points_optional = _coerce_optional_int(
                     match_entry.get("opponent_points")
                 )
-                usc_points_value = (
-                    usc_points_optional if usc_points_optional is not None else 0
+                home_points_value = (
+                    home_points_optional if home_points_optional is not None else 0
                 )
                 opponent_points_value = (
                     opponent_points_optional
@@ -3249,41 +3298,44 @@ def prepare_direct_comparison(
                 )
 
                 fallback_totals["matches_played"] += 1
-                fallback_totals["usc_sets_for"] += usc_sets_value
+                fallback_totals["home_sets_for"] += home_sets_value
                 fallback_totals["opponent_sets_for"] += opponent_sets_value
-                if usc_points_optional is not None and opponent_points_optional is not None:
-                    fallback_totals["usc_points_for"] += usc_points_optional
+                if home_points_optional is not None and opponent_points_optional is not None:
+                    fallback_totals["home_points_for"] += home_points_optional
                     fallback_totals["opponent_points_for"] += opponent_points_optional
 
-                usc_won_raw = match_entry.get("usc_won")
-                usc_won: Optional[bool]
-                if isinstance(usc_won_raw, bool):
-                    usc_won = usc_won_raw
-                elif isinstance(usc_won_raw, (int, float)):
-                    usc_won = bool(usc_won_raw)
-                elif isinstance(usc_won_raw, str):
-                    lowered = usc_won_raw.strip().lower()
+                # Read new `home_won` key, fall back to legacy `usc_won`
+                home_won_raw = match_entry.get("home_won")
+                if home_won_raw is None:
+                    home_won_raw = match_entry.get("usc_won")
+                home_won: Optional[bool]
+                if isinstance(home_won_raw, bool):
+                    home_won = home_won_raw
+                elif isinstance(home_won_raw, (int, float)):
+                    home_won = bool(home_won_raw)
+                elif isinstance(home_won_raw, str):
+                    lowered = home_won_raw.strip().lower()
                     if lowered in {"true", "1", "ja", "sieg", "win"}:
-                        usc_won = True
+                        home_won = True
                     elif lowered in {"false", "0", "nein", "niederlage", "loss"}:
-                        usc_won = False
+                        home_won = False
                     else:
-                        usc_won = None
+                        home_won = None
                 else:
-                    usc_won = None
+                    home_won = None
 
-                if usc_won is True:
-                    fallback_totals["usc_wins"] += 1
-                elif usc_won is False:
+                if home_won is True:
+                    fallback_totals["home_wins"] += 1
+                elif home_won is False:
                     fallback_totals["opponent_wins"] += 1
                 else:
-                    if usc_sets_value or opponent_sets_value:
-                        if usc_sets_value > opponent_sets_value:
-                            fallback_totals["usc_wins"] += 1
-                            usc_won = True
-                        elif opponent_sets_value > usc_sets_value:
+                    if home_sets_value or opponent_sets_value:
+                        if home_sets_value > opponent_sets_value:
+                            fallback_totals["home_wins"] += 1
+                            home_won = True
+                        elif opponent_sets_value > home_sets_value:
                             fallback_totals["opponent_wins"] += 1
-                            usc_won = False
+                            home_won = False
 
                 match_key = (
                     match_id,
@@ -3309,29 +3361,29 @@ def prepare_direct_comparison(
                         result_sets=result_sets,
                         result_points=result_points,
                         set_scores=set_scores,
-                        usc_sets=usc_sets_optional,
+                        home_sets=home_sets_optional,
                         opponent_sets=opponent_sets_optional,
-                        usc_points=usc_points_optional,
+                        home_points=home_points_optional,
                         opponent_points=opponent_points_optional,
-                        usc_won=usc_won,
+                        home_won=home_won,
                     )
                 )
 
     matches_played = _resolve_with_fallback(
         summary_totals["matches_played"], fallback_totals["matches_played"]
     )
-    usc_wins = _resolve_with_fallback(summary_totals["usc_wins"], fallback_totals["usc_wins"])
+    home_wins = _resolve_with_fallback(summary_totals["home_wins"], fallback_totals["home_wins"])
     opponent_wins = _resolve_with_fallback(
         summary_totals["opponent_wins"], fallback_totals["opponent_wins"]
     )
-    usc_sets_for = _resolve_with_fallback(
-        summary_totals["usc_sets_for"], fallback_totals["usc_sets_for"]
+    home_sets_for = _resolve_with_fallback(
+        summary_totals["home_sets_for"], fallback_totals["home_sets_for"]
     )
     opponent_sets_for = _resolve_with_fallback(
         summary_totals["opponent_sets_for"], fallback_totals["opponent_sets_for"]
     )
-    usc_points_for = _resolve_with_fallback(
-        summary_totals["usc_points_for"], fallback_totals["usc_points_for"]
+    home_points_for = _resolve_with_fallback(
+        summary_totals["home_points_for"], fallback_totals["home_points_for"]
     )
     opponent_points_for = _resolve_with_fallback(
         summary_totals["opponent_points_for"], fallback_totals["opponent_points_for"]
@@ -3340,12 +3392,12 @@ def prepare_direct_comparison(
     if matches and matches_played < len(matches):
         matches_played = len(matches)
 
-    if matches_played > 0 and usc_wins + opponent_wins < matches_played:
-        opponent_wins = matches_played - usc_wins
+    if matches_played > 0 and home_wins + opponent_wins < matches_played:
+        opponent_wins = matches_played - home_wins
 
     if (
         matches_played <= 0
-        and usc_wins <= 0
+        and home_wins <= 0
         and opponent_wins <= 0
         and not matches
     ):
@@ -3353,11 +3405,11 @@ def prepare_direct_comparison(
 
     summary = DirectComparisonSummary(
         matches_played=matches_played,
-        usc_wins=usc_wins,
+        home_wins=home_wins,
         opponent_wins=opponent_wins,
-        usc_sets_for=usc_sets_for,
+        home_sets_for=home_sets_for,
         opponent_sets_for=opponent_sets_for,
-        usc_points_for=usc_points_for,
+        home_points_for=home_points_for,
         opponent_points_for=opponent_points_for,
     )
 
@@ -3677,7 +3729,7 @@ def format_instagram_list(links: Sequence[str]) -> str:
 
 
 def format_direct_comparison_section(
-    comparison: Optional[DirectComparisonData], opponent_name: str
+    comparison: Optional[DirectComparisonData], opponent_name: str, home_team: str = USC_CANONICAL_NAME
 ) -> str:
     opponent_label = pretty_name(opponent_name)
     heading_slug = slugify_team_name(opponent_label) or "opponent"
@@ -3704,15 +3756,15 @@ def format_direct_comparison_section(
     if not has_content:
         return fallback_html
 
-    usc_label = USC_CANONICAL_NAME
+    usc_label = pretty_name(home_team) if home_team else USC_CANONICAL_NAME
     usc_normalized = normalize_name(usc_label)
     opponent_raw_name = opponent_name
 
     def _teams_line(match: DirectComparisonMatch) -> str:
         home_raw = match.home_team or opponent_raw_name
         away_raw = match.away_team or usc_label
-        usc_is_home = normalize_name(home_raw) == usc_normalized if home_raw else False
-        if usc_is_home:
+        home_is_configured = normalize_name(home_raw) == usc_normalized if home_raw else False
+        if home_is_configured:
             first_raw = home_raw
             second_raw = match.away_team or opponent_raw_name
         else:
@@ -3728,7 +3780,7 @@ def format_direct_comparison_section(
                 "          <div class=\"direct-comparison__metric\">",
                 f"            <span class=\"direct-comparison__metric-label\">{escape(label)}</span>",
                 "            <div class=\"direct-comparison__metric-score\">",
-                f"              <span class=\"direct-comparison__metric-team direct-comparison__metric-team--usc\">{escape(usc_label)}</span>",
+                f"              <span class=\"direct-comparison__metric-team direct-comparison__metric-team--home\">{escape(usc_label)}</span>",
                 f"              <span class=\"direct-comparison__metric-value\">{escape(usc_value)} – {escape(opponent_value)}</span>",
                 f"              <span class=\"direct-comparison__metric-team direct-comparison__metric-team--opponent\">{escape(opponent_label)}</span>",
                 "            </div>",
@@ -3738,16 +3790,16 @@ def format_direct_comparison_section(
 
     def _match_result_label(match: DirectComparisonMatch) -> str:
         sets_label: Optional[str] = None
-        if match.usc_sets is not None and match.opponent_sets is not None:
-            sets_label = f"{match.usc_sets}:{match.opponent_sets}"
+        if match.home_sets is not None and match.opponent_sets is not None:
+            sets_label = f"{match.home_sets}:{match.opponent_sets}"
         elif match.result_sets:
             sets_label = match.result_sets
 
         detail_label: Optional[str] = None
         if match.set_scores:
             detail_label = ", ".join(escape(score) for score in match.set_scores)
-        elif match.usc_points is not None and match.opponent_points is not None:
-            detail_label = f"{match.usc_points}:{match.opponent_points}"
+        elif match.home_points is not None and match.opponent_points is not None:
+            detail_label = f"{match.home_points}:{match.opponent_points}"
         elif match.result_points:
             detail_label = escape(match.result_points)
 
@@ -3761,10 +3813,10 @@ def format_direct_comparison_section(
 
     metrics_lines = [
         "          <div class=\"direct-comparison__metrics\">",
-        render_metric("Siege", str(summary.usc_wins), str(summary.opponent_wins)),
+        render_metric("Siege", str(summary.home_wins), str(summary.opponent_wins)),
         render_metric(
             "Sätze",
-            f"{summary.usc_sets_for}",
+            f"{summary.home_sets_for}",
             f"{summary.opponent_sets_for}",
         ),
         "          </div>",
@@ -3801,9 +3853,9 @@ def format_direct_comparison_section(
             result_label = _match_result_label(match) or "–"
 
             result_class = " direct-comparison__result--neutral"
-            if match.usc_won is True:
+            if match.home_won is True:
                 result_class = " direct-comparison__result--win"
-            elif match.usc_won is False:
+            elif match.home_won is False:
                 result_class = " direct-comparison__result--loss"
 
             match_rows.append(
@@ -4522,6 +4574,7 @@ def build_html_report(
     direct_comparison_html = format_direct_comparison_section(
         direct_comparison,
         next_home.away_team,
+        home_team=home_team,
     )
 
     navigation_links = [
@@ -5349,6 +5402,7 @@ def build_html_report(
       color: #0f172a;
       text-align: center;
     }}
+    .direct-comparison__metric-team--home,
     .direct-comparison__metric-team--usc {{
       color: {HIGHLIGHT_COLORS['usc']['row_text']};
     }}

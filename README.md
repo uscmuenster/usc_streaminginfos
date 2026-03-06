@@ -72,8 +72,16 @@ Das Tool ist vollständig konfigurierbar und lässt sich für beliebige Vereine 
 
 | Feld | Pflicht | Beschreibung |
 |---|---|---|
-| `home_team` | Nein | Name des Heimteams wie er im VBL-Spielplan steht (z. B. `"Dresdner SC"`). Fehlt das Feld oder die Datei, wird `"USC Münster"` als Standard verwendet. |
+| `home_team` | Nein | Name des Heimteams wie er im VBL-Spielplan steht (z. B. `"Dresdner SC"`). Fehlt das Feld oder die Datei, wird `"USC Münster"` als Standard verwendet. Wirkt sich auf Spieltagsbericht, Startaufstellungen (`aufstellungen.json`) und direkten Vergleich (`direct_comparisons.json`) aus. |
 | `theme.primary` | Nein | Primärfarbe als CSS-Farbwert (z. B. `"#0f766e"`). Beeinflusst `--theme-color`, `--home-accent`, `--mvp-overview-summary-bg` in den generierten HTML-Dateien sowie `theme_color`/`background_color` im PWA-Manifest. Fehlt der Wert, bleibt die Standard-Farbe erhalten. |
+
+### Betroffene Skripte
+
+| Skript | `--config`-Option | Nutzt `home_team` |
+|---|---|---|
+| `python -m usc_kommentatoren` | ✓ | Heimspiel-Suche, Direkter Vergleich, Kader, News |
+| `scripts/update_lineups.py` | ✓ | Startaufstellungen (`focus: "home"` statt `"usc"`) |
+| `scripts/update_direct_comparisons.py` | ✓ | Head-to-Head-Datensatz (`home_wins` statt `usc_wins`) |
 
 ### Für Forks
 
