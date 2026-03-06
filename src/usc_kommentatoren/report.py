@@ -1458,10 +1458,10 @@ def parse_schedule(
         except (KeyError, ValueError):
             continue
 
-        home_team = row.get("Mannschaft 1", "").strip()
-        away_team = row.get("Mannschaft 2", "").strip()
-        host = row.get("Gastgeber", "").strip()
-        location = row.get("Austragungsort", "").strip()
+        home_team = _normalize_schedule_field(row.get("Mannschaft 1")) or ""
+        away_team = _normalize_schedule_field(row.get("Mannschaft 2")) or ""
+        host = _normalize_schedule_field(row.get("Gastgeber")) or ""
+        location = _normalize_schedule_field(row.get("Austragungsort")) or ""
         result = build_match_result(row)
         match_number = (row.get("#") or "").strip() or None
         attendance = _normalize_schedule_field(row.get("Zuschauerzahl"))
@@ -1492,10 +1492,21 @@ def parse_schedule(
 def _normalize_schedule_field(raw: Optional[str]) -> Optional[str]:
     if raw is None:
         return None
-    value = raw.strip()
+    value = _fix_mojibake(raw).strip()
     if not value or value in {"-", "–"}:
         return None
     return value
+
+
+def _fix_mojibake(value: str) -> str:
+    """Repair common UTF-8/Latin-1 mojibake (e.g. "BlaubÃ¤ren" -> "Blaubären")."""
+    if not any(marker in value for marker in ("Ã", "Â", "â")):
+        return value
+    try:
+        repaired = value.encode("latin-1").decode("utf-8")
+    except UnicodeError:
+        return value
+    return repaired if repaired else value
 
 
 def _parse_referee_field(raw: Optional[str]) -> Tuple[str, ...]:
