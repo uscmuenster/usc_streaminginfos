@@ -1,22 +1,30 @@
 #!/usr/bin/env python3
-"""Generate JSON dataset with USC Münster head-to-head records."""
+"""Generate JSON dataset with head-to-head records for the configured home team."""
 
 from __future__ import annotations
 
 import argparse
 import csv
 import json
+import sys
 import unicodedata
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Dict, Iterator, List, MutableMapping, Sequence, Tuple
+from typing import Dict, Iterator, List, MutableMapping, Optional, Sequence, Tuple
 
 import requests
 
 USER_AGENT = {"User-Agent": "Mozilla/5.0 (compatible; usc-streaminginfos-bot/2.0)"}
 DEFAULT_OUTPUT_PATH = Path("docs/data/direct_comparisons.json")
-USC_KEYWORD = "usc"
+_DEFAULT_HOME_TEAM = "USC Münster"
+
+
+def _add_src_to_path() -> None:
+    repo_root = Path(__file__).resolve().parents[1]
+    src_dir = repo_root / "src"
+    if str(src_dir) not in sys.path:
+        sys.path.insert(0, str(src_dir))
 
 
 @dataclass(frozen=True)
@@ -62,10 +70,14 @@ def _normalize(value: str) -> str:
     return stripped.casefold()
 
 
-def is_usc_team(name: str | None) -> bool:
+def is_home_team(name: str | None, home_team: str) -> bool:
+    """Prüft, ob *name* dem konfigurierten Heimteam entspricht."""
     if not name:
         return False
-    return USC_KEYWORD in _normalize(name)
+    target = _normalize(home_team)
+    candidate = _normalize(name)
+    # Prüfe sowohl exakte Übereinstimmung als auch Teilstring-Match
+    return target == candidate or target in candidate or candidate in target
 
 
 def fetch_csv_rows(url: str) -> Iterator[Row]:
@@ -209,7 +221,11 @@ def clean_dict(data: MutableMapping[str, object]) -> Dict[str, object]:
     return {key: value for key, value in data.items() if value is not None}
 
 
-def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
+def build_dataset(
+    sources: Sequence[SeasonSource],
+    *,
+    home_team: str = _DEFAULT_HOME_TEAM,
+) -> Dict[str, object]:
     seasons_payload: List[Dict[str, object]] = []
     for source in sources:
         opponents: Dict[str, Dict[str, object]] = {}
@@ -218,7 +234,7 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
             for row in fetch_csv_rows(url):
                 team_home = row.get("Mannschaft 1") or ""
                 team_away = row.get("Mannschaft 2") or ""
-                if not (is_usc_team(team_home) or is_usc_team(team_away)):
+                if not (is_home_team(team_home, home_team) or is_home_team(team_away, home_team)):
                     continue
                 sets_pair = extract_sets(row)
                 if sets_pair is None:
@@ -229,14 +245,14 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
                         continue
                     seen_match_ids.add(match_identifier)
 
-                usc_is_home = is_usc_team(team_home)
-                opponent_name = team_away if usc_is_home else team_home
-                usc_sets, opponent_sets = sets_pair if usc_is_home else (sets_pair[1], sets_pair[0])
+                home_is_configured = is_home_team(team_home, home_team)
+                opponent_name = team_away if home_is_configured else team_home
+                home_sets, opponent_sets = sets_pair if home_is_configured else (sets_pair[1], sets_pair[0])
                 points_pair = extract_points(row)
                 if points_pair:
-                    usc_points, opponent_points = (points_pair if usc_is_home else (points_pair[1], points_pair[0]))
+                    home_points, opponent_points = (points_pair if home_is_configured else (points_pair[1], points_pair[0]))
                 else:
-                    usc_points = opponent_points = None
+                    home_points = opponent_points = None
 
                 round_label = get_first_value(row, ("ST",))
                 competition = get_first_value(row, ("Spielrunde",))
@@ -247,7 +263,7 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
                     points_str = f"{points_pair[0]}:{points_pair[1]}"
 
                 set_scores_pairs = extract_set_ballpoints(row)
-                if usc_is_home:
+                if home_is_configured:
                     oriented_set_scores = [
                         f"{home}:{away}" for home, away in set_scores_pairs
                     ]
@@ -277,11 +293,11 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
                                 "points": points_str,
                             }
                         ),
-                        "usc_sets": usc_sets,
+                        "home_sets": home_sets,
                         "opponent_sets": opponent_sets,
-                        "usc_points": usc_points,
+                        "home_points": home_points,
                         "opponent_points": opponent_points,
-                        "usc_won": usc_sets > opponent_sets,
+                        "home_won": home_sets > opponent_sets,
                     }
                 )
 
@@ -292,27 +308,27 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
                         "matches": [],
                         "summary": {
                             "matches_played": 0,
-                            "usc_wins": 0,
-                            "usc_losses": 0,
-                            "usc_sets_for": 0,
-                            "usc_sets_against": 0,
-                            "usc_points_for": 0,
-                            "usc_points_against": 0,
+                            "home_wins": 0,
+                            "opponent_wins": 0,
+                            "home_sets_for": 0,
+                            "opponent_sets_for": 0,
+                            "home_points_for": 0,
+                            "opponent_points_for": 0,
                         },
                     },
                 )
                 bucket["matches"].append(match_record)
                 summary = bucket["summary"]
                 summary["matches_played"] += 1
-                if usc_sets > opponent_sets:
-                    summary["usc_wins"] += 1
+                if home_sets > opponent_sets:
+                    summary["home_wins"] += 1
                 else:
-                    summary["usc_losses"] += 1
-                summary["usc_sets_for"] += usc_sets
-                summary["usc_sets_against"] += opponent_sets
-                if usc_points is not None and opponent_points is not None:
-                    summary["usc_points_for"] += usc_points
-                    summary["usc_points_against"] += opponent_points
+                    summary["opponent_wins"] += 1
+                summary["home_sets_for"] += home_sets
+                summary["opponent_sets_for"] += opponent_sets
+                if home_points is not None and opponent_points is not None:
+                    summary["home_points_for"] += home_points
+                    summary["opponent_points_for"] += opponent_points
         # sort matches chronologically per opponent
         for payload in opponents.values():
             payload["matches"].sort(key=lambda item: (item.get("date") or "", item.get("match_id") or ""))
@@ -332,7 +348,7 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
         )
     generated_at = datetime.now(UTC).replace(microsecond=0)
     return {
-        "team": "USC Münster",
+        "team": home_team,
         "generated_at": generated_at.isoformat().replace("+00:00", "Z"),
         "seasons": seasons_payload,
     }
@@ -340,7 +356,7 @@ def build_dataset(sources: Sequence[SeasonSource]) -> Dict[str, object]:
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Erzeuge eine JSON-Datei mit direkten Vergleichen aller USC-Gegner.",
+        description="Erzeuge eine JSON-Datei mit direkten Vergleichen aller Gegner des konfigurierten Heimteams.",
     )
     parser.add_argument(
         "--output",
@@ -348,12 +364,22 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         default=DEFAULT_OUTPUT_PATH,
         help="Pfad für die erzeugte JSON-Datei (Standard: docs/data/direct_comparisons.json).",
     )
+    parser.add_argument(
+        "--config",
+        type=Path,
+        default=None,
+        help="Pfad zur config.json (Standard: config.json im Repo-Root).",
+    )
     return parser.parse_args(argv)
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    _add_src_to_path()
+    from usc_kommentatoren.config_loader import load_config
+
     args = parse_args(argv)
-    dataset = build_dataset(SEASON_SOURCES)
+    cfg = load_config(args.config)
+    dataset = build_dataset(SEASON_SOURCES, home_team=cfg.home_team)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(dataset, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return 0

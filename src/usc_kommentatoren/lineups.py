@@ -801,7 +801,7 @@ def build_lineup_dataset(
     pdf_links = fetch_schedule_pdf_links(schedule_page_url)
 
     match_requests: List[Tuple[str, ScheduleRow]] = [
-        ("usc", row) for row in recent_rows
+        ("home", row) for row in recent_rows
     ]
     match_requests.extend(("opponent", row) for row in opponent_rows)
 
@@ -835,7 +835,7 @@ def build_lineup_dataset(
 
     dataset = _serialize_dataset(
         matches,
-        usc_team=home_team,
+        home_team=home_team,
         opponent_team=opponent_name,
         setter_lookup=setter_cache,
         roster_lookup=official_roster_cache,
@@ -848,21 +848,27 @@ def build_lineup_dataset(
 def _serialize_dataset(
     matches: Sequence[Tuple[str, MatchLineups]],
     *,
-    usc_team: str,
+    home_team: str,
     opponent_team: str,
     setter_lookup: Dict[str, List[str]],
     roster_lookup: Dict[str, Dict[str, str]],
 ) -> Dict[str, object]:
     serialized: List[Dict[str, object]] = []
     for focus, match in matches:
-        usc_code = match.usc_code
-        opponent_code = match.opponent_code
+        # Generic home/opponent code detection based on configured home_team
+        home_team_code = _find_team_code(match.team_names, home_team)
+        opponent_code = _find_team_code(match.team_names, opponent_team) if opponent_team else None
+        # Fallback: use legacy usc_code/opponent_code if generic lookup fails
+        if home_team_code is None:
+            home_team_code = match.usc_code
+        if opponent_code is None:
+            opponent_code = match.opponent_code
         home_code = _find_team_code(match.team_names, match.match.home_team)
         away_code = _find_team_code(match.team_names, match.match.away_team)
 
         focus_code: Optional[str] = None
-        if focus == "usc":
-            focus_code = usc_code
+        if focus == "home":
+            focus_code = home_team_code
         elif focus == "opponent":
             focus_code = None
             if opponent_team:
@@ -881,7 +887,7 @@ def _serialize_dataset(
                 "code": code,
                 "name": normalized,
                 "is_focus": focus_code is not None and code == focus_code,
-                "is_usc": usc_code is not None and code == usc_code,
+                "is_home": home_team_code is not None and code == home_team_code,
                 "is_opponent": bool(opponent_team and _simplify(normalized) == _simplify(opponent_team)),
                 "setters": list(setters),
             }
@@ -975,7 +981,7 @@ def _serialize_dataset(
             {
                 "focus": focus,
                 "focus_team_code": focus_code,
-                "focus_team_name": match.team_names.get(focus_code, opponent_team if focus == "opponent" else usc_team),
+                "focus_team_name": match.team_names.get(focus_code, opponent_team if focus == "opponent" else home_team),
                 "match_number": match.match.match_number,
                 "kickoff": match.match.kickoff.isoformat(),
                 "date_label": match.match.kickoff.strftime("%d.%m.%Y"),
@@ -990,7 +996,7 @@ def _serialize_dataset(
                 "set_scores": set_score_labels,
                 "pdf_url": match.pdf_url,
                 "team_codes": match.team_names,
-                "usc_code": usc_code,
+                "home_team_code": home_team_code,
                 "opponent_code": opponent_code,
                 "teams": list(teams_meta.values()),
                 "sets": serialized_sets,
@@ -999,10 +1005,11 @@ def _serialize_dataset(
 
     return {
         "generated_at": datetime.now(tz=BERLIN_TZ).isoformat(),
-        "usc_team": usc_team,
+        "home_team": home_team,
         "opponent_team": opponent_team,
         "matches": serialized,
     }
+
 
 
 def main() -> int:

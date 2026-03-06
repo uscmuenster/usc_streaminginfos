@@ -410,6 +410,7 @@ def main() -> int:
     direct_comparison_data = prepare_direct_comparison(
         direct_comparisons_payload,
         next_home.away_team,
+        home_team,
     )
 
     opponent_name_pronunciations: Dict[str, str] = {}
