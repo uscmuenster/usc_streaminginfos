@@ -46,7 +46,7 @@ jobs:
       - name: 🛠 Update direct comparisons dataset
         run: python scripts/update_direct_comparisons.py
 
-      - name: 🛠 Generate USC HTML report
+      - name: 🛠 Generate HTML report
         env:
           PYTHONPATH: src
         run: |
