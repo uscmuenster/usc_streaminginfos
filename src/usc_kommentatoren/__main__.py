@@ -6,7 +6,7 @@ import sys
 from dataclasses import replace
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from .config_loader import AppConfig, load_config
 from .mvp import collect_mvp_rankings
@@ -87,8 +87,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--mvp-output",
         type=Path,
-        default=Path("docs/data/mvp_rankings.json"),
-        help="Pfad zur JSON-Datei mit MVP-Rankings (Standard: docs/data/mvp_rankings.json).",
+        default=Path("docs/data/mvp_top3.json"),
+        help="Pfad zur JSON-Datei mit MVP-Rankings (Standard: docs/data/mvp_top3.json).",
     )
     parser.add_argument(
         "--skip-mvp-output",
@@ -358,9 +358,21 @@ def main() -> int:
             )
             direct_comparisons_payload = None
 
-    mvp_rankings_data: Optional[Dict[str, Dict[str, List[List[str]]]]] = None
+    mvp_rankings_data: Optional[Dict[str, Any]] = None
 
-    if args.mvp_output and not args.skip_mvp_output:
+    if args.mvp_output:
+        try:
+            mvp_rankings_data = json.loads(args.mvp_output.read_text(encoding="utf-8"))
+        except FileNotFoundError:
+            mvp_rankings_data = None
+        except Exception as exc:  # pragma: no cover - invalid JSON
+            print(
+                f"Warnung: MVP-Rankings aus {args.mvp_output} konnten nicht geladen werden: {exc}",
+                file=sys.stderr,
+            )
+            mvp_rankings_data = None
+
+    if mvp_rankings_data is None and args.mvp_output and not args.skip_mvp_output:
         try:
             mvp_rankings = collect_mvp_rankings(
                 [next_home.away_team, home_team]

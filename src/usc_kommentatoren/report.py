@@ -3964,7 +3964,7 @@ def format_direct_comparison_section(
     return "\n".join(line for line in section_lines if line)
 
 def format_mvp_rankings_section(
-    rankings: Optional[Mapping[str, Mapping[str, Any]]],
+    rankings: Optional[Mapping[str, Any]],
     *,
     usc_name: str,
     opponent_name: str,
@@ -3982,89 +3982,157 @@ def format_mvp_rankings_section(
             return True
         return team_normalized in target_normalized or target_normalized in team_normalized
 
-    categories: List[str] = []
-    for index, (indicator, payload) in enumerate(rankings.items()):
-        headers = list((payload or {}).get("headers") or [])
-        rows = list((payload or {}).get("rows") or [])
-        header_index = {header: idx for idx, header in enumerate(headers)}
+    def normalize_entry(raw_entry: Mapping[str, Any], team_role: str) -> Dict[str, str]:
+        rank_raw = (raw_entry.get("Rang") or raw_entry.get("col_0") or "").strip()
+        name_raw = (raw_entry.get("Name") or "").strip()
+        team_raw = (raw_entry.get("Mannschaft") or raw_entry.get("Team") or "").strip()
+        position_raw = (raw_entry.get("Position") or "").strip()
 
-        def value_for(row: Sequence[str], header: str) -> str:
-            index = header_index.get(header)
-            if index is not None and index < len(row):
-                return row[index].strip()
-            return ""
+        sets_raw = ""
+        for key in ("Sätze", "Anzahl Sätze", "Anzahl Sätze Anzahl Sätze"):
+            value = (raw_entry.get(key) or "").strip()
+            if value:
+                sets_raw = value
+                break
 
-        team_entries: Dict[str, List[Dict[str, str]]] = {"opponent": [], "usc": []}
-        for row in rows:
-            values: Dict[str, str] = {}
-            for header, idx in header_index.items():
-                if idx < len(row):
-                    values[header] = row[idx]
+        games_raw = ""
+        for key in ("Spiele", "Anzahl Spiele", "Anzahl Spiele Anzahl Spiele"):
+            value = (raw_entry.get(key) or "").strip()
+            if value:
+                games_raw = value
+                break
 
-            name_value = escape((values.get("Name") or value_for(row, "Name") or "–"))
-            rank_value = escape((values.get("Rang") or value_for(row, "Rang") or "–"))
-            team_raw = (
-                (values.get("Mannschaft") or values.get("Team") or value_for(row, "Mannschaft"))
-            ).strip()
-            team_label = get_team_short_label(team_raw) if team_raw else ""
-            position_raw = (values.get("Position") or value_for(row, "Position")).strip()
-            sets_raw = (values.get("Sätze") or value_for(row, "Sätze")).strip()
-            games_raw = (values.get("Spiele") or value_for(row, "Spiele")).strip()
+        score_raw = ""
+        preferred_score_keys = (
+            "Wert1",
+            "Wertung",
+            "Kennzahl",
+            "Top-Scorer",
+            "Quote Aufschläge mit Wirkung",
+            "Quote perfekte oder gute Annahme",
+            "Quote Aufschlagpunkte",
+            "Annahmeeffizienz",
+            "Angriffseffizienz",
+            "Blockpunkte",
+            "Aufschlagpunkte",
+            "Quote Angriffspunkte",
+            "Angriffspunkte",
+            "Aufschlageffizienz",
+        )
+        for key in preferred_score_keys:
+            value = (raw_entry.get(key) or "").strip()
+            if value:
+                score_raw = value
+                break
 
-            wert1_raw = (values.get("Wert1") or value_for(row, "Wert1")).strip()
-            wertung_raw = (values.get("Wertung") or value_for(row, "Wertung")).strip()
+        if not score_raw:
+            for key, value in raw_entry.items():
+                if not isinstance(value, str):
+                    continue
+                if key in {
+                    "col_0",
+                    "col_1",
+                    "Rang",
+                    "Name",
+                    "Position",
+                    "Mannschaft",
+                    "Team",
+                    "NAT",
+                    "Anzahl Sätze",
+                    "Anzahl Spiele",
+                    "Anzahl Sätze Anzahl Sätze",
+                    "Anzahl Spiele Anzahl Spiele",
+                    "Sätze",
+                    "Spiele",
+                }:
+                    continue
+                stripped = value.strip()
+                if stripped:
+                    score_raw = stripped
+                    break
 
-            if wert1_raw and wertung_raw:
-                score_value = f"{escape(wert1_raw)} | {escape(wertung_raw)}"
-            else:
-                metric_columns = ("Wert1", "Wert2", "Wert3", "Kennzahl", "Wertung")
-                metric_values: List[str] = []
-                for key in metric_columns:
-                    raw_value = (values.get(key) or value_for(row, key)).strip()
-                    if raw_value:
-                        metric_values.append(escape(raw_value))
+        team_label = get_team_short_label(team_raw) if team_raw else ""
+        meta_parts: List[str] = []
+        if position_raw:
+            meta_parts.append(escape(position_raw))
+        if team_label:
+            meta_parts.append(escape(team_label))
+        if sets_raw:
+            meta_parts.append(f"{escape(sets_raw)} Sätze")
+        if games_raw:
+            meta_parts.append(f"{escape(games_raw)} Spiele")
 
-                if metric_values:
-                    first_metric = metric_values[0]
-                    last_metric = metric_values[-1]
-                    if len(metric_values) == 1 or first_metric == last_metric:
-                        score_value = first_metric
-                    else:
-                        score_value = f"{first_metric} | {last_metric}"
-                else:
-                    score_value = "–"
+        return {
+            "rank": escape(rank_raw or "–"),
+            "name": escape(name_raw or "–"),
+            "meta": " • ".join(meta_parts),
+            "score": escape(score_raw or "–"),
+            "team": team_role,
+        }
 
-            if team_raw:
-                normalized_team = normalize_name(team_raw)
-            else:
-                normalized_team = ""
-
-            if matches_team(normalized_team, normalized_opponent):
-                team_role = "opponent"
-            elif matches_team(normalized_team, normalized_usc):
-                team_role = "usc"
-            else:
+    category_items: List[Tuple[str, Mapping[str, Any]]] = []
+    indicators_payload = rankings.get("indicators")
+    if isinstance(indicators_payload, list):
+        for item in indicators_payload:
+            if not isinstance(item, Mapping):
                 continue
+            label = str(item.get("label") or item.get("id") or "").strip()
+            if not label:
+                continue
+            category_items.append((label, item))
+    else:
+        for indicator, payload in rankings.items():
+            if indicator in {"generated_at", "home_team", "usc_team", "opponent_team", "limit"}:
+                continue
+            if isinstance(payload, Mapping):
+                category_items.append((str(indicator), payload))
 
-            meta_parts: List[str] = []
-            if position_raw:
-                meta_parts.append(escape(position_raw))
-            if team_label:
-                meta_parts.append(escape(team_label))
-            if sets_raw:
-                meta_parts.append(f"{escape(sets_raw)} Sätze")
-            if games_raw:
-                meta_parts.append(f"{escape(games_raw)} Spiele")
-            meta_text = " • ".join(meta_parts)
+    categories: List[str] = []
+    for index, (indicator, payload) in enumerate(category_items):
+        team_entries: Dict[str, List[Dict[str, str]]] = {"opponent": [], "usc": []}
 
-            entry: Dict[str, str] = {
-                "rank": rank_value,
-                "name": name_value,
-                "meta": meta_text,
-                "score": score_value,
-                "team": team_role,
-            }
-            team_entries[team_role].append(entry)
+        if isinstance(payload.get("home_team"), list) or isinstance(payload.get("opponent"), list):
+            for team_key in ("opponent", "usc"):
+                for row in payload.get(team_key, []) or []:
+                    if isinstance(row, Mapping):
+                        team_entries[team_key].append(normalize_entry(row, team_key))
+        else:
+            headers = list((payload or {}).get("headers") or [])
+            rows = list((payload or {}).get("rows") or [])
+            header_index = {header: idx for idx, header in enumerate(headers)}
+
+            def value_for(row: Sequence[str], header: str) -> str:
+                pos = header_index.get(header)
+                if pos is not None and pos < len(row):
+                    return row[pos].strip()
+                return ""
+
+            for row in rows:
+                values: Dict[str, str] = {}
+                for header, idx in header_index.items():
+                    if idx < len(row):
+                        values[header] = row[idx]
+
+                team_raw = ((values.get("Mannschaft") or values.get("Team") or value_for(row, "Mannschaft"))).strip()
+                normalized_team = normalize_name(team_raw) if team_raw else ""
+                if matches_team(normalized_team, normalized_opponent):
+                    team_role = "opponent"
+                elif matches_team(normalized_team, normalized_usc):
+                    team_role = "usc"
+                else:
+                    continue
+
+                converted: Dict[str, str] = dict(values)
+                converted.setdefault("Rang", values.get("Rang") or value_for(row, "Rang"))
+                converted.setdefault("Name", values.get("Name") or value_for(row, "Name"))
+                converted.setdefault("Mannschaft", team_raw)
+                converted.setdefault("Position", values.get("Position") or value_for(row, "Position"))
+                converted.setdefault("Sätze", values.get("Sätze") or value_for(row, "Sätze"))
+                converted.setdefault("Spiele", values.get("Spiele") or value_for(row, "Spiele"))
+                converted.setdefault("Wert1", values.get("Wert1") or value_for(row, "Wert1"))
+                converted.setdefault("Wertung", values.get("Wertung") or value_for(row, "Wertung"))
+
+                team_entries[team_role].append(normalize_entry(converted, team_role))
 
         ordered_entries: List[Dict[str, str]] = []
         for team_key in ("opponent", "usc"):
@@ -4073,20 +4141,20 @@ def format_mvp_rankings_section(
         list_items: List[str] = []
         for entry in ordered_entries:
             meta_html = (
-                f"                    <span class=\"mvp-entry-meta\">{entry['meta']}</span>\n"
+                f'                    <span class="mvp-entry-meta">{entry["meta"]}</span>\n'
                 if entry["meta"]
                 else ""
             )
             list_items.append(
-                "                <li class=\"mvp-entry\" "
-                f"data-team=\"{entry['team']}\">\n"
-                f"                  <span class=\"mvp-entry-rank\">{entry['rank']}</span>\n"
-                "                  <div class=\"mvp-entry-info\">\n"
-                f"                    <span class=\"mvp-entry-name\">{entry['name']}</span>\n"
+                '                <li class="mvp-entry" '
+                f'data-team="{entry["team"]}">\n'
+                f'                  <span class="mvp-entry-rank">{entry["rank"]}</span>\n'
+                '                  <div class="mvp-entry-info">\n'
+                f'                    <span class="mvp-entry-name">{entry["name"]}</span>\n'
                 f"{meta_html}"
-                "                  </div>\n"
-                f"                  <span class=\"mvp-entry-score\">{entry['score']}</span>\n"
-                "                </li>"
+                '                  </div>\n'
+                f'                  <span class="mvp-entry-score">{entry["score"]}</span>\n'
+                '                </li>'
             )
 
         if list_items:
