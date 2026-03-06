@@ -4700,7 +4700,7 @@ def build_html_report(
     )
     if usc_url:
         meta_lines.append(
-            f"<p><a class=\"meta-link\" href=\"{escape(usc_url)}\">Homepage USC Münster</a></p>"
+            f"<p><a class=\"meta-link\" href=\"{escape(usc_url)}\">Homepage {escape(home_team)}</a></p>"
         )
     if opponent_url:
         meta_lines.append(
