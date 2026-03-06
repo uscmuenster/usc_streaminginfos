@@ -3245,9 +3245,9 @@ def prepare_direct_comparison(
                         parsed_date = None
 
                 home_team_raw = match_entry.get("home_team")
-                home_team = str(home_team_raw).strip() if home_team_raw else ""
+                match_home_team = str(home_team_raw).strip() if home_team_raw else ""
                 away_team_raw = match_entry.get("away_team")
-                away_team = str(away_team_raw).strip() if away_team_raw else ""
+                match_away_team = str(away_team_raw).strip() if away_team_raw else ""
 
                 round_label = str(match_entry.get("round") or "").strip() or None
                 competition = _normalize_competition_label(
@@ -3351,8 +3351,8 @@ def prepare_direct_comparison(
                 match_key = (
                     match_id,
                     parsed_date,
-                    normalize_name(home_team) if home_team else "",
-                    normalize_name(away_team) if away_team else "",
+                    normalize_name(match_home_team) if match_home_team else "",
+                    normalize_name(match_away_team) if match_away_team else "",
                 )
                 if match_key in seen_matches:
                     continue
@@ -3364,8 +3364,8 @@ def prepare_direct_comparison(
                         date=parsed_date,
                         date_label=date_label,
                         season=season_label,
-                        home_team=home_team or opponent_label,
-                        away_team=away_team or USC_CANONICAL_NAME,
+                        home_team=match_home_team or opponent_label,
+                        away_team=match_away_team or home_team,
                         round_label=round_label,
                         competition=competition,
                         location=location,
