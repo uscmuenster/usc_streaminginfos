@@ -6,6 +6,7 @@ import csv
 import difflib
 import json
 import re
+import unicodedata
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -80,6 +81,7 @@ class MatchLineups:
 
     @property
     def usc_code(self) -> Optional[str]:
+        """Backward-compatible alias – only works when the home team is USC Münster."""
         for code, name in self.team_names.items():
             if "usc" in _simplify(name):
                 return code
@@ -87,6 +89,7 @@ class MatchLineups:
 
     @property
     def opponent_code(self) -> Optional[str]:
+        """Backward-compatible alias – returns the non-USC team code."""
         usc = self.usc_code
         if usc is None:
             return None
@@ -95,15 +98,54 @@ class MatchLineups:
                 return code
         return None
 
+    def get_home_code(self, home_team: str) -> Optional[str]:
+        """Return the PDF team code for the configured *home_team* (Unicode-aware)."""
+        return _find_team_code(self.team_names, home_team)
+
+    def get_opponent_code(self, home_team: str) -> Optional[str]:
+        """Return the PDF team code for the opponent of *home_team*."""
+        home = self.get_home_code(home_team)
+        if home is None:
+            return None
+        for code in self.team_names:
+            if code != home:
+                return code
+        return None
+
 
 def _simplify(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip().lower()
 
 
+def _normalize_team_name(value: str) -> str:
+    """Normalize a team name for Unicode-aware comparison (handles umlaut variants)."""
+    nfkd = unicodedata.normalize("NFKD", value)
+    stripped = "".join(char for char in nfkd if not unicodedata.combining(char))
+    return re.sub(r"\s+", " ", stripped).strip().casefold()
+
+
 def _find_team_code(team_names: Dict[str, str], target_name: str) -> Optional[str]:
-    normalized_target = _simplify(target_name)
+    """Find the PDF team code that matches *target_name*.
+
+    Tries three strategies in order:
+    1. Exact case-folded match (fast path).
+    2. Unicode-normalized match – handles umlaut variants (e.g. ``Münster`` ↔ ``Munster``).
+    3. Substring match – handles abbreviated PDF names (e.g. ``USC`` in ``USC Münster``).
+    """
+    # 1. Exact case-insensitive + whitespace-normalized match
+    simplified_target = _simplify(target_name)
     for code, name in team_names.items():
-        if _simplify(name) == normalized_target:
+        if _simplify(name) == simplified_target:
+            return code
+    # 2. Unicode-normalized match (strips combining chars, e.g. ü → u)
+    unicode_target = _normalize_team_name(target_name)
+    for code, name in team_names.items():
+        if _normalize_team_name(name) == unicode_target:
+            return code
+    # 3. Substring match (PDF may use abbreviated/truncated team names)
+    for code, name in team_names.items():
+        norm_name = _normalize_team_name(name)
+        if unicode_target in norm_name or norm_name in unicode_target:
             return code
     return None
 
@@ -858,11 +900,30 @@ def _serialize_dataset(
         # Generic home/opponent code detection based on configured home_team
         home_team_code = _find_team_code(match.team_names, home_team)
         opponent_code = _find_team_code(match.team_names, opponent_team) if opponent_team else None
-        # Fallback: use legacy usc_code/opponent_code if generic lookup fails
+        # Generic fallback: if still not found, check which scheduled team is the
+        # configured home team and look up its PDF code accordingly.
         if home_team_code is None:
-            home_team_code = match.usc_code
-        if opponent_code is None:
-            opponent_code = match.opponent_code
+            home_norm = _normalize_team_name(home_team)
+            scheduled_home_norm = _normalize_team_name(match.match.home_team)
+            scheduled_away_norm = _normalize_team_name(match.match.away_team)
+            if (
+                scheduled_home_norm == home_norm
+                or home_norm in scheduled_home_norm
+                or scheduled_home_norm in home_norm
+            ):
+                home_team_code = _find_team_code(match.team_names, match.match.home_team)
+            elif (
+                scheduled_away_norm == home_norm
+                or home_norm in scheduled_away_norm
+                or scheduled_away_norm in home_norm
+            ):
+                home_team_code = _find_team_code(match.team_names, match.match.away_team)
+        if opponent_code is None and opponent_team:
+            # The opponent in the scheduled match is the one that isn't the home team
+            for code, name in match.team_names.items():
+                if code != home_team_code:
+                    opponent_code = code
+                    break
         home_code = _find_team_code(match.team_names, match.match.home_team)
         away_code = _find_team_code(match.team_names, match.match.away_team)
 
