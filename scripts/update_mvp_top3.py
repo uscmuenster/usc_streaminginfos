@@ -95,21 +95,22 @@ def parse_partial(xml_payload: str) -> tuple[str, str | None]:
     return html, (viewstate or None)
 
 
-def parse_table(html: str) -> List[Dict[str, str]]:
+def parse_table(html: str, *, headers: Sequence[str] | None = None) -> tuple[List[Dict[str, str]], List[str]]:
     soup = BeautifulSoup(html, "html.parser")
     table = soup.select_one("table")
 
-    if table is None:
-        return []
+    resolved_headers = list(headers or [])
 
-    headers: List[str] = []
-    for th in table.select("thead th"):
-        label = th.get_text(" ", strip=True)
-        headers.append(label if label else f"col_{len(headers)}")
+    if table is not None and not resolved_headers:
+        for th in table.select("thead th"):
+            label = th.get_text(" ", strip=True)
+            resolved_headers.append(label if label else f"col_{len(resolved_headers)}")
 
     rows: List[Dict[str, str]] = []
 
-    for tr in table.select("tbody tr"):
+    row_selector = "tbody tr" if table is not None else "tr"
+
+    for tr in (table.select(row_selector) if table is not None else soup.select(row_selector)):
         cells = [cell.get_text(" ", strip=True) for cell in tr.select("td")]
 
         if not cells:
@@ -118,12 +119,12 @@ def parse_table(html: str) -> List[Dict[str, str]]:
         row: Dict[str, str] = {}
 
         for i, value in enumerate(cells):
-            key = headers[i] if i < len(headers) else f"col_{i}"
+            key = resolved_headers[i] if i < len(resolved_headers) else f"col_{i}"
             row[key] = value
 
         rows.append(row)
 
-    return rows
+    return rows, resolved_headers
 
 
 def get_pages(html: str) -> int:
@@ -138,7 +139,37 @@ def get_pages(html: str) -> int:
     return int(match.group(1)) if match else 1
 
 
-def fetch_indicator(session: requests.Session, indicator: str, viewstate: str) -> tuple[List[Dict[str, str]], int, str]:
+def fetch_page(session: requests.Session, page: int, viewstate: str) -> tuple[str, str]:
+    first = page * 25
+
+    payload = {
+        "jakarta.faces.partial.ajax": "true",
+        "jakarta.faces.source": TABLE,
+        "jakarta.faces.partial.execute": TABLE,
+        "jakarta.faces.partial.render": f"{FORM}:rankingPanel",
+        FORM: FORM,
+        f"{TABLE}_pagination": "true",
+        f"{TABLE}_first": str(first),
+        f"{TABLE}_rows": "25",
+        f"{TABLE}_encodeFeature": "true",
+        f"{TABLE}_page": str(page),
+        "jakarta.faces.ViewState": viewstate,
+    }
+
+    response = session.post(URL, data=payload, headers=HEADERS)
+    response.raise_for_status()
+
+    html, next_viewstate = parse_partial(response.text)
+    return html, (next_viewstate or viewstate)
+
+
+def fetch_indicator(
+    session: requests.Session,
+    indicator: str,
+    viewstate: str,
+    *,
+    max_rows: int = 100,
+) -> tuple[List[Dict[str, str]], int, str]:
     payload = {
         "jakarta.faces.partial.ajax": "true",
         "jakarta.faces.source": SELECTOR,
@@ -155,10 +186,23 @@ def fetch_indicator(session: requests.Session, indicator: str, viewstate: str) -
     response.raise_for_status()
 
     html, next_viewstate = parse_partial(response.text)
-    rows = parse_table(html)
+    current_viewstate = next_viewstate or viewstate
+    rows, headers = parse_table(html)
     pages = get_pages(html)
 
-    return rows, pages, (next_viewstate or viewstate)
+    if max_rows > 25 and pages > 1:
+        max_pages = min(pages, (max_rows + 24) // 25)
+
+        for page in range(1, max_pages):
+            page_html, current_viewstate = fetch_page(session, page, current_viewstate)
+            page_rows, _ = parse_table(page_html, headers=headers)
+            rows.extend(page_rows)
+
+            if len(rows) >= max_rows:
+                rows = rows[:max_rows]
+                break
+
+    return rows, pages, current_viewstate
 
 
 def top_players(rows: List[Dict[str, str]], team: str, limit: int = 3) -> List[Dict[str, str]]:
@@ -181,7 +225,7 @@ def top_players(rows: List[Dict[str, str]], team: str, limit: int = 3) -> List[D
     return filtered[:limit]
 
 
-def build_dataset(home_team: str, opponent_team: str, *, limit: int = 3) -> Mapping[str, object]:
+def build_dataset(home_team: str, opponent_team: str, *, limit: int = 3, scan_limit: int = 100) -> Mapping[str, object]:
     session = requests.Session()
 
     viewstate, soup = get_viewstate(session)
@@ -190,7 +234,7 @@ def build_dataset(home_team: str, opponent_team: str, *, limit: int = 3) -> Mapp
     result = []
 
     for indicator_id, label in indicators.items():
-        rows, pages, viewstate = fetch_indicator(session, indicator_id, viewstate)
+        rows, pages, viewstate = fetch_indicator(session, indicator_id, viewstate, max_rows=scan_limit)
 
         home_rows = top_players(rows, home_team, limit=limit)
         opponent_rows = top_players(rows, opponent_team, limit=limit)
@@ -212,6 +256,7 @@ def build_dataset(home_team: str, opponent_team: str, *, limit: int = 3) -> Mapp
         "usc_team": home_team,
         "opponent_team": opponent_team,
         "limit": limit,
+        "scan_limit": scan_limit,
         "indicators": result,
     }
 
@@ -233,6 +278,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--lineups-path", type=Path, default=DEFAULT_LINEUPS_PATH)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH)
     parser.add_argument("--limit", type=int, default=3)
+    parser.add_argument("--scan-limit", type=int, default=100)
 
     return parser.parse_args(argv)
 
@@ -248,7 +294,7 @@ def main(argv: Sequence[str] | None = None) -> None:
         home_team = home_team or home_team_ds
         opponent_team = opponent_team or opponent_team_ds
 
-    dataset = build_dataset(home_team, opponent_team, limit=args.limit)
+    dataset = build_dataset(home_team, opponent_team, limit=args.limit, scan_limit=args.scan_limit)
     dump_dataset(dataset, output_path=args.output)
 
 
