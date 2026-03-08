@@ -1,6 +1,6 @@
 {
   "team": "USC Münster",
-  "generated_at": "2026-03-07T14:39:06Z",
+  "generated_at": "2026-03-08T04:03:16Z",
   "seasons": [
     {
       "season": "2025/26",
@@ -8,13 +8,13 @@
         {
           "team": "Allianz MTV Stuttgart",
           "summary": {
-            "matches_played": 1,
+            "matches_played": 2,
             "home_wins": 0,
-            "opponent_wins": 1,
-            "home_sets_for": 1,
-            "opponent_sets_for": 3,
-            "home_points_for": 86,
-            "opponent_points_for": 99
+            "opponent_wins": 2,
+            "home_sets_for": 2,
+            "opponent_sets_for": 6,
+            "home_points_for": 169,
+            "opponent_points_for": 197
           },
           "matches": [
             {
@@ -39,6 +39,30 @@
               "opponent_sets": 3,
               "home_points": 86,
               "opponent_points": 99,
+              "home_won": false
+            },
+            {
+              "match_id": "2121",
+              "date": "2026-03-07",
+              "home_team": "Allianz MTV Stuttgart",
+              "away_team": "USC Münster",
+              "round": "Spieltag 15",
+              "competition": "1. Bundesliga Frauen",
+              "location": "SCHARRena Stuttgart (70372 Stuttgart)",
+              "set_scores": [
+                "25:23",
+                "18:25",
+                "17:25",
+                "23:25"
+              ],
+              "result": {
+                "sets": "3:1",
+                "points": "98:83"
+              },
+              "home_sets": 1,
+              "opponent_sets": 3,
+              "home_points": 83,
+              "opponent_points": 98,
               "home_won": false
             }
           ]
