@@ -101,11 +101,8 @@ Danach ist die Seite unter `https://<owner>.github.io/<repo>/` erreichbar.
 
 ## 3.5 Secrets und Variablen prüfen
 
-Unter **Settings → Secrets and variables → Actions**:
+Unter **Settings → Secrets and variables → Actions**: Keine Einstellungen notwendig.
 
-- Prüfen, ob Workflows zusätzliche Secrets brauchen (z. B. API-Keys, wenn später erweitert).
-- Falls ein PAT statt `GITHUB_TOKEN` eingesetzt wird: Secret (z. B. `REPO_TOKEN`) hinterlegen.
-- Falls Konfigurationswerte per Variable gepflegt werden sollen (z. B. Team-IDs), diese als Repository Variables speichern.
 
 ## 3.6 Sicherheits- und Wartungseinstellungen
 
