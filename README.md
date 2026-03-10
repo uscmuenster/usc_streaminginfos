@@ -1,4 +1,4 @@
-# USC Streaminginfos
+# Streaminginfos 1.BLF
 
 Dieses Repository erzeugt täglich eine schlanke HTML-Seite für ein Volleyball-Team und stellt zusätzliche Datensichten für Streams oder Social-Media-Betreuung bereit. Das Tool ist generisch konfigurierbar (siehe `config.json`) – in der Standardkonfiguration ist es auf das Frauen-Bundesligateam des USC Münster ausgerichtet. Alle Informationen werden aus frei zugänglichen Quellen geladen – der Spielplan kommt aus dem öffentlichen CSV-Export der Volleyball Bundesliga, News werden von den Vereinsseiten sowie den VBL-Portalen geholt und internationale Partien direkt von der CEV aggregiert.
 
