@@ -14,9 +14,9 @@ Diese Anleitung beschreibt, wie du dieses Repository in der **letzten Version** 
 
 ## 1.1 Kontinuierliche Übernahme deiner Änderungen (wichtig)
 
-**Kurzantwort:** Ja, das geht – aber **nicht** mit „Import repository“ allein.
+Ja, das geht – aber **nicht** mit „Import repository“ allein.
 
-Der Import erstellt eine einmalige Kopie (Snapshot). Wenn ein anderes Repo deine späteren Änderungen automatisch übernehmen soll, nutze stattdessen einen dieser Wege:
+Der Import erstellt eine einmalige Kopie (Snapshot). Wenn ein anderes Repo die späteren Änderungen automatisch übernehmen soll, nutze stattdessen einen dieser Wege:
 
 ### Option A (empfohlen): Fork verwenden
 
