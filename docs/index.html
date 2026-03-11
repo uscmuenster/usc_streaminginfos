@@ -228,6 +228,33 @@
       outline: 3px solid rgba(14, 165, 233, 0.55);
       outline-offset: 2px;
     }
+    .broadcast-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin: 0 0 0.6rem;
+    }
+    .broadcast-controls__label {
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .broadcast-controls__input {
+      max-width: 8rem;
+      width: 100%;
+      font: inherit;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      line-height: 1.2;
+      padding: 0.4rem 0.55rem;
+      border-radius: 0.55rem;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+    }
+    .broadcast-controls__input:focus-visible {
+      outline: 2px solid rgba(14, 165, 233, 0.5);
+      outline-offset: 1px;
+    }
     .broadcast-table-wrapper {
       border-radius: 0.85rem;
       border: 1px solid #e2e8f0;
@@ -1732,24 +1759,24 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="broadcast-row">
-                      <td class="broadcast-cell broadcast-cell--start">0:00</td>
-                      <td class="broadcast-cell broadcast-cell--duration">0:45</td>
+                    <tr class="broadcast-row" data-set-break-row="0">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>0:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>0:45</td>
                       <td class="broadcast-cell broadcast-cell--note">Ende 1. Satz: 45 Sekunden Fazit</td>
                     </tr>
-                    <tr class="broadcast-row">
-                      <td class="broadcast-cell broadcast-cell--start">0:45</td>
-                      <td class="broadcast-cell broadcast-cell--duration">1:30</td>
+                    <tr class="broadcast-row" data-set-break-row="1">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>0:45</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>1:30</td>
                       <td class="broadcast-cell broadcast-cell--note">01:30 Minuten ohne Kommentar</td>
                     </tr>
-                    <tr class="broadcast-row">
-                      <td class="broadcast-cell broadcast-cell--start">2:15</td>
-                      <td class="broadcast-cell broadcast-cell--duration">0:45</td>
+                    <tr class="broadcast-row" data-set-break-row="2">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>2:15</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>0:45</td>
                       <td class="broadcast-cell broadcast-cell--note">45 Sekunden Wiedereinstieg vor dem 2. Satz</td>
                     </tr>
-                    <tr class="broadcast-row">
-                      <td class="broadcast-cell broadcast-cell--start">3:00</td>
-                      <td class="broadcast-cell broadcast-cell--duration">0:00</td>
+                    <tr class="broadcast-row" data-set-break-row="3">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>3:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>0:00</td>
                       <td class="broadcast-cell broadcast-cell--note">Beginn 2. Satz</td>
                     </tr>
                   </tbody>
@@ -1765,8 +1792,12 @@
               <span class="broadcast-box__summary-indicator" aria-hidden="true"></span>
             </summary>
             <div class="broadcast-box__content">
+              <div class="broadcast-controls">
+                <label class="broadcast-controls__label" for="set-break-duration-input">Werbung 2 Dauer (MM:SS)</label>
+                <input class="broadcast-controls__input" id="set-break-duration-input" name="set-break-duration-input" type="text" inputmode="numeric" value="5:15" placeholder="05:15" data-set-break-duration-input />
+              </div>
               <div class="broadcast-table-wrapper">
-                <table class="broadcast-table">
+                <table class="broadcast-table" data-set-break-table>
                   <thead>
                     <tr>
                       <th scope="col" class="broadcast-heading broadcast-heading--start">Start</th>
@@ -1775,24 +1806,24 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="broadcast-row">
-                      <td class="broadcast-cell broadcast-cell--start">0:00</td>
-                      <td class="broadcast-cell broadcast-cell--duration">0:20</td>
+                    <tr class="broadcast-row" data-set-break-row="0">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>0:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>0:20</td>
                       <td class="broadcast-cell broadcast-cell--note">Ende 2. Satz: 20 Sekunden Fazit</td>
                     </tr>
-                    <tr class="broadcast-row">
-                      <td class="broadcast-cell broadcast-cell--start">0:20</td>
-                      <td class="broadcast-cell broadcast-cell--duration">5:15</td>
+                    <tr class="broadcast-row" data-set-break-row="1" data-editable-duration-row="true">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>0:20</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>5:15</td>
                       <td class="broadcast-cell broadcast-cell--note">Werbung 2 (Regie: saubere K1, Kommentatoren: still).</td>
                     </tr>
-                    <tr class="broadcast-row">
-                      <td class="broadcast-cell broadcast-cell--start">5:35</td>
-                      <td class="broadcast-cell broadcast-cell--duration">0:25</td>
+                    <tr class="broadcast-row" data-set-break-row="2">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>5:35</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>0:25</td>
                       <td class="broadcast-cell broadcast-cell--note">20 Sekunden Wiedereinstieg vor dem 3. Satz</td>
                     </tr>
-                    <tr class="broadcast-row">
-                      <td class="broadcast-cell broadcast-cell--start">6:00</td>
-                      <td class="broadcast-cell broadcast-cell--duration">0:00</td>
+                    <tr class="broadcast-row" data-set-break-row="3">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>6:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>0:00</td>
                       <td class="broadcast-cell broadcast-cell--note">Beginn 3. Satz</td>
                     </tr>
                   </tbody>
@@ -1818,24 +1849,24 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="broadcast-row">
-                      <td class="broadcast-cell broadcast-cell--start">0:00</td>
-                      <td class="broadcast-cell broadcast-cell--duration">3:00</td>
+                    <tr class="broadcast-row" data-set-break-row="0">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>0:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>3:00</td>
                       <td class="broadcast-cell broadcast-cell--note">Spielende: 45 Sekunden Fazit + 02:15 MVP-Ehrung</td>
                     </tr>
-                    <tr class="broadcast-row">
-                      <td class="broadcast-cell broadcast-cell--start">3:00</td>
-                      <td class="broadcast-cell broadcast-cell--duration">3:20</td>
+                    <tr class="broadcast-row" data-set-break-row="1">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>3:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>3:20</td>
                       <td class="broadcast-cell broadcast-cell--note">Werbung 3 (Regie: saubere K1, Kommentatoren: still).</td>
                     </tr>
-                    <tr class="broadcast-row">
-                      <td class="broadcast-cell broadcast-cell--start">6:20</td>
-                      <td class="broadcast-cell broadcast-cell--duration">2:00</td>
+                    <tr class="broadcast-row" data-set-break-row="2">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>6:20</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>2:00</td>
                       <td class="broadcast-cell broadcast-cell--note">02:00 Minuten Interview</td>
                     </tr>
-                    <tr class="broadcast-row">
-                      <td class="broadcast-cell broadcast-cell--start">8:20</td>
-                      <td class="broadcast-cell broadcast-cell--duration">1:00</td>
+                    <tr class="broadcast-row" data-set-break-row="3">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>8:20</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>1:00</td>
                       <td class="broadcast-cell broadcast-cell--note">Ausblick auf die nächsten Gegner + Verabschiedung (evt ins Interview integriert)</td>
                     </tr>
                   </tbody>
@@ -1851,6 +1882,13 @@
       <h2>Spiele: Schwarz-Weiß Erfurt</h2>
       <ul class="match-list">
         <li class="match-item match-item--finished">
+  <div class="match-line">
+    <div class="match-header"><strong>08.03.2026 (So) 16:00 Uhr</strong> – Schwarz-Weiß Erfurt vs. Dresdner SC</div>
+    <div class="match-result">Ergebnis: 0:3 / 42:75 (15:25 12:25 15:25)</div>
+    <div class="match-meta"><span>Zuschauer: 1003</span> · <span>MVP: Sandbothe, Elizabeth (Schwarz-Weiß Erfurt) und Grome, Emma (Dresdner SC)</span><br><a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480494&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/6cab6668-8f07-4972-aa5d-698048d1e9eb" target="_blank" rel="noopener">Statistik (PDF)</a></div>
+  </div>
+</li>
+      <li class="match-item match-item--finished">
   <div class="match-line">
     <div class="match-header"><strong>04.03.2026 (Mi) 19:30 Uhr</strong> – Skurios Volleys Borken vs. Schwarz-Weiß Erfurt</div>
     <div class="match-result">Ergebnis: 3:0 / 79:67 (27:25 25:17 27:25)</div>
@@ -1871,19 +1909,19 @@
     <div class="match-meta"><span>Zuschauer: 573</span> · <span>MVP: Körtzinger, Leonie (ETV Hamburger Volksbank Volleys) und Darley, Alianza (Schwarz-Weiß Erfurt)</span><br><a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480648&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/9727bae0-a9ec-426b-9678-11035158b283" target="_blank" rel="noopener">Statistik (PDF)</a></div>
   </div>
 </li>
-      <li class="match-item match-item--finished">
-  <div class="match-line">
-    <div class="match-header"><strong>07.02.2026 (Sa) 18:30 Uhr</strong> – Schwarz-Weiß Erfurt vs. SSC Palmberg Schwerin</div>
-    <div class="match-result">Ergebnis: 0:3 / 50:75 (12:25 21:25 17:25)</div>
-    <div class="match-meta"><span>Zuschauer: 803</span> · <span>MVP: Linke, Lena (Schwarz-Weiß Erfurt) und Frommann, Finnja (SSC Palmberg Schwerin)</span><br><a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480587&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/1493378c-3d54-4ff5-b0dc-e175d623a19c" target="_blank" rel="noopener">Statistik (PDF)</a></div>
-  </div>
-</li>
       </ul>
     </section>
     <section>
       <h2>Spiele: USC Münster</h2>
       <ul class="match-list">
         <li class="match-item match-item--finished">
+  <div class="match-line">
+    <div class="match-header"><strong>07.03.2026 (Sa) 18:05 Uhr</strong> – Allianz MTV Stuttgart vs. USC Münster</div>
+    <div class="match-result">Ergebnis: 3:1 / 98:83 (23:25 25:18 25:17 25:23)</div>
+    <div class="match-meta"><span>Zuschauer: 2011</span> · <span>MVP: Stautz, Antonia (Allianz MTV Stuttgart) und Kömmling, Elena (USC Münster)</span><br><a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480476&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/ab1b786d-9efd-4ace-8bac-5075f620269a" target="_blank" rel="noopener">Statistik (PDF)</a></div>
+  </div>
+</li>
+      <li class="match-item match-item--finished">
   <div class="match-line">
     <div class="match-header"><strong>04.03.2026 (Mi) 19:00 Uhr</strong> – Dresdner SC vs. USC Münster</div>
     <div class="match-result">Ergebnis: 3:0 / 75:57 (25:22 25:19 25:16)</div>
@@ -1902,13 +1940,6 @@
     <div class="match-header"><strong>14.02.2026 (Sa) 19:30 Uhr</strong> – Skurios Volleys Borken vs. USC Münster</div>
     <div class="match-result">Ergebnis: 0:3 / 50:75 (14:25 22:25 14:25)</div>
     <div class="match-meta"><span>Zuschauer: 1042</span> · <span>MVP: Loker, Marika (Skurios Volleys Borken) und Jordan, Emilia (USC Münster)</span><br><a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480642&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/2b7b3b54-2317-43ef-a7c2-52e6961c1ea5" target="_blank" rel="noopener">Statistik (PDF)</a></div>
-  </div>
-</li>
-      <li class="match-item match-item--finished">
-  <div class="match-line">
-    <div class="match-header"><strong>07.02.2026 (Sa) 19:30 Uhr</strong> – USC Münster vs. VfB Suhl LOTTO Thüringen</div>
-    <div class="match-result">Ergebnis: 1:3 / 86:91 (25:15 18:25 19:25 24:26)</div>
-    <div class="match-meta"><span>Zuschauer: 2024</span> · <span>MVP: Strothoff, Amelie (USC Münster) und Brancuska, Monika (VfB Suhl LOTTO Thüringen)</span><br><a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=777480599&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a> · <a href="https://www.volleyball-bundesliga.de/uploads/867b390c-2969-4f41-9e41-915653f79d34" target="_blank" rel="noopener">Statistik (PDF)</a></div>
   </div>
 </li>
       </ul>
@@ -2011,7 +2042,7 @@
           <li class="roster-item roster-player"><span class="roster-number">#13</span><div class="roster-text"><span class="roster-name">Lydia Stemmler (LÜ-di-a STEM-ler)</span><div class="roster-details">185 cm | 20.07.2001 (24) | Deutschland | Außenangriff</div></div></li>
           <li class="roster-item roster-player"><span class="roster-number">#14</span><div class="roster-text"><span class="roster-name">Alianza Darley (a-li-AN-sa DAR-li)</span><div class="roster-details">180 cm | 24.06.2001 (24) | Vereinigte Staaten von Amerika | Außenangriff</div></div></li>
           <li class="roster-item roster-player"><span class="roster-number">#55</span><div class="roster-text"><span class="roster-name">Mia Anna Stauß (MI-a AN-na SCHTAUS)</span><div class="roster-details">173 cm | 01.08.2002 (23) | Deutschland | Libero</div></div></li>
-          <li class="roster-item roster-player"><span class="roster-number">#56</span><div class="roster-text"><span class="roster-name">Rosalie Tetzel</span><div class="roster-details">– | 18.03.2007 (18) | Deutschland | Mittelblock</div></div></li>
+          <li class="roster-item roster-player"><span class="roster-number">#56</span><div class="roster-text"><span class="roster-name">Rosalie Tetzel</span><div class="roster-details">176 cm | 18.03.2007 (18) | Deutschland | Mittelblock</div></div></li>
           <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Pablo Sanchez</span><div class="roster-details">12.03.1993 (33) | Spanien | Trainer</div></div></li>
           <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Rebekka Schneider</span><div class="roster-details">01.05.1997 (28) | Deutschland | Co-Trainer</div></div></li>
           <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Lea Feistritzer (LE-a FEI-strit-zer)</span><div class="roster-details">25.08.2006 (19) | Deutschland | Co-Trainer (Scout)</div></div></li>
@@ -2021,6 +2052,7 @@
           <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Manuel Mico Navarro</span><div class="roster-details">16.10.2000 (25) | Spanien | Physiotherapeut</div></div></li>
           <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Dr. Birgit Götzrath</span><div class="roster-details">18.07.1967 (58) | Deutschland | Arzt</div></div></li>
           <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Dr. Christian Geßner</span><div class="roster-details">16.06.1968 (57) | Deutschland | Arzt</div></div></li>
+          <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Dr. Jörg Haselbach</span><div class="roster-details">10.03.1965 (61) | Deutschland | Arzt</div></div></li>
           <li class="roster-item roster-official"><span class="roster-number">Staff</span><div class="roster-text"><span class="roster-name">Dr. med. Liesa Georgi</span><div class="roster-details">06.08.1989 (36) | Deutschland | Arzt</div></div></li>
           </ul>
         </div>
@@ -2130,8 +2162,11 @@
         <summary>News von Schwarz-Weiß Erfurt</summary>
         <div class="accordion-content">
           <ul class="news-list">
-            <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=780692668&amp;component_56784875.page=0#a_56784875_780692668">Ein 3:0-Sieg und ein ganz besonderer Abend</a><span class="news-meta">Volleyball Bundesliga – 05.03.2026 01:45</span></li>
-      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=780677320&amp;component_56784875.page=0#a_56784875_780677320">Letzte Heim-Premiere gegen Erfurt</a><span class="news-meta">Volleyball Bundesliga – 03.03.2026 17:41</span></li>
+            <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=780748364&amp;component_56784875.page=0#a_56784875_780748364">Erfurt chancenlos</a><span class="news-meta">Volleyball Bundesliga – 08.03.2026 23:51</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=780745203&amp;component_56784875.page=0#a_56784875_780745203">Pflichtaufgabe souverän erfüllt</a><span class="news-meta">Volleyball Bundesliga – 08.03.2026 18:42</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=780722607&amp;component_56784875.page=0#a_56784875_780722607">Letzte Auswärtsfahrt führt nach Erfurt</a><span class="news-meta">Volleyball Bundesliga – 07.03.2026 18:16</span></li>
+      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=780719848&amp;component_56784875.page=0#a_56784875_780719848">Derby zur Kaffeezeit</a><span class="news-meta">Volleyball Bundesliga – 07.03.2026 14:00</span></li>
+      <li><a href="https://www.dnn.de/sport/regional/dresdner-sc-schlaegt-bei-schwarz-weiss-erfurt-auf-FR6TIDG5PZF63CFE6HQYSDCMPE.html">Dresdner SC schlägt bei Schwarz-Weiß Erfurt auf</a><span class="news-meta">Dresdner Neueste Nachrichten (DNN) via VBL Pressespiegel – 06.03.2026 18:39</span></li>
           </ul>
         </div>
       </details>
@@ -2139,9 +2174,11 @@
         <summary>News von USC Münster</summary>
         <div class="accordion-content">
           <ul class="news-list">
-            <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=780690852&amp;component_56784875.page=0#a_56784875_780690852">Revanche gegen Münster gelungen</a><span class="news-meta">Volleyball Bundesliga – 04.03.2026 23:19</span></li>
-      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=780675323&amp;component_56784875.page=0#a_56784875_780675323">Gegen Münster ist noch eine Rechnung offen</a><span class="news-meta">Volleyball Bundesliga – 03.03.2026 12:56</span></li>
-      <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml?component_56784875.showArticle=780674576&amp;component_56784875.page=0#a_56784875_780674576">USC startet Auswärtswoche in Dresden</a><span class="news-meta">Volleyball Bundesliga – 03.03.2026 10:40</span></li>
+            <li><a href="https://www.usc-muenster.de/usc/vorzeitige-meisterschaft-fuer-usc-muenster-3/">Vorzeitige Meisterschaft für USC Münster 3</a><span class="news-meta">Homepage USC Münster – 10.03.2026 09:25</span></li>
+      <li><a href="https://www.usc-muenster.de/erste-liga/stark-gekaempft-aber-ohne-punkte-usc-unterliegt-stuttgart-13/">Stark gekämpft, aber ohne Punkte: USC unterliegt Stuttgart 1:3</a><span class="news-meta">Homepage USC Münster – 07.03.2026 20:16</span></li>
+      <li><a href="https://www.usc-muenster.de/erste-liga/klare-niederlage-in-dresden-fokus-richtet-sich-auf-stuttgart/">Klare Niederlage in Dresden – Fokus richtet sich auf Stuttgart</a><span class="news-meta">Homepage USC Münster – 05.03.2026 12:43</span></li>
+      <li><a href="https://www.usc-muenster.de/erste-liga/topspiel-in-dresden-usc-startet-auswaertswoche-beim-tabellenvierten/">Topspiel in Dresden: USC startet Auswärtswoche beim Tabellenvierten</a><span class="news-meta">Homepage USC Münster – 03.03.2026 10:26</span></li>
+      <li><a href="https://www.news.de/tv-aktuell/855744271/volleyball-live-bundesliga-heute-live-im-tv-und-stream-sport1-am-7-3-2026-wiederholung-mediathek-allianz-mtv-stuttgart-usc-muenster-22-spieltag/1/">&quot;Volleyball Live - Bundesliga&quot; heute im TV und Livestream: &quot;Allianz MTV Stuttgart - USC Münster, 22. Spieltag&quot; live - Alle Termine und mehr</a><span class="news-meta">news.de via VBL Pressespiegel – 07.03.2026 14:00</span></li>
           </ul>
         </div>
       </details>
@@ -2163,28 +2200,52 @@
             <div class="mvp-category-content">
               <ol class="mvp-list">
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">11.</span>
+                  <span class="mvp-entry-rank">12.</span>
                   <div class="mvp-entry-info">
                     <span class="mvp-entry-name">Kovacic, Isabel</span>
-                    <span class="mvp-entry-meta">Diagonal • Schwarz-Weiß Erfurt • 55 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-meta">Diagonal • Schwarz-Weiß Erfurt • 58 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">94</span>
+                  <span class="mvp-entry-score">95</span>
                 </li>
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">19.</span>
+                  <span class="mvp-entry-rank">25.</span>
                   <div class="mvp-entry-info">
                     <span class="mvp-entry-name">Darley, Alianza</span>
-                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 45 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 48 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">73</span>
+                  <span class="mvp-entry-score">65</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">47.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Sandbothe, Elizabeth</span>
+                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 55 Sätze • 17 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">39</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">4.</span>
+                  <span class="mvp-entry-rank">5.</span>
                   <div class="mvp-entry-info">
                     <span class="mvp-entry-name">Spöler, Esther</span>
-                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 63 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 67 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">123</span>
+                  <span class="mvp-entry-score">127</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">27.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Strothoff, Amelie</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 63 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">62</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">30.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Kömmling, Elena</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 52 Sätze • 14 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">58</span>
                 </li>
               </ol>
             </div>
@@ -2196,20 +2257,52 @@
             <div class="mvp-category-content">
               <ol class="mvp-list">
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">1.</span>
+                  <span class="mvp-entry-rank">76.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Siebert, Sina</span>
-                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 18 Sätze • 10 Spiele</span>
+                    <span class="mvp-entry-name">Sandbothe, Elizabeth</span>
+                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 55 Sätze • 17 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">41,9%</span>
+                  <span class="mvp-entry-score">23,7%</span>
                 </li>
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">19.</span>
+                  <span class="mvp-entry-rank">90.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Feistritzer, Lea</span>
-                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 23 Sätze • 8 Spiele</span>
+                    <span class="mvp-entry-name">Zellin, Alina</span>
+                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 32 Sätze • 11 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">32,0%</span>
+                  <span class="mvp-entry-score">21,8%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">97.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Greskamp, Antonia</span>
+                    <span class="mvp-entry-meta">Zuspiel • Schwarz-Weiß Erfurt • 48 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">19,4%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">78.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Waelkens, Anke</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 33 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">23,5%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">79.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Spöler, Esther</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 67 Sätze • 18 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">23,5%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">96.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Kömmling, Elena</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 52 Sätze • 14 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">20,2%</span>
                 </li>
               </ol>
             </div>
@@ -2221,36 +2314,36 @@
             <div class="mvp-category-content">
               <ol class="mvp-list">
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">6.</span>
+                  <span class="mvp-entry-rank">52.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Szücs, Kinga</span>
-                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 55 Sätze • 18 Spiele</span>
+                    <span class="mvp-entry-name">Feistritzer, Lea</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 23 Sätze • 8 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">45,7%</span>
+                  <span class="mvp-entry-score">23,4%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">42.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Goertz, Lotte</span>
+                    <span class="mvp-entry-meta">Libero • Schwarz-Weiß Erfurt • 61 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">30,6%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">45.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Stemmler, Lydia</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 2 Sätze • 1 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">28,6%</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">7.</span>
+                  <span class="mvp-entry-rank">43.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Schaefer, Lara-Marie</span>
-                    <span class="mvp-entry-meta">Libero • USC Münster • 9 Sätze • 6 Spiele</span>
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 48 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">45,5%</span>
-                </li>
-                <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">8.</span>
-                  <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Molenaar, Pippa</span>
-                    <span class="mvp-entry-meta">Libero • USC Münster • 66 Sätze • 18 Spiele</span>
-                  </div>
-                  <span class="mvp-entry-score">45,2%</span>
-                </li>
-                <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">14.</span>
-                  <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Strothoff, Amelie</span>
-                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 59 Sätze • 18 Spiele</span>
-                  </div>
-                  <span class="mvp-entry-score">43,1%</span>
+                  <span class="mvp-entry-score">30,5%</span>
                 </li>
               </ol>
             </div>
@@ -2262,36 +2355,52 @@
             <div class="mvp-category-content">
               <ol class="mvp-list">
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">1.</span>
+                  <span class="mvp-entry-rank">58.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Siebert, Sina</span>
-                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 18 Sätze • 10 Spiele</span>
+                    <span class="mvp-entry-name">Kovacic, Isabel</span>
+                    <span class="mvp-entry-meta">Diagonal • Schwarz-Weiß Erfurt • 58 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">19,4%</span>
+                  <span class="mvp-entry-score">7,6%</span>
                 </li>
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">8.</span>
+                  <span class="mvp-entry-rank">73.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Respaut, Emilie</span>
-                    <span class="mvp-entry-meta">Zuspiel • Schwarz-Weiß Erfurt • 58 Sätze • 18 Spiele</span>
+                    <span class="mvp-entry-name">Feistritzer, Lea</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 23 Sätze • 8 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">13,2%</span>
+                  <span class="mvp-entry-score">6,7%</span>
                 </li>
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">22.</span>
+                  <span class="mvp-entry-rank">31.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Darley, Alianza</span>
-                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 45 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-name">Greskamp, Antonia</span>
+                    <span class="mvp-entry-meta">Zuspiel • Schwarz-Weiß Erfurt • 48 Sätze • 19 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">10,5%</span>
+                  <span class="mvp-entry-score">9,7%</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">20.</span>
+                  <span class="mvp-entry-rank">56.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Ford, Brianna</span>
-                    <span class="mvp-entry-meta">Diagonal • USC Münster • 47 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-name">Strothoff, Amelie</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 63 Sätze • 19 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">10,9%</span>
+                  <span class="mvp-entry-score">7,7%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">62.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Spöler, Esther</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 67 Sätze • 18 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">7,3%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">30.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Waelkens, Anke</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 33 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">9,8%</span>
                 </li>
               </ol>
             </div>
@@ -2303,36 +2412,36 @@
             <div class="mvp-category-content">
               <ol class="mvp-list">
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">5.</span>
+                  <span class="mvp-entry-rank">51.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Szücs, Kinga</span>
-                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 55 Sätze • 18 Spiele</span>
+                    <span class="mvp-entry-name">Feistritzer, Lea</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 23 Sätze • 8 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">35,3%</span>
+                  <span class="mvp-entry-score">0,0%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">51.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Stemmler, Lydia</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 2 Sätze • 1 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">0,0%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">39.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Goertz, Lotte</span>
+                    <span class="mvp-entry-meta">Libero • Schwarz-Weiß Erfurt • 61 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">13,0%</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">6.</span>
+                  <span class="mvp-entry-rank">47.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Strothoff, Amelie</span>
-                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 59 Sätze • 18 Spiele</span>
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 48 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">34,5%</span>
-                </li>
-                <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">7.</span>
-                  <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Molenaar, Pippa</span>
-                    <span class="mvp-entry-meta">Libero • USC Münster • 66 Sätze • 18 Spiele</span>
-                  </div>
-                  <span class="mvp-entry-score">34,4%</span>
-                </li>
-                <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">11.</span>
-                  <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Schaefer, Lara-Marie</span>
-                    <span class="mvp-entry-meta">Libero • USC Münster • 9 Sätze • 6 Spiele</span>
-                  </div>
-                  <span class="mvp-entry-score">33,3%</span>
+                  <span class="mvp-entry-score">7,4%</span>
                 </li>
               </ol>
             </div>
@@ -2344,44 +2453,52 @@
             <div class="mvp-category-content">
               <ol class="mvp-list">
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">14.</span>
+                  <span class="mvp-entry-rank">52.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Linke, Lena</span>
-                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 39 Sätze • 15 Spiele</span>
+                    <span class="mvp-entry-name">Sandbothe, Elizabeth</span>
+                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 55 Sätze • 17 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">36,9%</span>
+                  <span class="mvp-entry-score">21,6%</span>
                 </li>
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">24.</span>
+                  <span class="mvp-entry-rank">56.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Zellin, Alina</span>
-                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 32 Sätze • 11 Spiele</span>
+                    <span class="mvp-entry-name">Darley, Alianza</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 48 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">31,9%</span>
+                  <span class="mvp-entry-score">20,6%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">65.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Respaut, Emilie</span>
+                    <span class="mvp-entry-meta">Zuspiel • Schwarz-Weiß Erfurt • 61 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">19,1%</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">8.</span>
+                  <span class="mvp-entry-rank">57.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Seybering, Diane</span>
-                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 60 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 48 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">41,6%</span>
+                  <span class="mvp-entry-score">20,6%</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">11.</span>
+                  <span class="mvp-entry-rank">63.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Spöler, Esther</span>
-                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 63 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-name">Strothoff, Amelie</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 63 Sätze • 19 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">38,0%</span>
+                  <span class="mvp-entry-score">20,1%</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">19.</span>
+                  <span class="mvp-entry-rank">73.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Waelkens, Anke</span>
-                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 32 Sätze • 14 Spiele</span>
+                    <span class="mvp-entry-name">Ford, Brianna</span>
+                    <span class="mvp-entry-meta">Diagonal • USC Münster • 48 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">32,8%</span>
+                  <span class="mvp-entry-score">16,2%</span>
                 </li>
               </ol>
             </div>
@@ -2393,36 +2510,52 @@
             <div class="mvp-category-content">
               <ol class="mvp-list">
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">10.</span>
+                  <span class="mvp-entry-rank">85.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Sandbothe, Elizabeth</span>
-                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 52 Sätze • 16 Spiele</span>
+                    <span class="mvp-entry-name">Feistritzer, Lea</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 23 Sätze • 8 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">31</span>
+                  <span class="mvp-entry-score">5</span>
                 </li>
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">17.</span>
+                  <span class="mvp-entry-rank">34.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Kovacic, Isabel</span>
-                    <span class="mvp-entry-meta">Diagonal • Schwarz-Weiß Erfurt • 55 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-name">Darley, Alianza</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 48 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">26</span>
+                  <span class="mvp-entry-score">17</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">45.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Zellin, Alina</span>
+                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 32 Sätze • 11 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">14</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">6.</span>
-                  <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Spöler, Esther</span>
-                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 63 Sätze • 17 Spiele</span>
-                  </div>
-                  <span class="mvp-entry-score">34</span>
-                </li>
-                <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">24.</span>
+                  <span class="mvp-entry-rank">25.</span>
                   <div class="mvp-entry-info">
                     <span class="mvp-entry-name">Jordan, Emilia</span>
-                    <span class="mvp-entry-meta">Zuspiel • USC Münster • 66 Sätze • 18 Spiele</span>
+                    <span class="mvp-entry-meta">Zuspiel • USC Münster • 70 Sätze • 19 Spiele</span>
                   </div>
                   <span class="mvp-entry-score">19</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">30.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Seybering, Diane</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 64 Sätze • 18 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">18</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">42.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Strothoff, Amelie</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 63 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">15</span>
                 </li>
               </ol>
             </div>
@@ -2434,36 +2567,52 @@
             <div class="mvp-category-content">
               <ol class="mvp-list">
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">1.</span>
+                  <span class="mvp-entry-rank">68.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Respaut, Emilie</span>
-                    <span class="mvp-entry-meta">Zuspiel • Schwarz-Weiß Erfurt • 58 Sätze • 18 Spiele</span>
+                    <span class="mvp-entry-name">Zellin, Alina</span>
+                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 32 Sätze • 11 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">29</span>
+                  <span class="mvp-entry-score">7</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">79.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Siebert, Sina</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 18 Sätze • 10 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">6</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">85.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Feistritzer, Lea</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 23 Sätze • 8 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">5</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">9.</span>
+                  <span class="mvp-entry-rank">85.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Jordan, Emilia</span>
-                    <span class="mvp-entry-meta">Zuspiel • USC Münster • 66 Sätze • 18 Spiele</span>
+                    <span class="mvp-entry-name">Waelkens, Anke</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 33 Sätze • 15 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">17</span>
+                  <span class="mvp-entry-score">5</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">16.</span>
+                  <span class="mvp-entry-rank">46.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Strothoff, Amelie</span>
-                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 59 Sätze • 18 Spiele</span>
+                    <span class="mvp-entry-name">Kömmling, Elena</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 52 Sätze • 14 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">16</span>
+                  <span class="mvp-entry-score">11</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">18.</span>
+                  <span class="mvp-entry-rank">51.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Ford, Brianna</span>
-                    <span class="mvp-entry-meta">Diagonal • USC Münster • 47 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 48 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">15</span>
+                  <span class="mvp-entry-score">10</span>
                 </li>
               </ol>
             </div>
@@ -2475,44 +2624,52 @@
             <div class="mvp-category-content">
               <ol class="mvp-list">
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">8.</span>
+                  <span class="mvp-entry-rank">80.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Linke, Lena</span>
-                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 39 Sätze • 15 Spiele</span>
+                    <span class="mvp-entry-name">Kovacic, Isabel</span>
+                    <span class="mvp-entry-meta">Diagonal • Schwarz-Weiß Erfurt • 58 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">50,8%</span>
+                  <span class="mvp-entry-score">30,8%</span>
                 </li>
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">19.</span>
+                  <span class="mvp-entry-rank">86.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Zellin, Alina</span>
-                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 32 Sätze • 11 Spiele</span>
+                    <span class="mvp-entry-name">Szücs, Kinga</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 58 Sätze • 19 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">47,8%</span>
+                  <span class="mvp-entry-score">27,8%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">90.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Siebert, Sina</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 18 Sätze • 10 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">26,9%</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">6.</span>
+                  <span class="mvp-entry-rank">79.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Seybering, Diane</span>
-                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 60 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 48 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">51,1%</span>
+                  <span class="mvp-entry-score">30,9%</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">9.</span>
+                  <span class="mvp-entry-rank">47.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Spöler, Esther</span>
-                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 63 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-name">Schultze, Lena</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 33 Sätze • 14 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">50,7%</span>
+                  <span class="mvp-entry-score">38,8%</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">12.</span>
+                  <span class="mvp-entry-rank">51.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Waelkens, Anke</span>
-                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 32 Sätze • 14 Spiele</span>
+                    <span class="mvp-entry-name">Jordan, Emilia</span>
+                    <span class="mvp-entry-meta">Zuspiel • USC Münster • 70 Sätze • 19 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">50,0%</span>
+                  <span class="mvp-entry-score">38,1%</span>
                 </li>
               </ol>
             </div>
@@ -2524,44 +2681,52 @@
             <div class="mvp-category-content">
               <ol class="mvp-list">
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">7.</span>
+                  <span class="mvp-entry-rank">75.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Kovacic, Isabel</span>
-                    <span class="mvp-entry-meta">Diagonal • Schwarz-Weiß Erfurt • 55 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-name">Zellin, Alina</span>
+                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 32 Sätze • 11 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">161</span>
+                  <span class="mvp-entry-score">33</span>
                 </li>
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">10.</span>
+                  <span class="mvp-entry-rank">89.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Darley, Alianza</span>
-                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 45 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-name">Siebert, Sina</span>
+                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 18 Sätze • 10 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">147</span>
+                  <span class="mvp-entry-score">18</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">95.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Respaut, Emilie</span>
+                    <span class="mvp-entry-meta">Zuspiel • Schwarz-Weiß Erfurt • 61 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">16</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">11.</span>
+                  <span class="mvp-entry-rank">82.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Strothoff, Amelie</span>
-                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 59 Sätze • 18 Spiele</span>
+                    <span class="mvp-entry-name">Waelkens, Anke</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 33 Sätze • 15 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">142</span>
+                  <span class="mvp-entry-score">29</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">12.</span>
+                  <span class="mvp-entry-rank">85.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Spöler, Esther</span>
-                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 63 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-name">Jordan, Emilia</span>
+                    <span class="mvp-entry-meta">Zuspiel • USC Münster • 70 Sätze • 19 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">140</span>
+                  <span class="mvp-entry-score">24</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">17.</span>
+                  <span class="mvp-entry-rank">88.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Ford, Brianna</span>
-                    <span class="mvp-entry-meta">Diagonal • USC Münster • 47 Sätze • 17 Spiele</span>
+                    <span class="mvp-entry-name">Heil, Franziska</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 6 Sätze • 2 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">130</span>
+                  <span class="mvp-entry-score">20</span>
                 </li>
               </ol>
             </div>
@@ -2573,36 +2738,52 @@
             <div class="mvp-category-content">
               <ol class="mvp-list">
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">5.</span>
+                  <span class="mvp-entry-rank">79.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Respaut, Emilie</span>
-                    <span class="mvp-entry-meta">Zuspiel • Schwarz-Weiß Erfurt • 58 Sätze • 18 Spiele</span>
+                    <span class="mvp-entry-name">Linke, Lena</span>
+                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 41 Sätze • 16 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">7,3%</span>
+                  <span class="mvp-entry-score">-17,5%</span>
                 </li>
                 <li class="mvp-entry" data-team="opponent">
-                  <span class="mvp-entry-rank">7.</span>
+                  <span class="mvp-entry-rank">86.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Siebert, Sina</span>
-                    <span class="mvp-entry-meta">Außenangriff • Schwarz-Weiß Erfurt • 18 Sätze • 10 Spiele</span>
+                    <span class="mvp-entry-name">Zellin, Alina</span>
+                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 32 Sätze • 11 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">6,5%</span>
+                  <span class="mvp-entry-score">-19,2%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">87.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Sandbothe, Elizabeth</span>
+                    <span class="mvp-entry-meta">Mittelblock • Schwarz-Weiß Erfurt • 55 Sätze • 17 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">-19,3%</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">15.</span>
+                  <span class="mvp-entry-rank">88.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Schultze, Lena</span>
-                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 29 Sätze • 13 Spiele</span>
+                    <span class="mvp-entry-name">Waelkens, Anke</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 33 Sätze • 15 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">1,7%</span>
+                  <span class="mvp-entry-score">-19,6%</span>
                 </li>
                 <li class="mvp-entry" data-team="usc">
-                  <span class="mvp-entry-rank">22.</span>
+                  <span class="mvp-entry-rank">97.</span>
                   <div class="mvp-entry-info">
-                    <span class="mvp-entry-name">Strothoff, Amelie</span>
-                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 59 Sätze • 18 Spiele</span>
+                    <span class="mvp-entry-name">Spöler, Esther</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 67 Sätze • 18 Spiele</span>
                   </div>
-                  <span class="mvp-entry-score">-2,1%</span>
+                  <span class="mvp-entry-score">-20,9%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">99.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Kömmling, Elena</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 52 Sätze • 14 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">-21,3%</span>
                 </li>
               </ol>
             </div>
@@ -2619,7 +2800,6 @@
           <ul class="instagram-list">
             <li><a href="https://www.instagram.com/schwarzweisserfurt">@schwarzweisserfurt</a></li>
           <li><a href="https://www.instagram.com/schwarzweisserfurt/reels">Reels-Übersicht</a></li>
-          <li><a href="https://www.instagram.com/p/DDSZDbsIfc-">Beitrag DDSZDbsIfc-</a></li>
           </ul>
         </article>
         <article class="instagram-card">
@@ -2664,7 +2844,7 @@
     <footer class="page-footer">
       <p class="update-note" role="status">
         <span aria-hidden="true">📅</span>
-        <span><strong>Aktualisiert am</strong> Freitag, 06. März 2026 um 21:28</span>
+        <span><strong>Aktualisiert am</strong> Mittwoch, 11. März 2026 um 20:19</span>
       </p>
     </footer>
 
@@ -2802,6 +2982,57 @@
             window.setInterval(update, 1000);
           }
         }
+      }
+
+      const setBreakInput = document.querySelector('[data-set-break-duration-input]');
+      const setBreakTable = document.querySelector('[data-set-break-table]');
+      if (setBreakInput && setBreakTable) {
+        const rows = Array.from(setBreakTable.querySelectorAll('tbody tr'));
+        const parseDuration = (value) => {
+          const normalized = String(value || '').trim();
+          if (!normalized) {
+            return null;
+          }
+          const parts = normalized.split(':').map((part) => Number(part));
+          if (parts.some((part) => !Number.isFinite(part) || part < 0)) {
+            return null;
+          }
+          if (parts.length === 2) {
+            return (parts[0] * 60) + parts[1];
+          }
+          if (parts.length === 3) {
+            return (parts[0] * 3600) + (parts[1] * 60) + parts[2];
+          }
+          return null;
+        };
+        const formatDuration = (seconds) => {
+          const clamped = Math.max(0, Math.floor(seconds));
+          const minutes = Math.floor(clamped / 60);
+          const remainingSeconds = clamped % 60;
+          return String(minutes) + ':' + String(remainingSeconds).padStart(2, '0');
+        };
+        const updateSetBreakSchedule = () => {
+          const customSeconds = parseDuration(setBreakInput.value);
+          let cumulativeSeconds = 0;
+          for (const row of rows) {
+            const startCell = row.querySelector('[data-start-cell]');
+            const durationCell = row.querySelector('[data-duration-cell]');
+            if (startCell) {
+              startCell.textContent = formatDuration(cumulativeSeconds);
+            }
+            let rowSeconds = parseDuration(durationCell?.textContent || '');
+            if (row.hasAttribute('data-editable-duration-row') && customSeconds !== null) {
+              rowSeconds = customSeconds;
+              if (durationCell) {
+                durationCell.textContent = formatDuration(customSeconds);
+              }
+            }
+            cumulativeSeconds += rowSeconds ?? 0;
+          }
+        };
+
+        setBreakInput.addEventListener('input', updateSetBreakSchedule);
+        updateSetBreakSchedule();
       }
 
       const stopwatch = document.querySelector('[data-stopwatch]');
