@@ -4877,19 +4877,32 @@ def build_html_report(
         plan: Iterable[Any],
         heading_id: str,
         heading_label: str,
+        editable_note_prefix: str | None = None,
     ) -> str:
         rows: List[str] = []
         cumulative_duration = timedelta()
-        for entry in plan:
+        editable_row_duration_label: str | None = None
+        for index, entry in enumerate(plan):
             start_label = _format_minutes_seconds(cumulative_duration)
             duration_label = _format_minutes_seconds(entry.duration)
+            note_value = str(entry.note)
+            row_attributes = [f'data-set-break-row="{index}"']
+            if editable_note_prefix and note_value.startswith(editable_note_prefix):
+                row_attributes.append('data-editable-duration-row="true"')
+                editable_row_duration_label = duration_label
             rows.append(
                 "\n".join(
                     [
-                        "<tr class=\"broadcast-row\">",
-                        f"  <td class=\"broadcast-cell broadcast-cell--start\">{escape(start_label)}</td>",
-                        f"  <td class=\"broadcast-cell broadcast-cell--duration\">{escape(duration_label)}</td>",
-                        f"  <td class=\"broadcast-cell broadcast-cell--note\">{escape(entry.note)}</td>",
+                        f"<tr class=\"broadcast-row\" {' '.join(row_attributes)}>",
+                        (
+                            "  <td class=\"broadcast-cell broadcast-cell--start\" "
+                            f"data-start-cell>{escape(start_label)}</td>"
+                        ),
+                        (
+                            "  <td class=\"broadcast-cell broadcast-cell--duration\" "
+                            f"data-duration-cell>{escape(duration_label)}</td>"
+                        ),
+                        f"  <td class=\"broadcast-cell broadcast-cell--note\">{escape(note_value)}</td>",
                         "</tr>",
                     ]
                 )
@@ -4913,10 +4926,32 @@ def build_html_report(
             "    <div class=\"broadcast-box__content\">",
         ]
         if rows:
+            if editable_row_duration_label is not None:
+                box_lines.extend(
+                    [
+                        "      <div class=\"broadcast-controls\">",
+                        (
+                            "        <label class=\"broadcast-controls__label\" "
+                            "for=\"set-break-duration-input\">Werbung 2 Dauer (MM:SS)</label>"
+                        ),
+                        (
+                            "        <input class=\"broadcast-controls__input\" "
+                            "id=\"set-break-duration-input\" "
+                            "name=\"set-break-duration-input\" "
+                            "type=\"text\" "
+                            "inputmode=\"numeric\" "
+                            f"value=\"{escape(editable_row_duration_label, quote=True)}\" "
+                            "placeholder=\"05:15\" "
+                            "data-set-break-duration-input />"
+                        ),
+                        "      </div>",
+                    ]
+                )
+            table_attrs = " data-set-break-table" if editable_row_duration_label else ""
             box_lines.extend(
                 [
                     "      <div class=\"broadcast-table-wrapper\">",
-                    "        <table class=\"broadcast-table\">",
+                    f"        <table class=\"broadcast-table\"{table_attrs}>",
                     "          <thead>",
                     "            <tr>",
                     "              <th scope=\"col\" class=\"broadcast-heading broadcast-heading--start\">Start</th>",
@@ -4957,6 +4992,7 @@ def build_html_report(
         SECOND_SET_BREAK_PLAN,
         "set-break-2-3-heading",
         "Satzpause 2 → 3",
+        editable_note_prefix="Werbung 2",
     )
     post_match_box_html = _render_set_break_box(
         POST_MATCH_PLAN,
@@ -5285,6 +5321,33 @@ def build_html_report(
     .stopwatch-button:focus-visible {{
       outline: 3px solid rgba(14, 165, 233, 0.55);
       outline-offset: 2px;
+    }}
+    .broadcast-controls {{
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin: 0 0 0.6rem;
+    }}
+    .broadcast-controls__label {{
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
+      font-weight: 600;
+      color: #0f172a;
+    }}
+    .broadcast-controls__input {{
+      max-width: 8rem;
+      width: 100%;
+      font: inherit;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      line-height: 1.2;
+      padding: 0.4rem 0.55rem;
+      border-radius: 0.55rem;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+    }}
+    .broadcast-controls__input:focus-visible {{
+      outline: 2px solid rgba(14, 165, 233, 0.5);
+      outline-offset: 1px;
     }}
     .broadcast-table-wrapper {{
       border-radius: 0.85rem;
@@ -6894,6 +6957,57 @@ def build_html_report(
             window.setInterval(update, 1000);
           }}
         }}
+      }}
+
+      const setBreakInput = document.querySelector('[data-set-break-duration-input]');
+      const setBreakTable = document.querySelector('[data-set-break-table]');
+      if (setBreakInput && setBreakTable) {{
+        const rows = Array.from(setBreakTable.querySelectorAll('tbody tr'));
+        const parseDuration = (value) => {{
+          const normalized = String(value || '').trim();
+          if (!normalized) {{
+            return null;
+          }}
+          const parts = normalized.split(':').map((part) => Number(part));
+          if (parts.some((part) => !Number.isFinite(part) || part < 0)) {{
+            return null;
+          }}
+          if (parts.length === 2) {{
+            return (parts[0] * 60) + parts[1];
+          }}
+          if (parts.length === 3) {{
+            return (parts[0] * 3600) + (parts[1] * 60) + parts[2];
+          }}
+          return null;
+        }};
+        const formatDuration = (seconds) => {{
+          const clamped = Math.max(0, Math.floor(seconds));
+          const minutes = Math.floor(clamped / 60);
+          const remainingSeconds = clamped % 60;
+          return String(minutes) + ':' + String(remainingSeconds).padStart(2, '0');
+        }};
+        const updateSetBreakSchedule = () => {{
+          const customSeconds = parseDuration(setBreakInput.value);
+          let cumulativeSeconds = 0;
+          for (const row of rows) {{
+            const startCell = row.querySelector('[data-start-cell]');
+            const durationCell = row.querySelector('[data-duration-cell]');
+            if (startCell) {{
+              startCell.textContent = formatDuration(cumulativeSeconds);
+            }}
+            let rowSeconds = parseDuration(durationCell?.textContent || '');
+            if (row.hasAttribute('data-editable-duration-row') && customSeconds !== null) {{
+              rowSeconds = customSeconds;
+              if (durationCell) {{
+                durationCell.textContent = formatDuration(customSeconds);
+              }}
+            }}
+            cumulativeSeconds += rowSeconds ?? 0;
+          }}
+        }};
+
+        setBreakInput.addEventListener('input', updateSetBreakSchedule);
+        updateSetBreakSchedule();
       }}
 
       const stopwatch = document.querySelector('[data-stopwatch]');
