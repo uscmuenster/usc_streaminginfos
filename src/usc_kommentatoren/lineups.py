@@ -18,10 +18,14 @@ from bs4 import BeautifulSoup
 
 from .report import (
     BERLIN_TZ,
+    DEFAULT_SCHEDULE_ICS_URL,
     DEFAULT_SCHEDULE_URL,
+    VBL_PLAYOFFS_SCHEDULE_URL,
     REQUEST_HEADERS,
     USC_CANONICAL_NAME,
+    fetch_ics_schedule,
     collect_team_roster,
+    parse_ics_schedule,
     _decode_csv_bytes_robust,
     _normalize_schedule_field,
     extract_schedule_result_label,
@@ -38,6 +42,20 @@ DEFAULT_OUTPUT_PATH = Path("docs/data/aufstellungen.json")
 ROSTER_CACHE_DIR = Path("data/rosters")
 
 POSITION_SLOTS = ["I", "II", "III", "IV", "V", "VI"]
+
+# Zusätzlicher iCal-Feed für Playoffs (matchSeriesId=776311124)
+VBL_PLAYOFFS_SCHEDULE_ICS_URL = (
+    "https://www.volleyball-bundesliga.de/iCal/matchSeries/"
+    "matches.ical?matchSeriesId=776311124&calenderType=ics"
+)
+
+DEFAULT_ADDITIONAL_SCHEDULE_URLS: Tuple[str, ...] = (
+    VBL_PLAYOFFS_SCHEDULE_URL,
+)
+
+DEFAULT_ADDITIONAL_SCHEDULE_ICS_URLS: Tuple[str, ...] = (
+    VBL_PLAYOFFS_SCHEDULE_ICS_URL,
+)
 
 
 @dataclass(frozen=True)
@@ -253,6 +271,55 @@ def find_next_usc_home_match_row(
 ) -> Optional[ScheduleRow]:
     """Rückwärtskompatible Variante von find_next_home_match_row."""
     return find_next_home_match_row(rows, USC_CANONICAL_NAME, reference=reference)
+
+
+def find_next_home_match_from_ics(
+    *,
+    home_team: str,
+    schedule_ics_url: str = DEFAULT_SCHEDULE_ICS_URL,
+    additional_schedule_ics_urls: Sequence[str] = DEFAULT_ADDITIONAL_SCHEDULE_ICS_URLS,
+    reference: Optional[datetime] = None,
+) -> Optional[ScheduleRow]:
+    now = reference or datetime.now(tz=BERLIN_TZ)
+    target = _simplify(home_team)
+    urls: List[str] = [schedule_ics_url]
+    for url in additional_schedule_ics_urls:
+        if url and url not in urls:
+            urls.append(url)
+
+    candidates: List[ScheduleRow] = []
+    for url in urls:
+        try:
+            ics_text = fetch_ics_schedule(url)
+            events = parse_ics_schedule(ics_text)
+        except requests.RequestException:
+            continue
+
+        for event in events:
+            if event.kickoff < now:
+                continue
+            if target not in _simplify(event.home_team):
+                continue
+            candidates.append(
+                ScheduleRow(
+                    match_number="",
+                    kickoff=event.kickoff,
+                    home_team=event.home_team,
+                    away_team=event.away_team,
+                    competition="",
+                    venue="",
+                    season="",
+                    result_label="",
+                    score=None,
+                    total_points=None,
+                    set_scores=(),
+                )
+            )
+
+    if not candidates:
+        return None
+    candidates.sort(key=lambda row: row.kickoff)
+    return candidates[0]
 
 
 def find_recent_matches_for_team(
@@ -816,20 +883,41 @@ def build_lineup_dataset(
     *,
     limit: int = 2,
     schedule_csv_url: str = DEFAULT_SCHEDULE_URL,
+    additional_schedule_csv_urls: Sequence[str] = DEFAULT_ADDITIONAL_SCHEDULE_URLS,
+    schedule_ics_url: str = DEFAULT_SCHEDULE_ICS_URL,
+    additional_schedule_ics_urls: Sequence[str] = DEFAULT_ADDITIONAL_SCHEDULE_ICS_URLS,
     schedule_page_url: str = SCHEDULE_PAGE_URL,
     output_path: Path = DEFAULT_OUTPUT_PATH,
     pdf_cache_dir: Path = PDF_CACHE_DIR,
     roster_cache_dir: Path = ROSTER_CACHE_DIR,
     home_team: str = USC_CANONICAL_NAME,
 ) -> Dict[str, object]:
-    csv_text = fetch_schedule_csv(schedule_csv_url)
-    schedule_rows = parse_schedule(csv_text)
+    urls: List[str] = [schedule_csv_url]
+    for url in additional_schedule_csv_urls:
+        if url and url not in urls:
+            urls.append(url)
+
+    schedule_rows: List[ScheduleRow] = []
+    for url in urls:
+        try:
+            csv_text = fetch_schedule_csv(url)
+        except requests.RequestException:
+            continue
+        schedule_rows.extend(parse_schedule(csv_text))
+
+    schedule_rows.sort(key=lambda row: row.kickoff)
 
     recent_rows = find_recent_matches_for_home_team(schedule_rows, home_team, limit=limit)
     if not recent_rows:
         raise RuntimeError(f"Keine abgeschlossenen Spiele von {home_team} gefunden.")
 
     next_home_match = find_next_home_match_row(schedule_rows, home_team)
+    if not next_home_match:
+        next_home_match = find_next_home_match_from_ics(
+            home_team=home_team,
+            schedule_ics_url=schedule_ics_url,
+            additional_schedule_ics_urls=additional_schedule_ics_urls,
+        )
     if not next_home_match:
         raise RuntimeError(f"Kein zukünftiges Heimspiel von {home_team} gefunden.")
 
