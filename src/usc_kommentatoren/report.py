@@ -36,10 +36,15 @@ from .broadcast_spielende import BROADCAST_PLAN as POST_MATCH_PLAN
 
 DEFAULT_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
 DEFAULT_SCHEDULE_ICS_URL = "https://www.volleyball-bundesliga.de/iCal/matchSeries/matches.ical?matchSeriesId=776311171&calenderType=ics"
+VBL_PLAYOFFS_SCHEDULE_URL = "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311124"
 DVV_POKAL_SCHEDULE_URL = "https://www.dvv-pokal.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311591"
-DEFAULT_ADDITIONAL_SCHEDULE_URLS: Tuple[str, ...] = (DVV_POKAL_SCHEDULE_URL,)
+DEFAULT_ADDITIONAL_SCHEDULE_URLS: Tuple[str, ...] = (
+    VBL_PLAYOFFS_SCHEDULE_URL,
+    DVV_POKAL_SCHEDULE_URL,
+)
 SCHEDULE_COMPETITION_LABELS: Dict[str, str] = {
     DEFAULT_SCHEDULE_URL: "VBL",
+    VBL_PLAYOFFS_SCHEDULE_URL: "VBL-Playoffs",
     DVV_POKAL_SCHEDULE_URL: "DVV-Pokal",
 }
 FILENAME_TIMESTAMP_RE = re.compile(r"_(\d{4}-\d{2}-\d{2}_\d{2}-\d{2})\.csv$")
