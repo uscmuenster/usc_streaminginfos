@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-14T04:02:26.752056+00:00",
+  "generated_at": "2026-03-16T16:36:06.916345+00:00",
   "home_team": "USC Münster",
   "usc_team": "USC Münster",
   "opponent_team": "Schwarz-Weiß Erfurt",
@@ -25,7 +25,7 @@
           "Top-Scorer": "127"
         },
         {
-          "col_0": "27.",
+          "col_0": "29.",
           "col_1": "",
           "Name": "Strothoff, Amelie",
           "Position": "Außenangriff",
@@ -39,7 +39,7 @@
           "Top-Scorer": "62"
         },
         {
-          "col_0": "30.",
+          "col_0": "31.",
           "col_1": "",
           "Name": "Kömmling, Elena",
           "Position": "Außenangriff",
@@ -69,7 +69,7 @@
           "Top-Scorer": "127"
         },
         {
-          "col_0": "27.",
+          "col_0": "29.",
           "col_1": "",
           "Name": "Strothoff, Amelie",
           "Position": "Außenangriff",
@@ -83,7 +83,7 @@
           "Top-Scorer": "62"
         },
         {
-          "col_0": "30.",
+          "col_0": "31.",
           "col_1": "",
           "Name": "Kömmling, Elena",
           "Position": "Außenangriff",
@@ -99,7 +99,7 @@
       ],
       "opponent": [
         {
-          "col_0": "12.",
+          "col_0": "13.",
           "col_1": "",
           "Name": "Kovacic, Isabel",
           "Position": "Diagonal",
@@ -113,7 +113,7 @@
           "Top-Scorer": "95"
         },
         {
-          "col_0": "25.",
+          "col_0": "27.",
           "col_1": "",
           "Name": "Darley, Alianza",
           "Position": "Außenangriff",
@@ -127,7 +127,7 @@
           "Top-Scorer": "65"
         },
         {
-          "col_0": "47.",
+          "col_0": "52.",
           "col_1": "",
           "Name": "Sandbothe, Elizabeth",
           "Position": "Mittelblock",
@@ -148,7 +148,7 @@
       "label": "Aufschlag / Quote Aufschläge mit Wirkung",
       "home_team": [
         {
-          "col_0": "78.",
+          "col_0": "77.",
           "col_1": "",
           "Name": "Waelkens, Anke",
           "Position": "Mittelblock",
@@ -162,7 +162,7 @@
           "Quote Aufschläge mit Wirkung": "23,5%"
         },
         {
-          "col_0": "79.",
+          "col_0": "78.",
           "col_1": "",
           "Name": "Spöler, Esther",
           "Position": "Mittelblock",
@@ -176,7 +176,7 @@
           "Quote Aufschläge mit Wirkung": "23,5%"
         },
         {
-          "col_0": "96.",
+          "col_0": "95.",
           "col_1": "",
           "Name": "Kömmling, Elena",
           "Position": "Außenangriff",
@@ -192,7 +192,7 @@
       ],
       "usc": [
         {
-          "col_0": "78.",
+          "col_0": "77.",
           "col_1": "",
           "Name": "Waelkens, Anke",
           "Position": "Mittelblock",
@@ -206,7 +206,7 @@
           "Quote Aufschläge mit Wirkung": "23,5%"
         },
         {
-          "col_0": "79.",
+          "col_0": "78.",
           "col_1": "",
           "Name": "Spöler, Esther",
           "Position": "Mittelblock",
@@ -220,7 +220,7 @@
           "Quote Aufschläge mit Wirkung": "23,5%"
         },
         {
-          "col_0": "96.",
+          "col_0": "95.",
           "col_1": "",
           "Name": "Kömmling, Elena",
           "Position": "Außenangriff",
@@ -250,7 +250,7 @@
           "Quote Aufschläge mit Wirkung": "23,7%"
         },
         {
-          "col_0": "90.",
+          "col_0": "89.",
           "col_1": "",
           "Name": "Zellin, Alina",
           "Position": "Mittelblock",
@@ -264,7 +264,7 @@
           "Quote Aufschläge mit Wirkung": "21,8%"
         },
         {
-          "col_0": "97.",
+          "col_0": "98.",
           "col_1": "",
           "Name": "Greskamp, Antonia",
           "Position": "Zuspiel",
@@ -319,7 +319,7 @@
       ],
       "opponent": [
         {
-          "col_0": "52.",
+          "col_0": "51.",
           "col_1": "",
           "Name": "Feistritzer, Lea",
           "Position": "Außenangriff",
@@ -349,7 +349,7 @@
           "Quote perfekte oder gute Annahme": "30,6%"
         },
         {
-          "col_0": "45.",
+          "col_0": "44.",
           "col_1": "",
           "Name": "Stemmler, Lydia",
           "Position": "Außenangriff",
@@ -385,7 +385,7 @@
           "Quote Aufschlagpunkte": "7,7%"
         },
         {
-          "col_0": "62.",
+          "col_0": "63.",
           "col_1": "",
           "Name": "Spöler, Esther",
           "Position": "Mittelblock",
@@ -399,7 +399,7 @@
           "Quote Aufschlagpunkte": "7,3%"
         },
         {
-          "col_0": "30.",
+          "col_0": "29.",
           "col_1": "",
           "Name": "Waelkens, Anke",
           "Position": "Mittelblock",
@@ -429,7 +429,7 @@
           "Quote Aufschlagpunkte": "7,7%"
         },
         {
-          "col_0": "62.",
+          "col_0": "63.",
           "col_1": "",
           "Name": "Spöler, Esther",
           "Position": "Mittelblock",
@@ -443,7 +443,7 @@
           "Quote Aufschlagpunkte": "7,3%"
         },
         {
-          "col_0": "30.",
+          "col_0": "29.",
           "col_1": "",
           "Name": "Waelkens, Anke",
           "Position": "Mittelblock",
@@ -473,7 +473,7 @@
           "Quote Aufschlagpunkte": "7,6%"
         },
         {
-          "col_0": "73.",
+          "col_0": "70.",
           "col_1": "",
           "Name": "Feistritzer, Lea",
           "Position": "Außenangriff",
@@ -487,7 +487,7 @@
           "Quote Aufschlagpunkte": "6,7%"
         },
         {
-          "col_0": "31.",
+          "col_0": "30.",
           "col_1": "",
           "Name": "Greskamp, Antonia",
           "Position": "Zuspiel",
@@ -508,7 +508,7 @@
       "label": "Annahme / Annahmeeffizienz",
       "home_team": [
         {
-          "col_0": "47.",
+          "col_0": "46.",
           "col_1": "",
           "Name": "Malm, Cecilia",
           "Position": "Außenangriff",
@@ -525,7 +525,7 @@
       ],
       "usc": [
         {
-          "col_0": "47.",
+          "col_0": "46.",
           "col_1": "",
           "Name": "Malm, Cecilia",
           "Position": "Außenangriff",
@@ -542,7 +542,7 @@
       ],
       "opponent": [
         {
-          "col_0": "51.",
+          "col_0": "50.",
           "col_1": "",
           "Name": "Feistritzer, Lea",
           "Position": "Außenangriff",
@@ -557,7 +557,7 @@
           "Annahmeeffizienz": "0,0%"
         },
         {
-          "col_0": "51.",
+          "col_0": "50.",
           "col_1": "",
           "Name": "Stemmler, Lydia",
           "Position": "Außenangriff",
@@ -594,7 +594,7 @@
       "label": "Angriff / Angriffseffizienz",
       "home_team": [
         {
-          "col_0": "57.",
+          "col_0": "58.",
           "col_1": "",
           "Name": "Malm, Cecilia",
           "Position": "Außenangriff",
@@ -608,7 +608,7 @@
           "Angriffseffizienz": "20,6%"
         },
         {
-          "col_0": "63.",
+          "col_0": "60.",
           "col_1": "",
           "Name": "Strothoff, Amelie",
           "Position": "Außenangriff",
@@ -622,7 +622,7 @@
           "Angriffseffizienz": "20,1%"
         },
         {
-          "col_0": "73.",
+          "col_0": "72.",
           "col_1": "",
           "Name": "Ford, Brianna",
           "Position": "Diagonal",
@@ -638,7 +638,7 @@
       ],
       "usc": [
         {
-          "col_0": "57.",
+          "col_0": "58.",
           "col_1": "",
           "Name": "Malm, Cecilia",
           "Position": "Außenangriff",
@@ -652,7 +652,7 @@
           "Angriffseffizienz": "20,6%"
         },
         {
-          "col_0": "63.",
+          "col_0": "60.",
           "col_1": "",
           "Name": "Strothoff, Amelie",
           "Position": "Außenangriff",
@@ -666,7 +666,7 @@
           "Angriffseffizienz": "20,1%"
         },
         {
-          "col_0": "73.",
+          "col_0": "72.",
           "col_1": "",
           "Name": "Ford, Brianna",
           "Position": "Diagonal",
@@ -696,7 +696,7 @@
           "Angriffseffizienz": "21,6%"
         },
         {
-          "col_0": "56.",
+          "col_0": "57.",
           "col_1": "",
           "Name": "Darley, Alianza",
           "Position": "Außenangriff",
@@ -731,7 +731,31 @@
       "label": "Block / Blockpunkte",
       "home_team": [
         {
-          "col_0": "25.",
+          "col_0": "76.",
+          "col_1": "",
+          "Name": "Schultze, Lena",
+          "Position": "Außenangriff",
+          "Mannschaft": "Münster",
+          "NAT": "Deutschland (GER)",
+          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,2",
+          "Anzahl Sätze Anzahl Sätze": "33",
+          "Anzahl Spiele Anzahl Spiele": "14",
+          "Blockpunkte": "7"
+        },
+        {
+          "col_0": "27.",
+          "col_1": "",
+          "Name": "Ford, Brianna",
+          "Position": "Diagonal",
+          "Mannschaft": "Münster",
+          "NAT": "Vereinigte Staaten von Amerika (USA)",
+          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,4",
+          "Anzahl Sätze Anzahl Sätze": "48",
+          "Anzahl Spiele Anzahl Spiele": "18",
+          "Blockpunkte": "19"
+        },
+        {
+          "col_0": "27.",
           "col_1": "",
           "Name": "Jordan, Emilia",
           "Position": "Zuspiel",
@@ -741,35 +765,35 @@
           "Anzahl Sätze Anzahl Sätze": "70",
           "Anzahl Spiele Anzahl Spiele": "19",
           "Blockpunkte": "19"
-        },
-        {
-          "col_0": "30.",
-          "col_1": "",
-          "Name": "Seybering, Diane",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,3",
-          "Anzahl Sätze Anzahl Sätze": "64",
-          "Anzahl Spiele Anzahl Spiele": "18",
-          "Blockpunkte": "18"
-        },
-        {
-          "col_0": "42.",
-          "col_1": "",
-          "Name": "Strothoff, Amelie",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "63",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Blockpunkte": "15"
         }
       ],
       "usc": [
         {
-          "col_0": "25.",
+          "col_0": "76.",
+          "col_1": "",
+          "Name": "Schultze, Lena",
+          "Position": "Außenangriff",
+          "Mannschaft": "Münster",
+          "NAT": "Deutschland (GER)",
+          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,2",
+          "Anzahl Sätze Anzahl Sätze": "33",
+          "Anzahl Spiele Anzahl Spiele": "14",
+          "Blockpunkte": "7"
+        },
+        {
+          "col_0": "27.",
+          "col_1": "",
+          "Name": "Ford, Brianna",
+          "Position": "Diagonal",
+          "Mannschaft": "Münster",
+          "NAT": "Vereinigte Staaten von Amerika (USA)",
+          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,4",
+          "Anzahl Sätze Anzahl Sätze": "48",
+          "Anzahl Spiele Anzahl Spiele": "18",
+          "Blockpunkte": "19"
+        },
+        {
+          "col_0": "27.",
           "col_1": "",
           "Name": "Jordan, Emilia",
           "Position": "Zuspiel",
@@ -779,35 +803,23 @@
           "Anzahl Sätze Anzahl Sätze": "70",
           "Anzahl Spiele Anzahl Spiele": "19",
           "Blockpunkte": "19"
-        },
-        {
-          "col_0": "30.",
-          "col_1": "",
-          "Name": "Seybering, Diane",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,3",
-          "Anzahl Sätze Anzahl Sätze": "64",
-          "Anzahl Spiele Anzahl Spiele": "18",
-          "Blockpunkte": "18"
-        },
-        {
-          "col_0": "42.",
-          "col_1": "",
-          "Name": "Strothoff, Amelie",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "63",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Blockpunkte": "15"
         }
       ],
       "opponent": [
         {
-          "col_0": "85.",
+          "col_0": "76.",
+          "col_1": "",
+          "Name": "Linke, Lena",
+          "Position": "Mittelblock",
+          "Mannschaft": "Erfurt",
+          "NAT": "Deutschland (GER)",
+          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,2",
+          "Anzahl Sätze Anzahl Sätze": "41",
+          "Anzahl Spiele Anzahl Spiele": "16",
+          "Blockpunkte": "7"
+        },
+        {
+          "col_0": "86.",
           "col_1": "",
           "Name": "Feistritzer, Lea",
           "Position": "Außenangriff",
@@ -819,7 +831,7 @@
           "Blockpunkte": "5"
         },
         {
-          "col_0": "34.",
+          "col_0": "37.",
           "col_1": "",
           "Name": "Darley, Alianza",
           "Position": "Außenangriff",
@@ -829,18 +841,6 @@
           "Anzahl Sätze Anzahl Sätze": "48",
           "Anzahl Spiele Anzahl Spiele": "18",
           "Blockpunkte": "17"
-        },
-        {
-          "col_0": "45.",
-          "col_1": "",
-          "Name": "Zellin, Alina",
-          "Position": "Mittelblock",
-          "Mannschaft": "Erfurt",
-          "NAT": "Deutschland (GER)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,4",
-          "Anzahl Sätze Anzahl Sätze": "32",
-          "Anzahl Spiele Anzahl Spiele": "11",
-          "Blockpunkte": "14"
         }
       ],
       "pages": 7
@@ -850,7 +850,7 @@
       "label": "Aufschlag / Aufschlagpunkte",
       "home_team": [
         {
-          "col_0": "85.",
+          "col_0": "86.",
           "col_1": "",
           "Name": "Waelkens, Anke",
           "Position": "Mittelblock",
@@ -865,7 +865,7 @@
           "Aufschlagpunkte": "5"
         },
         {
-          "col_0": "46.",
+          "col_0": "50.",
           "col_1": "",
           "Name": "Kömmling, Elena",
           "Position": "Außenangriff",
@@ -880,7 +880,7 @@
           "Aufschlagpunkte": "11"
         },
         {
-          "col_0": "51.",
+          "col_0": "54.",
           "col_1": "",
           "Name": "Malm, Cecilia",
           "Position": "Außenangriff",
@@ -897,7 +897,7 @@
       ],
       "usc": [
         {
-          "col_0": "85.",
+          "col_0": "86.",
           "col_1": "",
           "Name": "Waelkens, Anke",
           "Position": "Mittelblock",
@@ -912,7 +912,7 @@
           "Aufschlagpunkte": "5"
         },
         {
-          "col_0": "46.",
+          "col_0": "50.",
           "col_1": "",
           "Name": "Kömmling, Elena",
           "Position": "Außenangriff",
@@ -927,7 +927,7 @@
           "Aufschlagpunkte": "11"
         },
         {
-          "col_0": "51.",
+          "col_0": "54.",
           "col_1": "",
           "Name": "Malm, Cecilia",
           "Position": "Außenangriff",
@@ -944,7 +944,22 @@
       ],
       "opponent": [
         {
-          "col_0": "68.",
+          "col_0": "73.",
+          "col_1": "",
+          "Name": "Linke, Lena",
+          "Position": "Mittelblock",
+          "Mannschaft": "Erfurt",
+          "NAT": "Deutschland (GER)",
+          "Aufschläge Aufschläge": "120",
+          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
+          "Quote Aufschlagpunkte Quote Aufschlagpunkte": "5,8%",
+          "Anzahl Sätze Anzahl Sätze": "41",
+          "Anzahl Spiele Anzahl Spiele": "16",
+          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "25,0%",
+          "Aufschlagpunkte": "7"
+        },
+        {
+          "col_0": "73.",
           "col_1": "",
           "Name": "Zellin, Alina",
           "Position": "Mittelblock",
@@ -972,21 +987,6 @@
           "Anzahl Spiele Anzahl Spiele": "10",
           "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "41,9%",
           "Aufschlagpunkte": "6"
-        },
-        {
-          "col_0": "85.",
-          "col_1": "",
-          "Name": "Feistritzer, Lea",
-          "Position": "Außenangriff",
-          "Mannschaft": "Erfurt",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "75",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Quote Aufschlagpunkte Quote Aufschlagpunkte": "6,7%",
-          "Anzahl Sätze Anzahl Sätze": "23",
-          "Anzahl Spiele Anzahl Spiele": "8",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "32,0%",
-          "Aufschlagpunkte": "5"
         }
       ],
       "pages": 6
@@ -1112,7 +1112,7 @@
           "Quote Angriffspunkte": "27,8%"
         },
         {
-          "col_0": "90.",
+          "col_0": "91.",
           "col_1": "",
           "Name": "Siebert, Sina",
           "Position": "Außenangriff",
@@ -1133,7 +1133,7 @@
       "label": "Angriff / Angriffspunkte",
       "home_team": [
         {
-          "col_0": "82.",
+          "col_0": "84.",
           "col_1": "",
           "Name": "Waelkens, Anke",
           "Position": "Mittelblock",
@@ -1147,7 +1147,7 @@
           "Angriffspunkte": "29"
         },
         {
-          "col_0": "85.",
+          "col_0": "86.",
           "col_1": "",
           "Name": "Jordan, Emilia",
           "Position": "Zuspiel",
@@ -1177,7 +1177,7 @@
       ],
       "usc": [
         {
-          "col_0": "82.",
+          "col_0": "84.",
           "col_1": "",
           "Name": "Waelkens, Anke",
           "Position": "Mittelblock",
@@ -1191,7 +1191,7 @@
           "Angriffspunkte": "29"
         },
         {
-          "col_0": "85.",
+          "col_0": "86.",
           "col_1": "",
           "Name": "Jordan, Emilia",
           "Position": "Zuspiel",
@@ -1221,7 +1221,21 @@
       ],
       "opponent": [
         {
-          "col_0": "75.",
+          "col_0": "78.",
+          "col_1": "",
+          "Name": "Linke, Lena",
+          "Position": "Mittelblock",
+          "Mannschaft": "Erfurt",
+          "NAT": "Deutschland (GER)",
+          "Angriffe Angriffe": "70",
+          "Angriffspunkte pro Satz Angriffspunkte pro Satz": "0,8",
+          "Quote Angriffspunkte Quote Angriffspunkte": "47,1%",
+          "Anzahl Sätze Anzahl Sätze": "41",
+          "Anzahl Spiele Anzahl Spiele": "16",
+          "Angriffspunkte": "33"
+        },
+        {
+          "col_0": "78.",
           "col_1": "",
           "Name": "Zellin, Alina",
           "Position": "Mittelblock",
@@ -1247,20 +1261,6 @@
           "Anzahl Sätze Anzahl Sätze": "18",
           "Anzahl Spiele Anzahl Spiele": "10",
           "Angriffspunkte": "18"
-        },
-        {
-          "col_0": "95.",
-          "col_1": "",
-          "Name": "Respaut, Emilie",
-          "Position": "Zuspiel",
-          "Mannschaft": "Erfurt",
-          "NAT": "Frankreich (FRA)",
-          "Angriffe Angriffe": "47",
-          "Angriffspunkte pro Satz Angriffspunkte pro Satz": "0,3",
-          "Quote Angriffspunkte Quote Angriffspunkte": "34,0%",
-          "Anzahl Sätze Anzahl Sätze": "61",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Angriffspunkte": "16"
         }
       ],
       "pages": 6
@@ -1270,7 +1270,7 @@
       "label": "Aufschlag / Aufschlageffizienz",
       "home_team": [
         {
-          "col_0": "88.",
+          "col_0": "90.",
           "col_1": "",
           "Name": "Waelkens, Anke",
           "Position": "Mittelblock",
@@ -1317,7 +1317,7 @@
       ],
       "usc": [
         {
-          "col_0": "88.",
+          "col_0": "90.",
           "col_1": "",
           "Name": "Waelkens, Anke",
           "Position": "Mittelblock",
@@ -1364,7 +1364,7 @@
       ],
       "opponent": [
         {
-          "col_0": "79.",
+          "col_0": "80.",
           "col_1": "",
           "Name": "Linke, Lena",
           "Position": "Mittelblock",
@@ -1379,7 +1379,7 @@
           "Aufschlageffizienz": "-17,5%"
         },
         {
-          "col_0": "86.",
+          "col_0": "87.",
           "col_1": "",
           "Name": "Zellin, Alina",
           "Position": "Mittelblock",
@@ -1394,7 +1394,7 @@
           "Aufschlageffizienz": "-19,2%"
         },
         {
-          "col_0": "87.",
+          "col_0": "88.",
           "col_1": "",
           "Name": "Sandbothe, Elizabeth",
           "Position": "Mittelblock",

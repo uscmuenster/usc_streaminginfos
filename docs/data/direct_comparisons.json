@@ -1,6 +1,6 @@
 {
   "team": "USC Münster",
-  "generated_at": "2026-03-14T04:02:54Z",
+  "generated_at": "2026-03-16T16:36:32Z",
   "seasons": [
     {
       "season": "2025/26",
@@ -376,13 +376,13 @@
         {
           "team": "Schwarz-Weiß Erfurt",
           "summary": {
-            "matches_played": 1,
-            "home_wins": 1,
+            "matches_played": 2,
+            "home_wins": 2,
             "opponent_wins": 0,
-            "home_sets_for": 3,
+            "home_sets_for": 6,
             "opponent_sets_for": 0,
-            "home_points_for": 75,
-            "opponent_points_for": 51
+            "home_points_for": 150,
+            "opponent_points_for": 103
           },
           "matches": [
             {
@@ -406,6 +406,29 @@
               "opponent_sets": 0,
               "home_points": 75,
               "opponent_points": 51,
+              "home_won": true
+            },
+            {
+              "match_id": "2132",
+              "date": "2026-03-14",
+              "home_team": "USC Münster",
+              "away_team": "Schwarz-Weiß Erfurt",
+              "round": "Spieltag 22",
+              "competition": "1. Bundesliga Frauen",
+              "location": "Sporthalle Berg Fidel (48153 Münster)",
+              "set_scores": [
+                "25:20",
+                "25:18",
+                "25:14"
+              ],
+              "result": {
+                "sets": "3:0",
+                "points": "75:52"
+              },
+              "home_sets": 3,
+              "opponent_sets": 0,
+              "home_points": 75,
+              "opponent_points": 52,
               "home_won": true
             }
           ]
