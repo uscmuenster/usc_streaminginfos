@@ -6,6 +6,7 @@ import csv
 import difflib
 import json
 import re
+import sys
 import unicodedata
 from dataclasses import dataclass
 from datetime import datetime
@@ -947,12 +948,24 @@ def build_lineup_dataset(
             pdf_url = (
                 f"https://live.volleyball-bundesliga.de/2025-26/"
                 f"SAMSscore/{row.match_number}.pdf"
-         )
+            )
         pdf_path = pdf_cache_dir / f"{row.match_number}.pdf"
         if row.match_number not in cache:
-            download_pdf(pdf_url, pdf_path)
-            cache[row.match_number] = extract_lineups_from_pdf(pdf_path)
-        pdf_lineups = cache[row.match_number]
+            try:
+                download_pdf(pdf_url, pdf_path)
+                cache[row.match_number] = extract_lineups_from_pdf(pdf_path)
+            except requests.RequestException:
+                print(
+                    (
+                        "Warnung: Spielbericht konnte nicht geladen werden "
+                        f"({row.match_number}: {pdf_url}) – Spiel wird übersprungen."
+                    ),
+                    file=sys.stderr,
+                )
+                continue
+        pdf_lineups = cache.get(row.match_number)
+        if pdf_lineups is None:
+            continue
         matches.append((focus, merge_schedule_details(row, pdf_url, pdf_lineups)))
 
     setter_cache: Dict[str, List[str]] = {}
