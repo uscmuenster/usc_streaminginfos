@@ -52,6 +52,14 @@ SCHEDULE_PAGE_URL = (
     "https://www.volleyball-bundesliga.de/cms/home/"
     "1_bundesliga_frauen/statistik/hauptrunde/spielplan.xhtml?playingScheduleMode=full"
 )
+PLAYOFFS_SCHEDULE_PAGE_URL = (
+    "https://www.volleyball-bundesliga.de/cms/home/"
+    "1_bundesliga_frauen/statistik/spielplan_playoffs_1blf.xhtml"
+)
+SCHEDULE_METADATA_PAGE_URLS: Dict[str, str] = {
+    DEFAULT_SCHEDULE_URL: SCHEDULE_PAGE_URL,
+    VBL_PLAYOFFS_SCHEDULE_URL: PLAYOFFS_SCHEDULE_PAGE_URL,
+}
 TABLE_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml"
 VBL_NEWS_URL = "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/news/news.xhtml"
 VBL_BASE_URL = "https://www.volleyball-bundesliga.de/"
@@ -974,8 +982,8 @@ def download_schedule(
     return target_path
 
 
-def fetch_schedule_match_metadata(
-    url: str = SCHEDULE_PAGE_URL,
+def _fetch_single_schedule_match_metadata(
+    url: str,
     *,
     retries: int = 5,
     delay_seconds: float = 2.0,
@@ -1029,6 +1037,31 @@ def fetch_schedule_match_metadata(
                 entry["stats_url"] = full_href
 
     return metadata
+
+
+def fetch_schedule_match_metadata(
+    url: str = SCHEDULE_PAGE_URL,
+    *,
+    retries: int = 5,
+    delay_seconds: float = 2.0,
+) -> Dict[str, Dict[str, Optional[str]]]:
+    urls = [url]
+    if url == SCHEDULE_PAGE_URL:
+        for schedule_url in DEFAULT_ADDITIONAL_SCHEDULE_URLS:
+            metadata_url = SCHEDULE_METADATA_PAGE_URLS.get(schedule_url)
+            if metadata_url and metadata_url not in urls:
+                urls.append(metadata_url)
+
+    combined: Dict[str, Dict[str, Optional[str]]] = {}
+    for metadata_url in urls:
+        page_metadata = _fetch_single_schedule_match_metadata(
+            metadata_url,
+            retries=retries,
+            delay_seconds=delay_seconds,
+        )
+        combined.update(page_metadata)
+
+    return combined
 
 
 def build_match_details_url(match_id: str) -> str:
