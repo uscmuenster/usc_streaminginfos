@@ -4129,6 +4129,23 @@ def format_mvp_rankings_section(
     for index, (indicator, payload) in enumerate(category_items):
         team_entries: Dict[str, List[Dict[str, str]]] = {"opponent": [], "usc": []}
 
+        def deduplicate_entries(entries: Sequence[Dict[str, str]]) -> List[Dict[str, str]]:
+            deduplicated: List[Dict[str, str]] = []
+            seen: set[Tuple[str, str, str, str, str]] = set()
+            for entry in entries:
+                key = (
+                    entry.get("team", ""),
+                    entry.get("rank", ""),
+                    entry.get("name", ""),
+                    entry.get("meta", ""),
+                    entry.get("score", ""),
+                )
+                if key in seen:
+                    continue
+                seen.add(key)
+                deduplicated.append(entry)
+            return deduplicated
+
         def team_role_for_name(team_name: str) -> Optional[str]:
             if not team_name:
                 return None
@@ -4195,7 +4212,8 @@ def format_mvp_rankings_section(
 
         ordered_entries: List[Dict[str, str]] = []
         for team_key in ("opponent", "usc"):
-            ordered_entries.extend(team_entries[team_key][:3])
+            unique_team_entries = deduplicate_entries(team_entries[team_key])
+            ordered_entries.extend(unique_team_entries[:3])
 
         list_items: List[str] = []
         for entry in ordered_entries:
