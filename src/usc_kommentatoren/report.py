@@ -4129,11 +4129,36 @@ def format_mvp_rankings_section(
     for index, (indicator, payload) in enumerate(category_items):
         team_entries: Dict[str, List[Dict[str, str]]] = {"opponent": [], "usc": []}
 
+        def team_role_for_name(team_name: str) -> Optional[str]:
+            if not team_name:
+                return None
+
+            variants = {
+                normalize_name(team_name),
+                normalize_name(pretty_name(team_name)),
+            }
+
+            for normalized_team in variants:
+                if matches_team(normalized_team, normalized_opponent):
+                    return "opponent"
+                if matches_team(normalized_team, normalized_usc):
+                    return "usc"
+            return None
+
         if isinstance(payload.get("home_team"), list) or isinstance(payload.get("opponent"), list):
             for team_key in ("opponent", "usc"):
                 for row in payload.get(team_key, []) or []:
                     if isinstance(row, Mapping):
                         team_entries[team_key].append(normalize_entry(row, team_key))
+        elif isinstance(payload.get("all_players"), list):
+            for row in payload.get("all_players", []):
+                if not isinstance(row, Mapping):
+                    continue
+                team_raw = str((row.get("Mannschaft") or row.get("Team") or "")).strip()
+                team_role = team_role_for_name(team_raw)
+                if not team_role:
+                    continue
+                team_entries[team_role].append(normalize_entry(row, team_role))
         else:
             headers = list((payload or {}).get("headers") or [])
             rows = list((payload or {}).get("rows") or [])
@@ -4152,12 +4177,8 @@ def format_mvp_rankings_section(
                         values[header] = row[idx]
 
                 team_raw = ((values.get("Mannschaft") or values.get("Team") or value_for(row, "Mannschaft"))).strip()
-                normalized_team = normalize_name(team_raw) if team_raw else ""
-                if matches_team(normalized_team, normalized_opponent):
-                    team_role = "opponent"
-                elif matches_team(normalized_team, normalized_usc):
-                    team_role = "usc"
-                else:
+                team_role = team_role_for_name(team_raw)
+                if not team_role:
                     continue
 
                 converted: Dict[str, str] = dict(values)
