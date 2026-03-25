@@ -50,3 +50,50 @@ def test_format_mvp_rankings_section_uses_all_players_top3_per_team() -> None:
 
     # Ensure no empty-state message is shown when all_players contains matching teams.
     assert "Keine MVP-Rankings" not in html
+
+
+def test_format_mvp_rankings_section_deduplicates_identical_entries() -> None:
+    rankings = {
+        "generated_at": "2026-03-25T13:02:26.824823+00:00",
+        "home_team": "USC Münster",
+        "opponent_team": "Dresdner SC",
+        "limit": 3,
+        "scan_limit": 50,
+        "indicators": [
+            {
+                "id": "dup-check",
+                "label": "Aufschlag / Quote Aufschläge mit Wirkung",
+                "pages": 6,
+                "all_players": [
+                    {
+                        "col_0": "32.",
+                        "Name": "Pfeffer, Mette Marleen",
+                        "Mannschaft": "Dresdner SC",
+                        "Quote Aufschläge mit Wirkung": "29,5%",
+                        "Sätze": "70",
+                        "Spiele": "20",
+                    },
+                    {
+                        "col_0": "38.",
+                        "Name": "Siksna, Amanda",
+                        "Mannschaft": "Dresdner SC",
+                        "Quote Aufschläge mit Wirkung": "28,6%",
+                        "Sätze": "58",
+                        "Spiele": "19",
+                    },
+                    {
+                        "col_0": "32.",
+                        "Name": "Pfeffer, Mette Marleen",
+                        "Mannschaft": "Dresdner SC",
+                        "Quote Aufschläge mit Wirkung": "29,5%",
+                        "Sätze": "70",
+                        "Spiele": "20",
+                    },
+                ],
+            }
+        ],
+    }
+
+    html = format_mvp_rankings_section(rankings, usc_name="USC Münster", opponent_name="Dresdner SC")
+
+    assert html.count("Pfeffer, Mette Marleen") == 1
