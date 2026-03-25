@@ -225,28 +225,29 @@ def top_players(rows: List[Dict[str, str]], team: str, limit: int = 3) -> List[D
     return filtered[:limit]
 
 
-def build_dataset(home_team: str, opponent_team: str, *, limit: int = 3, scan_limit: int = 100) -> Mapping[str, object]:
+def build_dataset(home_team: str, opponent_team: str, *, limit: int = 3, scan_limit: int = 50) -> Mapping[str, object]:
     session = requests.Session()
 
     viewstate, soup = get_viewstate(session)
     indicators = extract_indicators(soup)
+    effective_scan_limit = min(scan_limit, 50)
 
     result = []
 
     for indicator_id, label in indicators.items():
-        rows, pages, viewstate = fetch_indicator(session, indicator_id, viewstate, max_rows=scan_limit)
-
-        home_rows = top_players(rows, home_team, limit=limit)
-        opponent_rows = top_players(rows, opponent_team, limit=limit)
+        rows, pages, viewstate = fetch_indicator(
+            session,
+            indicator_id,
+            viewstate,
+            max_rows=effective_scan_limit,
+        )
 
         result.append(
             {
                 "id": indicator_id,
                 "label": label,
-                "home_team": home_rows,
-                "usc": home_rows,
-                "opponent": opponent_rows,
                 "pages": pages,
+                "all_players": rows,
             }
         )
 
@@ -256,7 +257,7 @@ def build_dataset(home_team: str, opponent_team: str, *, limit: int = 3, scan_li
         "usc_team": home_team,
         "opponent_team": opponent_team,
         "limit": limit,
-        "scan_limit": scan_limit,
+        "scan_limit": effective_scan_limit,
         "indicators": result,
     }
 
@@ -278,7 +279,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--lineups-path", type=Path, default=DEFAULT_LINEUPS_PATH)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH)
     parser.add_argument("--limit", type=int, default=3)
-    parser.add_argument("--scan-limit", type=int, default=100)
+    parser.add_argument("--scan-limit", type=int, default=50)
 
     return parser.parse_args(argv)
 
