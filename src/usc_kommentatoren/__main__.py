@@ -359,30 +359,8 @@ def main() -> int:
             direct_comparisons_payload = None
 
     mvp_rankings_data: Optional[Dict[str, Any]] = None
-    if args.mvp_output and not args.skip_mvp_output:
-        try:
-            mvp_rankings = collect_mvp_rankings([next_home.away_team, home_team])
-        except Exception as exc:  # pragma: no cover - network failure
-            print(
-                f"Warnung: MVP-Rankings konnten nicht geladen werden: {exc}",
-                file=sys.stderr,
-            )
-            try:
-                mvp_rankings_data = json.loads(args.mvp_output.read_text(encoding="utf-8"))
-            except FileNotFoundError:
-                mvp_rankings_data = None
-            except Exception as cache_exc:  # pragma: no cover - invalid JSON
-                print(
-                    f"Warnung: MVP-Rankings aus {args.mvp_output} konnten nicht geladen werden: {cache_exc}",
-                    file=sys.stderr,
-                )
-                mvp_rankings_data = None
-        else:
-            mvp_rankings_data = mvp_rankings
-            args.mvp_output.parent.mkdir(parents=True, exist_ok=True)
-            payload = json.dumps(mvp_rankings, ensure_ascii=False, indent=2)
-            args.mvp_output.write_text(payload + "\n", encoding="utf-8")
-    elif args.mvp_output:
+
+    if args.mvp_output:
         try:
             mvp_rankings_data = json.loads(args.mvp_output.read_text(encoding="utf-8"))
         except FileNotFoundError:
@@ -393,6 +371,22 @@ def main() -> int:
                 file=sys.stderr,
             )
             mvp_rankings_data = None
+
+    if mvp_rankings_data is None and args.mvp_output and not args.skip_mvp_output:
+        try:
+            mvp_rankings = collect_mvp_rankings(
+                [next_home.away_team, home_team]
+            )
+        except Exception as exc:  # pragma: no cover - network failure
+            print(
+                f"Warnung: MVP-Rankings konnten nicht geladen werden: {exc}",
+                file=sys.stderr,
+            )
+        else:
+            mvp_rankings_data = mvp_rankings
+            args.mvp_output.parent.mkdir(parents=True, exist_ok=True)
+            payload = json.dumps(mvp_rankings, ensure_ascii=False, indent=2)
+            args.mvp_output.write_text(payload + "\n", encoding="utf-8")
 
     detail_cache: Dict[str, Dict[str, object]] = {}
     next_home_original = next_home
