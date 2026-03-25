@@ -1,1339 +1,200 @@
 {
-  "generated_at": "2026-03-25T07:13:37.348136+00:00",
-  "home_team": "USC Münster",
-  "usc_team": "USC Münster",
-  "opponent_team": "Dresdner SC",
-  "limit": 3,
-  "scan_limit": 100,
-  "indicators": [
-    {
-      "id": "60245649",
-      "label": "alle Spielelemente / Top-Scorer",
-      "home_team": [
-        {
-          "col_0": "5.",
-          "col_1": "",
-          "Name": "Spöler, Esther",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Punkte gesamt Punkte gesamt": "207",
-          "Fehler gesamt Fehler gesamt": "78",
-          "Punkte pro Satz Punkte pro Satz": "3,0",
-          "Anzahl Sätze Anzahl Sätze": "70",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Top-Scorer": "129"
-        },
-        {
-          "col_0": "22.",
-          "col_1": "",
-          "Name": "Kömmling, Elena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Punkte gesamt Punkte gesamt": "154",
-          "Fehler gesamt Fehler gesamt": "81",
-          "Punkte pro Satz Punkte pro Satz": "2,8",
-          "Anzahl Sätze Anzahl Sätze": "55",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Top-Scorer": "73"
-        },
-        {
-          "col_0": "28.",
-          "col_1": "",
-          "Name": "Strothoff, Amelie",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Punkte gesamt Punkte gesamt": "189",
-          "Fehler gesamt Fehler gesamt": "125",
-          "Punkte pro Satz Punkte pro Satz": "2,9",
-          "Anzahl Sätze Anzahl Sätze": "66",
-          "Anzahl Spiele Anzahl Spiele": "20",
-          "Top-Scorer": "64"
-        }
-      ],
-      "usc": [
-        {
-          "col_0": "5.",
-          "col_1": "",
-          "Name": "Spöler, Esther",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Punkte gesamt Punkte gesamt": "207",
-          "Fehler gesamt Fehler gesamt": "78",
-          "Punkte pro Satz Punkte pro Satz": "3,0",
-          "Anzahl Sätze Anzahl Sätze": "70",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Top-Scorer": "129"
-        },
-        {
-          "col_0": "22.",
-          "col_1": "",
-          "Name": "Kömmling, Elena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Punkte gesamt Punkte gesamt": "154",
-          "Fehler gesamt Fehler gesamt": "81",
-          "Punkte pro Satz Punkte pro Satz": "2,8",
-          "Anzahl Sätze Anzahl Sätze": "55",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Top-Scorer": "73"
-        },
-        {
-          "col_0": "28.",
-          "col_1": "",
-          "Name": "Strothoff, Amelie",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Punkte gesamt Punkte gesamt": "189",
-          "Fehler gesamt Fehler gesamt": "125",
-          "Punkte pro Satz Punkte pro Satz": "2,9",
-          "Anzahl Sätze Anzahl Sätze": "66",
-          "Anzahl Spiele Anzahl Spiele": "20",
-          "Top-Scorer": "64"
-        }
-      ],
-      "opponent": [
-        {
-          "col_0": "11.",
-          "col_1": "",
-          "Name": "Hölzig, Annegret",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Deutschland (GER)",
-          "Punkte gesamt Punkte gesamt": "195",
-          "Fehler gesamt Fehler gesamt": "93",
-          "Punkte pro Satz Punkte pro Satz": "3,2",
-          "Anzahl Sätze Anzahl Sätze": "61",
-          "Anzahl Spiele Anzahl Spiele": "18",
-          "Top-Scorer": "102"
-        },
-        {
-          "col_0": "14.",
-          "col_1": "",
-          "Name": "ten Brinke, Marije",
-          "Position": "Mittelblock",
-          "Mannschaft": "Schwerin",
-          "NAT": "Niederlande (NED)",
-          "Punkte gesamt Punkte gesamt": "135",
-          "Fehler gesamt Fehler gesamt": "41",
-          "Punkte pro Satz Punkte pro Satz": "2,5",
-          "Anzahl Sätze Anzahl Sätze": "53",
-          "Anzahl Spiele Anzahl Spiele": "16",
-          "Top-Scorer": "94"
-        },
-        {
-          "col_0": "16.",
-          "col_1": "",
-          "Name": "Kirchhoff, Mia",
-          "Position": "Diagonal",
-          "Mannschaft": "Schwerin",
-          "NAT": "Deutschland (GER)",
-          "Punkte gesamt Punkte gesamt": "172",
-          "Fehler gesamt Fehler gesamt": "82",
-          "Punkte pro Satz Punkte pro Satz": "3,0",
-          "Anzahl Sätze Anzahl Sätze": "58",
-          "Anzahl Spiele Anzahl Spiele": "18",
-          "Top-Scorer": "90"
-        }
-      ],
-      "pages": 6
-    },
-    {
-      "id": "29593924",
-      "label": "Aufschlag / Quote Aufschläge mit Wirkung",
-      "home_team": [
-        {
-          "col_0": "76.",
-          "col_1": "",
-          "Name": "Waelkens, Anke",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Belgien (BEL)",
-          "Aufschläge Aufschläge": "51",
-          "Aufschlagpunkte Aufschlagpunkte": "5",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Quote Aufschläge mit Wirkung": "23,5%"
-        },
-        {
-          "col_0": "77.",
-          "col_1": "",
-          "Name": "Spöler, Esther",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "239",
-          "Aufschlagpunkte Aufschlagpunkte": "17",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "70",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Quote Aufschläge mit Wirkung": "23,4%"
-        },
-        {
-          "col_0": "98.",
-          "col_1": "",
-          "Name": "Kömmling, Elena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "199",
-          "Aufschlagpunkte Aufschlagpunkte": "12",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "55",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Quote Aufschläge mit Wirkung": "20,1%"
-        }
-      ],
-      "usc": [
-        {
-          "col_0": "76.",
-          "col_1": "",
-          "Name": "Waelkens, Anke",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Belgien (BEL)",
-          "Aufschläge Aufschläge": "51",
-          "Aufschlagpunkte Aufschlagpunkte": "5",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Quote Aufschläge mit Wirkung": "23,5%"
-        },
-        {
-          "col_0": "77.",
-          "col_1": "",
-          "Name": "Spöler, Esther",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "239",
-          "Aufschlagpunkte Aufschlagpunkte": "17",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "70",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Quote Aufschläge mit Wirkung": "23,4%"
-        },
-        {
-          "col_0": "98.",
-          "col_1": "",
-          "Name": "Kömmling, Elena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "199",
-          "Aufschlagpunkte Aufschlagpunkte": "12",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "55",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Quote Aufschläge mit Wirkung": "20,1%"
-        }
-      ],
-      "opponent": [
-        {
-          "col_0": "84.",
-          "col_1": "",
-          "Name": "Jaksetic, Vedrana",
-          "Position": "Zuspiel",
-          "Mannschaft": "Schwerin",
-          "NAT": "Kroatien (CRO)",
-          "Aufschläge Aufschläge": "144",
-          "Aufschlagpunkte Aufschlagpunkte": "10",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "52",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Quote Aufschläge mit Wirkung": "22,9%"
-        },
-        {
-          "col_0": "100.",
-          "col_1": "",
-          "Name": "Kok, Helena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Niederlande (NED)",
-          "Aufschläge Aufschläge": "141",
-          "Aufschlagpunkte Aufschlagpunkte": "9",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "50",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Quote Aufschläge mit Wirkung": "19,1%"
-        },
-        {
-          "col_0": "26.",
-          "col_1": "",
-          "Name": "Vos, Iris",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Niederlande (NED)",
-          "Aufschläge Aufschläge": "84",
-          "Aufschlagpunkte Aufschlagpunkte": "6",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "17",
-          "Quote Aufschläge mit Wirkung": "29,8%"
-        }
-      ],
-      "pages": 5
-    },
-    {
-      "id": "31385020",
-      "label": "Annahme / Quote perfekte oder gute Annahme",
-      "home_team": [
-        {
-          "col_0": "43.",
-          "col_1": "",
-          "Name": "Malm, Cecilia",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Schweden (SWE)",
-          "Annahmen Annahmen": "190",
-          "perfekte Annahmen perfekte Annahmen": "27",
-          "gute Annahmen gute Annahmen": "31",
-          "Annahmen pro Satz Annahmen pro Satz": "3,9",
-          "Anzahl Sätze Anzahl Sätze": "49",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Quote perfekte oder gute Annahme": "30,5%"
-        }
-      ],
-      "usc": [
-        {
-          "col_0": "43.",
-          "col_1": "",
-          "Name": "Malm, Cecilia",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Schweden (SWE)",
-          "Annahmen Annahmen": "190",
-          "perfekte Annahmen perfekte Annahmen": "27",
-          "gute Annahmen gute Annahmen": "31",
-          "Annahmen pro Satz Annahmen pro Satz": "3,9",
-          "Anzahl Sätze Anzahl Sätze": "49",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Quote perfekte oder gute Annahme": "30,5%"
-        }
-      ],
-      "opponent": [
-        {
-          "col_0": "28.",
-          "col_1": "",
-          "Name": "Kok, Helena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Niederlande (NED)",
-          "Annahmen Annahmen": "284",
-          "perfekte Annahmen perfekte Annahmen": "63",
-          "gute Annahmen gute Annahmen": "37",
-          "Annahmen pro Satz Annahmen pro Satz": "5,7",
-          "Anzahl Sätze Anzahl Sätze": "50",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Quote perfekte oder gute Annahme": "35,2%"
-        }
-      ],
-      "pages": 3
-    },
-    {
-      "id": "29593922",
-      "label": "Aufschlag / Quote Aufschlagpunkte",
-      "home_team": [
-        {
-          "col_0": "64.",
-          "col_1": "",
-          "Name": "Spöler, Esther",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "239",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "70",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Aufschlagpunkte Aufschlagpunkte": "17",
-          "Quote Aufschlagpunkte": "7,1%"
-        },
-        {
-          "col_0": "29.",
-          "col_1": "",
-          "Name": "Waelkens, Anke",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Belgien (BEL)",
-          "Aufschläge Aufschläge": "51",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Aufschlagpunkte Aufschlagpunkte": "5",
-          "Quote Aufschlagpunkte": "9,8%"
-        },
-        {
-          "col_0": "45.",
-          "col_1": "",
-          "Name": "Malm, Cecilia",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Schweden (SWE)",
-          "Aufschläge Aufschläge": "121",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "49",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Aufschlagpunkte Aufschlagpunkte": "10",
-          "Quote Aufschlagpunkte": "8,3%"
-        }
-      ],
-      "usc": [
-        {
-          "col_0": "64.",
-          "col_1": "",
-          "Name": "Spöler, Esther",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "239",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "70",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Aufschlagpunkte Aufschlagpunkte": "17",
-          "Quote Aufschlagpunkte": "7,1%"
-        },
-        {
-          "col_0": "29.",
-          "col_1": "",
-          "Name": "Waelkens, Anke",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Belgien (BEL)",
-          "Aufschläge Aufschläge": "51",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Aufschlagpunkte Aufschlagpunkte": "5",
-          "Quote Aufschlagpunkte": "9,8%"
-        },
-        {
-          "col_0": "45.",
-          "col_1": "",
-          "Name": "Malm, Cecilia",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Schweden (SWE)",
-          "Aufschläge Aufschläge": "121",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "49",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Aufschlagpunkte Aufschlagpunkte": "10",
-          "Quote Aufschlagpunkte": "8,3%"
-        }
-      ],
-      "opponent": [
-        {
-          "col_0": "63.",
-          "col_1": "",
-          "Name": "Vos, Iris",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Niederlande (NED)",
-          "Aufschläge Aufschläge": "84",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "17",
-          "Aufschlagpunkte Aufschlagpunkte": "6",
-          "Quote Aufschlagpunkte": "7,1%"
-        },
-        {
-          "col_0": "65.",
-          "col_1": "",
-          "Name": "Jaksetic, Vedrana",
-          "Position": "Zuspiel",
-          "Mannschaft": "Schwerin",
-          "NAT": "Kroatien (CRO)",
-          "Aufschläge Aufschläge": "144",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "52",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Aufschlagpunkte Aufschlagpunkte": "10",
-          "Quote Aufschlagpunkte": "6,9%"
-        },
-        {
-          "col_0": "28.",
-          "col_1": "",
-          "Name": "Artyshuk, Anna",
-          "Position": "Diagonal",
-          "Mannschaft": "Schwerin",
-          "NAT": "Ukraine (UKR)",
-          "Aufschläge Aufschläge": "91",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "47",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Aufschlagpunkte Aufschlagpunkte": "9",
-          "Quote Aufschlagpunkte": "9,9%"
-        }
-      ],
-      "pages": 5
-    },
-    {
-      "id": "60245660",
-      "label": "Annahme / Annahmeeffizienz",
-      "home_team": [
-        {
-          "col_0": "46.",
-          "col_1": "",
-          "Name": "Malm, Cecilia",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Schweden (SWE)",
-          "Annahmen Annahmen": "190",
-          "perfekte u. gute Annahmen perfekte u. gute Annahmen": "58",
-          "Annahmefehler Annahmefehler": "18",
-          "Annahmen pro Satz Annahmen pro Satz": "3,9",
-          "Anzahl Sätze Anzahl Sätze": "49",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Annahmeeffizienz": "7,4%"
-        }
-      ],
-      "usc": [
-        {
-          "col_0": "46.",
-          "col_1": "",
-          "Name": "Malm, Cecilia",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Schweden (SWE)",
-          "Annahmen Annahmen": "190",
-          "perfekte u. gute Annahmen perfekte u. gute Annahmen": "58",
-          "Annahmefehler Annahmefehler": "18",
-          "Annahmen pro Satz Annahmen pro Satz": "3,9",
-          "Anzahl Sätze Anzahl Sätze": "49",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Annahmeeffizienz": "7,4%"
-        }
-      ],
-      "opponent": [],
-      "pages": 3
-    },
-    {
-      "id": "29593918",
-      "label": "Angriff / Angriffseffizienz",
-      "home_team": [
-        {
-          "col_0": "56.",
-          "col_1": "",
-          "Name": "Malm, Cecilia",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Schweden (SWE)",
-          "Angriffe Angriffe": "165",
-          "Angriffspunkte Angriffspunkte": "51",
-          "Angriffsfehler Angriffsfehler": "17",
-          "Anzahl Sätze Anzahl Sätze": "49",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Angriffseffizienz": "20,6%"
-        },
-        {
-          "col_0": "59.",
-          "col_1": "",
-          "Name": "Strothoff, Amelie",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "416",
-          "Angriffspunkte Angriffspunkte": "156",
-          "Angriffsfehler Angriffsfehler": "72",
-          "Anzahl Sätze Anzahl Sätze": "66",
-          "Anzahl Spiele Anzahl Spiele": "20",
-          "Angriffseffizienz": "20,2%"
-        },
-        {
-          "col_0": "72.",
-          "col_1": "",
-          "Name": "Schultze, Lena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "195",
-          "Angriffspunkte Angriffspunkte": "74",
-          "Angriffsfehler Angriffsfehler": "42",
-          "Anzahl Sätze Anzahl Sätze": "36",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Angriffseffizienz": "16,4%"
-        }
-      ],
-      "usc": [
-        {
-          "col_0": "56.",
-          "col_1": "",
-          "Name": "Malm, Cecilia",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Schweden (SWE)",
-          "Angriffe Angriffe": "165",
-          "Angriffspunkte Angriffspunkte": "51",
-          "Angriffsfehler Angriffsfehler": "17",
-          "Anzahl Sätze Anzahl Sätze": "49",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Angriffseffizienz": "20,6%"
-        },
-        {
-          "col_0": "59.",
-          "col_1": "",
-          "Name": "Strothoff, Amelie",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "416",
-          "Angriffspunkte Angriffspunkte": "156",
-          "Angriffsfehler Angriffsfehler": "72",
-          "Anzahl Sätze Anzahl Sätze": "66",
-          "Anzahl Spiele Anzahl Spiele": "20",
-          "Angriffseffizienz": "20,2%"
-        },
-        {
-          "col_0": "72.",
-          "col_1": "",
-          "Name": "Schultze, Lena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "195",
-          "Angriffspunkte Angriffspunkte": "74",
-          "Angriffsfehler Angriffsfehler": "42",
-          "Anzahl Sätze Anzahl Sätze": "36",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Angriffseffizienz": "16,4%"
-        }
-      ],
-      "opponent": [
-        {
-          "col_0": "51.",
-          "col_1": "",
-          "Name": "Kirchhoff, Mia",
-          "Position": "Diagonal",
-          "Mannschaft": "Schwerin",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "390",
-          "Angriffspunkte Angriffspunkte": "149",
-          "Angriffsfehler Angriffsfehler": "64",
-          "Anzahl Sätze Anzahl Sätze": "58",
-          "Anzahl Spiele Anzahl Spiele": "18",
-          "Angriffseffizienz": "21,8%"
-        },
-        {
-          "col_0": "67.",
-          "col_1": "",
-          "Name": "Grozer, Leana",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "238",
-          "Angriffspunkte Angriffspunkte": "80",
-          "Angriffsfehler Angriffsfehler": "36",
-          "Anzahl Sätze Anzahl Sätze": "39",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Angriffseffizienz": "18,5%"
-        },
-        {
-          "col_0": "29.",
-          "col_1": "",
-          "Name": "Hölzig, Annegret",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "373",
-          "Angriffspunkte Angriffspunkte": "155",
-          "Angriffsfehler Angriffsfehler": "43",
-          "Anzahl Sätze Anzahl Sätze": "61",
-          "Anzahl Spiele Anzahl Spiele": "18",
-          "Angriffseffizienz": "30,0%"
-        }
-      ],
-      "pages": 4
-    },
-    {
-      "id": "29593928",
-      "label": "Block / Blockpunkte",
-      "home_team": [
-        {
-          "col_0": "69.",
-          "col_1": "",
-          "Name": "Schultze, Lena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "36",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Blockpunkte": "8"
-        },
-        {
-          "col_0": "25.",
-          "col_1": "",
-          "Name": "Jordan, Emilia",
-          "Position": "Zuspiel",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,3",
-          "Anzahl Sätze Anzahl Sätze": "73",
-          "Anzahl Spiele Anzahl Spiele": "20",
-          "Blockpunkte": "20"
-        },
-        {
-          "col_0": "28.",
-          "col_1": "",
-          "Name": "Ford, Brianna",
-          "Position": "Diagonal",
-          "Mannschaft": "Münster",
-          "NAT": "Vereinigte Staaten von Amerika (USA)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,4",
-          "Anzahl Sätze Anzahl Sätze": "48",
-          "Anzahl Spiele Anzahl Spiele": "18",
-          "Blockpunkte": "19"
-        }
-      ],
-      "usc": [
-        {
-          "col_0": "69.",
-          "col_1": "",
-          "Name": "Schultze, Lena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "36",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Blockpunkte": "8"
-        },
-        {
-          "col_0": "25.",
-          "col_1": "",
-          "Name": "Jordan, Emilia",
-          "Position": "Zuspiel",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,3",
-          "Anzahl Sätze Anzahl Sätze": "73",
-          "Anzahl Spiele Anzahl Spiele": "20",
-          "Blockpunkte": "20"
-        },
-        {
-          "col_0": "28.",
-          "col_1": "",
-          "Name": "Ford, Brianna",
-          "Position": "Diagonal",
-          "Mannschaft": "Münster",
-          "NAT": "Vereinigte Staaten von Amerika (USA)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,4",
-          "Anzahl Sätze Anzahl Sätze": "48",
-          "Anzahl Spiele Anzahl Spiele": "18",
-          "Blockpunkte": "19"
-        }
-      ],
-      "opponent": [
-        {
-          "col_0": "86.",
-          "col_1": "",
-          "Name": "Vos, Iris",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Niederlande (NED)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,2",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "17",
-          "Blockpunkte": "5"
-        },
-        {
-          "col_0": "25.",
-          "col_1": "",
-          "Name": "Kok, Helena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Niederlande (NED)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,4",
-          "Anzahl Sätze Anzahl Sätze": "50",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Blockpunkte": "20"
-        },
-        {
-          "col_0": "31.",
-          "col_1": "",
-          "Name": "Hölzig, Annegret",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Deutschland (GER)",
-          "Blockpunkte pro Satz Blockpunkte pro Satz": "0,3",
-          "Anzahl Sätze Anzahl Sätze": "61",
-          "Anzahl Spiele Anzahl Spiele": "18",
-          "Blockpunkte": "18"
-        }
-      ],
-      "pages": 7
-    },
-    {
-      "id": "29593923",
-      "label": "Aufschlag / Aufschlagpunkte",
-      "home_team": [
-        {
-          "col_0": "86.",
-          "col_1": "",
-          "Name": "Waelkens, Anke",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Belgien (BEL)",
-          "Aufschläge Aufschläge": "51",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Quote Aufschlagpunkte Quote Aufschlagpunkte": "9,8%",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "23,5%",
-          "Aufschlagpunkte": "5"
-        },
-        {
-          "col_0": "94.",
-          "col_1": "",
-          "Name": "Schultze, Lena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "84",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,1",
-          "Quote Aufschlagpunkte Quote Aufschlagpunkte": "4,8%",
-          "Anzahl Sätze Anzahl Sätze": "36",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "27,4%",
-          "Aufschlagpunkte": "4"
-        },
-        {
-          "col_0": "45.",
-          "col_1": "",
-          "Name": "Kömmling, Elena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "199",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Quote Aufschlagpunkte Quote Aufschlagpunkte": "6,0%",
-          "Anzahl Sätze Anzahl Sätze": "55",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "20,1%",
-          "Aufschlagpunkte": "12"
-        }
-      ],
-      "usc": [
-        {
-          "col_0": "86.",
-          "col_1": "",
-          "Name": "Waelkens, Anke",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Belgien (BEL)",
-          "Aufschläge Aufschläge": "51",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Quote Aufschlagpunkte Quote Aufschlagpunkte": "9,8%",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "23,5%",
-          "Aufschlagpunkte": "5"
-        },
-        {
-          "col_0": "94.",
-          "col_1": "",
-          "Name": "Schultze, Lena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "84",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,1",
-          "Quote Aufschlagpunkte Quote Aufschlagpunkte": "4,8%",
-          "Anzahl Sätze Anzahl Sätze": "36",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "27,4%",
-          "Aufschlagpunkte": "4"
-        },
-        {
-          "col_0": "45.",
-          "col_1": "",
-          "Name": "Kömmling, Elena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "199",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Quote Aufschlagpunkte Quote Aufschlagpunkte": "6,0%",
-          "Anzahl Sätze Anzahl Sätze": "55",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "20,1%",
-          "Aufschlagpunkte": "12"
-        }
-      ],
-      "opponent": [
-        {
-          "col_0": "79.",
-          "col_1": "",
-          "Name": "Vos, Iris",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Niederlande (NED)",
-          "Aufschläge Aufschläge": "84",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,2",
-          "Quote Aufschlagpunkte Quote Aufschlagpunkte": "7,1%",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "17",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "29,8%",
-          "Aufschlagpunkte": "6"
-        },
-        {
-          "col_0": "79.",
-          "col_1": "",
-          "Name": "van Clewe, Luisa",
-          "Position": "Mittelblock",
-          "Mannschaft": "Schwerin",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "56",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,3",
-          "Quote Aufschlagpunkte Quote Aufschlagpunkte": "10,7%",
-          "Anzahl Sätze Anzahl Sätze": "18",
-          "Anzahl Spiele Anzahl Spiele": "8",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "37,5%",
-          "Aufschlagpunkte": "6"
-        },
-        {
-          "col_0": "27.",
-          "col_1": "",
-          "Name": "Kirchhoff, Mia",
-          "Position": "Diagonal",
-          "Mannschaft": "Schwerin",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "135",
-          "Aufschlagpunkte pro Satz Aufschlagpunkte pro Satz": "0,3",
-          "Quote Aufschlagpunkte Quote Aufschlagpunkte": "11,1%",
-          "Anzahl Sätze Anzahl Sätze": "58",
-          "Anzahl Spiele Anzahl Spiele": "18",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "25,9%",
-          "Aufschlagpunkte": "15"
-        }
-      ],
-      "pages": 6
-    },
-    {
-      "id": "29593919",
-      "label": "Angriff / Quote Angriffspunkte",
-      "home_team": [
-        {
-          "col_0": "80.",
-          "col_1": "",
-          "Name": "Malm, Cecilia",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Schweden (SWE)",
-          "Angriffe Angriffe": "165",
-          "Angriffsfehler Angriffsfehler": "17",
-          "Anzahl Sätze Anzahl Sätze": "49",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Angriffspunkte Angriffspunkte": "51",
-          "Quote Angriffspunkte": "30,9%"
-        },
-        {
-          "col_0": "48.",
-          "col_1": "",
-          "Name": "Jordan, Emilia",
-          "Position": "Zuspiel",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "65",
-          "Angriffsfehler Angriffsfehler": "7",
-          "Anzahl Sätze Anzahl Sätze": "73",
-          "Anzahl Spiele Anzahl Spiele": "20",
-          "Angriffspunkte Angriffspunkte": "25",
-          "Quote Angriffspunkte": "38,5%"
-        },
-        {
-          "col_0": "50.",
-          "col_1": "",
-          "Name": "Kömmling, Elena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "338",
-          "Angriffsfehler Angriffsfehler": "40",
-          "Anzahl Sätze Anzahl Sätze": "55",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Angriffspunkte Angriffspunkte": "129",
-          "Quote Angriffspunkte": "38,2%"
-        }
-      ],
-      "usc": [
-        {
-          "col_0": "80.",
-          "col_1": "",
-          "Name": "Malm, Cecilia",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Schweden (SWE)",
-          "Angriffe Angriffe": "165",
-          "Angriffsfehler Angriffsfehler": "17",
-          "Anzahl Sätze Anzahl Sätze": "49",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Angriffspunkte Angriffspunkte": "51",
-          "Quote Angriffspunkte": "30,9%"
-        },
-        {
-          "col_0": "48.",
-          "col_1": "",
-          "Name": "Jordan, Emilia",
-          "Position": "Zuspiel",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "65",
-          "Angriffsfehler Angriffsfehler": "7",
-          "Anzahl Sätze Anzahl Sätze": "73",
-          "Anzahl Spiele Anzahl Spiele": "20",
-          "Angriffspunkte Angriffspunkte": "25",
-          "Quote Angriffspunkte": "38,5%"
-        },
-        {
-          "col_0": "50.",
-          "col_1": "",
-          "Name": "Kömmling, Elena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "338",
-          "Angriffsfehler Angriffsfehler": "40",
-          "Anzahl Sätze Anzahl Sätze": "55",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Angriffspunkte Angriffspunkte": "129",
-          "Quote Angriffspunkte": "38,2%"
-        }
-      ],
-      "opponent": [
-        {
-          "col_0": "31.",
-          "col_1": "",
-          "Name": "van Clewe, Luisa",
-          "Position": "Mittelblock",
-          "Mannschaft": "Schwerin",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "43",
-          "Angriffsfehler Angriffsfehler": "4",
-          "Anzahl Sätze Anzahl Sätze": "18",
-          "Anzahl Spiele Anzahl Spiele": "8",
-          "Angriffspunkte Angriffspunkte": "18",
-          "Quote Angriffspunkte": "41,9%"
-        },
-        {
-          "col_0": "35.",
-          "col_1": "",
-          "Name": "Hölzig, Annegret",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "373",
-          "Angriffsfehler Angriffsfehler": "43",
-          "Anzahl Sätze Anzahl Sätze": "61",
-          "Anzahl Spiele Anzahl Spiele": "18",
-          "Angriffspunkte Angriffspunkte": "155",
-          "Quote Angriffspunkte": "41,6%"
-        },
-        {
-          "col_0": "39.",
-          "col_1": "",
-          "Name": "Vos, Iris",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Niederlande (NED)",
-          "Angriffe Angriffe": "132",
-          "Angriffsfehler Angriffsfehler": "24",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "17",
-          "Angriffspunkte Angriffspunkte": "53",
-          "Quote Angriffspunkte": "40,2%"
-        }
-      ],
-      "pages": 4
-    },
-    {
-      "id": "29593920",
-      "label": "Angriff / Angriffspunkte",
-      "home_team": [
-        {
-          "col_0": "84.",
-          "col_1": "",
-          "Name": "Waelkens, Anke",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Belgien (BEL)",
-          "Angriffe Angriffe": "58",
-          "Angriffspunkte pro Satz Angriffspunkte pro Satz": "0,9",
-          "Quote Angriffspunkte Quote Angriffspunkte": "50,0%",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Angriffspunkte": "29"
-        },
-        {
-          "col_0": "86.",
-          "col_1": "",
-          "Name": "Jordan, Emilia",
-          "Position": "Zuspiel",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "65",
-          "Angriffspunkte pro Satz Angriffspunkte pro Satz": "0,3",
-          "Quote Angriffspunkte Quote Angriffspunkte": "38,5%",
-          "Anzahl Sätze Anzahl Sätze": "73",
-          "Anzahl Spiele Anzahl Spiele": "20",
-          "Angriffspunkte": "25"
-        },
-        {
-          "col_0": "88.",
-          "col_1": "",
-          "Name": "Heil, Franziska",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "35",
-          "Angriffspunkte pro Satz Angriffspunkte pro Satz": "2,6",
-          "Quote Angriffspunkte Quote Angriffspunkte": "60,0%",
-          "Anzahl Sätze Anzahl Sätze": "8",
-          "Anzahl Spiele Anzahl Spiele": "3",
-          "Angriffspunkte": "21"
-        }
-      ],
-      "usc": [
-        {
-          "col_0": "84.",
-          "col_1": "",
-          "Name": "Waelkens, Anke",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Belgien (BEL)",
-          "Angriffe Angriffe": "58",
-          "Angriffspunkte pro Satz Angriffspunkte pro Satz": "0,9",
-          "Quote Angriffspunkte Quote Angriffspunkte": "50,0%",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Angriffspunkte": "29"
-        },
-        {
-          "col_0": "86.",
-          "col_1": "",
-          "Name": "Jordan, Emilia",
-          "Position": "Zuspiel",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "65",
-          "Angriffspunkte pro Satz Angriffspunkte pro Satz": "0,3",
-          "Quote Angriffspunkte Quote Angriffspunkte": "38,5%",
-          "Anzahl Sätze Anzahl Sätze": "73",
-          "Anzahl Spiele Anzahl Spiele": "20",
-          "Angriffspunkte": "25"
-        },
-        {
-          "col_0": "88.",
-          "col_1": "",
-          "Name": "Heil, Franziska",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "35",
-          "Angriffspunkte pro Satz Angriffspunkte pro Satz": "2,6",
-          "Quote Angriffspunkte Quote Angriffspunkte": "60,0%",
-          "Anzahl Sätze Anzahl Sätze": "8",
-          "Anzahl Spiele Anzahl Spiele": "3",
-          "Angriffspunkte": "21"
-        }
-      ],
-      "opponent": [
-        {
-          "col_0": "89.",
-          "col_1": "",
-          "Name": "van Clewe, Luisa",
-          "Position": "Mittelblock",
-          "Mannschaft": "Schwerin",
-          "NAT": "Deutschland (GER)",
-          "Angriffe Angriffe": "43",
-          "Angriffspunkte pro Satz Angriffspunkte pro Satz": "1",
-          "Quote Angriffspunkte Quote Angriffspunkte": "41,9%",
-          "Anzahl Sätze Anzahl Sätze": "18",
-          "Anzahl Spiele Anzahl Spiele": "8",
-          "Angriffspunkte": "18"
-        },
-        {
-          "col_0": "44.",
-          "col_1": "",
-          "Name": "Artyshuk, Anna",
-          "Position": "Diagonal",
-          "Mannschaft": "Schwerin",
-          "NAT": "Ukraine (UKR)",
-          "Angriffe Angriffe": "251",
-          "Angriffspunkte pro Satz Angriffspunkte pro Satz": "1,9",
-          "Quote Angriffspunkte Quote Angriffspunkte": "35,9%",
-          "Anzahl Sätze Anzahl Sätze": "47",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Angriffspunkte": "90"
-        },
-        {
-          "col_0": "46.",
-          "col_1": "",
-          "Name": "ten Brinke, Marije",
-          "Position": "Mittelblock",
-          "Mannschaft": "Schwerin",
-          "NAT": "Niederlande (NED)",
-          "Angriffe Angriffe": "167",
-          "Angriffspunkte pro Satz Angriffspunkte pro Satz": "1,6",
-          "Quote Angriffspunkte Quote Angriffspunkte": "49,7%",
-          "Anzahl Sätze Anzahl Sätze": "53",
-          "Anzahl Spiele Anzahl Spiele": "16",
-          "Angriffspunkte": "83"
-        }
-      ],
-      "pages": 6
-    },
-    {
-      "id": "60245659",
-      "label": "Aufschlag / Aufschlageffizienz",
-      "home_team": [
-        {
-          "col_0": "90.",
-          "col_1": "",
-          "Name": "Waelkens, Anke",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Belgien (BEL)",
-          "Aufschläge Aufschläge": "51",
-          "Aufschlagpunkte Aufschlagpunkte": "5",
-          "Aufschlagfehler Aufschlagfehler": "10",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "23,5%",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Aufschlageffizienz": "-19,6%"
-        },
-        {
-          "col_0": "99.",
-          "col_1": "",
-          "Name": "Spöler, Esther",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "239",
-          "Aufschlagpunkte Aufschlagpunkte": "17",
-          "Aufschlagfehler Aufschlagfehler": "27",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "23,4%",
-          "Anzahl Sätze Anzahl Sätze": "70",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Aufschlageffizienz": "-21,3%"
-        },
-        {
-          "col_0": "100.",
-          "col_1": "",
-          "Name": "Kömmling, Elena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "199",
-          "Aufschlagpunkte Aufschlagpunkte": "12",
-          "Aufschlagfehler Aufschlagfehler": "15",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "20,1%",
-          "Anzahl Sätze Anzahl Sätze": "55",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Aufschlageffizienz": "-22,6%"
-        }
-      ],
-      "usc": [
-        {
-          "col_0": "90.",
-          "col_1": "",
-          "Name": "Waelkens, Anke",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Belgien (BEL)",
-          "Aufschläge Aufschläge": "51",
-          "Aufschlagpunkte Aufschlagpunkte": "5",
-          "Aufschlagfehler Aufschlagfehler": "10",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "23,5%",
-          "Anzahl Sätze Anzahl Sätze": "33",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Aufschlageffizienz": "-19,6%"
-        },
-        {
-          "col_0": "99.",
-          "col_1": "",
-          "Name": "Spöler, Esther",
-          "Position": "Mittelblock",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "239",
-          "Aufschlagpunkte Aufschlagpunkte": "17",
-          "Aufschlagfehler Aufschlagfehler": "27",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "23,4%",
-          "Anzahl Sätze Anzahl Sätze": "70",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Aufschlageffizienz": "-21,3%"
-        },
-        {
-          "col_0": "100.",
-          "col_1": "",
-          "Name": "Kömmling, Elena",
-          "Position": "Außenangriff",
-          "Mannschaft": "Münster",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "199",
-          "Aufschlagpunkte Aufschlagpunkte": "12",
-          "Aufschlagfehler Aufschlagfehler": "15",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "20,1%",
-          "Anzahl Sätze Anzahl Sätze": "55",
-          "Anzahl Spiele Anzahl Spiele": "15",
-          "Aufschlageffizienz": "-22,6%"
-        }
-      ],
-      "opponent": [
-        {
-          "col_0": "76.",
-          "col_1": "",
-          "Name": "ten Brinke, Marije",
-          "Position": "Mittelblock",
-          "Mannschaft": "Schwerin",
-          "NAT": "Niederlande (NED)",
-          "Aufschläge Aufschläge": "195",
-          "Aufschlagpunkte Aufschlagpunkte": "12",
-          "Aufschlagfehler Aufschlagfehler": "9",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "24,6%",
-          "Anzahl Sätze Anzahl Sätze": "53",
-          "Anzahl Spiele Anzahl Spiele": "16",
-          "Aufschlageffizienz": "-15,9%"
-        },
-        {
-          "col_0": "95.",
-          "col_1": "",
-          "Name": "Jaksetic, Vedrana",
-          "Position": "Zuspiel",
-          "Mannschaft": "Schwerin",
-          "NAT": "Kroatien (CRO)",
-          "Aufschläge Aufschläge": "144",
-          "Aufschlagpunkte Aufschlagpunkte": "10",
-          "Aufschlagfehler Aufschlagfehler": "5",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "22,9%",
-          "Anzahl Sätze Anzahl Sätze": "52",
-          "Anzahl Spiele Anzahl Spiele": "19",
-          "Aufschlageffizienz": "-20,8%"
-        },
-        {
-          "col_0": "39.",
-          "col_1": "",
-          "Name": "Hölzig, Annegret",
-          "Position": "Außenangriff",
-          "Mannschaft": "Schwerin",
-          "NAT": "Deutschland (GER)",
-          "Aufschläge Aufschläge": "239",
-          "Aufschlagpunkte Aufschlagpunkte": "22",
-          "Aufschlagfehler Aufschlagfehler": "29",
-          "Quote Aufschläge mit Wirkung Quote Aufschläge mit Wirkung": "29,7%",
-          "Anzahl Sätze Anzahl Sätze": "61",
-          "Anzahl Spiele Anzahl Spiele": "18",
-          "Aufschlageffizienz": "-7,9%"
-        }
-      ],
-      "pages": 5
-    }
-  ]
+  "alle Spielelemente / Top-Scorer": {
+    "headers": [
+      "Rang",
+      "",
+      "Name",
+      "Sätze",
+      "Spiele",
+      "Position",
+      "Mannschaft",
+      "Nation",
+      "Punkte",
+      "Fehler",
+      "Punkte/Satz",
+      "",
+      "TopScorer"
+    ],
+    "rows": []
+  },
+  "Aufschlag / Quote Aufschläge mit Wirkung": {
+    "headers": [
+      "Rang",
+      "",
+      "Name",
+      "Sätze",
+      "Spiele",
+      "Position",
+      "Mannschaft",
+      "Nation",
+      "Punkte",
+      "Fehler",
+      "Punkte/Satz",
+      "",
+      "TopScorer"
+    ],
+    "rows": []
+  },
+  "Annahme / Quote perfekte oder gute Annahme": {
+    "headers": [
+      "Rang",
+      "",
+      "Name",
+      "Sätze",
+      "Spiele",
+      "Position",
+      "Mannschaft",
+      "Nation",
+      "Punkte",
+      "Fehler",
+      "Punkte/Satz",
+      "",
+      "TopScorer"
+    ],
+    "rows": []
+  },
+  "Aufschlag / Quote Aufschlagpunkte": {
+    "headers": [
+      "Rang",
+      "",
+      "Name",
+      "Sätze",
+      "Spiele",
+      "Position",
+      "Mannschaft",
+      "Nation",
+      "Punkte",
+      "Fehler",
+      "Punkte/Satz",
+      "",
+      "TopScorer"
+    ],
+    "rows": []
+  },
+  "Annahme / Annahmeeffizienz": {
+    "headers": [
+      "Rang",
+      "",
+      "Name",
+      "Sätze",
+      "Spiele",
+      "Position",
+      "Mannschaft",
+      "Nation",
+      "Punkte",
+      "Fehler",
+      "Punkte/Satz",
+      "",
+      "TopScorer"
+    ],
+    "rows": []
+  },
+  "Angriff / Angriffseffizienz": {
+    "headers": [
+      "Rang",
+      "",
+      "Name",
+      "Sätze",
+      "Spiele",
+      "Position",
+      "Mannschaft",
+      "Nation",
+      "Punkte",
+      "Fehler",
+      "Punkte/Satz",
+      "",
+      "TopScorer"
+    ],
+    "rows": []
+  },
+  "Block / Blockpunkte": {
+    "headers": [
+      "Rang",
+      "",
+      "Name",
+      "Sätze",
+      "Spiele",
+      "Position",
+      "Mannschaft",
+      "Nation",
+      "Punkte",
+      "Fehler",
+      "Punkte/Satz",
+      "",
+      "TopScorer"
+    ],
+    "rows": []
+  },
+  "Aufschlag / Aufschlagpunkte": {
+    "headers": [
+      "Rang",
+      "",
+      "Name",
+      "Sätze",
+      "Spiele",
+      "Position",
+      "Mannschaft",
+      "Nation",
+      "Punkte",
+      "Fehler",
+      "Punkte/Satz",
+      "",
+      "TopScorer"
+    ],
+    "rows": []
+  },
+  "Angriff / Quote Angriffspunkte": {
+    "headers": [
+      "Rang",
+      "",
+      "Name",
+      "Sätze",
+      "Spiele",
+      "Position",
+      "Mannschaft",
+      "Nation",
+      "Punkte",
+      "Fehler",
+      "Punkte/Satz",
+      "",
+      "TopScorer"
+    ],
+    "rows": []
+  },
+  "Angriff / Angriffspunkte": {
+    "headers": [
+      "Rang",
+      "",
+      "Name",
+      "Sätze",
+      "Spiele",
+      "Position",
+      "Mannschaft",
+      "Nation",
+      "Punkte",
+      "Fehler",
+      "Punkte/Satz",
+      "",
+      "TopScorer"
+    ],
+    "rows": []
+  },
+  "Aufschlag / Aufschlageffizienz": {
+    "headers": [
+      "Rang",
+      "",
+      "Name",
+      "Sätze",
+      "Spiele",
+      "Position",
+      "Mannschaft",
+      "Nation",
+      "Punkte",
+      "Fehler",
+      "Punkte/Satz",
+      "",
+      "TopScorer"
+    ],
+    "rows": []
+  }
 }
