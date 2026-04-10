@@ -4321,9 +4321,12 @@ def format_roster_list(
         pronunciation = None
         if name_pronunciations:
             pronunciation = name_pronunciations.get(normalize_name(member_name))
-        if pronunciation:
-            member_name = f"{member_name} ({pronunciation})"
         name_html = escape(member_name)
+        if pronunciation:
+            pronunciation_html = (
+                f"<span class=\"roster-pronunciation\">({escape(pronunciation)})</span>"
+            )
+            name_html = f"{name_html}{pronunciation_html}"
         height_display: Optional[str] = None
         if member.height and not member.is_official:
             height_value = member.height.strip()
@@ -6255,13 +6258,13 @@ def build_html_report(
       margin: 0;
       padding: 0;
       display: grid;
-      gap: 0.8rem;
+      gap: 0.55rem;
     }}
     .roster-item {{
       display: grid;
       grid-template-columns: minmax(3.6rem, auto) 1fr;
       gap: 0.75rem;
-      align-items: center;
+      align-items: baseline;
     }}
     .roster-number {{
       font-family: \"Fira Mono\", \"SFMono-Regular\", Menlo, Consolas, monospace;
@@ -6278,17 +6281,22 @@ def build_html_report(
     }}
     .roster-text {{
       display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.1rem 0.55rem;
     }}
     .roster-name {{
       font-weight: 600;
       font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
     }}
+    .roster-pronunciation {{
+      display: inline-block;
+      margin-left: 0.55rem;
+    }}
     .roster-details {{
       font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
       color: #475569;
-      line-height: 1.35;
+      line-height: 1.25;
     }}
     .notice-group {{
       margin-top: clamp(1.4rem, 3vw, 2rem);
