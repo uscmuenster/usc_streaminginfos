@@ -42,6 +42,7 @@ class SourceLinkInfo:
     url: str
     page_title: str
     page_description: str
+    extracted_facts: tuple[str, ...]
     fetched_at_utc: str
 
 
@@ -61,6 +62,14 @@ MATCHES: tuple[VnlMatch, ...] = (
 
 
 SOURCE_LINKS: tuple[SourceLink, ...] = (
+    SourceLink(
+        key="match_detail",
+        label="Match-Detail (Canada vs Germany)",
+        url=(
+            "https://en.volleyballworld.com/volleyball/competitions/"
+            "volleyball-nations-league/schedule/26558/?match=canada-vs-germany"
+        ),
+    ),
     SourceLink(
         key="germany_schedule_1",
         label="Germany Team Schedule (Start: dynamisch)",
@@ -109,10 +118,10 @@ def pick_next_match(today: date) -> VnlMatch:
 
 
 def strip_tags(value: str) -> str:
-    cleaned = re.sub(r"<script[\\s\\S]*?</script>", "", value, flags=re.IGNORECASE)
-    cleaned = re.sub(r"<style[\\s\\S]*?</style>", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"<script[\s\S]*?</script>", "", value, flags=re.IGNORECASE)
+    cleaned = re.sub(r"<style[\s\S]*?</style>", "", cleaned, flags=re.IGNORECASE)
     cleaned = re.sub(r"<[^>]+>", " ", cleaned)
-    cleaned = re.sub(r"\\s+", " ", unescape(cleaned)).strip()
+    cleaned = re.sub(r"\s+", " ", unescape(cleaned)).strip()
     return cleaned
 
 
@@ -143,6 +152,121 @@ def extract_description(html: str) -> str:
     return "Beschreibung nicht verfügbar"
 
 
+def extract_attr(block: str, attr: str) -> str | None:
+    pattern = rf"{re.escape(attr)}=(?:\"([^\"]*)\"|'([^']*)'|([^\s>]+))"
+    match = re.search(pattern, block, flags=re.IGNORECASE)
+    if not match:
+        return None
+    for group in match.groups():
+        if group:
+            value = unescape(group.strip())
+            return value.split()[0]
+    return None
+
+
+def extract_match_facts(html: str) -> tuple[str, ...]:
+    card_match = re.search(
+        r'<a[^>]+class="vbw-mu-scheduled[^"]*vbw-mu__status-info-btn"[^>]*>(.*?)</a>',
+        html,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    block = card_match.group(1) if card_match else html
+
+    facts: list[str] = []
+    fields = (
+        ("Teams", r'<div class=vbw-mu__team__name>([^<]+)</div>', 2),
+        ("Match", r'<div class=vbw-mu__info--details>([^<]+)</div>', 1),
+        ("Tag", r'<div class=vbw-mu__date--day>([^<]+)</div>', 1),
+        ("Datum", r'<div class=vbw-mu__date--date>([^<]+)</div>', 1),
+        ("Ort", r'<div class=vbw-mu__info--city>([^<]+)</div>', 1),
+        ("Land", r'<div class=vbw-mu__info--country>([^<]+)</div>', 1),
+    )
+    for label, pattern, expected in fields:
+        values = [strip_tags(v) for v in re.findall(pattern, block, flags=re.IGNORECASE)]
+        values = [v for v in values if v]
+        if not values:
+            continue
+        if expected == 2 and len(values) >= 2:
+            facts.append(f"{label}: {values[0]} vs {values[1]}")
+        else:
+            facts.append(f"{label}: {values[0]}")
+
+    wrapper_match = re.search(r'<div class=vbw-mu__time-wrapper[^>]*>', block, flags=re.IGNORECASE)
+    if wrapper_match:
+        wrapper_tag = wrapper_match.group(0)
+        utc_time = extract_attr(wrapper_tag, "data-timeutc")
+        local_time = extract_attr(wrapper_tag, "data-timelocal")
+        utc_datetime = extract_attr(wrapper_tag, "data-utc-datetime")
+        if utc_time:
+            facts.append(f"Anpfiff UTC: {utc_time}")
+        if local_time:
+            facts.append(f"Anpfiff Lokal: {local_time}")
+        if utc_datetime:
+            facts.append(f"UTC-Datetime: {utc_datetime}")
+
+    return tuple(dict.fromkeys(facts))
+
+
+def extract_head_to_head_facts(html: str) -> tuple[str, ...]:
+    facts: list[str] = []
+    title = extract_title(html)
+    if title and title != "Titel nicht verfügbar":
+        facts.append(f"Match-Titel: {title}")
+
+    pool = re.search(r"(Pool\s+\d+\s*-\s*Week\s*\d+\s*-\s*Women\s*#\d+)", html, flags=re.IGNORECASE)
+    if pool:
+        facts.append(f"Event: {strip_tags(pool.group(1))}")
+
+    has_historical_section = "ALL HISTORICAL MATCHES" in html.upper()
+    if has_historical_section:
+        facts.append("Historische Spiele: Im Quelltext sichtbar")
+    else:
+        facts.append("Historische Spiele: Nicht serverseitig im Quelltext enthalten")
+
+    set_scores = re.findall(r"(?:\d{1,2})-(?:\d{1,2})", html)
+    if has_historical_section and set_scores:
+        preview = ", ".join(set_scores[:5])
+        facts.append(f"Satzstände (Auszug): {preview}")
+
+    return tuple(dict.fromkeys(facts))
+
+
+def extract_squad_facts(html: str) -> tuple[str, ...]:
+    facts: list[str] = []
+    title = extract_title(html)
+    if title and title != "Titel nicht verfügbar":
+        facts.append(f"Seite: {title}")
+
+    team_line = re.search(r"Team\s+([A-Za-z\s\-]+)\s+Volleyball\s+Players", unescape(html), flags=re.IGNORECASE)
+    if team_line:
+        facts.append(f"Team: {strip_tags(team_line.group(1))}")
+
+    players = re.findall(r'"player_name":"([^"]+)"', html)
+    if players:
+        facts.append(f"Spielerinnen im Quelltext: {len(players)}")
+        facts.append("Beispiele: " + ", ".join(dict.fromkeys(players[:5])))
+    else:
+        facts.append("Spielerinnenliste: Nicht serverseitig im Quelltext enthalten")
+    return tuple(dict.fromkeys(facts))
+
+
+def extract_source_facts(link: SourceLink, html: str) -> tuple[str, ...]:
+    if link.key == "head_to_head":
+        return extract_head_to_head_facts(html)
+    if link.key == "germany_squad":
+        return extract_squad_facts(html)
+    if "match=" in link.url:
+        return extract_match_facts(html)
+    generic_facts: list[str] = []
+    title = extract_title(html)
+    description = extract_description(html)
+    if title and title != "Titel nicht verfügbar":
+        generic_facts.append(f"Titel: {title}")
+    if description and description != "Beschreibung nicht verfügbar":
+        generic_facts.append(f"Beschreibung: {description}")
+    return tuple(dict.fromkeys(generic_facts))
+
+
 def fetch_link_info(link: SourceLink, fetched_at: datetime) -> SourceLinkInfo:
     request = Request(link.url, headers={"User-Agent": USER_AGENT})
     try:
@@ -151,9 +275,11 @@ def fetch_link_info(link: SourceLink, fetched_at: datetime) -> SourceLinkInfo:
             html = response.read().decode(charset, errors="replace")
             title = extract_title(html)
             description = extract_description(html)
+            facts = extract_source_facts(link, html)
     except URLError:
         title = "Abruf fehlgeschlagen"
         description = "Die Quelle konnte beim Build nicht geladen werden."
+        facts = ("Datenextraktion fehlgeschlagen (Quelle nicht erreichbar).",)
 
     return SourceLinkInfo(
         key=link.key,
@@ -161,6 +287,7 @@ def fetch_link_info(link: SourceLink, fetched_at: datetime) -> SourceLinkInfo:
         url=link.url,
         page_title=title,
         page_description=description,
+        extracted_facts=facts,
         fetched_at_utc=fetched_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
     )
 
@@ -179,6 +306,10 @@ def render_source_info_cards(source_infos: Iterable[SourceLinkInfo]) -> str:
                     f"          <strong>{source.label}</strong>",
                     f"          <span class=\"source-title\">{source.page_title}</span>",
                     f"          <span class=\"source-description\">{source.page_description}</span>",
+                    *[
+                        f"          <span class=\"source-fact\">• {fact}</span>"
+                        for fact in source.extracted_facts
+                    ],
                     (
                         f"          <a href=\"{source.url}\" target=\"_blank\" rel=\"noopener\">"
                         "Quelle öffnen</a>"
@@ -315,6 +446,14 @@ def render_html(
       color: #2e2e2e;
       font-size: 0.95rem;
       line-height: 1.35;
+    }}
+
+    .source-fact {{
+      display: block;
+      color: #1f1f1f;
+      font-size: 0.92rem;
+      line-height: 1.35;
+      margin-top: 4px;
     }}
 
     .updated {{
