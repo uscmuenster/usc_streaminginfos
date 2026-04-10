@@ -194,6 +194,8 @@ Alle Pfade lassen sich über die jeweiligen CLI-Argumente anpassen.
 
 Der Workflow `.github/workflows/ci.yml` kann manuell gestartet werden (`workflow_dispatch`) und läuft zusätzlich jede Nacht um 03:00 Uhr deutscher Zeit (`cron: "0 1 * * *"` in UTC). Bei jedem Lauf werden die Abhängigkeiten installiert, der aktuelle CSV-Spielplan nach `data/schedule.csv` heruntergeladen, das Modul kompiliert und anschließend der HTML-Bericht erzeugt. Das Ergebnis wird als Artefakt `usc-report` bereitgestellt, in `docs/index.html` geschrieben, bei Änderungen automatisch in den `main`-Branch eingecheckt **und** direkt über GitHub Pages veröffentlicht.
 
+Zusätzlich aktualisiert der Workflow `.github/workflows/vnl.yml` die Seite `docs/germany_vnl.html` täglich (`cron: "30 1 * * *"` in UTC, also 03:30 Uhr deutscher Sommerzeit) sowie bei manuellem Start. Dabei wird `scripts/update_germany_vnl.py` ausgeführt, die Seite neu gebaut und anschließend ebenfalls über den `gh-pages`-Branch ausgeliefert.
+
 Nach dem ersten erfolgreichen Workflow-Lauf ist der Bericht unter `https://<dein-account>.github.io/<repository-name>/` öffentlich abrufbar. Eine separate Aktivierung von GitHub Pages ist nicht mehr nötig; das Deployment erledigt der Workflow.
 
 ## Nächste Schritte
