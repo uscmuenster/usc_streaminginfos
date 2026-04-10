@@ -3,11 +3,20 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import json
+import re
+from dataclasses import asdict, dataclass
 from datetime import date, datetime, timedelta, timezone
+from html import unescape
 from pathlib import Path
+from typing import Iterable
+from urllib.error import URLError
+from urllib.request import Request, urlopen
 
 OUTPUT_PATH = Path("docs/germany_vnl.html")
+LINK_DATA_PATH = Path("docs/data/germany_vnl_links.json")
+REQUEST_TIMEOUT_SECONDS = 12
+USER_AGENT = "usc-streaminginfos-bot/1.0 (+https://github.com/)"
 
 
 @dataclass(frozen=True)
@@ -17,6 +26,23 @@ class VnlMatch:
     competition: str
     match_url: str
     slug: str
+
+
+@dataclass(frozen=True)
+class SourceLink:
+    key: str
+    label: str
+    url: str
+
+
+@dataclass(frozen=True)
+class SourceLinkInfo:
+    key: str
+    label: str
+    url: str
+    page_title: str
+    page_description: str
+    fetched_at_utc: str
 
 
 # Hinweis: Falls neue offizielle Match-Links vorliegen, hier ergänzen.
@@ -34,6 +60,47 @@ MATCHES: tuple[VnlMatch, ...] = (
 )
 
 
+SOURCE_LINKS: tuple[SourceLink, ...] = (
+    SourceLink(
+        key="germany_schedule_1",
+        label="Germany Team Schedule (Start: dynamisch)",
+        url=(
+            "https://en.volleyballworld.com/volleyball/competitions/"
+            "volleyball-nations-league/teams/women/8625/schedule/"
+        ),
+    ),
+    SourceLink(
+        key="head_to_head",
+        label="Head-to-Head",
+        url=(
+            "https://en.volleyballworld.com/volleyball/competitions/"
+            "volleyball-nations-league/schedule/26558/#head-to-head"
+        ),
+    ),
+    SourceLink(
+        key="germany_squad",
+        label="Germany Kader",
+        url=(
+            "https://en.volleyballworld.com/volleyball/competitions/"
+            "volleyball-nations-league/teams/women/8625/players/?"
+        ),
+    ),
+    SourceLink(
+        key="standings",
+        label="VNL Standings (Frauen)",
+        url=(
+            "https://en.volleyballworld.com/volleyball/competitions/"
+            "volleyball-nations-league/standings/women/#advanced"
+        ),
+    ),
+    SourceLink(
+        key="world_ranking",
+        label="Weltrangliste (Frauen)",
+        url="https://en.volleyballworld.com/volleyball/world-ranking/women?",
+    ),
+)
+
+
 def pick_next_match(today: date) -> VnlMatch:
     for match in sorted(MATCHES, key=lambda item: item.match_date):
         if match.match_date >= today:
@@ -41,12 +108,98 @@ def pick_next_match(today: date) -> VnlMatch:
     return sorted(MATCHES, key=lambda item: item.match_date)[-1]
 
 
-def render_html(next_match: VnlMatch, today: date, built_at: datetime) -> str:
-    from_date_1 = next_match.match_date.strftime("%Y-%m-%d")
-    from_date_2 = (next_match.match_date + timedelta(days=7)).strftime("%Y-%m-%d")
+def strip_tags(value: str) -> str:
+    cleaned = re.sub(r"<script[\\s\\S]*?</script>", "", value, flags=re.IGNORECASE)
+    cleaned = re.sub(r"<style[\\s\\S]*?</style>", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"<[^>]+>", " ", cleaned)
+    cleaned = re.sub(r"\\s+", " ", unescape(cleaned)).strip()
+    return cleaned
+
+
+def extract_title(html: str) -> str:
+    match = re.search(r"<title[^>]*>(.*?)</title>", html, flags=re.IGNORECASE | re.DOTALL)
+    if not match:
+        return "Titel nicht verfügbar"
+    return strip_tags(match.group(1)) or "Titel nicht verfügbar"
+
+
+def extract_description(html: str) -> str:
+    meta_match = re.search(
+        r'<meta[^>]+name=["\']description["\'][^>]+content=["\'](.*?)["\']',
+        html,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    if meta_match:
+        text = strip_tags(meta_match.group(1))
+        if text:
+            return text
+
+    first_heading = re.search(r"<h1[^>]*>(.*?)</h1>", html, flags=re.IGNORECASE | re.DOTALL)
+    if first_heading:
+        heading = strip_tags(first_heading.group(1))
+        if heading:
+            return heading
+
+    return "Beschreibung nicht verfügbar"
+
+
+def fetch_link_info(link: SourceLink, fetched_at: datetime) -> SourceLinkInfo:
+    request = Request(link.url, headers={"User-Agent": USER_AGENT})
+    try:
+        with urlopen(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
+            charset = response.headers.get_content_charset() or "utf-8"
+            html = response.read().decode(charset, errors="replace")
+            title = extract_title(html)
+            description = extract_description(html)
+    except URLError:
+        title = "Abruf fehlgeschlagen"
+        description = "Die Quelle konnte beim Build nicht geladen werden."
+
+    return SourceLinkInfo(
+        key=link.key,
+        label=link.label,
+        url=link.url,
+        page_title=title,
+        page_description=description,
+        fetched_at_utc=fetched_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+    )
+
+
+def collect_source_infos(source_links: Iterable[SourceLink], fetched_at: datetime) -> list[SourceLinkInfo]:
+    return [fetch_link_info(link, fetched_at) for link in source_links]
+
+
+def render_source_info_cards(source_infos: Iterable[SourceLinkInfo]) -> str:
+    cards: list[str] = []
+    for source in source_infos:
+        cards.append(
+            "\n".join(
+                [
+                    '        <article class="tile source-tile">',
+                    f"          <strong>{source.label}</strong>",
+                    f"          <span class=\"source-title\">{source.page_title}</span>",
+                    f"          <span class=\"source-description\">{source.page_description}</span>",
+                    (
+                        f"          <a href=\"{source.url}\" target=\"_blank\" rel=\"noopener\">"
+                        "Quelle öffnen</a>"
+                    ),
+                    "        </article>",
+                ]
+            )
+        )
+    return "\n".join(cards)
+
+
+def render_html(
+    next_match: VnlMatch,
+    source_infos: list[SourceLinkInfo],
+    today: date,
+    built_at: datetime,
+) -> str:
     pretty_match_date = next_match.match_date.strftime("%d.%m.%Y")
     updated_iso = built_at.strftime("%Y-%m-%dT%H:%M:%SZ")
     updated_pretty = today.strftime("%d.%m.%Y")
+    source_cards = render_source_info_cards(source_infos)
 
     return f"""<!DOCTYPE html>
 <html lang="de">
@@ -140,9 +293,29 @@ def render_html(next_match: VnlMatch, today: date, built_at: datetime) -> str:
 
     .links h3 {{ margin-top: 0; }}
 
-    .links ul {{ margin: 0; padding-left: 18px; }}
+    .source-grid {{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }}
 
-    .links li {{ margin: 8px 0; }}
+    .source-tile a {{
+      display: inline-block;
+      margin-top: 8px;
+    }}
+
+    .source-title {{
+      display: block;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }}
+
+    .source-description {{
+      display: block;
+      color: #2e2e2e;
+      font-size: 0.95rem;
+      line-height: 1.35;
+    }}
 
     .updated {{
       margin-top: 18px;
@@ -157,7 +330,7 @@ def render_html(next_match: VnlMatch, today: date, built_at: datetime) -> str:
   <main>
     <div class="flag-strip" aria-hidden="true"></div>
     <h1>Volleyball Nations League – Germany (Frauen)</h1>
-    <p class="subtitle">Nächster Gegner der deutschen Nationalmannschaft in einer schwarz-rot-goldenen Ansicht.</p>
+    <p class="subtitle">Nächster Gegner der deutschen Nationalmannschaft.</p>
 
     <section class="next-opponent" aria-labelledby="next-opponent-title">
       <h2 id="next-opponent-title">Nächster Gegner</h2>
@@ -182,15 +355,10 @@ def render_html(next_match: VnlMatch, today: date, built_at: datetime) -> str:
     </section>
 
     <section class="links" aria-labelledby="source-links-title">
-      <h3 id="source-links-title">Nützliche VNL-Links</h3>
-      <ul>
-        <li><a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/teams/women/8625/schedule/#fromDate={from_date_1}" target="_blank" rel="noopener">Germany Team Schedule (Start: {from_date_1})</a></li>
-        <li><a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/teams/women/8625/schedule/#fromDate={from_date_2}" target="_blank" rel="noopener">Germany Team Schedule (Start: {from_date_2})</a></li>
-        <li><a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/schedule/26558/#head-to-head" target="_blank" rel="noopener">Head-to-Head</a></li>
-        <li><a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/teams/women/8625/players/?" target="_blank" rel="noopener">Germany Kader</a></li>
-        <li><a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/standings/women/#advanced" target="_blank" rel="noopener">VNL Standings (Frauen)</a></li>
-        <li><a href="https://en.volleyballworld.com/volleyball/world-ranking/women?" target="_blank" rel="noopener">Weltrangliste (Frauen)</a></li>
-      </ul>
+      <h3 id="source-links-title">Ausgelesene VNL-Quellen</h3>
+      <div class="source-grid">
+{source_cards}
+      </div>
     </section>
 
     <p class="updated">Zuletzt aktualisiert: {updated_pretty} (UTC-Build: {updated_iso})</p>
@@ -200,12 +368,26 @@ def render_html(next_match: VnlMatch, today: date, built_at: datetime) -> str:
 """
 
 
+def write_link_data(source_infos: list[SourceLinkInfo]) -> None:
+    LINK_DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
+    serializable = [asdict(source) for source in source_infos]
+    LINK_DATA_PATH.write_text(
+        json.dumps(serializable, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
 def main() -> None:
     built_at = datetime.now(timezone.utc)
     today = built_at.date()
     next_match = pick_next_match(today)
-    OUTPUT_PATH.write_text(render_html(next_match, today, built_at), encoding="utf-8")
-    print(f"Updated {OUTPUT_PATH} for {today.isoformat()} -> {next_match.opponent}")
+    source_infos = collect_source_infos(SOURCE_LINKS, built_at)
+    write_link_data(source_infos)
+    OUTPUT_PATH.write_text(
+        render_html(next_match, source_infos, today, built_at),
+        encoding="utf-8",
+    )
+    print(f"Updated {OUTPUT_PATH} and {LINK_DATA_PATH} for {today.isoformat()}")
 
 
 if __name__ == "__main__":

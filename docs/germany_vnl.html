@@ -90,9 +90,29 @@
 
     .links h3 { margin-top: 0; }
 
-    .links ul { margin: 0; padding-left: 18px; }
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
 
-    .links li { margin: 8px 0; }
+    .source-tile a {
+      display: inline-block;
+      margin-top: 8px;
+    }
+
+    .source-title {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .source-description {
+      display: block;
+      color: #2e2e2e;
+      font-size: 0.95rem;
+      line-height: 1.35;
+    }
 
     .updated {
       margin-top: 18px;
@@ -107,7 +127,7 @@
   <main>
     <div class="flag-strip" aria-hidden="true"></div>
     <h1>Volleyball Nations League – Germany (Frauen)</h1>
-    <p class="subtitle">Nächster Gegner der deutschen Nationalmannschaft in einer schwarz-rot-goldenen Ansicht.</p>
+    <p class="subtitle">Nächster Gegner der deutschen Nationalmannschaft.</p>
 
     <section class="next-opponent" aria-labelledby="next-opponent-title">
       <h2 id="next-opponent-title">Nächster Gegner</h2>
@@ -132,18 +152,42 @@
     </section>
 
     <section class="links" aria-labelledby="source-links-title">
-      <h3 id="source-links-title">Nützliche VNL-Links</h3>
-      <ul>
-        <li><a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/teams/women/8625/schedule/#fromDate=2026-06-04" target="_blank" rel="noopener">Germany Team Schedule (Start: 2026-06-04)</a></li>
-        <li><a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/teams/women/8625/schedule/#fromDate=2026-06-11" target="_blank" rel="noopener">Germany Team Schedule (Start: 2026-06-11)</a></li>
-        <li><a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/schedule/26558/#head-to-head" target="_blank" rel="noopener">Head-to-Head</a></li>
-        <li><a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/teams/women/8625/players/?" target="_blank" rel="noopener">Germany Kader</a></li>
-        <li><a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/standings/women/#advanced" target="_blank" rel="noopener">VNL Standings (Frauen)</a></li>
-        <li><a href="https://en.volleyballworld.com/volleyball/world-ranking/women?" target="_blank" rel="noopener">Weltrangliste (Frauen)</a></li>
-      </ul>
+      <h3 id="source-links-title">Ausgelesene VNL-Quellen</h3>
+      <div class="source-grid">
+        <article class="tile source-tile">
+          <strong>Germany Team Schedule (Start: dynamisch)</strong>
+          <span class="source-title">VNL Germany 2026 Schedule - Women's National Volleyball Team</span>
+          <span class="source-description">VNL ${teamName} 2026 Schedule - Women's National Volleyball Team</span>
+          <a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/teams/women/8625/schedule/" target="_blank" rel="noopener">Quelle öffnen</a>
+        </article>
+        <article class="tile source-tile">
+          <strong>Head-to-Head</strong>
+          <span class="source-title">Canada-Germany Women VNL 2026 04.06.2026</span>
+          <span class="source-description">Canada-Germany Women VNL 2026 04.06.2026</span>
+          <a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/schedule/26558/#head-to-head" target="_blank" rel="noopener">Quelle öffnen</a>
+        </article>
+        <article class="tile source-tile">
+          <strong>Germany Kader</strong>
+          <span class="source-title">Team Germany Volleyball Players - Women's VNL 2026</span>
+          <span class="source-description">Team ${teamName} Volleyball Players - Women's VNL 2026</span>
+          <a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/teams/women/8625/players/?" target="_blank" rel="noopener">Quelle öffnen</a>
+        </article>
+        <article class="tile source-tile">
+          <strong>VNL Standings (Frauen)</strong>
+          <span class="source-title">VNL Standings 2026 | Women’s Volleyball Nations League Table</span>
+          <span class="source-description">VNL Standings 2026 | Women’s Volleyball Nations League Table</span>
+          <a href="https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/standings/women/#advanced" target="_blank" rel="noopener">Quelle öffnen</a>
+        </article>
+        <article class="tile source-tile">
+          <strong>Weltrangliste (Frauen)</strong>
+          <span class="source-title">FIVB Women's Volleyball Ranking | Volleyball World</span>
+          <span class="source-description">FIVB Women's Volleyball Ranking | Volleyball World</span>
+          <a href="https://en.volleyballworld.com/volleyball/world-ranking/women?" target="_blank" rel="noopener">Quelle öffnen</a>
+        </article>
+      </div>
     </section>
 
-    <p class="updated">Zuletzt aktualisiert: 10.04.2026 (UTC-Build: 2026-04-10T15:08:56Z)</p>
+    <p class="updated">Zuletzt aktualisiert: 10.04.2026 (UTC-Build: 2026-04-10T15:14:33Z)</p>
   </main>
 </body>
 </html>

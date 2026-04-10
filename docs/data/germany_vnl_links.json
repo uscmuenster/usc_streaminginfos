@@ -1,0 +1,42 @@
+[
+  {
+    "key": "germany_schedule_1",
+    "label": "Germany Team Schedule (Start: dynamisch)",
+    "url": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/teams/women/8625/schedule/",
+    "page_title": "VNL Germany 2026 Schedule - Women's National Volleyball Team",
+    "page_description": "VNL ${teamName} 2026 Schedule - Women's National Volleyball Team",
+    "fetched_at_utc": "2026-04-10T15:14:33Z"
+  },
+  {
+    "key": "head_to_head",
+    "label": "Head-to-Head",
+    "url": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/schedule/26558/#head-to-head",
+    "page_title": "Canada-Germany Women VNL 2026 04.06.2026",
+    "page_description": "Canada-Germany Women VNL 2026 04.06.2026",
+    "fetched_at_utc": "2026-04-10T15:14:33Z"
+  },
+  {
+    "key": "germany_squad",
+    "label": "Germany Kader",
+    "url": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/teams/women/8625/players/?",
+    "page_title": "Team Germany Volleyball Players - Women's VNL 2026",
+    "page_description": "Team ${teamName} Volleyball Players - Women's VNL 2026",
+    "fetched_at_utc": "2026-04-10T15:14:33Z"
+  },
+  {
+    "key": "standings",
+    "label": "VNL Standings (Frauen)",
+    "url": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/standings/women/#advanced",
+    "page_title": "VNL Standings 2026 | Women’s Volleyball Nations League Table",
+    "page_description": "VNL Standings 2026 | Women’s Volleyball Nations League Table",
+    "fetched_at_utc": "2026-04-10T15:14:33Z"
+  },
+  {
+    "key": "world_ranking",
+    "label": "Weltrangliste (Frauen)",
+    "url": "https://en.volleyballworld.com/volleyball/world-ranking/women?",
+    "page_title": "FIVB Women's Volleyball Ranking | Volleyball World",
+    "page_description": "FIVB Women's Volleyball Ranking | Volleyball World",
+    "fetched_at_utc": "2026-04-10T15:14:33Z"
+  }
+]
