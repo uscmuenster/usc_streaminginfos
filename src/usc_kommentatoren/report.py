@@ -4770,19 +4770,37 @@ def build_html_report(
     opponent_photo_block = ""
     if opponent_photo:
         opponent_photo_block = (
-            "          <figure class=\"team-photo\">"
+            "          <div class=\"team-photo-toggle\">"
+            "<input class=\"team-photo-toggle__input\" type=\"checkbox\" "
+            "id=\"opponent-team-photo-toggle\" />"
+            "<label class=\"team-photo-toggle__label\" for=\"opponent-team-photo-toggle\">"
+            "Mannschaftsfoto anzeigen"
+            "</label>"
+            "<div class=\"team-photo-toggle__content\">"
+            "<figure class=\"team-photo\">"
             f"<img src=\"{escape(opponent_photo)}\" alt=\"Teamfoto {escape(heading)}\" />"
             f"<figcaption>Teamfoto {escape(heading)}</figcaption>"
-            "</figure>\n"
+            "</figure>"
+            "</div>"
+            "</div>\n"
         )
 
     usc_photo_block = ""
     if usc_photo:
         usc_photo_block = (
-            "          <figure class=\"team-photo\">"
+            "          <div class=\"team-photo-toggle\">"
+            "<input class=\"team-photo-toggle__input\" type=\"checkbox\" "
+            "id=\"usc-team-photo-toggle\" />"
+            "<label class=\"team-photo-toggle__label\" for=\"usc-team-photo-toggle\">"
+            "Mannschaftsfoto anzeigen"
+            "</label>"
+            "<div class=\"team-photo-toggle__content\">"
+            "<figure class=\"team-photo\">"
             f"<img src=\"{escape(usc_photo)}\" alt=\"Teamfoto {escape(home_team)}\" />"
             f"<figcaption>Teamfoto {escape(home_team)}</figcaption>"
-            "</figure>\n"
+            "</figure>"
+            "</div>"
+            "</div>\n"
         )
     countdown_summary_html = "\n".join(
         [
@@ -6239,8 +6257,42 @@ def build_html_report(
       color: inherit;
       word-break: break-word;
     }}
-    .team-photo {{
+    .team-photo-toggle {{
       margin: 0 0 1.1rem 0;
+    }}
+    .team-photo-toggle__input {{
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }}
+    .team-photo-toggle__label {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.86rem);
+      color: #0f172a;
+      background: rgba(186, 230, 253, 0.55);
+      border: 1px solid rgba(14, 116, 144, 0.25);
+      border-radius: 999px;
+      padding: 0.32rem 0.78rem;
+    }}
+    .team-photo-toggle__input:focus-visible + .team-photo-toggle__label {{
+      outline: 2px solid rgba(14, 116, 144, 0.45);
+      outline-offset: 2px;
+    }}
+    .team-photo-toggle__content {{
+      display: none;
+      margin-top: 0.6rem;
+    }}
+    .team-photo-toggle__input:checked + .team-photo-toggle__label + .team-photo-toggle__content {{
+      display: block;
+    }}
+    .team-photo {{
+      margin: 0;
     }}
     .team-photo img {{
       width: 100%;
@@ -6506,7 +6558,7 @@ def build_html_report(
         font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
         padding: 0.3rem 0.5rem;
       }}
-      .team-photo {{
+      .team-photo-toggle {{
         margin-bottom: 0.9rem;
       }}
     }}
@@ -6788,6 +6840,14 @@ def build_html_report(
       }}
       .team-photo figcaption {{
         color: #94a3b8;
+      }}
+      .team-photo-toggle__label {{
+        color: #e2e8f0;
+        background: rgba(21, 94, 117, 0.5);
+        border-color: rgba(103, 232, 249, 0.3);
+      }}
+      .team-photo-toggle__input:focus-visible + .team-photo-toggle__label {{
+        outline-color: rgba(103, 232, 249, 0.5);
       }}
       a {{
         color: #5eead4;
