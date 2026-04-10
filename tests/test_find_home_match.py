@@ -21,6 +21,7 @@ from usc_kommentatoren.report import (
 )
 from usc_kommentatoren.lineups import (
     ScheduleRow,
+    find_last_known_home_opponent,
     find_next_home_match_row,
     find_next_usc_home_match_row,
     find_recent_matches_for_home_team,
@@ -175,3 +176,24 @@ class TestFindRecentMatchesForHomeTeam:
         ]
         result = find_recent_matches_for_home_team(rows, "Dresdner SC", limit=2)
         assert result == []
+
+
+class TestFindLastKnownHomeOpponent:
+    def test_returns_last_finished_home_opponent(self) -> None:
+        reference = _dt(2025, 2, 1)
+        rows = [
+            _row("USC Münster", "DSC", _dt(2025, 1, 5), finished=True),
+            _row("VC Wiesbaden", "USC Münster", _dt(2025, 1, 10), finished=True),
+            _row("USC Münster", "SSC", _dt(2025, 1, 20), finished=True),
+        ]
+        result = find_last_known_home_opponent(rows, "USC Münster", reference=reference)
+        assert result == "SSC"
+
+    def test_returns_none_without_finished_home_match(self) -> None:
+        reference = _dt(2025, 2, 1)
+        rows = [
+            _row("VC Wiesbaden", "USC Münster", _dt(2025, 1, 10), finished=True),
+            _row("USC Münster", "DSC", _dt(2025, 2, 5), finished=False),
+        ]
+        result = find_last_known_home_opponent(rows, "USC Münster", reference=reference)
+        assert result is None

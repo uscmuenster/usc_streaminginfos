@@ -345,6 +345,27 @@ def find_recent_matches_for_team(
     return relevant[:limit]
 
 
+def find_last_known_home_opponent(
+    rows: Sequence[ScheduleRow],
+    home_team: str,
+    *,
+    reference: Optional[datetime] = None,
+) -> Optional[str]:
+    """Liefert den zuletzt bekannten Gegner aus einem Heimspiel von *home_team*."""
+    now = reference or datetime.now(tz=BERLIN_TZ)
+    target = _simplify(home_team)
+    relevant = [
+        row
+        for row in rows
+        if row.is_finished
+        and row.kickoff < now
+        and target in _simplify(row.home_team)
+        and row.away_team.strip()
+    ]
+    relevant.sort(key=lambda row: row.kickoff, reverse=True)
+    return relevant[0].away_team if relevant else None
+
+
 def fetch_schedule_pdf_links(page_url: str = SCHEDULE_PAGE_URL) -> Dict[str, str]:
     response = requests.get(page_url, headers=REQUEST_HEADERS, timeout=30)
     response.raise_for_status()
@@ -920,9 +941,23 @@ def build_lineup_dataset(
             additional_schedule_ics_urls=additional_schedule_ics_urls,
         )
     if not next_home_match:
-        raise RuntimeError(f"Kein zukünftiges Heimspiel von {home_team} gefunden.")
-
-    opponent_name = next_home_match.away_team
+        opponent_name = find_last_known_home_opponent(schedule_rows, home_team)
+        if not opponent_name:
+            raise RuntimeError(
+                (
+                    f"Kein zukünftiges Heimspiel von {home_team} gefunden und "
+                    "kein letzter bekannter Heimgegner verfügbar."
+                )
+            )
+        print(
+            (
+                f"Warnung: Kein zukünftiges Heimspiel von {home_team} gefunden. "
+                f"Verwende letzten bekannten Gegner: {opponent_name}."
+            ),
+            file=sys.stderr,
+        )
+    else:
+        opponent_name = next_home_match.away_team
 
     opponent_rows = find_recent_matches_for_team(
         schedule_rows,
