@@ -43,6 +43,18 @@ from .report import (
 DEFAULT_OUTPUT_PATH = Path("docs/index.html")
 
 
+def _find_fallback_opponent(matches: List["Match"], home_team: str) -> Optional[str]:
+    normalized_home = normalize_name(home_team)
+
+    for match in sorted(matches, key=lambda item: item.kickoff, reverse=True):
+        if normalize_name(match.home_team) == normalized_home and match.away_team:
+            return match.away_team
+        if normalize_name(match.away_team) == normalized_home and match.home_team:
+            return match.home_team
+
+    return None
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate volleyball schedule report")
     parser.add_argument(
@@ -225,7 +237,23 @@ def main() -> int:
         )
 
     if not next_home:
-        raise SystemExit(f"Kein zukünftiges Heimspiel von {home_team} gefunden.")
+        opponent_name = _find_fallback_opponent(matches, home_team)
+        if not opponent_name:
+            raise SystemExit(f"Kein zukünftiges Heimspiel von {home_team} gefunden.")
+        print(
+            f"Warnung: Kein zukünftiges Heimspiel von {home_team} gefunden. "
+            f"Verwende letzten bekannten Gegner: {opponent_name}.",
+            file=sys.stderr,
+        )
+        next_home = Match(
+            kickoff=datetime.now(tz=BERLIN_TZ),
+            home_team=home_team,
+            away_team=opponent_name,
+            host=home_team,
+            location="",
+            result=None,
+            competition="VBL",
+        )
 
     reference_time = next_home.kickoff + timedelta(seconds=1)
     usc_next = find_next_match_for_team(

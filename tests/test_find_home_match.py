@@ -19,6 +19,7 @@ from usc_kommentatoren.report import (
     find_next_usc_home_match,
     normalize_name,
 )
+from usc_kommentatoren.__main__ import _find_fallback_opponent
 from usc_kommentatoren.lineups import (
     ScheduleRow,
     find_last_known_home_opponent,
@@ -197,3 +198,26 @@ class TestFindLastKnownHomeOpponent:
         ]
         result = find_last_known_home_opponent(rows, "USC Münster", reference=reference)
         assert result is None
+
+
+class TestFindFallbackOpponent:
+    def test_prefers_last_known_home_opponent(self) -> None:
+        matches = [
+            _match("USC Münster", "DSC", _dt(2025, 1, 10), result=True),
+            _match("Schwerin", "USC Münster", _dt(2025, 1, 20), result=True),
+            _match("USC Münster", "Potsdam", _dt(2025, 2, 1), result=True),
+        ]
+
+        result = _find_fallback_opponent(matches, "USC Münster")
+
+        assert result == "Potsdam"
+
+    def test_falls_back_to_last_known_match_if_no_home_match_exists(self) -> None:
+        matches = [
+            _match("Schwerin", "USC Münster", _dt(2025, 1, 20), result=True),
+            _match("Dresdner SC", "USC Münster", _dt(2025, 2, 1), result=True),
+        ]
+
+        result = _find_fallback_opponent(matches, "USC Münster")
+
+        assert result == "Dresdner SC"
