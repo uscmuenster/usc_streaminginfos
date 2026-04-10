@@ -1,6 +1,6 @@
 {
-  "name": "USC Streaminginfos",
-  "short_name": "USC Infos",
+  "name": "USC Münster Streaminginfos",
+  "short_name": "USC Münster",
   "description": "Aktuelle Informationen und Statistiken zu USC Münster.",
   "lang": "de",
   "start_url": "./index_app.html",
