@@ -4268,7 +4268,7 @@ def format_mvp_rankings_section(
     opponent_label = get_team_short_label(opponent_name)
     return (
         "\n"
-        "    <section class=\"mvp-group\">\n"
+        "    <section class=\"mvp-group block\" id=\"mvp\">\n"
         "      <details class=\"mvp-overview\">\n"
         "        <summary>MVP-Rankings</summary>\n"
         "        <div class=\"mvp-overview-content\">\n"
@@ -4380,6 +4380,162 @@ def format_roster_list(
         )
     return "\n          ".join(rendered)
 
+
+
+def _compact_role(role: str) -> str:
+    value = (role or "").strip()
+    mapping = {
+        "Libero": "L",
+        "Zuspiel": "Z",
+        "Außenangriff": "AA",
+        "Aussenangriff": "AA",
+        "Diagonal": "D",
+        "Mittelblock": "MB",
+        "Trainer": "T",
+        "Co-Trainer": "Co",
+        "Co-Trainer (Scout)": "Scout",
+        "Statistiker": "Stat",
+        "Physiotherapeut": "Physio",
+        "Arzt": "Arzt",
+    }
+    return mapping.get(value, value or "–")
+
+
+def _compact_transfer_category_class(category: str) -> str:
+    normalized = normalize_name(category)
+    if "trainer" in normalized:
+        return "trainer"
+    if "zugang" in normalized or "zugaenge" in normalized:
+        return "zugaenge"
+    if "abgang" in normalized or "abgaenge" in normalized:
+        return "abgaenge"
+    return "bleibt"
+
+
+def _compact_height_value(member: RosterMember) -> str:
+    if not member.height:
+        return ""
+    return member.height.strip().replace(" cm", "").replace("cm", "")
+
+
+def _compact_birth_age(member: RosterMember, match_day: Optional[date]) -> tuple[str, str]:
+    birth_display = member.formatted_birthdate or ""
+    age_display = ""
+    if member.birthdate_value and match_day:
+        age = calculate_age(member.birthdate_value, match_day)
+        if age is not None:
+            age_display = str(age)
+    return birth_display, age_display
+
+
+def format_compact_roster_card(
+    *,
+    team_code: str,
+    team_name: str,
+    members: Sequence[RosterMember],
+    variant: str,
+    match_day: Optional[date],
+    photo_block: str = "",
+    name_pronunciations: Optional[Mapping[str, str]] = None,
+) -> str:
+    players = sorted(
+        [member for member in members if not member.is_official],
+        key=lambda member: (member.number_value is None, member.number_value or 9999, member.name),
+    )
+    staff = [member for member in members if member.is_official]
+
+    player_rows: List[str] = []
+    for member in players:
+        number = member.number_value if member.number_value is not None else member.number_label or ""
+        number_display = f"# {number}" if number != "" else "#"
+        role = _compact_role(member.role)
+        height = _compact_height_value(member)
+        birth, age = _compact_birth_age(member, match_day)
+        pronunciation = ""
+        if name_pronunciations:
+            pronunciation = (name_pronunciations.get(normalize_name(member.name)) or "").strip()
+        title_parts = []
+        if pronunciation:
+            title_parts.append(f"({pronunciation})")
+        detail_parts = [part for part in [f"{height} cm" if height else "", birth + (f" ({age})" if age else ""), member.nationality or "", member.role or ""] if part]
+        title = " · ".join([title_parts[0], " | ".join(detail_parts)]) if title_parts else " | ".join(detail_parts)
+        player_rows.append(
+            '<li class="compact-player-row" title="{title}">'
+            '<span class="compact-no">{number}</span>'
+            '<span class="compact-pos">{role}</span>'
+            '<span class="compact-name">{name}</span>'
+            '<span class="compact-height">{height}</span>'
+            '<span class="compact-age">{age}</span>'
+            '</li>'.format(
+                title=escape(title),
+                number=escape(str(number_display)),
+                role=escape(role),
+                name=escape(member.name.strip()),
+                height=escape(height),
+                age=escape(age),
+            )
+        )
+    if not player_rows:
+        player_rows.append('<li class="compact-player-row"><span class="compact-name">Keine Kaderdaten gefunden.</span></li>')
+
+    staff_rows: List[str] = []
+    for member in staff:
+        role = _compact_role(member.role)
+        birth, age = _compact_birth_age(member, match_day)
+        detail = " | ".join(part for part in [birth + (f" ({age})" if age else ""), member.nationality or "", member.role or ""] if part)
+        staff_rows.append(
+            '<li class="compact-staff-row"><span class="compact-staff-role">{role}</span>'
+            '<span class="compact-staff-name">{name}</span>'
+            '<span class="compact-staff-detail">{detail}</span></li>'.format(
+                role=escape(role),
+                name=escape(member.name.strip()),
+                detail=escape(detail),
+            )
+        )
+    staff_html = "".join(staff_rows) or '<li class="compact-staff-row"><span class="compact-staff-detail">Keine Staff-Daten gefunden.</span></li>'
+    return (
+        f'<article class="compact-card roster-compact-card compact-card--{escape(variant)}" aria-label="{escape(team_name)} Spielerinnen nach Trikotnummern">'
+        f'<h3>{escape(team_code)} <span>{escape(team_name)}</span></h3>'
+        f'{photo_block}'
+        '<div class="compact-list-head" aria-hidden="true"><span>#</span><span>Pos.</span><span>Name</span><span>cm</span><span>Alter</span></div>'
+        f'<ul class="compact-player-list">{"".join(player_rows)}</ul>'
+        '<details class="compact-subdetails"><summary>Staff anzeigen</summary>'
+        f'<ul class="compact-staff-list">{staff_html}</ul></details></article>'
+    )
+
+
+def format_compact_transfer_card(*, team_code: str, team_name: str, items: Sequence[TransferItem], variant: str) -> str:
+    rows: List[str] = []
+    current_category: Optional[str] = None
+    for item in items:
+        category = item.category or "Sonstiges"
+        category_class = _compact_transfer_category_class(category)
+        if category != current_category:
+            rows.append(f'<li class="compact-transfer-category compact-transfer-category--{category_class}">{escape(category)}</li>')
+            current_category = category
+        pos = _compact_role(item.type_code)
+        status = item.info.strip()
+        club = item.related_club.strip()
+        if category_class == "abgaenge" and status and not club and not status.lower().startswith("vertrag"):
+            club = status
+            status = ""
+        title = " | ".join(part for part in [item.name, pos, item.nationality, status, club] if part)
+        rows.append(
+            f'<li class="compact-transfer-row compact-transfer-row--{category_class}" title="{escape(title)}">'
+            f'<span class="compact-transfer-name">{escape(item.name.strip())}</span>'
+            f'<span class="compact-transfer-pos">{escape(pos)}</span>'
+            f'<span class="compact-transfer-nat">{escape(item.nationality.strip())}</span>'
+            f'<span class="compact-transfer-contract">{escape(status)}</span>'
+            f'<span class="compact-transfer-club">{escape(club)}</span></li>'
+        )
+    if not rows:
+        rows.append('<li class="compact-transfer-row"><span class="compact-transfer-name">Keine Wechsel gemeldet.</span></li>')
+    return (
+        f'<article class="compact-card transfer-compact-card compact-card--{escape(variant)}" aria-label="{escape(team_name)} Wechselbörse kompakt">'
+        f'<h3>{escape(team_code)} <span>{escape(team_name)}</span></h3>'
+        '<div class="compact-transfer-head" aria-hidden="true"><span>Name</span><span>Pos.</span><span>Nat.</span><span>Status</span><span>Von / Ziel</span></div>'
+        f'<ul class="compact-transfer-list">{"".join(rows)}</ul></article>'
+    )
 
 def collect_birthday_notes(
     match_date: date,
@@ -4607,7 +4763,7 @@ def _format_season_results_section(
     header_lines.append("      </div>")
 
     section_lines = [
-        "    <section class=\"season-results\">",
+        "    <section class=\"season-results block\" id=\"saison\">",
         *header_lines,
         "      <div class=\"season-results-grid\">",
         *cards_markup,
@@ -4618,6 +4774,23 @@ def _format_season_results_section(
 
     return "\n".join(section_lines)
 
+
+
+DVV_LAYOUT_CSS = r"""
+    :root {
+      --ink:#0f172a; --paper:#f7fffb; --white:#fff; --usc-deep:#004c54; --usc:#0f766e; --usc-bright:#10b981; --mint:#dcfce7; --sky:#e0f2fe; --blue:#1d4ed8; --muted:#64748b; --line:rgba(0,76,84,.14); --soft-shadow:0 14px 35px rgba(0,76,84,.10); --shadow:0 22px 54px rgba(0,76,84,.18); --radius:24px;
+    }
+    body { background:radial-gradient(circle at 10% 0%, rgba(16,185,129,.18), transparent 28%),radial-gradient(circle at 90% 10%, rgba(14,165,233,.16), transparent 30%),linear-gradient(135deg,#f8fffc 0%,#ffffff 48%,#eefcf6 100%); color:var(--ink); }
+    main,.wrap { width:min(1240px, calc(100% - 32px)); max-width:none; margin:0 auto; padding:0; }
+    .jumpbar { position:sticky; top:0; z-index:1000; background:rgba(0,76,84,.95); border-bottom:1px solid rgba(255,255,255,.16); box-shadow:0 8px 24px rgba(0,76,84,.22); backdrop-filter:blur(16px); }
+    .jumpbar-inner { width:min(1240px, calc(100% - 32px)); margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:12px; padding:6px 0; }
+    .jumpbar-links { display:flex; gap:8px; align-items:center; overflow-x:auto; scrollbar-width:none; }
+    .jumpbar-links::-webkit-scrollbar{display:none}.jumpbar-title{flex:0 0 auto;color:#a7f3d0;font-size:12px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}.jumpbar a{flex:0 0 auto;color:#fff;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:950;line-height:1;white-space:nowrap}.jumpbar a:hover,.jumpbar a:focus-visible{background:rgba(16,185,129,.24);border-color:rgba(167,243,208,.65);outline:none;text-decoration:none}.jumpbar-countdown{min-width:112px;display:flex;justify-content:flex-end;align-items:center;padding:7px 10px;border-radius:15px;color:#fff;background:rgba(255,255,255,.10);border:1px solid rgba(167,243,208,.42);font-variant-numeric:tabular-nums;white-space:nowrap}.countdown-time{font-size:18px;font-weight:1000;letter-spacing:.02em}.jumpbar-countdown.is-urgent{background:linear-gradient(135deg,rgba(185,28,28,.42),rgba(16,185,129,.18));border-color:rgba(250,204,21,.70)}.jumpbar-countdown.is-done{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.06)}
+    #top,.block[id],.notice[id],#live-regie[id]{scroll-margin-top:70px}header#top{position:relative;overflow:hidden;color:#fff;background:linear-gradient(135deg,#002f35 0%,#004c54 52%,#0f766e 52%,#0f766e 74%,#10b981 74%);box-shadow:var(--shadow);padding:54px 0 42px;margin:0 0 20px}header#top h1{margin:0;color:#fff;font-size:clamp(42px,7vw,82px);line-height:.92;letter-spacing:-.08em;font-weight:1000}header#top h1 span{display:block;color:#d1fae5}.eyebrow{font-weight:1000;text-transform:uppercase;letter-spacing:.12em;color:#a7f3d0}.subtitle{max-width:850px;font-size:clamp(16px,2vw,21px);line-height:1.45;color:#ecfdf5}.meta-row{display:flex;flex-wrap:wrap;gap:10px}.pill{display:inline-flex;align-items:center;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.14);color:#fff;border-radius:999px;padding:9px 12px;font-weight:900}.notice{border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;background:linear-gradient(135deg,#fff,#ecfdf5);box-shadow:var(--soft-shadow);margin-bottom:14px}.quickstats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:22px}.stat{border:1px solid var(--line);border-radius:20px;background:#fff;padding:16px;box-shadow:var(--soft-shadow)}.stat b{display:block;font-size:clamp(21px,2.3vw,29px);letter-spacing:-.045em;line-height:1.05;overflow-wrap:anywhere}.stat span{display:block;color:var(--muted);font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;margin-top:7px}
+    .block{position:relative;overflow:visible;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg,#fff,#f7fffb);box-shadow:var(--soft-shadow);padding:24px;margin:22px 0}.block::before,.broadcast-box::before,.season-results-card::before,.instagram-card::before,.match-list li::before{content:"";position:absolute;inset:0 0 auto 0;height:7px;background:linear-gradient(90deg,var(--usc-deep),var(--usc),var(--usc-bright))}.block h2{margin:0 0 12px;font-size:clamp(24px,3vw,32px);letter-spacing:-.04em;color:var(--ink)}.info{color:var(--muted);font-weight:700}.live-regie-block .hero-layout{margin:0}.broadcast-box{position:relative;overflow:hidden;border-radius:22px;border:1px solid var(--line);box-shadow:var(--soft-shadow)}.broadcast-table-wrapper{overflow-x:auto}.match-list li,.instagram-card,.season-results-card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:20px}.opponent-block::before{background:linear-gradient(90deg,#1e3a8a,#1d4ed8,#93c5fd)}
+    .compact-block .section-lead{margin:0 0 18px;color:#1f2937;font-size:clamp(15px,1.8vw,18px);line-height:1.55}.compact-details{border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#fff,#f7fffb);box-shadow:0 12px 30px rgba(0,76,84,.08);overflow:hidden}.compact-details>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 18px;color:var(--usc-deep);font-size:18px;font-weight:1000;letter-spacing:-.02em;background:linear-gradient(135deg,rgba(15,118,110,.12),rgba(255,255,255,.92));border-bottom:1px solid rgba(0,76,84,.10)}.compact-details>summary::-webkit-details-marker{display:none}.compact-details>summary::after{content:"zuklappen";border-radius:999px;padding:7px 10px;background:var(--usc-deep);color:#fff;font-size:11px;font-weight:1000;letter-spacing:.04em;text-transform:uppercase}.compact-details:not([open])>summary::after{content:"aufklappen"}.compact-two-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:18px;align-items:start}.compact-card{border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#fff,#f7fffb);padding:18px;box-shadow:0 12px 30px rgba(0,76,84,.07);position:relative;overflow:hidden}.compact-card::before{content:"";position:absolute;inset:0 0 auto 0;height:7px;background:linear-gradient(90deg,var(--usc-deep),var(--usc),var(--usc-bright))}.compact-card--opponent{border-color:rgba(29,78,216,.24);background:radial-gradient(circle at 100% 0%,rgba(29,78,216,.12),transparent 34%),linear-gradient(180deg,#fff,#f8fbff)}.compact-card--opponent::before{background:linear-gradient(90deg,#1e3a8a,#1d4ed8,#93c5fd)}.compact-card--usc{border-color:rgba(15,118,110,.28);background:radial-gradient(circle at 100% 0%,rgba(16,185,129,.15),transparent 34%),linear-gradient(180deg,#fff,#f0fdf4)}.compact-card h3{margin:5px 0 7px;font-size:22px;line-height:1.05;letter-spacing:-.04em}.compact-card h3 span{margin-left:8px;color:var(--muted);font-size:13px;font-weight:1000;letter-spacing:.05em;text-transform:uppercase}.compact-list-head,.compact-player-row{display:grid;grid-template-columns:54px 46px minmax(0,1fr) 48px 44px;gap:8px;align-items:center}.compact-list-head,.compact-transfer-head{color:var(--muted);font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.06em;padding:0 8px 7px}.compact-player-list,.compact-transfer-list,.compact-staff-list{list-style:none;margin:0;padding:0;display:grid;gap:3px}.compact-player-row{min-height:21px;border-radius:999px;background:rgba(255,255,255,.74);border:1px solid rgba(0,76,84,.10);padding:1px 7px;font-size:12.5px}.compact-no{font-weight:1000;color:var(--usc)}.compact-pos,.compact-height,.compact-age{font-weight:950}.compact-name{font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.compact-subdetails{margin-top:8px;border:1px solid rgba(0,76,84,.10);border-radius:16px;background:rgba(255,255,255,.62);overflow:hidden}.compact-subdetails>summary{cursor:pointer;list-style:none;padding:7px 10px;font-weight:1000;color:var(--usc-deep);display:flex;justify-content:space-between}.compact-subdetails>summary::-webkit-details-marker{display:none}.compact-staff-list{padding:0 8px 8px;gap:3px}.compact-staff-row{display:grid;grid-template-columns:72px minmax(0,1fr) minmax(150px,.95fr);gap:8px;border-radius:12px;background:#fff;padding:4px 7px;font-size:11.5px}.compact-staff-role,.compact-staff-name{font-weight:1000}.compact-staff-detail{color:var(--muted);font-weight:850;overflow:hidden;text-overflow:ellipsis}.compact-transfer-head,.compact-transfer-row{display:grid;grid-template-columns:minmax(150px,1.15fr) 45px 52px minmax(110px,.8fr) minmax(120px,1fr);gap:8px;align-items:center}.compact-transfer-category{margin-top:8px;border:1px solid rgba(0,76,84,.12);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.08em}.compact-transfer-category--zugaenge{background:rgba(16,185,129,.13);color:#047857;border-color:rgba(16,185,129,.24)}.compact-transfer-category--abgaenge{background:rgba(185,28,28,.09);color:#991b1b;border-color:rgba(185,28,28,.18)}.compact-transfer-category--bleibt{background:rgba(250,204,21,.17);color:#854d0e;border-color:rgba(250,204,21,.36)}.compact-transfer-row{border:1px solid rgba(0,76,84,.10);border-radius:16px;background:rgba(255,255,255,.80);padding:7px 8px;font-size:12.5px}.compact-transfer-row--zugaenge{border-left:5px solid rgba(16,185,129,.55)}.compact-transfer-row--abgaenge{border-left:5px solid rgba(185,28,28,.45)}.compact-transfer-row--bleibt{border-left:5px solid rgba(250,204,21,.75)}.compact-transfer-row--trainer{border-left:5px solid rgba(0,76,84,.45)}.compact-transfer-name{font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.compact-transfer-pos,.compact-transfer-nat{font-weight:1000;color:var(--usc)}.compact-transfer-contract,.compact-transfer-club{color:var(--muted);font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    @media(max-width:1050px){.hero-layout,.compact-two-grid{grid-template-columns:1fr}.quickstats{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(min-width:721px) and (max-width:1050px){.roster-compact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.roster-compact-card{padding:12px}.roster-compact-card h3{font-size:20px}.compact-list-head,.compact-player-row{grid-template-columns:44px 34px minmax(0,1fr) 38px 32px;gap:5px}.compact-list-head{padding:0 6px 4px;font-size:10px}.compact-player-row{min-height:19px;padding:1px 5px;font-size:11.5px}.compact-player-list{gap:2px}.compact-subdetails{margin-top:6px}.compact-subdetails>summary{padding:6px 8px;font-size:12px}.compact-staff-row{grid-template-columns:52px minmax(0,1fr);gap:4px;padding:3px 6px;font-size:10.8px}.compact-staff-detail{grid-column:2/-1}}@media(max-width:720px){main,.wrap,.jumpbar-inner{width:min(100% - 20px,1240px)}.jumpbar-inner{grid-template-columns:1fr}.jumpbar-countdown{justify-content:center;width:100%}.quickstats{grid-template-columns:1fr}.block{padding:18px}.compact-details>summary{align-items:flex-start;flex-direction:column}.compact-list-head,.compact-transfer-head{display:none}.compact-player-row{grid-template-columns:46px 38px minmax(0,1fr) 42px 38px;gap:5px;padding:4px 7px;font-size:12.5px}.compact-transfer-row{grid-template-columns:44px 45px minmax(0,1fr);grid-template-areas:"pos nat name" "status status club";gap:4px 6px}.compact-transfer-name{grid-area:name}.compact-transfer-pos{grid-area:pos;text-align:left}.compact-transfer-nat{grid-area:nat;text-align:left}.compact-transfer-contract{grid-area:status}.compact-transfer-club{grid-area:club}.compact-staff-row{grid-template-columns:62px minmax(0,1fr)}.compact-staff-detail{grid-column:2/-1}}@media(max-width:430px){.compact-two-grid{padding:12px}.compact-card{padding:14px 10px}.compact-player-row{grid-template-columns:42px 34px minmax(0,1fr) 38px 34px}.compact-name{font-size:12px}}@media print{.jumpbar,.stopwatch-controls,.broadcast-controls,.team-photo-toggle__label{display:none!important}body{background:#fff}header,.block,.notice,.broadcast-box,.stat{box-shadow:none}}
+"""
 
 def build_html_report(
     *,
@@ -4802,6 +4975,38 @@ def build_html_report(
             "</div>"
             "</div>\n"
         )
+    opponent_team_code = (next_home.away_team or heading)[:3].upper()
+    usc_team_code = "USC"
+    compact_opponent_roster_card = format_compact_roster_card(
+        team_code=opponent_team_code,
+        team_name=heading,
+        members=opponent_roster,
+        variant="opponent",
+        match_day=match_day,
+        photo_block=opponent_photo_block,
+        name_pronunciations=opponent_name_pronunciations,
+    )
+    compact_usc_roster_card = format_compact_roster_card(
+        team_code=usc_team_code,
+        team_name=home_team,
+        members=usc_roster,
+        variant="usc",
+        match_day=match_day,
+        photo_block=usc_photo_block,
+    )
+    compact_opponent_transfer_card = format_compact_transfer_card(
+        team_code=opponent_team_code,
+        team_name=heading,
+        items=opponent_transfers,
+        variant="opponent",
+    )
+    compact_usc_transfer_card = format_compact_transfer_card(
+        team_code=usc_team_code,
+        team_name=home_team,
+        items=usc_transfers,
+        variant="usc",
+    )
+
     countdown_summary_html = "\n".join(
         [
             (
@@ -6871,68 +7076,26 @@ def build_html_report(
         box-shadow: 0 22px 48px rgba(185, 28, 28, 0.45);
       }}
     }}
+{DVV_LAYOUT_CSS}
   </style>
 </head>
 <body>
+  <nav aria-label="Seitennavigation" class="jumpbar"><div class="jumpbar-inner"><div class="jumpbar-links"><span class="jumpbar-title">USC Matchcenter</span><a href="#top">Start</a><a href="#live-regie">Ablauf</a><a href="#spiele-gegner">Spiele Gegner</a><a href="#spiele-usc">Spiele USC</a><a href="#direktvergleich">Vergleich</a><a href="#kader">Kader</a><a href="#wechsel">Wechsel</a><a href="#news">News</a><a href="#mvp">MVP</a><a href="#saison">Saison</a></div><div aria-label="Countdown bis Spielbeginn" class="jumpbar-countdown" data-jump-countdown data-kickoff="{escape(countdown_iso)}"><span class="countdown-time">00:00:00</span></div></div></nav>
+  <header id="top"><div class="wrap"><div class="eyebrow">USC Münster · Nächster Heimgegner</div><h1>Matchcenter: <span data-next-opponent>{escape(heading)}</span></h1><p class="subtitle">Alle produktionsrelevanten Informationen in einem DVV-inspirierten USC-Layout: Ablauf, Formkurve, Kader, Wechsel, News und Saisonkontext.</p><div aria-label="Spieldaten" class="meta-row"><span class="pill">🏐 {escape(next_home.competition or 'VBL')}</span><span class="pill">🗓️ {escape(kickoff_label)}</span><span class="pill">📍 {escape(location)}</span><span class="pill">📊 Direkter Vergleich</span></div></div></header>
   <main>
-    <h1>Nächster Heimgegner ({home_team_escaped}):<br><span data-next-opponent>{escape(heading)}</span></h1>
+    <section class="notice" aria-label="Kurzbriefing"><strong>Spieltermin:</strong> {escape(kickoff_label)} · <strong>Ort:</strong> {escape(location)} · <strong>Wettbewerb:</strong> {escape(next_home.competition or 'VBL')} · <strong>Schiedsgericht:</strong> {escape(', '.join(next_home.referees) if next_home.referees else 'noch nicht veröffentlicht')}</section>
+    <div aria-label="Schnellübersicht" class="quickstats"><div class="stat"><b>{escape(heading)}</b><span>Gegner</span></div><div class="stat"><b>{escape(kickoff_time)}</b><span>Spielbeginn</span></div><div class="stat"><b>{len(opponent_roster)}</b><span>Gegner Kader/Staff</span></div><div class="stat"><b>{len(usc_roster)}</b><span>USC Kader/Staff</span></div><div class="stat"><b>{len(opponent_recent) + len(usc_recent)}</b><span>Formspiele</span></div></div>
+    <section class="block live-regie-block" id="live-regie"><h2>Live-Regie &amp; Sendeablauf</h2><p class="info">Ablaufpläne, Countdown und Stoppuhr bleiben bedienbar; die Darstellung folgt dem kartenbasierten DVV-Layout.</p>
 {hero_layout_html}
+    </section>
 {notes_html}
-    <section>
-      <h2>Spiele: {escape(heading)}</h2>
-      <ul class=\"match-list\">
-        {opponent_items}
-      </ul>
-    </section>
-    <section>
-      <h2>Spiele: {home_team_escaped}</h2>
-      <ul class=\"match-list\">
-        {usc_items}
-      </ul>
-    </section>
+    <section class="block match-block opponent-block" id="spiele-gegner"><h2>Spiele: {escape(heading)}</h2><ul class="match-list">{opponent_items}</ul></section>
+    <section class="block match-block usc-block" id="spiele-usc"><h2>Spiele: {home_team_escaped}</h2><ul class="match-list">{usc_items}</ul></section>
 {direct_comparison_html}
-    <section class=\"lineup-link\">
-      <ul>
-        {lineup_link_items}
-      </ul>
-    </section>
-    <section class=\"roster-group\">
-      <details class=\"accordion\">
-        <summary>Kader {escape(heading)}</summary>
-        <div class=\"accordion-content\">
-{opponent_photo_block}          <ul class=\"roster-list\">
-            {opponent_roster_items}
-          </ul>
-        </div>
-      </details>
-      <details class=\"accordion\">
-        <summary>Kader {home_team_escaped}</summary>
-        <div class=\"accordion-content\">
-{usc_photo_block}          <ul class=\"roster-list\">
-            {usc_roster_items}
-          </ul>
-        </div>
-      </details>
-    </section>
-    <section class=\"transfer-group\">
-      <details class=\"accordion\">
-        <summary>Wechselbörse {escape(heading)}</summary>
-        <div class=\"accordion-content\">
-          <ul class=\"transfer-list\">
-            {opponent_transfer_items}
-          </ul>
-        </div>
-      </details>
-      <details class=\"accordion\">
-        <summary>Wechselbörse {home_team_escaped}</summary>
-        <div class=\"accordion-content\">
-          <ul class=\"transfer-list\">
-            {usc_transfer_items}
-          </ul>
-        </div>
-      </details>
-    </section>
-    <section class=\"news-group\">
+    <section class="lineup-link block block-link" id="aufstellungen"><ul>{lineup_link_items}</ul></section>
+    <section class="roster-group block compact-block" id="kader"><h2>Spielerinnen kompakt nach Trikotnummern</h2><p class="section-lead">Trikotnummer, Position, Name, Größe und Alter – im kompakten DVV-Listenstil und nach Trikotnummer sortiert. Der Staff bleibt je Team separat aufklappbar.</p><details class="compact-details" open><summary>Kaderlisten aufklappen</summary><div class="compact-two-grid roster-compact-grid">{compact_opponent_roster_card}{compact_usc_roster_card}</div></details></section>
+    <section class="transfer-group block compact-block" id="wechsel"><h2>Wechselbörse kompakt</h2><p class="section-lead">Trainer, Zugänge, Vertragsstatus und Abgänge im gleichen kompakten Karten-/Listenraster wie die Trikotlisten.</p><details class="compact-details" open><summary>Wechselbörse aufklappen</summary><div class="compact-two-grid transfer-compact-grid">{compact_opponent_transfer_card}{compact_usc_transfer_card}</div></details></section>
+    <section class=\"news-group block\" id=\"news\">
       <details class=\"accordion\">
         <summary>News von {escape(heading)}</summary>
         <div class=\"accordion-content\">
@@ -6950,7 +7113,7 @@ def build_html_report(
         </div>
       </details>
     </section>
-{mvp_section_html}    <section class=\"instagram-group\">
+{mvp_section_html}    <section class=\"instagram-group block\" id=\"instagram\">
       <h2>Instagram-Links</h2>
       <div class=\"instagram-grid\">
         <article class=\"instagram-card\">
