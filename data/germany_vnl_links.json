@@ -1,0 +1,83 @@
+[
+  {
+    "key": "match_detail",
+    "label": "Match-Detail (Canada vs Germany)",
+    "url": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/schedule/26558/?match=canada-vs-germany",
+    "page_title": "Canada-Germany Women VNL 2026 04.06.2026",
+    "page_description": "Canada-Germany Women VNL 2026 04.06.2026",
+    "extracted_facts": [
+      "Teams: Canada vs Germany",
+      "Match: Pool 1 - Week 1 - Women #9",
+      "Tag: Thursday",
+      "Datum: 04 Jun, 2026",
+      "Ort: Quebec City",
+      "Land: Canada",
+      "Anpfiff UTC: 00:00",
+      "Anpfiff Lokal: 20:00",
+      "UTC-Datetime: 2026-06-04T00:00:00Z"
+    ],
+    "fetched_at_utc": "2026-04-10T15:28:59Z"
+  },
+  {
+    "key": "germany_schedule_1",
+    "label": "Germany Team Schedule (Start: dynamisch)",
+    "url": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/teams/women/8625/schedule/",
+    "page_title": "VNL Germany 2026 Schedule - Women's National Volleyball Team",
+    "page_description": "VNL ${teamName} 2026 Schedule - Women's National Volleyball Team",
+    "extracted_facts": [
+      "Titel: VNL Germany 2026 Schedule - Women's National Volleyball Team",
+      "Beschreibung: VNL ${teamName} 2026 Schedule - Women's National Volleyball Team"
+    ],
+    "fetched_at_utc": "2026-04-10T15:28:59Z"
+  },
+  {
+    "key": "head_to_head",
+    "label": "Head-to-Head",
+    "url": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/schedule/26558/#head-to-head",
+    "page_title": "Canada-Germany Women VNL 2026 04.06.2026",
+    "page_description": "Canada-Germany Women VNL 2026 04.06.2026",
+    "extracted_facts": [
+      "Match-Titel: Canada-Germany Women VNL 2026 04.06.2026",
+      "Event: Pool 1 - Week 1 - Women #9",
+      "Historische Spiele: Nicht serverseitig im Quelltext enthalten"
+    ],
+    "fetched_at_utc": "2026-04-10T15:28:59Z"
+  },
+  {
+    "key": "germany_squad",
+    "label": "Germany Kader",
+    "url": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/teams/women/8625/players/?",
+    "page_title": "Team Germany Volleyball Players - Women's VNL 2026",
+    "page_description": "Team ${teamName} Volleyball Players - Women's VNL 2026",
+    "extracted_facts": [
+      "Seite: Team Germany Volleyball Players - Women's VNL 2026",
+      "Team: Germany",
+      "Spielerinnenliste: Nicht serverseitig im Quelltext enthalten"
+    ],
+    "fetched_at_utc": "2026-04-10T15:28:59Z"
+  },
+  {
+    "key": "standings",
+    "label": "VNL Standings (Frauen)",
+    "url": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/standings/women/#advanced",
+    "page_title": "VNL Standings 2026 | Women’s Volleyball Nations League Table",
+    "page_description": "VNL Standings 2026 | Women’s Volleyball Nations League Table",
+    "extracted_facts": [
+      "Titel: VNL Standings 2026 | Women’s Volleyball Nations League Table",
+      "Beschreibung: VNL Standings 2026 | Women’s Volleyball Nations League Table"
+    ],
+    "fetched_at_utc": "2026-04-10T15:28:59Z"
+  },
+  {
+    "key": "world_ranking",
+    "label": "Weltrangliste (Frauen)",
+    "url": "https://en.volleyballworld.com/volleyball/world-ranking/women?",
+    "page_title": "FIVB Women's Volleyball Ranking | Volleyball World",
+    "page_description": "FIVB Women's Volleyball Ranking | Volleyball World",
+    "extracted_facts": [
+      "Titel: FIVB Women's Volleyball Ranking | Volleyball World",
+      "Beschreibung: FIVB Women's Volleyball Ranking | Volleyball World"
+    ],
+    "fetched_at_utc": "2026-04-10T15:28:59Z"
+  }
+]

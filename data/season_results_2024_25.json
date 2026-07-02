@@ -1,0 +1,88 @@
+{
+  "title": "Ergebnis der Saison 2024/25",
+  "teams": [
+    {
+      "name": "Allianz MTV Stuttgart",
+      "details": [
+        "Normalrunde: Platz 2 (21 Siege, 3 Niederlagen, 11 x 3:0)",
+        "Playoff Platz 3 (Münster 2:0, Dresden 1:2)"
+      ]
+    },
+    {
+      "name": "USC Münster",
+      "details": [
+        "Normalrunde: Platz 7 (7 Siege, 17 Niederlagen, 2 x 3:0)",
+        "Playoff Platz 5 (Stuttgart 0:2)"
+      ]
+    },
+    {
+      "name": "SSC Palmberg Schwerin",
+      "details": [
+        "Normalrunde: Platz 1 (20 Siege, 4 Niederlagen, 15 x 3:0)",
+        "Deutscher Meister (Aachen 2:0, Suhl 2:0, Dresden 3:0)"
+      ]
+    },
+    {
+      "name": "VC Wiesbaden",
+      "details": [
+        "Normalrunde: Platz 6 (8 Siege, 16 Niederlagen, 10 x 0:3)",
+        "Playoff Platz 5 (Dresden 0:2)"
+      ]
+    },
+    {
+      "name": "VfB Suhl LOTTO Thüringen",
+      "details": [
+        "Normalrunde: Platz 5 (12 Siege, 12 Niederlagen, 5 x 3:0)",
+        "Playoff Platz 3 (Potsdam 2:0, Schwerin 0:2)"
+      ]
+    },
+    {
+      "name": "Schwarz-Weiß Erfurt",
+      "details": [
+        "Normalrunde: Platz 9 (1 Sieg, 23 Niederlagen, 17 x 0:3)"
+      ]
+    },
+    {
+      "name": "Dresdner SC",
+      "details": [
+        "Normalrunde: Platz 3 (19 Siege, 5 Niederlagen, 10 x 3:0)",
+        "Vizemeister (Wiesbaden 2:0, Stuttgart 2:1, Schwerin 0:3)"
+      ]
+    },
+    {
+      "name": "Ladies in Black Aachen",
+      "details": [
+        "Normalrunde: Platz 8 (5 Siege, 19 Niederlagen, 7 x 2:3)",
+        "Playoff Platz 5 (Schwerin 0:2)"
+      ]
+    },
+    {
+      "name": "Skurios Volleys Borken",
+      "details": [
+        "2. BL Pro: Platz 1 (24 Siege, 2 Niederlagen, 12 x 3:0, Aufsteiger)"
+      ]
+    },
+    {
+      "name": "Binder Blaubären TSV Flacht",
+      "details": [
+        "2. BL Pro: Platz 6 (15 Siege, 11 Niederlagen, 7 x 3:0, Aufsteiger)"
+      ]
+    },
+    {
+      "name": "ETV Hamburger Volksbank Volleys",
+      "details": [
+        "2. BL Pro: Platz 7 (15 Siege, 11 Niederlagen, nur 1 x 0:3, Aufsteiger)"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "label": "Normalrunde 2024/25",
+      "url": "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/archiv/ergebnisse.xhtml?LeaguePresenter.view=resultTable&LeaguePresenter.matchSeriesId=770580199#samsCmsComponent_208408"
+    },
+    {
+      "label": "Playoffs 2024/25",
+      "url": "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/archiv/ergebnisse.xhtml?LeaguePresenter.view=matches&LeaguePresenter.matchSeriesId=770580129#samsCmsComponent_208408"
+    }
+  ]
+}

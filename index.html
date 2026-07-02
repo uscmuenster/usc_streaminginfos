@@ -1,0 +1,2944 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="theme-color" content="#0f766e">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>Nächster Heimgegner: USC Münster</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --font-scale: 1;
+      --font-context-scale: 1;
+      --theme-color: #0f766e;
+      --home-accent: #0f766e;
+      --accordion-opponent-bg: #e0f2fe;
+      --accordion-opponent-shadow: rgba(30, 64, 175, 0.08);
+      --accordion-usc-bg: #dcfce7;
+      --accordion-usc-shadow: rgba(22, 163, 74, 0.08);
+      --usc-highlight-row-bg: #dcfce7;
+      --usc-highlight-row-text: #047857;
+      --usc-highlight-card-border: rgba(45, 212, 191, 0.55);
+      --usc-highlight-card-shadow: rgba(45, 212, 191, 0.16);
+      --usc-highlight-mvp-bg: rgba(16, 185, 129, 0.12);
+      --usc-highlight-mvp-border: rgba(5, 150, 105, 0.24);
+      --usc-highlight-mvp-score: #047857;
+      --usc-highlight-legend-dot: #16a34a;
+      --home-highlight-row-bg: #dcfce7;
+      --home-highlight-row-text: #047857;
+      --home-highlight-card-border: rgba(45, 212, 191, 0.55);
+      --home-highlight-card-shadow: rgba(45, 212, 191, 0.16);
+      --home-highlight-mvp-bg: rgba(16, 185, 129, 0.12);
+      --home-highlight-mvp-border: rgba(5, 150, 105, 0.24);
+      --home-highlight-mvp-score: #047857;
+      --home-highlight-legend-dot: #16a34a;
+      --opponent-highlight-row-bg: #e0f2fe;
+      --opponent-highlight-row-text: #1d4ed8;
+      --opponent-highlight-card-border: rgba(59, 130, 246, 0.35);
+      --opponent-highlight-card-shadow: rgba(59, 130, 246, 0.18);
+      --opponent-highlight-mvp-bg: rgba(59, 130, 246, 0.12);
+      --opponent-highlight-mvp-border: rgba(37, 99, 235, 0.22);
+      --opponent-highlight-mvp-score: #1d4ed8;
+      --opponent-highlight-legend-dot: #2563eb;
+      --mvp-overview-summary-bg: #0f766e;
+    }
+    @media (display-mode: standalone), (display-mode: fullscreen) {
+      :root {
+        --font-context-scale: 1.25;
+      }
+    }
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.95rem, 1.8vw, 1.05rem));
+      background: #f5f7f9;
+      color: #1f2933;
+    }
+    main {
+      max-width: min(110rem, 96vw);
+      margin: 0 auto;
+      padding: clamp(0.6rem, 2.5vw, 1.2rem) clamp(0.9rem, 3vw, 2.4rem);
+    }
+    h1 {
+      color: #004c54;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.55rem, 4.5vw, 2.35rem));
+      margin: 0 0 1.25rem 0;
+    }
+    h2 {
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.15rem, 3.6vw, 1.6rem));
+      margin-bottom: 1rem;
+    }
+    section {
+      margin-top: clamp(1.2rem, 3vw, 2rem);
+    }
+    .meta {
+      display: grid;
+      gap: 0.25rem;
+      margin: 0 0 1.3rem 0;
+      padding: 0;
+    }
+    .meta p {
+      margin: 0;
+    }
+    .meta-spacer {
+      height: clamp(0.6rem, 2.2vw, 1.2rem);
+    }
+    .hero-layout {
+      display: grid;
+      gap: clamp(1rem, 3vw, 1.8rem);
+      align-items: start;
+      margin-bottom: clamp(1.1rem, 3vw, 1.6rem);
+      grid-template-columns: minmax(0, clamp(20rem, 34vw, 28rem)) minmax(0, 1fr);
+    }
+    .hero-primary {
+      display: grid;
+      gap: clamp(0.8rem, 2.4vw, 1.3rem);
+    }
+    .hero-stopwatch {
+      display: grid;
+    }
+    .hero-secondary {
+      display: grid;
+      gap: clamp(0.9rem, 2.6vw, 1.4rem);
+      align-content: start;
+    }
+    @media (max-width: 70rem) {
+      .hero-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .broadcast-box {
+      border-radius: 1rem;
+      background: #ffffff;
+      padding: clamp(0.75rem, 2.2vw, 1.15rem);
+      box-shadow: 0 18px 40px rgba(15, 118, 110, 0.16);
+      border: 1px solid rgba(15, 118, 110, 0.18);
+      display: grid;
+      gap: clamp(0.55rem, 1.8vw, 0.8rem);
+    }
+    .broadcast-box__details {
+      display: grid;
+      gap: clamp(0.75rem, 2.2vw, 1.1rem);
+      margin: 0;
+    }
+    .broadcast-box__summary {
+      display: flex;
+      align-items: center;
+      gap: clamp(0.45rem, 2vw, 1.2rem);
+      margin: 0;
+      padding: 0;
+      cursor: pointer;
+      list-style: none;
+    }
+    .broadcast-box__summary::-webkit-details-marker {
+      display: none;
+    }
+    .broadcast-box__summary:focus-visible {
+      outline: 3px solid rgba(14, 165, 233, 0.55);
+      border-radius: 0.75rem;
+      outline-offset: 2px;
+    }
+    .broadcast-box__summary-title {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.4rem, 3.8vw, 1.8rem));
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .broadcast-box__summary-indicator {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(1.5rem, 4vw, 1.8rem);
+      height: clamp(1.5rem, 4vw, 1.8rem);
+      border-radius: 999px;
+      border: 2px solid rgba(15, 118, 110, 0.35);
+      color: #0f766e;
+      font-size: clamp(0.85rem, 2.2vw, 1rem);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .broadcast-box__summary-indicator::before {
+      content: "▸";
+    }
+    .broadcast-box__details[open] .broadcast-box__summary-indicator {
+      transform: rotate(90deg);
+      border-color: rgba(15, 118, 110, 0.6);
+    }
+    .broadcast-box__details[open] .broadcast-box__summary-indicator::before {
+      content: "▾";
+    }
+    .broadcast-box__content {
+      display: grid;
+      gap: clamp(0.75rem, 2vw, 1.1rem);
+    }
+    .broadcast-box h2 {
+      margin: 0;
+    }
+    .stopwatch-display {
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.75rem, 5vw, 2.2rem));
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      padding: clamp(0.35rem, 1vw, 0.6rem);
+      border-radius: 0.75rem;
+      background: rgba(15, 118, 110, 0.08);
+      border: 1px solid rgba(15, 118, 110, 0.15);
+    }
+    .stopwatch--running .stopwatch-display {
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.18), rgba(14, 165, 233, 0.2));
+      border-color: rgba(14, 165, 233, 0.4);
+      box-shadow: 0 18px 36px rgba(14, 165, 233, 0.22);
+    }
+    .stopwatch-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(0.3rem, 1.5vw, 0.55rem);
+      justify-content: center;
+    }
+    .stopwatch-button {
+      font: inherit;
+      font-weight: 600;
+      padding: clamp(0.35rem, 1vw, 0.55rem) clamp(0.75rem, 2.5vw, 1.1rem);
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      color: #ffffff;
+      background: linear-gradient(135deg, #0f766e, #0ea5e9);
+      box-shadow: 0 14px 30px rgba(14, 165, 233, 0.25);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    }
+    .stopwatch-button:hover {
+      filter: brightness(1.05);
+      box-shadow: 0 16px 34px rgba(14, 165, 233, 0.35);
+    }
+    .stopwatch-button:active {
+      transform: translateY(1px) scale(0.99);
+    }
+    .stopwatch-button:focus-visible {
+      outline: 3px solid rgba(14, 165, 233, 0.55);
+      outline-offset: 2px;
+    }
+    .broadcast-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin: 0 0 0.6rem;
+    }
+    .broadcast-controls__label {
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .broadcast-controls__input {
+      max-width: 8rem;
+      width: 100%;
+      font: inherit;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      line-height: 1.2;
+      padding: 0.4rem 0.55rem;
+      border-radius: 0.55rem;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+    }
+    .broadcast-controls__input:focus-visible {
+      outline: 2px solid rgba(14, 165, 233, 0.5);
+      outline-offset: 1px;
+    }
+    .broadcast-table-wrapper {
+      border-radius: 0.85rem;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      overflow-x: auto;
+    }
+    .broadcast-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
+    }
+    .broadcast-table thead th {
+      text-align: left;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.68rem);
+      color: #0f766e;
+      padding: 0.45rem 0.65rem;
+      background: rgba(15, 118, 110, 0.08);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+    }
+    .broadcast-heading--countdown,
+    .broadcast-heading--duration,
+    .broadcast-heading--start {
+      text-align: left;
+    }
+    .broadcast-heading--note {
+      width: 55%;
+    }
+    .broadcast-table thead th:first-child {
+      border-top-left-radius: 0.85rem;
+    }
+    .broadcast-table thead th:last-child {
+      border-top-right-radius: 0.85rem;
+    }
+    .broadcast-table tbody th,
+    .broadcast-table tbody td {
+      padding: 0.3rem 0.65rem;
+      vertical-align: top;
+      border-top: 1px solid rgba(148, 163, 184, 0.35);
+      line-height: 1.3;
+      text-align: left;
+    }
+    .broadcast-table tbody tr:first-child th,
+    .broadcast-table tbody tr:first-child td {
+      border-top: none;
+    }
+    .broadcast-cell--time {
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .broadcast-cell--countdown {
+      font-weight: 700;
+      color: #0f766e;
+      white-space: nowrap;
+      text-align: left;
+    }
+    .broadcast-cell--note {
+      font-weight: 500;
+      line-height: 1.35;
+    }
+    .broadcast-cell--duration {
+      text-align: left;
+      white-space: nowrap;
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+    }
+    .broadcast-cell--start {
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      white-space: nowrap;
+    }
+    .broadcast-empty {
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      color: #475569;
+    }
+    @media (min-width: 60rem) {
+      .hero-layout {
+        grid-template-columns: minmax(0, 0.35fr) minmax(0, 0.65fr);
+      }
+    }
+    @media (max-width: 50rem) {
+      .hero-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    .countdown-meta {
+      display: grid;
+      gap: clamp(0.2rem, 1.2vw, 0.45rem);
+      margin: 0 0 clamp(0.55rem, 2vw, 0.9rem) 0;
+    }
+    .countdown-meta p {
+      margin: 0;
+    }
+    .countdown-meta__kickoff {
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.05rem, 3.4vw, 1.25rem));
+      font-weight: 600;
+    }
+    .countdown-meta__location {
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.95rem, 3vw, 1.1rem));
+      font-weight: 500;
+    }
+    .countdown-meta__competition {
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.9rem, 2.6vw, 1.05rem));
+      font-weight: 500;
+    }
+    .countdown-banner {
+      margin: 0;
+      padding: clamp(0.55rem, 1.7vw, 0.15rem) clamp(0.65rem, 2.2vw, 1.15rem);
+      border-radius: 0.95rem;
+      background: linear-gradient(135deg, #0f766e, #10b981);
+      color: #f0fdf4;
+      display: inline-flex;
+      align-items: center;
+      gap: clamp(0.35rem, 1.5vw, 0.6rem);
+      width: auto;
+      max-width: 100%;
+    }
+    .countdown-banner--live {
+      background: linear-gradient(135deg, #b91c1c, #f97316);
+      box-shadow: 0 18px 40px rgba(180, 83, 9, 0.4);
+    }
+    .countdown-heading {
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.5rem, 1.5vw, 0.65rem));
+    }
+    .countdown-display {
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.2rem, 3.6vw, 1.6rem));
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .update-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.6rem;
+      background: #ecfdf5;
+      color: #047857;
+      border-radius: 999px;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.7rem);
+      font-weight: 600;
+      border: 1px solid #bbf7d0;
+    }
+    .update-note span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .page-footer {
+      margin-top: clamp(1.75rem, 4vw, 2.75rem);
+      display: flex;
+      justify-content: center;
+    }
+    .match-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 48rem) {
+      .match-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .match-list li.match-item--upcoming {
+        grid-column: 1 / -1;
+      }
+    }
+    .match-list li {
+      background: #ffffff;
+      border-radius: 0.8rem;
+      padding: 0.85rem clamp(0.9rem, 2.6vw, 1.3rem);
+      box-shadow: 0 10px 30px rgba(0, 76, 84, 0.08);
+    }
+    .direct-comparison-box {
+      margin-top: clamp(1rem, 3vw, 1.75rem);
+    }
+    .direct-comparison__metrics {
+      display: grid;
+      gap: clamp(0.6rem, 2.5vw, 0.85rem);
+      grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+      margin: 0 0 clamp(0.85rem, 3vw, 1.15rem);
+    }
+    .direct-comparison__metric {
+      background: rgba(15, 118, 110, 0.08);
+      border-radius: 0.85rem;
+      padding: clamp(0.6rem, 2.2vw, 0.95rem);
+      display: grid;
+      gap: clamp(0.35rem, 1.6vw, 0.55rem);
+    }
+    .direct-comparison__metric-label {
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.72rem);
+      color: #0f766e;
+      text-align: center;
+      margin: 0;
+    }
+    .direct-comparison__metric-score {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: clamp(0.35rem, 1.2vw, 0.6rem);
+      align-items: baseline;
+      justify-items: center;
+    }
+    .direct-comparison__metric-team {
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.4rem);
+      color: #0f172a;
+      text-align: center;
+    }
+    .direct-comparison__metric-team--home,
+    .direct-comparison__metric-team--usc {
+      color: #047857;
+    }
+    .direct-comparison__metric-team--opponent {
+      color: #1d4ed8;
+    }
+    .direct-comparison__metric-value {
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.05rem);
+      font-variant-numeric: tabular-nums;
+      color: #0f766e;
+    }
+    .direct-comparison__last-meeting {
+      background: rgba(15, 118, 110, 0.06);
+      border-radius: 0.9rem;
+      padding: clamp(0.7rem, 2.2vw, 1.05rem);
+      display: grid;
+      gap: clamp(0.35rem, 1.2vw, 0.6rem);
+      margin-bottom: clamp(0.85rem, 3vw, 1.2rem);
+    }
+    .direct-comparison__last-meeting h3 {
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.05rem);
+    }
+    .direct-comparison__last-teams {
+      margin: 0;
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
+    }
+    .direct-comparison__last-meta {
+      margin: 0;
+      color: #1f2937;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
+    }
+    .direct-comparison__last-result {
+      margin: 0;
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+    }
+    .direct-comparison__matches-heading {
+      margin: 0 0 clamp(0.5rem, 2vw, 0.8rem);
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
+    }
+    .direct-comparison__matches-wrapper {
+      margin-bottom: clamp(0.75rem, 2.6vw, 1.15rem);
+    }
+    .direct-comparison__heading {
+      text-transform: none;
+    }
+    .direct-comparison__cell {
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
+    }
+    .direct-comparison__cell--meta {
+      white-space: nowrap;
+    }
+    .direct-comparison__cell--result {
+      font-weight: 600;
+      text-align: right;
+    }
+    .direct-comparison__result--win {
+      color: #047857;
+    }
+    .direct-comparison__result--loss {
+      color: #b91c1c;
+    }
+    .direct-comparison__result--neutral {
+      color: #0f172a;
+    }
+    .direct-comparison__note {
+      margin: clamp(0.25rem, 1.2vw, 0.55rem) 0 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
+      color: #475569;
+    }
+    .direct-comparison__fallback {
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      color: #475569;
+      text-align: center;
+      font-weight: 500;
+    }
+    .lineup-link {
+      margin-top: clamp(0.75rem, 2.5vw, 1.4rem);
+      display: flex;
+      justify-content: center;
+    }
+    .lineup-link ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(0.6rem, 2vw, 1rem);
+    }
+    .lineup-link li {
+      display: flex;
+    }
+    .lineup-link a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      background: #0f766e;
+      color: #ffffff;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.25);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .lineup-link a:hover,
+    .lineup-link a:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(15, 118, 110, 0.3);
+      outline: none;
+    }
+    .match-line {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .match-header {
+      font-weight: 600;
+      color: inherit;
+    }
+    .match-result {
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.1rem);
+      color: #0f766e;
+      font-weight: 600;
+    }
+    .match-meta {
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
+      color: #475569;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem 0.75rem;
+      align-items: center;
+    }
+    .match-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .match-meta a {
+      color: #1d4ed8;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .match-meta a:hover,
+    .match-meta a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+    .match-stats {
+      margin-top: clamp(0.45rem, 1.4vw, 0.85rem);
+      border-radius: 0.85rem;
+      background: #f8fafc;
+      border: 1px solid rgba(15, 118, 110, 0.18);
+      padding: 0.75rem 1rem;
+    }
+    .match-stats summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.92rem);
+    }
+    .match-stats summary::-webkit-details-marker {
+      display: none;
+    }
+    .match-stats summary::after {
+      content: "▾";
+      margin-left: auto;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      transition: transform 0.2s ease;
+    }
+    .match-stats[open] summary::after {
+      transform: rotate(180deg);
+    }
+    .match-stats-content {
+      margin-top: 0.75rem;
+      display: grid;
+      gap: clamp(0.75rem, 2vw, 1.1rem);
+    }
+    .match-stats-table-wrapper {
+      overflow-x: auto;
+    }
+    .match-stats-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #ffffff;
+      border-radius: 0.75rem;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      min-width: 22rem;
+    }
+    .match-stats-table thead th {
+      background: rgba(15, 118, 110, 0.12);
+      color: #0f766e;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      padding: 0.55rem 0.75rem;
+      text-align: center;
+    }
+    .match-stats-table thead th:first-child {
+      text-align: left;
+    }
+    .match-stats-table tbody th {
+      text-align: left;
+      padding: 0.65rem 0.85rem;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .match-stats-table tbody td {
+      text-align: center;
+      padding: 0.65rem 0.7rem;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      font-weight: 500;
+      color: #1f2937;
+    }
+    .match-stats-table tbody td.match-stats-value {
+      text-align: center;
+    }
+    .match-stats-table tbody tr + tr th,
+    .match-stats-table tbody tr + tr td {
+      border-top: 1px solid #e2e8f0;
+    }
+    .match-stats-table tbody tr[data-team-role="usc"] {
+      background: var(--usc-highlight-row-bg);
+      color: var(--usc-highlight-row-text);
+    }
+    .match-stats-table tbody tr[data-team-role="usc"] th,
+    .match-stats-table tbody tr[data-team-role="usc"] td {
+      color: inherit;
+    }
+    .match-stats-table tbody tr[data-team-role="opponent"] {
+      background: var(--opponent-highlight-row-bg);
+      color: var(--opponent-highlight-row-text);
+    }
+    .match-stats-table tbody tr[data-team-role="opponent"] th,
+    .match-stats-table tbody tr[data-team-role="opponent"] td {
+      color: inherit;
+    }
+    .match-stats-card {
+      border-radius: 0.75rem;
+      background: #ffffff;
+      padding: 0.75rem 0.95rem;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+    .match-stats-card[data-team-role="usc"] {
+      border-color: var(--usc-highlight-card-border);
+      box-shadow: 0 14px 30px var(--usc-highlight-card-shadow);
+    }
+    .match-stats-card[data-team-role="opponent"] {
+      border-color: var(--opponent-highlight-card-border);
+      box-shadow: 0 14px 30px var(--opponent-highlight-card-shadow);
+    }
+    .match-stats-card h4 {
+      margin: 0 0 0.5rem 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .match-stats-card pre {
+      margin: 0;
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.75rem);
+      line-height: 1.4;
+      white-space: pre;
+      overflow-x: auto;
+      padding: 0.5rem 0.65rem;
+      background: rgba(15, 23, 42, 0.04);
+      border-radius: 0.6rem;
+      color: #1f2937;
+    }
+    .news-group,
+    .roster-group,
+    .transfer-group {
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+      display: grid;
+      gap: 0.75rem;
+    }
+    .accordion {
+      border-radius: 0.85rem;
+      overflow: hidden;
+      background: var(--accordion-opponent-bg);
+      box-shadow: 0 18px 40px var(--accordion-opponent-shadow);
+      border: none;
+    }
+    .roster-group details:nth-of-type(2),
+    .transfer-group details:nth-of-type(2),
+    .news-group details:nth-of-type(2) {
+      background: var(--accordion-usc-bg);
+      box-shadow: 0 18px 40px var(--accordion-usc-shadow);
+    }
+    .accordion summary {
+      cursor: pointer;
+      padding: 0.85rem 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1rem, 2.6vw, 1.2rem));
+    }
+    .accordion summary::-webkit-details-marker {
+      display: none;
+    }
+    .accordion summary::after {
+      content: "▾";
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
+      transition: transform 0.2s ease;
+    }
+    .accordion[open] summary::after {
+      transform: rotate(180deg);
+    }
+    .accordion-content {
+      padding: 0 1.2rem 1.2rem;
+    }
+    .news-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .news-list li {
+      margin: 0;
+      padding: 0;
+    }
+    .news-meta {
+      display: block;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
+      color: #64748b;
+      margin-top: 0.2rem;
+    }
+    .mvp-group {
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+    }
+    .mvp-overview {
+      border-radius: 0.8rem;
+      border: none;
+      background: #ffffff;
+      box-shadow: 0 14px 30px rgba(15, 118, 110, 0.14);
+      overflow: hidden;
+    }
+    .mvp-overview summary {
+      cursor: pointer;
+      padding: 0.85rem 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1rem, 2.4vw, 1.15rem));
+      background: var(--mvp-overview-summary-bg);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      color: #ffffff;
+    }
+    .mvp-overview summary::-webkit-details-marker {
+      display: none;
+    }
+    .mvp-overview summary::after {
+      content: "▾";
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
+      transition: transform 0.2s ease;
+    }
+    .mvp-overview[open] summary::after {
+      transform: rotate(180deg);
+    }
+    .mvp-overview-content {
+      padding: 0 1.2rem 1.2rem;
+      display: grid;
+      gap: clamp(0.6rem, 2vw, 1.1rem);
+    }
+    .mvp-note {
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
+      color: #475569;
+    }
+    .mvp-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+    }
+    .mvp-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.75rem);
+      font-weight: 600;
+      background: rgba(15, 23, 42, 0.05);
+      color: #0f172a;
+    }
+    .mvp-legend-item::before {
+      content: "";
+      width: 0.65rem;
+      height: 0.65rem;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 2px rgba(15, 23, 42, 0.15);
+    }
+    .mvp-legend-item[data-team="usc"]::before {
+      background: var(--usc-highlight-legend-dot);
+    }
+    .mvp-legend-item[data-team="opponent"]::before {
+      background: var(--opponent-highlight-legend-dot);
+    }
+    .mvp-category {
+      border-radius: 0.8rem;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      overflow: hidden;
+    }
+    .mvp-category summary {
+      cursor: pointer;
+      padding: 0.85rem 1.05rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.95rem, 2.2vw, 1.1rem));
+      gap: 0.6rem;
+      background: rgba(15, 118, 110, 0.08);
+    }
+    .mvp-category summary::-webkit-details-marker {
+      display: none;
+    }
+    .mvp-category summary::after {
+      content: "▾";
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      transition: transform 0.2s ease;
+      color: inherit;
+    }
+    .mvp-category[open] summary::after {
+      transform: rotate(180deg);
+    }
+    .mvp-category-title {
+      flex: 1;
+      color: #0f766e;
+    }
+    .mvp-category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(15, 118, 110, 0.14);
+      color: #0f4c75;
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.7rem);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .mvp-category-content {
+      padding: 0.9rem 1.05rem 1.1rem;
+      display: grid;
+      gap: 0.7rem;
+    }
+    .mvp-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.55rem;
+    }
+    .mvp-entry {
+      display: grid;
+      grid-template-columns: minmax(4.75rem, auto) 1fr minmax(4.5rem, auto);
+      gap: 0.6rem;
+      align-items: center;
+      padding: 0.6rem 0.75rem;
+      border-radius: 0.7rem;
+      background: rgba(15, 23, 42, 0.05);
+      box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
+    }
+    .mvp-entry-rank {
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      color: #0f172a;
+    }
+    .mvp-entry-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .mvp-entry-name {
+      font-weight: 600;
+      color: #0f172a;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+    }
+    .mvp-entry-meta {
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.78rem);
+      color: #475569;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .mvp-entry-score {
+      font-weight: 700;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      color: #0f4c75;
+      justify-self: end;
+    }
+    .mvp-entry[data-team="opponent"] {
+      background: var(--opponent-highlight-mvp-bg);
+      box-shadow: inset 0 0 0 1px var(--opponent-highlight-mvp-border);
+    }
+    .mvp-entry[data-team="opponent"] .mvp-entry-score {
+      color: var(--opponent-highlight-mvp-score);
+    }
+    .mvp-entry[data-team="usc"] {
+      background: var(--usc-highlight-mvp-bg);
+      box-shadow: inset 0 0 0 1px var(--usc-highlight-mvp-border);
+    }
+    .mvp-entry[data-team="usc"] .mvp-entry-score {
+      color: var(--usc-highlight-mvp-score);
+    }
+    @media (max-width: 38rem) {
+      .mvp-category summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+      }
+      .mvp-entry {
+        grid-template-columns: minmax(4.25rem, auto) 1fr;
+        grid-template-areas: "rank score" "info info";
+        row-gap: 0.4rem;
+      }
+      .mvp-entry-rank {
+        grid-area: rank;
+      }
+      .mvp-entry-score {
+        grid-area: score;
+      }
+      .mvp-entry-info {
+        grid-area: info;
+      }
+    }
+    @media (max-width: 30rem) {
+      .match-stats summary {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
+      }
+      .match-stats-table {
+        min-width: min(16rem, 100%);
+      }
+      .match-stats-table thead th {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.62rem);
+        padding: 0.3rem 0.35rem;
+      }
+      .match-stats-table tbody th,
+      .match-stats-table tbody td {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.7rem);
+        padding: 0.35rem 0.35rem;
+      }
+    }
+    .mvp-empty {
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      color: #475569;
+    }
+    .transfer-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.65rem;
+    }
+    .transfer-category {
+      font-weight: 700;
+      color: #1d4ed8;
+      padding-top: 0.35rem;
+      margin: 0;
+    }
+    .transfer-line {
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      font-weight: 500;
+      color: inherit;
+      word-break: break-word;
+    }
+    .team-photo-toggle {
+      margin: 0 0 1.1rem 0;
+    }
+    .team-photo-toggle__input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+    .team-photo-toggle__label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.86rem);
+      color: #0f172a;
+      background: rgba(186, 230, 253, 0.55);
+      border: 1px solid rgba(14, 116, 144, 0.25);
+      border-radius: 999px;
+      padding: 0.32rem 0.78rem;
+    }
+    .team-photo-toggle__input:focus-visible + .team-photo-toggle__label {
+      outline: 2px solid rgba(14, 116, 144, 0.45);
+      outline-offset: 2px;
+    }
+    .team-photo-toggle__content {
+      display: none;
+      margin-top: 0.6rem;
+    }
+    .team-photo-toggle__input:checked + .team-photo-toggle__label + .team-photo-toggle__content {
+      display: block;
+    }
+    .team-photo {
+      margin: 0;
+    }
+    .team-photo img {
+      width: 100%;
+      border-radius: 0.85rem;
+      display: block;
+    }
+    .team-photo figcaption {
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
+      color: #64748b;
+      margin-top: 0.35rem;
+      text-align: center;
+    }
+    .roster-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.55rem;
+    }
+    .roster-item {
+      display: grid;
+      grid-template-columns: minmax(3.6rem, auto) 1fr;
+      gap: 0.75rem;
+      align-items: baseline;
+    }
+    .roster-number {
+      font-family: "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      background: #bae6fd;
+      color: #1f2933;
+      border-radius: 0.65rem;
+      padding: 0.35rem 0.65rem;
+      text-align: center;
+    }
+    .roster-official .roster-number {
+      background: #e2e8f0;
+    }
+    .roster-text {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.1rem 0.55rem;
+    }
+    .roster-name {
+      font-weight: 600;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 1rem);
+    }
+    .roster-pronunciation {
+      display: inline-block;
+      margin-left: 0.55rem;
+    }
+    .roster-details {
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.82rem);
+      color: #475569;
+      line-height: 1.25;
+    }
+    .notice-group {
+      margin-top: clamp(1.4rem, 3vw, 2rem);
+    }
+    .notice-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.65rem;
+    }
+    .notice-list li {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border-radius: 0.85rem;
+      padding: clamp(0.85rem, 2.8vw, 1.15rem);
+      font-weight: 600;
+      box-shadow: 0 16px 34px rgba(250, 204, 21, 0.22);
+    }
+    .instagram-group {
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+    }
+    .instagram-grid {
+      display: grid;
+      gap: 1.2rem;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+    .instagram-card {
+      background: #ffffff;
+      border-radius: 0.85rem;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.12);
+    }
+    .instagram-card h3 {
+      margin: 0 0 0.75rem 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.05rem, 3vw, 1.3rem));
+    }
+    .instagram-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.35rem;
+    }
+    .season-results {
+      margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+    }
+    .season-results-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.25rem;
+      align-items: baseline;
+      margin-bottom: clamp(0.75rem, 2.5vw, 1.25rem);
+    }
+    .season-results-header h2 {
+      margin: 0;
+    }
+    .season-results-status {
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
+      color: #475569;
+    }
+    .season-results-grid {
+      display: grid;
+      gap: clamp(1rem, 3vw, 1.5rem);
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+    .season-results-card {
+      background: #ffffff;
+      border-radius: 0.85rem;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.12);
+      display: grid;
+      gap: 0.6rem;
+    }
+    .season-results-card h3 {
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.05rem, 3vw, 1.3rem));
+      color: #0f172a;
+    }
+    .season-results-list {
+      margin: 0;
+      padding-left: 1rem;
+      display: grid;
+      gap: 0.35rem;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      color: #1f2933;
+    }
+    .season-results-fallback {
+      margin: 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      color: #475569;
+    }
+    .season-results-links {
+      margin-top: clamp(1rem, 3vw, 1.75rem);
+      background: #f8fafc;
+      border-radius: 0.85rem;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.35);
+    }
+    .season-results-links h3 {
+      margin: 0 0 0.75rem 0;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(0.95rem, 2.5vw, 1.1rem));
+      color: #1f2937;
+    }
+    .season-results-link-list {
+      margin: 0;
+      padding-left: 1rem;
+      display: grid;
+      gap: 0.4rem;
+    }
+    .season-results-link-list a {
+      color: #1d4ed8;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .season-results-link-list a:hover,
+    .season-results-link-list a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+    .meta-link {
+      font-weight: 600;
+    }
+    a {
+      color: #0f766e;
+    }
+    a:hover,
+    a:focus {
+      text-decoration: underline;
+    }
+    .match-meta a {
+      color: #1d4ed8;
+      font-weight: 600;
+    }
+    .match-meta a:hover,
+    .match-meta a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+    @media (max-width: 40rem) {
+      body {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.85rem);
+      }
+      h1 {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.6rem);
+      }
+      h2 {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.1rem);
+      }
+      .match-list li {
+        padding: 0.85rem 1rem;
+      }
+      .direct-comparison__metrics {
+        grid-template-columns: 1fr;
+        gap: clamp(0.5rem, 3vw, 0.7rem);
+      }
+      .direct-comparison__metric {
+        padding: clamp(0.55rem, 3vw, 0.85rem);
+      }
+      .direct-comparison__metric-value {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.95rem);
+      }
+      .direct-comparison__metric-team {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.78rem);
+      }
+      .lineup-link ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .lineup-link li {
+        width: 100%;
+        justify-content: center;
+      }
+      .lineup-link a {
+        width: min(22rem, 100%);
+        justify-content: center;
+      }
+      .match-result {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
+      }
+      .match-stats summary {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.9rem);
+      }
+      .match-stats-table {
+        min-width: min(18rem, 100%);
+      }
+      .match-stats-table thead th {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.68rem);
+        padding: 0.35rem 0.45rem;
+      }
+      .match-stats-table tbody th,
+      .match-stats-table tbody td {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.78rem);
+        padding: 0.4rem 0.45rem;
+      }
+      .accordion summary {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.05rem);
+      }
+      .mvp-overview summary {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 1.05rem);
+      }
+      .roster-item {
+        grid-template-columns: minmax(3rem, auto) 1fr;
+      }
+      .roster-number {
+        font-size: calc(var(--font-scale) * var(--font-context-scale) * 0.8rem);
+        padding: 0.3rem 0.5rem;
+      }
+      .team-photo-toggle {
+        margin-bottom: 0.9rem;
+      }
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --accordion-opponent-bg: #1c3f5f;
+        --accordion-opponent-shadow: rgba(56, 189, 248, 0.28);
+        --accordion-usc-bg: #1a4f3a;
+        --accordion-usc-shadow: rgba(74, 222, 128, 0.26);
+        --usc-highlight-row-bg: rgba(22, 163, 74, 0.25);
+        --usc-highlight-row-text: #bbf7d0;
+        --opponent-highlight-row-bg: rgba(59, 130, 246, 0.18);
+        --opponent-highlight-row-text: #bfdbfe;
+        --mvp-overview-summary-bg: rgba(253, 186, 116, 0.35);
+        --theme-color: rgba(253, 186, 116, 0.35);
+      }
+      body {
+        background: #0e1b1f;
+        color: #e6f1f3;
+      }
+      .broadcast-box {
+        background: radial-gradient(circle at top left, rgba(15, 118, 110, 0.55), rgba(8, 47, 73, 0.9));
+        border-color: rgba(125, 211, 252, 0.22);
+        box-shadow: 0 26px 52px rgba(8, 47, 73, 0.55);
+      }
+      .broadcast-box__summary {
+        color: #e0f2fe;
+      }
+      .broadcast-box__summary-title {
+        color: #e0f2fe;
+      }
+      .broadcast-box__summary-indicator {
+        border-color: rgba(125, 211, 252, 0.55);
+        color: #bae6fd;
+        background: rgba(8, 145, 178, 0.18);
+      }
+      .broadcast-box__details[open] .broadcast-box__summary-indicator {
+        border-color: rgba(56, 189, 248, 0.75);
+        background: rgba(15, 118, 110, 0.35);
+        color: #f0fdfa;
+      }
+      .broadcast-box__content {
+        background: linear-gradient(145deg, rgba(12, 74, 110, 0.55), rgba(8, 47, 73, 0.75));
+        border-radius: 0.85rem;
+        padding: clamp(0.35rem, 1.4vw, 0.75rem);
+        box-shadow: inset 0 0 0 1px rgba(14, 165, 233, 0.15);
+      }
+      .broadcast-table-wrapper {
+        background: rgba(8, 47, 73, 0.65);
+        border-color: rgba(148, 163, 184, 0.32);
+      }
+      .broadcast-table thead th {
+        background: linear-gradient(135deg, rgba(13, 148, 136, 0.35), rgba(59, 130, 246, 0.18));
+        color: #99f6e4;
+        border-bottom-color: rgba(20, 184, 166, 0.35);
+      }
+      .broadcast-table tbody th,
+      .broadcast-table tbody td {
+        border-top-color: rgba(51, 65, 85, 0.6);
+      }
+      .broadcast-table tbody tr:nth-child(even) {
+        background: rgba(15, 118, 110, 0.15);
+      }
+      .broadcast-cell--time {
+        color: #ccfbf1;
+      }
+      .broadcast-cell--countdown {
+        color: #5eead4;
+        text-shadow: 0 0 8px rgba(94, 234, 212, 0.45);
+      }
+      .broadcast-cell--note {
+        color: #e0f2fe;
+      }
+      .broadcast-cell--duration {
+        color: #bfdbfe;
+      }
+      .broadcast-cell--duration,
+      .broadcast-empty {
+        color: #bfdbfe;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #f1f5f9;
+      }
+      .match-list li {
+        background: #132a30;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      }
+      .direct-comparison__metric {
+        background: rgba(15, 118, 110, 0.22);
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+      }
+      .direct-comparison__metric-label {
+        color: #5eead4;
+      }
+      .direct-comparison__metric-value {
+        color: #bbf7d0;
+      }
+      .direct-comparison__metric-team {
+        color: #f0fdfa;
+      }
+      .direct-comparison__metric-team--opponent {
+        color: #bae6fd;
+      }
+      .direct-comparison__last-meeting {
+        background: rgba(15, 118, 110, 0.18);
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35);
+      }
+      .direct-comparison__last-meta {
+        color: #bfdbfe;
+      }
+      .direct-comparison__last-result {
+        color: #e0f2fe;
+      }
+      .direct-comparison__result--loss {
+        color: #fca5a5;
+      }
+      .direct-comparison__result--neutral {
+        color: #f1f5f9;
+      }
+      .direct-comparison__note {
+        color: #cbd5f5;
+      }
+      .direct-comparison__fallback {
+        color: #94a3b8;
+      }
+      .match-stats {
+        background: #132a30;
+        border-color: rgba(45, 212, 191, 0.35);
+      }
+      .match-stats summary {
+        color: #e2f3f7;
+      }
+      .match-stats-table {
+        background: #0f1f24;
+        border-color: rgba(94, 234, 212, 0.25);
+        box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+      }
+      .match-stats-table thead th {
+        background: rgba(94, 234, 212, 0.16);
+        color: #5eead4;
+      }
+      .match-stats-table tbody tr + tr th,
+      .match-stats-table tbody tr + tr td {
+        border-color: rgba(148, 163, 184, 0.35);
+      }
+      .match-stats-table tbody th,
+      .match-stats-table tbody td {
+        color: #e2f3f7;
+      }
+      .match-stats-table tbody tr[data-team-role="usc"] {
+        background: var(--usc-highlight-row-bg);
+        color: var(--usc-highlight-row-text);
+      }
+      .match-stats-table tbody tr[data-team-role="opponent"] {
+        background: var(--opponent-highlight-row-bg);
+        color: var(--opponent-highlight-row-text);
+      }
+      .match-stats-card {
+        background: #0f1f24;
+        border-color: rgba(94, 234, 212, 0.25);
+        box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+      }
+      .match-stats-card h4 {
+        color: #f0f9ff;
+      }
+      .match-stats-card pre {
+        background: rgba(15, 118, 110, 0.22);
+        color: #f1f5f9;
+      }
+      .lineup-link a {
+        background: #14b8a6;
+        color: #022c22;
+        box-shadow: 0 16px 32px rgba(20, 184, 166, 0.35);
+      }
+      .accordion {
+        background: var(--accordion-opponent-bg);
+        box-shadow: 0 18px 40px var(--accordion-opponent-shadow);
+      }
+      .mvp-overview {
+        background: #132a30;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }
+      .mvp-overview summary {
+        color: #f1f5f9;
+        background: var(--mvp-overview-summary-bg);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+      }
+      .mvp-note {
+        color: #cbd5f5;
+      }
+      .mvp-card {
+        background: #132a30;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }
+      .mvp-card summary {
+        color: #f1f5f9;
+      }
+      .roster-group details:nth-of-type(2),
+      .transfer-group details:nth-of-type(2),
+      .news-group details:nth-of-type(2) {
+        background: var(--accordion-usc-bg);
+        box-shadow: 0 18px 40px var(--accordion-usc-shadow);
+      }
+      .instagram-card {
+        background: #132a30;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }
+      .season-results-card {
+        background: #132a30;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }
+      .season-results-card h3 {
+        color: #f1f5f9;
+      }
+      .season-results-list {
+        color: #cbd5f5;
+      }
+      .season-results-fallback {
+        color: #94a3b8;
+      }
+      .season-results-links {
+        background: #0f1f24;
+        box-shadow: inset 0 0 0 1px rgba(94, 234, 212, 0.25);
+      }
+      .season-results-links h3 {
+        color: #e6f1f3;
+      }
+      .season-results-link-list a {
+        color: #93c5fd;
+      }
+      .season-results-status {
+        color: #94a3b8;
+      }
+      .pwa-install-banner {
+        box-shadow: 0 22px 44px rgba(8, 47, 73, 0.55);
+      }
+      .pwa-install-button {
+        color: #0f766e;
+      }
+      .pwa-install-dismiss {
+        color: #e2f3f7;
+      }
+      .match-result {
+        color: #5eead4;
+      }
+      .match-meta {
+        color: #cbd5f5;
+      }
+      .transfer-line {
+        color: #dbeafe;
+      }
+      .news-meta {
+        color: #9ca3af;
+      }
+      .transfer-category {
+        color: #bfdbfe;
+      }
+      .roster-number {
+        background: #155e75;
+        color: #ecfeff;
+      }
+      .roster-official .roster-number {
+        background: #1f2933;
+      }
+      .roster-details {
+        color: #cbd5f5;
+      }
+      .update-note {
+        background: rgba(15, 118, 110, 0.16);
+        color: #ccfbf1;
+        border-color: rgba(45, 212, 191, 0.35);
+      }
+      .notice-list li {
+        background: linear-gradient(135deg, #7c2d12, #a16207);
+        color: #fef3c7;
+        box-shadow: 0 20px 48px rgba(250, 204, 21, 0.35);
+      }
+      .team-photo figcaption {
+        color: #94a3b8;
+      }
+      .team-photo-toggle__label {
+        color: #e2e8f0;
+        background: rgba(21, 94, 117, 0.5);
+        border-color: rgba(103, 232, 249, 0.3);
+      }
+      .team-photo-toggle__input:focus-visible + .team-photo-toggle__label {
+        outline-color: rgba(103, 232, 249, 0.5);
+      }
+      a {
+        color: #5eead4;
+      }
+      .countdown-meta__kickoff {
+        color: #ccfbf1;
+      }
+      .countdown-meta__location {
+        color: #bae6fd;
+      }
+      .countdown-meta__competition {
+        color: #7dd3fc;
+      }
+      .countdown-banner {
+        background: linear-gradient(135deg, rgba(20, 184, 166, 0.85), rgba(14, 165, 233, 0.65));
+        color: #ecfeff;
+        box-shadow: 0 20px 44px rgba(14, 165, 233, 0.35);
+      }
+      .countdown-banner--live {
+        background: linear-gradient(135deg, rgba(248, 113, 113, 0.92), rgba(249, 115, 22, 0.88));
+        box-shadow: 0 22px 48px rgba(185, 28, 28, 0.45);
+      }
+    }
+
+    :root {
+      --ink:#0f172a; --paper:#f7fffb; --white:#fff; --usc-deep:#004c54; --usc:#0f766e; --usc-bright:#10b981; --mint:#dcfce7; --sky:#e0f2fe; --blue:#1d4ed8; --muted:#64748b; --line:rgba(0,76,84,.14); --soft-shadow:0 14px 35px rgba(0,76,84,.10); --shadow:0 22px 54px rgba(0,76,84,.18); --radius:24px;
+    }
+    body { background:radial-gradient(circle at 10% 0%, rgba(16,185,129,.18), transparent 28%),radial-gradient(circle at 90% 10%, rgba(14,165,233,.16), transparent 30%),linear-gradient(135deg,#f8fffc 0%,#ffffff 48%,#eefcf6 100%); color:var(--ink); }
+    main,.wrap { width:min(1240px, calc(100% - 32px)); max-width:none; margin:0 auto; padding:0; }
+    .jumpbar { position:sticky; top:0; z-index:1000; background:rgba(0,76,84,.95); border-bottom:1px solid rgba(255,255,255,.16); box-shadow:0 8px 24px rgba(0,76,84,.22); backdrop-filter:blur(16px); }
+    .jumpbar-inner { width:min(1240px, calc(100% - 32px)); margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:12px; padding:6px 0; }
+    .jumpbar-links { display:flex; gap:8px; align-items:center; overflow-x:auto; scrollbar-width:none; }
+    .jumpbar-links::-webkit-scrollbar{display:none}.jumpbar-title{flex:0 0 auto;color:#a7f3d0;font-size:12px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}.jumpbar a{flex:0 0 auto;color:#fff;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:950;line-height:1;white-space:nowrap}.jumpbar a:hover,.jumpbar a:focus-visible{background:rgba(16,185,129,.24);border-color:rgba(167,243,208,.65);outline:none;text-decoration:none}.jumpbar-countdown{min-width:112px;display:flex;justify-content:flex-end;align-items:center;padding:7px 10px;border-radius:15px;color:#fff;background:rgba(255,255,255,.10);border:1px solid rgba(167,243,208,.42);font-variant-numeric:tabular-nums;white-space:nowrap}.countdown-time{font-size:18px;font-weight:1000;letter-spacing:.02em}.jumpbar-countdown.is-urgent{background:linear-gradient(135deg,rgba(185,28,28,.42),rgba(16,185,129,.18));border-color:rgba(250,204,21,.70)}.jumpbar-countdown.is-done{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.06)}
+    #top,.block[id],.notice[id],#live-regie[id]{scroll-margin-top:70px}header#top{position:relative;overflow:hidden;color:#fff;background:linear-gradient(135deg,#002f35 0%,#004c54 52%,#0f766e 52%,#0f766e 74%,#10b981 74%);box-shadow:var(--shadow);padding:54px 0 42px;margin:0 0 20px}header#top h1{margin:0;color:#fff;font-size:clamp(42px,7vw,82px);line-height:.92;letter-spacing:-.08em;font-weight:1000}header#top h1 span{display:block;color:#d1fae5}.eyebrow{font-weight:1000;text-transform:uppercase;letter-spacing:.12em;color:#a7f3d0}.subtitle{max-width:850px;font-size:clamp(16px,2vw,21px);line-height:1.45;color:#ecfdf5}.meta-row{display:flex;flex-wrap:wrap;gap:10px}.pill{display:inline-flex;align-items:center;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.14);color:#fff;border-radius:999px;padding:9px 12px;font-weight:900}.notice{border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;background:linear-gradient(135deg,#fff,#ecfdf5);box-shadow:var(--soft-shadow);margin-bottom:14px}.quickstats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:22px}.stat{border:1px solid var(--line);border-radius:20px;background:#fff;padding:16px;box-shadow:var(--soft-shadow)}.stat b{display:block;font-size:clamp(21px,2.3vw,29px);letter-spacing:-.045em;line-height:1.05;overflow-wrap:anywhere}.stat span{display:block;color:var(--muted);font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;margin-top:7px}
+    .block{position:relative;overflow:visible;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg,#fff,#f7fffb);box-shadow:var(--soft-shadow);padding:24px;margin:22px 0}.block::before,.broadcast-box::before,.season-results-card::before,.instagram-card::before,.match-list li::before{content:"";position:absolute;inset:0 0 auto 0;height:7px;background:linear-gradient(90deg,var(--usc-deep),var(--usc),var(--usc-bright))}.block h2{margin:0 0 12px;font-size:clamp(24px,3vw,32px);letter-spacing:-.04em;color:var(--ink)}.info{color:var(--muted);font-weight:700}.live-regie-block .hero-layout{margin:0}.broadcast-box{position:relative;overflow:hidden;border-radius:22px;border:1px solid var(--line);box-shadow:var(--soft-shadow)}.broadcast-table-wrapper{overflow-x:auto}.match-list li,.instagram-card,.season-results-card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:20px}.opponent-block::before{background:linear-gradient(90deg,#1e3a8a,#1d4ed8,#93c5fd)}
+    .compact-block .section-lead{margin:0 0 18px;color:#1f2937;font-size:clamp(15px,1.8vw,18px);line-height:1.55}.compact-details{border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#fff,#f7fffb);box-shadow:0 12px 30px rgba(0,76,84,.08);overflow:hidden}.compact-details>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 18px;color:var(--usc-deep);font-size:18px;font-weight:1000;letter-spacing:-.02em;background:linear-gradient(135deg,rgba(15,118,110,.12),rgba(255,255,255,.92));border-bottom:1px solid rgba(0,76,84,.10)}.compact-details>summary::-webkit-details-marker{display:none}.compact-details>summary::after{content:"zuklappen";border-radius:999px;padding:7px 10px;background:var(--usc-deep);color:#fff;font-size:11px;font-weight:1000;letter-spacing:.04em;text-transform:uppercase}.compact-details:not([open])>summary::after{content:"aufklappen"}.compact-two-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:18px;align-items:start}.compact-card{border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#fff,#f7fffb);padding:18px;box-shadow:0 12px 30px rgba(0,76,84,.07);position:relative;overflow:hidden}.compact-card::before{content:"";position:absolute;inset:0 0 auto 0;height:7px;background:linear-gradient(90deg,var(--usc-deep),var(--usc),var(--usc-bright))}.compact-card--opponent{border-color:rgba(29,78,216,.24);background:radial-gradient(circle at 100% 0%,rgba(29,78,216,.12),transparent 34%),linear-gradient(180deg,#fff,#f8fbff)}.compact-card--opponent::before{background:linear-gradient(90deg,#1e3a8a,#1d4ed8,#93c5fd)}.compact-card--usc{border-color:rgba(15,118,110,.28);background:radial-gradient(circle at 100% 0%,rgba(16,185,129,.15),transparent 34%),linear-gradient(180deg,#fff,#f0fdf4)}.compact-card h3{margin:5px 0 7px;font-size:22px;line-height:1.05;letter-spacing:-.04em}.compact-card h3 span{margin-left:8px;color:var(--muted);font-size:13px;font-weight:1000;letter-spacing:.05em;text-transform:uppercase}.compact-list-head,.compact-player-row{display:grid;grid-template-columns:54px 46px minmax(0,1fr) 48px 44px;gap:8px;align-items:center}.compact-list-head,.compact-transfer-head{color:var(--muted);font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.06em;padding:0 8px 7px}.compact-player-list,.compact-transfer-list,.compact-staff-list{list-style:none;margin:0;padding:0;display:grid;gap:3px}.compact-player-row{min-height:21px;border-radius:999px;background:rgba(255,255,255,.74);border:1px solid rgba(0,76,84,.10);padding:1px 7px;font-size:12.5px}.compact-no{font-weight:1000;color:var(--usc)}.compact-pos,.compact-height,.compact-age{font-weight:950}.compact-name{font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.compact-subdetails{margin-top:8px;border:1px solid rgba(0,76,84,.10);border-radius:16px;background:rgba(255,255,255,.62);overflow:hidden}.compact-subdetails>summary{cursor:pointer;list-style:none;padding:7px 10px;font-weight:1000;color:var(--usc-deep);display:flex;justify-content:space-between}.compact-subdetails>summary::-webkit-details-marker{display:none}.compact-staff-list{padding:0 8px 8px;gap:3px}.compact-staff-row{display:grid;grid-template-columns:72px minmax(0,1fr) minmax(150px,.95fr);gap:8px;border-radius:12px;background:#fff;padding:4px 7px;font-size:11.5px}.compact-staff-role,.compact-staff-name{font-weight:1000}.compact-staff-detail{color:var(--muted);font-weight:850;overflow:hidden;text-overflow:ellipsis}.compact-transfer-head,.compact-transfer-row{display:grid;grid-template-columns:minmax(150px,1.15fr) 45px 52px minmax(110px,.8fr) minmax(120px,1fr);gap:8px;align-items:center}.compact-transfer-category{margin-top:8px;border:1px solid rgba(0,76,84,.12);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:1000;text-transform:uppercase;letter-spacing:.08em}.compact-transfer-category--zugaenge{background:rgba(16,185,129,.13);color:#047857;border-color:rgba(16,185,129,.24)}.compact-transfer-category--abgaenge{background:rgba(185,28,28,.09);color:#991b1b;border-color:rgba(185,28,28,.18)}.compact-transfer-category--bleibt{background:rgba(250,204,21,.17);color:#854d0e;border-color:rgba(250,204,21,.36)}.compact-transfer-row{border:1px solid rgba(0,76,84,.10);border-radius:16px;background:rgba(255,255,255,.80);padding:7px 8px;font-size:12.5px}.compact-transfer-row--zugaenge{border-left:5px solid rgba(16,185,129,.55)}.compact-transfer-row--abgaenge{border-left:5px solid rgba(185,28,28,.45)}.compact-transfer-row--bleibt{border-left:5px solid rgba(250,204,21,.75)}.compact-transfer-row--trainer{border-left:5px solid rgba(0,76,84,.45)}.compact-transfer-name{font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.compact-transfer-pos,.compact-transfer-nat{font-weight:1000;color:var(--usc)}.compact-transfer-contract,.compact-transfer-club{color:var(--muted);font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    @media(max-width:1050px){.hero-layout,.compact-two-grid{grid-template-columns:1fr}.quickstats{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(min-width:721px) and (max-width:1050px){.roster-compact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.roster-compact-card{padding:12px}.roster-compact-card h3{font-size:20px}.compact-list-head,.compact-player-row{grid-template-columns:44px 34px minmax(0,1fr) 38px 32px;gap:5px}.compact-list-head{padding:0 6px 4px;font-size:10px}.compact-player-row{min-height:19px;padding:1px 5px;font-size:11.5px}.compact-player-list{gap:2px}.compact-subdetails{margin-top:6px}.compact-subdetails>summary{padding:6px 8px;font-size:12px}.compact-staff-row{grid-template-columns:52px minmax(0,1fr);gap:4px;padding:3px 6px;font-size:10.8px}.compact-staff-detail{grid-column:2/-1}}@media(max-width:720px){main,.wrap,.jumpbar-inner{width:min(100% - 20px,1240px)}.jumpbar-inner{grid-template-columns:1fr}.jumpbar-countdown{justify-content:center;width:100%}.quickstats{grid-template-columns:1fr}.block{padding:18px}.compact-details>summary{align-items:flex-start;flex-direction:column}.compact-list-head,.compact-transfer-head{display:none}.compact-player-row{grid-template-columns:46px 38px minmax(0,1fr) 42px 38px;gap:5px;padding:4px 7px;font-size:12.5px}.compact-transfer-row{grid-template-columns:44px 45px minmax(0,1fr);grid-template-areas:"pos nat name" "status status club";gap:4px 6px}.compact-transfer-name{grid-area:name}.compact-transfer-pos{grid-area:pos;text-align:left}.compact-transfer-nat{grid-area:nat;text-align:left}.compact-transfer-contract{grid-area:status}.compact-transfer-club{grid-area:club}.compact-staff-row{grid-template-columns:62px minmax(0,1fr)}.compact-staff-detail{grid-column:2/-1}}@media(max-width:430px){.compact-two-grid{padding:12px}.compact-card{padding:14px 10px}.compact-player-row{grid-template-columns:42px 34px minmax(0,1fr) 38px 34px}.compact-name{font-size:12px}}@media print{.jumpbar,.stopwatch-controls,.broadcast-controls,.team-photo-toggle__label{display:none!important}body{background:#fff}header,.block,.notice,.broadcast-box,.stat{box-shadow:none}}
+
+  </style>
+</head>
+<body>
+  <nav aria-label="Seitennavigation" class="jumpbar"><div class="jumpbar-inner"><div class="jumpbar-links"><span class="jumpbar-title">USC Matchcenter</span><a href="#top">Start</a><a href="#live-regie">Ablauf</a><a href="#spiele-gegner">Spiele Gegner</a><a href="#spiele-usc">Spiele USC</a><a href="#direktvergleich">Vergleich</a><a href="#kader">Kader</a><a href="#wechsel">Wechsel</a><a href="#news">News</a><a href="#mvp">MVP</a><a href="#saison">Saison</a></div><div aria-label="Countdown bis Spielbeginn" class="jumpbar-countdown" data-jump-countdown data-kickoff="2026-07-02T07:54:52+02:00"><span class="countdown-time">00:00:00</span></div></div></nav>
+  <header id="top"><div class="wrap"><div class="eyebrow">USC Münster · Nächster Heimgegner</div><h1>Matchcenter: <span data-next-opponent>Dresdner SC</span></h1><p class="subtitle">Alle produktionsrelevanten Informationen in einem DVV-inspirierten USC-Layout: Ablauf, Formkurve, Kader, Wechsel, News und Saisonkontext.</p><div aria-label="Spieldaten" class="meta-row"><span class="pill">🏐 VBL</span><span class="pill">🗓️ 02.07.2026 (Do) 07:54 Uhr</span><span class="pill">📍 noch nicht veröffentlicht</span><span class="pill">📊 Direkter Vergleich</span></div></div></header>
+  <main>
+    <section class="notice" aria-label="Kurzbriefing"><strong>Spieltermin:</strong> 02.07.2026 (Do) 07:54 Uhr · <strong>Ort:</strong> noch nicht veröffentlicht · <strong>Wettbewerb:</strong> VBL · <strong>Schiedsgericht:</strong> noch nicht veröffentlicht</section>
+    <div aria-label="Schnellübersicht" class="quickstats"><div class="stat"><b>Dresdner SC</b><span>Gegner</span></div><div class="stat"><b>07:54</b><span>Spielbeginn</span></div><div class="stat"><b>24</b><span>Gegner Kader/Staff</span></div><div class="stat"><b>25</b><span>USC Kader/Staff</span></div><div class="stat"><b>8</b><span>Formspiele</span></div></div>
+    <section class="block live-regie-block" id="live-regie"><h2>Live-Regie &amp; Sendeablauf</h2><p class="info">Ablaufpläne, Countdown und Stoppuhr bleiben bedienbar; die Darstellung folgt dem kartenbasierten DVV-Layout.</p>
+    <div class="hero-layout">
+      <div class="hero-primary">
+            <div class="countdown-meta">
+              <p class="countdown-meta__kickoff"><strong>Spieltermin:</strong> 02.07.2026 (Do) 07:54 Uhr</p>
+              <p class="countdown-meta__location"><strong>Austragungsort:</strong> noch nicht veröffentlicht</p>
+              <p class="countdown-meta__competition"><strong>Wettbewerb:</strong> VBL</p>
+            </div>
+        <div class="meta">
+          <p><strong>1. Schiedsrichter*in:</strong> noch nicht veröffentlicht</p>
+      <p><strong>2. Schiedsrichter*in:</strong> noch nicht veröffentlicht</p>
+      <p class="meta-spacer" aria-hidden="true"></p>
+      <p><a class="meta-link" href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/tabelle_hauptrunde.xhtml">Tabelle der Volleyball Bundesliga</a></p>
+      <p><a class="meta-link" href="https://www.usc-muenster.de/">Homepage USC Münster</a></p>
+      <p><a class="meta-link" href="https://www.dscvolley.de/">Homepage Dresdner SC</a></p>
+        </div>
+        <div class="hero-stopwatch">
+          <aside class="broadcast-box" aria-labelledby="stopwatch-heading">
+            <details class="broadcast-box__details" data-stopwatch>
+              <summary class="broadcast-box__summary">
+                <span class="broadcast-box__summary-title" id="stopwatch-heading" role="heading" aria-level="2">Stoppuhr</span>
+                <span class="broadcast-box__summary-indicator" aria-hidden="true"></span>
+              </summary>
+              <div class="broadcast-box__content">
+                <div class="stopwatch-display" data-stopwatch-display aria-live="polite">00:00</div>
+                <div class="stopwatch-controls" role="group" aria-label="Stoppuhr-Steuerung">
+                  <button type="button" class="stopwatch-button" data-stopwatch-start>Start</button>
+                  <button type="button" class="stopwatch-button" data-stopwatch-stop>Stopp</button>
+                  <button type="button" class="stopwatch-button" data-stopwatch-reset>Zurücksetzen</button>
+                </div>
+              </div>
+            </details>
+          </aside>
+        </div>
+      </div>
+      <div class="hero-secondary">
+        <aside class="broadcast-box" aria-labelledby="broadcast-plan-heading">
+          <details class="broadcast-box__details">
+            <summary class="broadcast-box__summary">
+              <span class="broadcast-box__summary-title" id="broadcast-plan-heading" role="heading" aria-level="2">Sendeablauf vor Spielbeginn</span>
+              <span class="countdown-banner" data-countdown-banner data-kickoff="2026-07-02T07:54:52+02:00" data-timezone="Europe/Berlin">
+                <span class="countdown-heading" data-countdown-heading></span>
+                <span class="countdown-display" data-countdown-display aria-live="polite">--:--:--</span>
+              </span>
+              <span class="broadcast-box__summary-indicator" aria-hidden="true"></span>
+            </summary>
+            <div class="broadcast-box__content">
+              <div class="broadcast-table-wrapper">
+                <table class="broadcast-table">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="broadcast-heading broadcast-heading--time">Zeit</th>
+                      <th scope="col" class="broadcast-heading broadcast-heading--countdown">Countdown</th>
+                      <th scope="col" class="broadcast-heading broadcast-heading--duration">Dauer</th>
+                      <th scope="col" class="broadcast-heading broadcast-heading--note">Programmpunkt</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="broadcast-row">
+                      <th scope="row" class="broadcast-cell broadcast-cell--time">07:34:52 Uhr</th>
+                      <td class="broadcast-cell broadcast-cell--countdown">−20:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration">00:05:00</td>
+                      <td class="broadcast-cell broadcast-cell--note">LIGA Grafik-Tafel: &quot;Die Übertragung startet in Kürze&quot; → Signal auf Plattform.</td>
+                    </tr>
+                    <tr class="broadcast-row">
+                      <th scope="row" class="broadcast-cell broadcast-cell--time">07:39:52 Uhr</th>
+                      <td class="broadcast-cell broadcast-cell--countdown">−15:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration">00:00:30</td>
+                      <td class="broadcast-cell broadcast-cell--note">Volleyball – Opening Title + DYN VBL Opener</td>
+                    </tr>
+                    <tr class="broadcast-row">
+                      <th scope="row" class="broadcast-cell broadcast-cell--time">07:40:22 Uhr</th>
+                      <td class="broadcast-cell broadcast-cell--countdown">−14:30</td>
+                      <td class="broadcast-cell broadcast-cell--duration">00:06:30</td>
+                      <td class="broadcast-cell broadcast-cell--note">Beginn Kommentar; Bild-im-Bild mit K1. Spieltagsübersicht und Rückblick, Tabelle, Schiedsrichter.</td>
+                    </tr>
+                    <tr class="broadcast-row">
+                      <th scope="row" class="broadcast-cell broadcast-cell--time">07:46:52 Uhr</th>
+                      <td class="broadcast-cell broadcast-cell--countdown">−8:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration">00:03:20</td>
+                      <td class="broadcast-cell broadcast-cell--note">Werbung 1 (Regie: saubere K1, Kommentatoren: still).</td>
+                    </tr>
+                    <tr class="broadcast-row">
+                      <th scope="row" class="broadcast-cell broadcast-cell--time">07:50:12 Uhr</th>
+                      <td class="broadcast-cell broadcast-cell--countdown">−4:40</td>
+                      <td class="broadcast-cell broadcast-cell--duration">00:03:40</td>
+                      <td class="broadcast-cell broadcast-cell--note">Wiederbeginn Kommentar, Einlauf Spielerinnen, Schiedsgericht</td>
+                    </tr>
+                    <tr class="broadcast-row">
+                      <th scope="row" class="broadcast-cell broadcast-cell--time">07:52:52 Uhr</th>
+                      <td class="broadcast-cell broadcast-cell--countdown">−2:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration">00:02:00</td>
+                      <td class="broadcast-cell broadcast-cell--note">Aufstellungen der Mannschaften</td>
+                    </tr>
+                    <tr class="broadcast-row">
+                      <th scope="row" class="broadcast-cell broadcast-cell--time">07:54:52 Uhr</th>
+                      <td class="broadcast-cell broadcast-cell--countdown">−0:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration">00:30:00</td>
+                      <td class="broadcast-cell broadcast-cell--note">Spielbeginn</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+        </aside>
+        <aside class="broadcast-box" aria-labelledby="set-break-1-2-heading">
+          <details class="broadcast-box__details">
+            <summary class="broadcast-box__summary">
+              <span class="broadcast-box__summary-title" id="set-break-1-2-heading" role="heading" aria-level="2">Satzpause 1 → 2 | 3 → 4 | 4 → 5</span>
+              <span class="broadcast-box__summary-indicator" aria-hidden="true"></span>
+            </summary>
+            <div class="broadcast-box__content">
+              <div class="broadcast-table-wrapper">
+                <table class="broadcast-table">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="broadcast-heading broadcast-heading--start">Start</th>
+                      <th scope="col" class="broadcast-heading broadcast-heading--duration">Dauer</th>
+                      <th scope="col" class="broadcast-heading broadcast-heading--note">Programmpunkt</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="broadcast-row" data-set-break-row="0">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>0:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>0:45</td>
+                      <td class="broadcast-cell broadcast-cell--note">Ende 1. Satz: 45 Sekunden Fazit</td>
+                    </tr>
+                    <tr class="broadcast-row" data-set-break-row="1">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>0:45</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>1:30</td>
+                      <td class="broadcast-cell broadcast-cell--note">01:30 Minuten ohne Kommentar</td>
+                    </tr>
+                    <tr class="broadcast-row" data-set-break-row="2">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>2:15</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>0:45</td>
+                      <td class="broadcast-cell broadcast-cell--note">45 Sekunden Wiedereinstieg vor dem 2. Satz</td>
+                    </tr>
+                    <tr class="broadcast-row" data-set-break-row="3">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>3:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>0:00</td>
+                      <td class="broadcast-cell broadcast-cell--note">Beginn 2. Satz</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+        </aside>
+        <aside class="broadcast-box" aria-labelledby="set-break-2-3-heading">
+          <details class="broadcast-box__details">
+            <summary class="broadcast-box__summary">
+              <span class="broadcast-box__summary-title" id="set-break-2-3-heading" role="heading" aria-level="2">Satzpause 2 → 3</span>
+              <span class="broadcast-box__summary-indicator" aria-hidden="true"></span>
+            </summary>
+            <div class="broadcast-box__content">
+              <div class="broadcast-controls">
+                <label class="broadcast-controls__label" for="set-break-duration-input">Werbung 2 Dauer (MM:SS)</label>
+                <input class="broadcast-controls__input" id="set-break-duration-input" name="set-break-duration-input" type="text" inputmode="numeric" value="5:15" placeholder="05:15" data-set-break-duration-input />
+              </div>
+              <div class="broadcast-table-wrapper">
+                <table class="broadcast-table" data-set-break-table>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="broadcast-heading broadcast-heading--start">Start</th>
+                      <th scope="col" class="broadcast-heading broadcast-heading--duration">Dauer</th>
+                      <th scope="col" class="broadcast-heading broadcast-heading--note">Programmpunkt</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="broadcast-row" data-set-break-row="0">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>0:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>0:20</td>
+                      <td class="broadcast-cell broadcast-cell--note">Ende 2. Satz: 20 Sekunden Fazit</td>
+                    </tr>
+                    <tr class="broadcast-row" data-set-break-row="1" data-editable-duration-row="true">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>0:20</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>5:15</td>
+                      <td class="broadcast-cell broadcast-cell--note">Werbung 2 (Regie: saubere K1, Kommentatoren: still).</td>
+                    </tr>
+                    <tr class="broadcast-row" data-set-break-row="2">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>5:35</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>0:25</td>
+                      <td class="broadcast-cell broadcast-cell--note">20 Sekunden Wiedereinstieg vor dem 3. Satz</td>
+                    </tr>
+                    <tr class="broadcast-row" data-set-break-row="3">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>6:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>0:00</td>
+                      <td class="broadcast-cell broadcast-cell--note">Beginn 3. Satz</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+        </aside>
+        <aside class="broadcast-box" aria-labelledby="post-match-heading">
+          <details class="broadcast-box__details">
+            <summary class="broadcast-box__summary">
+              <span class="broadcast-box__summary-title" id="post-match-heading" role="heading" aria-level="2">Spielende</span>
+              <span class="broadcast-box__summary-indicator" aria-hidden="true"></span>
+            </summary>
+            <div class="broadcast-box__content">
+              <div class="broadcast-table-wrapper">
+                <table class="broadcast-table">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="broadcast-heading broadcast-heading--start">Start</th>
+                      <th scope="col" class="broadcast-heading broadcast-heading--duration">Dauer</th>
+                      <th scope="col" class="broadcast-heading broadcast-heading--note">Programmpunkt</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="broadcast-row" data-set-break-row="0">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>0:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>3:00</td>
+                      <td class="broadcast-cell broadcast-cell--note">Spielende: 45 Sekunden Fazit + 02:15 MVP-Ehrung</td>
+                    </tr>
+                    <tr class="broadcast-row" data-set-break-row="1">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>3:00</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>3:20</td>
+                      <td class="broadcast-cell broadcast-cell--note">Werbung 3 (Regie: saubere K1, Kommentatoren: still).</td>
+                    </tr>
+                    <tr class="broadcast-row" data-set-break-row="2">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>6:20</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>2:00</td>
+                      <td class="broadcast-cell broadcast-cell--note">02:00 Minuten Interview</td>
+                    </tr>
+                    <tr class="broadcast-row" data-set-break-row="3">
+                      <td class="broadcast-cell broadcast-cell--start" data-start-cell>8:20</td>
+                      <td class="broadcast-cell broadcast-cell--duration" data-duration-cell>1:00</td>
+                      <td class="broadcast-cell broadcast-cell--note">Ausblick auf die nächsten Gegner + Verabschiedung (evt ins Interview integriert)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+        </aside>
+      </div>
+    </div>
+    </section>
+
+    <section class="block match-block opponent-block" id="spiele-gegner"><h2>Spiele: Dresdner SC</h2><ul class="match-list"><li class="match-item match-item--finished">
+  <div class="match-line">
+    <div class="match-header"><strong>22.04.2026 (Mi) 19:00 Uhr</strong> – VfB Suhl LOTTO Thüringen vs. Dresdner SC</div>
+    <div class="match-result">Ergebnis: 3:0 / 75:58 (25:20 25:16 25:22)</div>
+    <div class="match-meta"><span>Zuschauer: 1900</span></div>
+  </div>
+</li>
+      <li class="match-item match-item--finished">
+  <div class="match-line">
+    <div class="match-header"><strong>18.04.2026 (Sa) 19:00 Uhr</strong> – Dresdner SC vs. VfB Suhl LOTTO Thüringen</div>
+    <div class="match-result">Ergebnis: 2:3 / 89:112 (25:23 11:25 26:24 14:25 13:15)</div>
+    <div class="match-meta"><span>Zuschauer: 3000</span></div>
+  </div>
+</li>
+      <li class="match-item match-item--finished">
+  <div class="match-line">
+    <div class="match-header"><strong>15.04.2026 (Mi) 19:00 Uhr</strong> – VfB Suhl LOTTO Thüringen vs. Dresdner SC</div>
+    <div class="match-result">Ergebnis: 3:0 / 75:60 (25:22 25:22 25:16)</div>
+    <div class="match-meta"><span>Zuschauer: 1800</span></div>
+  </div>
+</li>
+      <li class="match-item match-item--finished">
+  <div class="match-line">
+    <div class="match-header"><strong>08.04.2026 (Mi) 19:00 Uhr</strong> – Dresdner SC vs. Allianz MTV Stuttgart</div>
+    <div class="match-result">Ergebnis: 3:2 / 109:108 (20:25 25:21 25:23 24:26 15:13)</div>
+    <div class="match-meta"><span>Zuschauer: 3000</span></div>
+  </div>
+</li></ul></section>
+    <section class="block match-block usc-block" id="spiele-usc"><h2>Spiele: USC Münster</h2><ul class="match-list"><li class="match-item match-item--finished">
+  <div class="match-line">
+    <div class="match-header"><strong>25.03.2026 (Mi) 19:30 Uhr</strong> – USC Münster vs. Dresdner SC</div>
+    <div class="match-result">Ergebnis: 2:3 / 109:112 (20:25 25:22 25:22 23:25 16:18)</div>
+    <div class="match-meta"><span>Zuschauer: 1911</span></div>
+  </div>
+</li>
+      <li class="match-item match-item--finished">
+  <div class="match-line">
+    <div class="match-header"><strong>21.03.2026 (Sa) 17:15 Uhr</strong> – Dresdner SC vs. USC Münster</div>
+    <div class="match-result">Ergebnis: 3:0 / 78:67 (28:26 25:22 25:19)</div>
+    <div class="match-meta"><span>Zuschauer: 2480</span></div>
+  </div>
+</li>
+      <li class="match-item match-item--finished">
+  <div class="match-line">
+    <div class="match-header"><strong>14.03.2026 (Sa) 18:00 Uhr</strong> – USC Münster vs. Schwarz-Weiß Erfurt</div>
+    <div class="match-result">Ergebnis: 3:0 / 75:52 (25:20 25:18 25:14)</div>
+    <div class="match-meta"><span>Zuschauer: 2214</span><br><a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=781910723&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a></div>
+  </div>
+</li>
+      <li class="match-item match-item--finished">
+  <div class="match-line">
+    <div class="match-header"><strong>07.03.2026 (Sa) 18:05 Uhr</strong> – Allianz MTV Stuttgart vs. USC Münster</div>
+    <div class="match-result">Ergebnis: 3:1 / 98:83 (23:25 25:18 25:17 25:23)</div>
+    <div class="match-meta"><span>Zuschauer: 2011</span><br><a href="https://www.volleyball-bundesliga.de/popup/matchSeries/matchDetails.xhtml?matchId=781910656&amp;hideHistoryBackButton=true" target="_blank" rel="noopener">Spielinfos</a></div>
+  </div>
+</li></ul></section>
+    <aside class="broadcast-box direct-comparison-box" aria-labelledby="direct-comparison-heading-dresdner-sc">
+      <details class="broadcast-box__details">
+        <summary class="broadcast-box__summary">
+          <span class="broadcast-box__summary-title" id="direct-comparison-heading-dresdner-sc" role="heading" aria-level="2">Direkter Vergleich</span>
+          <span class="broadcast-box__summary-indicator" aria-hidden="true"></span>
+        </summary>
+        <div class="broadcast-box__content">
+          <div class="direct-comparison__metrics">
+          <div class="direct-comparison__metric">
+            <span class="direct-comparison__metric-label">Siege</span>
+            <div class="direct-comparison__metric-score">
+              <span class="direct-comparison__metric-team direct-comparison__metric-team--home">USC Münster</span>
+              <span class="direct-comparison__metric-value">2 – 7</span>
+              <span class="direct-comparison__metric-team direct-comparison__metric-team--opponent">Dresdner SC</span>
+            </div>
+          </div>
+          <div class="direct-comparison__metric">
+            <span class="direct-comparison__metric-label">Sätze</span>
+            <div class="direct-comparison__metric-score">
+              <span class="direct-comparison__metric-team direct-comparison__metric-team--home">USC Münster</span>
+              <span class="direct-comparison__metric-value">10 – 24</span>
+              <span class="direct-comparison__metric-team direct-comparison__metric-team--opponent">Dresdner SC</span>
+            </div>
+          </div>
+          </div>
+          <h3 class="direct-comparison__matches-heading">Alle Duelle</h3>
+          <div class="broadcast-table-wrapper direct-comparison__matches-wrapper">
+            <table class="broadcast-table direct-comparison__matches-table">
+              <thead>
+                <tr>
+                  <th scope="col" class="broadcast-heading direct-comparison__heading direct-comparison__heading--meta">Datum &amp; Wettbewerb</th>
+                  <th scope="col" class="broadcast-heading direct-comparison__heading direct-comparison__heading--teams">Begegnung</th>
+                  <th scope="col" class="broadcast-heading direct-comparison__heading direct-comparison__heading--result">Ergebnis</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr class="broadcast-row direct-comparison__match-row">
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--meta">04.03.2026 · VBL · Spieltag 21 · Dresden</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--teams">USC Münster – Dresdner SC</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--result direct-comparison__result--loss">0:3 (22:25, 19:25, 16:25)</td>
+            </tr>
+            <tr class="broadcast-row direct-comparison__match-row">
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--meta">13.12.2025 · VBL · Spieltag 12 · Münster</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--teams">USC Münster – Dresdner SC</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--result direct-comparison__result--win">3:2 (17:25, 25:22, 25:23, 21:25, 15:12)</td>
+            </tr>
+            <tr class="broadcast-row direct-comparison__match-row">
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--meta">08.02.2025 · VBL · Spieltag 22 · Münster</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--teams">USC Münster – Dresdner SC</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--result direct-comparison__result--loss">2:3 (25:21, 25:23, 25:27, 20:25, 9:15)</td>
+            </tr>
+            <tr class="broadcast-row direct-comparison__match-row">
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--meta">08.12.2024 · VBL · Spieltag 12 · Münster</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--teams">USC Münster – Dresdner SC</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--result direct-comparison__result--loss">0:3 (18:25, 22:25, 20:25)</td>
+            </tr>
+            <tr class="broadcast-row direct-comparison__match-row">
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--meta">05.10.2024 · VBL · Spieltag 3 · Dresden</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--teams">USC Münster – Dresdner SC</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--result direct-comparison__result--loss">0:3 (25:27, 22:25, 16:25)</td>
+            </tr>
+            <tr class="broadcast-row direct-comparison__match-row">
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--meta">30.12.2023 · VBL · Spieltag 3 · Dresden</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--teams">USC Münster – Dresdner SC</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--result direct-comparison__result--loss">1:3 (17:25, 25:21, 23:25, 19:25)</td>
+            </tr>
+            <tr class="broadcast-row direct-comparison__match-row">
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--meta">21.10.2023 · VBL · Spieltag 12 · Münster</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--teams">USC Münster – Dresdner SC</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--result direct-comparison__result--loss">0:3 (18:25, 18:25, 18:25)</td>
+            </tr>
+            <tr class="broadcast-row direct-comparison__match-row">
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--meta">25.03.2023 · VBL · Spieltag 21 · Münster</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--teams">USC Münster – Dresdner SC</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--result direct-comparison__result--win">3:1 (17:25, 25:21, 26:24, 25:18)</td>
+            </tr>
+            <tr class="broadcast-row direct-comparison__match-row">
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--meta">30.12.2022 · VBL · Spieltag 10 · Dresden</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--teams">USC Münster – Dresdner SC</td>
+              <td class="broadcast-cell direct-comparison__cell direct-comparison__cell--result direct-comparison__result--loss">1:3 (15:25, 27:25, 17:25, 18:25)</td>
+            </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="direct-comparison__note">Datenbasis: Saisons 2022/23 – 2025/26</p>
+        </div>
+      </details>
+    </aside>
+    <section class="lineup-link block block-link" id="aufstellungen"><ul><li><a href="aufstellungen.html">Startaufstellungen der letzten Begegnungen</a></li></ul></section>
+    <section class="roster-group block compact-block" id="kader"><h2>Spielerinnen kompakt nach Trikotnummern</h2><p class="section-lead">Trikotnummer, Position, Name, Größe und Alter – im kompakten DVV-Listenstil und nach Trikotnummer sortiert. Der Staff bleibt je Team separat aufklappbar.</p><details class="compact-details" open><summary>Kaderlisten aufklappen</summary><div class="compact-two-grid roster-compact-grid"><article class="compact-card roster-compact-card compact-card--opponent" aria-label="Dresdner SC Spielerinnen nach Trikotnummern"><h3>DRE <span>Dresdner SC</span></h3><div class="compact-list-head" aria-hidden="true"><span>#</span><span>Pos.</span><span>Name</span><span>cm</span><span>Alter</span></div><ul class="compact-player-list"><li class="compact-player-row" title="(pa-TRI-tsi-a NEST-ler) · 170 cm | 17.05.2001 (25) | Deutschland | Libero"><span class="compact-no"># 1</span><span class="compact-pos">L</span><span class="compact-name">Patricia Nestler</span><span class="compact-height">170</span><span class="compact-age">25</span></li><li class="compact-player-row" title="(la-RIS-sa WIN-ter) · 180 cm | 12.04.2004 (22) | Deutschland | Zuspiel"><span class="compact-no"># 2</span><span class="compact-pos">Z</span><span class="compact-name">Larissa Winter</span><span class="compact-height">180</span><span class="compact-age">22</span></li><li class="compact-player-row" title="(LE-na OL-li-ges) · 176 cm | 03.10.2008 (17) | Deutschland | Zuspiel"><span class="compact-no"># 3</span><span class="compact-pos">Z</span><span class="compact-name">Lena Olliges</span><span class="compact-height">176</span><span class="compact-age">17</span></li><li class="compact-player-row" title="(EM-ma GROOM) · 175 cm | 20.09.2002 (23) | Vereinigte Staaten von Amerika | Zuspiel"><span class="compact-no"># 4</span><span class="compact-pos">Z</span><span class="compact-name">Emma Grome</span><span class="compact-height">175</span><span class="compact-age">23</span></li><li class="compact-player-row" title="(RO-sa EN-ti-us) · 191 cm | 17.09.2003 (22) | Niederlande | Diagonal"><span class="compact-no"># 5</span><span class="compact-pos">D</span><span class="compact-name">Rosa Entius</span><span class="compact-height">191</span><span class="compact-age">22</span></li><li class="compact-player-row" title="(a-ME-li-a van der WERF) · 191 cm | 11.03.2002 (24) | Vereinigte Staaten von Amerika | Mittelblock"><span class="compact-no"># 6</span><span class="compact-pos">MB</span><span class="compact-name">Amelia Van der Werff</span><span class="compact-height">191</span><span class="compact-age">24</span></li><li class="compact-player-row" title="(te-RE-sa ZI-gen-balg) · 180 cm | 13.09.2006 (19) | Deutschland | Außenangriff"><span class="compact-no"># 7</span><span class="compact-pos">AA</span><span class="compact-name">Teresa Ziegenbalg</span><span class="compact-height">180</span><span class="compact-age">19</span></li><li class="compact-player-row" title="(JET-te KÖI-pers) · 186 cm | 23.07.2002 (23) | Niederlande | Außenangriff"><span class="compact-no"># 8</span><span class="compact-pos">AA</span><span class="compact-name">Jette Kuipers</span><span class="compact-height">186</span><span class="compact-age">23</span></li><li class="compact-player-row" title="(e-MI-li-a SCHAR-schmidt) · 175 cm | 30.03.2007 (19) | Deutschland | Libero"><span class="compact-no"># 9</span><span class="compact-pos">L</span><span class="compact-name">Emilia Schaarschmidt</span><span class="compact-height">175</span><span class="compact-age">19</span></li><li class="compact-player-row" title="(MI-ku a-ki-MO-to) · 185 cm | 18.08.2006 (19) | Japan | Außenangriff"><span class="compact-no"># 10</span><span class="compact-pos">AA</span><span class="compact-name">Miku Akimoto</span><span class="compact-height">185</span><span class="compact-age">19</span></li><li class="compact-player-row" title="(a-MAN-da SIKS-na) · 185 cm | 20.08.2002 (23) | Kanada | Mittelblock"><span class="compact-no"># 11</span><span class="compact-pos">MB</span><span class="compact-name">Amanda Siksna</span><span class="compact-height">185</span><span class="compact-age">23</span></li><li class="compact-player-row" title="(MET-te mar-LEEN PFEF-fer) · 190 cm | 12.07.2005 (20) | Deutschland | Mittelblock"><span class="compact-no"># 12</span><span class="compact-pos">MB</span><span class="compact-name">Mette Marleen Pfeffer</span><span class="compact-height">190</span><span class="compact-age">20</span></li><li class="compact-player-row" title="(flo-ren-TI-ne RO-se-mann) · 188 cm | 02.01.2007 (19) | Deutschland | Mittelblock"><span class="compact-no"># 13</span><span class="compact-pos">MB</span><span class="compact-name">Florentine Rosemann</span><span class="compact-height">188</span><span class="compact-age">19</span></li><li class="compact-player-row" title="188 cm | 06.09.2001 (24) | Lettland | Diagonal"><span class="compact-no"># 15</span><span class="compact-pos">D</span><span class="compact-name">Marta Kame?lija Levinska</span><span class="compact-height">188</span><span class="compact-age">24</span></li><li class="compact-player-row" title="(lo-RE-na LOR-ber FI-jok) · 175 cm | 17.02.2003 (23) | Slowenien | Außenangriff"><span class="compact-no"># 17</span><span class="compact-pos">AA</span><span class="compact-name">Lorena Lorber Fijok</span><span class="compact-height">175</span><span class="compact-age">23</span></li></ul><details class="compact-subdetails"><summary>Staff anzeigen</summary><ul class="compact-staff-list"><li class="compact-staff-row"><span class="compact-staff-role">T</span><span class="compact-staff-name">Alexander Waibl</span><span class="compact-staff-detail">20.03.1968 (58) | Deutschland | Trainer</span></li><li class="compact-staff-row"><span class="compact-staff-role">Co</span><span class="compact-staff-name">Andreas Renneberg</span><span class="compact-staff-detail">14.11.1983 (42) | Deutschland | Co-Trainer</span></li><li class="compact-staff-row"><span class="compact-staff-role">Co</span><span class="compact-staff-name">Lukasz Marciniak</span><span class="compact-staff-detail">22.04.1990 (36) | Polen | Co-Trainer</span></li><li class="compact-staff-row"><span class="compact-staff-role">Co</span><span class="compact-staff-name">Wojciech Jerzy Paleszniak</span><span class="compact-staff-detail">04.08.1986 (39) | Polen | Co-Trainer</span></li><li class="compact-staff-row"><span class="compact-staff-role">Scout</span><span class="compact-staff-name">Rados?aw Roman Wodzi?ski</span><span class="compact-staff-detail">06.11.1990 (35) | Polen | Co-Trainer (Scout)</span></li><li class="compact-staff-row"><span class="compact-staff-role">Stat</span><span class="compact-staff-name">Rados?aw Roman Wodzi?ski</span><span class="compact-staff-detail">06.11.1990 (35) | Polen | Statistiker</span></li><li class="compact-staff-row"><span class="compact-staff-role">Physio</span><span class="compact-staff-name">Oleksandr Selyavkin</span><span class="compact-staff-detail">23.09.1987 (38) | Ukraine | Physiotherapeut</span></li><li class="compact-staff-row"><span class="compact-staff-role">Arzt</span><span class="compact-staff-name">Dr. Attila Höhne</span><span class="compact-staff-detail">06.12.1970 (55) | Deutschland | Arzt</span></li><li class="compact-staff-row"><span class="compact-staff-role">Arzt</span><span class="compact-staff-name">Dr. Tino Lorenz</span><span class="compact-staff-detail">20.07.1962 (63) | Deutschland | Arzt</span></li></ul></details></article><article class="compact-card roster-compact-card compact-card--usc" aria-label="USC Münster Spielerinnen nach Trikotnummern"><h3>USC <span>USC Münster</span></h3><div class="compact-list-head" aria-hidden="true"><span>#</span><span>Pos.</span><span>Name</span><span>cm</span><span>Alter</span></div><ul class="compact-player-list"><li class="compact-player-row" title="178 cm | 31.05.2005 (21) | Niederlande | Libero"><span class="compact-no"># 1</span><span class="compact-pos">L</span><span class="compact-name">Pippa Molenaar</span><span class="compact-height">178</span><span class="compact-age">21</span></li><li class="compact-player-row" title="177 cm | 06.05.2006 (20) | Deutschland | Libero"><span class="compact-no"># 2</span><span class="compact-pos">L</span><span class="compact-name">Lara-Marie Schaefer</span><span class="compact-height">177</span><span class="compact-age">20</span></li><li class="compact-player-row" title="185 cm | 12.07.1998 (27) | Deutschland | Mittelblock"><span class="compact-no"># 3</span><span class="compact-pos">MB</span><span class="compact-name">Esther Spöler</span><span class="compact-height">185</span><span class="compact-age">27</span></li><li class="compact-player-row" title="180 cm | 30.09.2002 (23) | Schweden | Außenangriff"><span class="compact-no"># 5</span><span class="compact-pos">AA</span><span class="compact-name">Cecilia Malm</span><span class="compact-height">180</span><span class="compact-age">23</span></li><li class="compact-player-row" title="179 cm | 01.01.2000 (26) | Deutschland | Außenangriff"><span class="compact-no"># 7</span><span class="compact-pos">AA</span><span class="compact-name">Elena Kömmling</span><span class="compact-height">179</span><span class="compact-age">26</span></li><li class="compact-player-row" title="180 cm | 31.07.1997 (28) | Deutschland | Zuspiel"><span class="compact-no"># 8</span><span class="compact-pos">Z</span><span class="compact-name">Yina Liu</span><span class="compact-height">180</span><span class="compact-age">28</span></li><li class="compact-player-row" title="179 cm | 26.07.2005 (20) | Deutschland | Zuspiel"><span class="compact-no"># 9</span><span class="compact-pos">Z</span><span class="compact-name">Emilia Jordan</span><span class="compact-height">179</span><span class="compact-age">20</span></li><li class="compact-player-row" title="188 cm | 21.04.2005 (21) | Deutschland | Außenangriff"><span class="compact-no"># 10</span><span class="compact-pos">AA</span><span class="compact-name">Amelie Strothoff</span><span class="compact-height">188</span><span class="compact-age">21</span></li><li class="compact-player-row" title="191 cm | 03.11.2008 (17) | Deutschland | Mittelblock"><span class="compact-no"># 11</span><span class="compact-pos">MB</span><span class="compact-name">Franziska Heil</span><span class="compact-height">191</span><span class="compact-age">17</span></li><li class="compact-player-row" title="194 cm | 29.03.2000 (26) | Belgien | Mittelblock"><span class="compact-no"># 12</span><span class="compact-pos">MB</span><span class="compact-name">Anke Waelkens</span><span class="compact-height">194</span><span class="compact-age">26</span></li><li class="compact-player-row" title="183 cm | 19.05.2008 (18) | Deutschland | Außenangriff"><span class="compact-no"># 16</span><span class="compact-pos">AA</span><span class="compact-name">Lena Schultze</span><span class="compact-height">183</span><span class="compact-age">18</span></li><li class="compact-player-row" title="192 cm | 28.01.2007 (19) | Deutschland | Mittelblock"><span class="compact-no"># 18</span><span class="compact-pos">MB</span><span class="compact-name">Diane Seybering</span><span class="compact-height">192</span><span class="compact-age">19</span></li></ul><details class="compact-subdetails"><summary>Staff anzeigen</summary><ul class="compact-staff-list"><li class="compact-staff-row"><span class="compact-staff-role">T</span><span class="compact-staff-name">Matthias Pack</span><span class="compact-staff-detail">29.11.1985 (40) | Österreich | Trainer</span></li><li class="compact-staff-row"><span class="compact-staff-role">T</span><span class="compact-staff-name">Ralph Bergmann</span><span class="compact-staff-detail">26.05.1970 (56) | Deutschland | Trainer</span></li><li class="compact-staff-row"><span class="compact-staff-role">Co</span><span class="compact-staff-name">Jack Payne</span><span class="compact-staff-detail">17.03.1994 (32) | Australien | Co-Trainer</span></li><li class="compact-staff-row"><span class="compact-staff-role">Co</span><span class="compact-staff-name">Matthias Pack</span><span class="compact-staff-detail">29.11.1985 (40) | Österreich | Co-Trainer</span></li><li class="compact-staff-row"><span class="compact-staff-role">Co</span><span class="compact-staff-name">Ralph Bergmann</span><span class="compact-staff-detail">26.05.1970 (56) | Deutschland | Co-Trainer</span></li><li class="compact-staff-row"><span class="compact-staff-role">Scout</span><span class="compact-staff-name">Jack Payne</span><span class="compact-staff-detail">17.03.1994 (32) | Australien | Co-Trainer (Scout)</span></li><li class="compact-staff-row"><span class="compact-staff-role">Scout</span><span class="compact-staff-name">Wopke Jurjen Nawijn</span><span class="compact-staff-detail">13.01.1999 (27) | Niederlande | Co-Trainer (Scout)</span></li><li class="compact-staff-row"><span class="compact-staff-role">Physio</span><span class="compact-staff-name">Constantin Lingenfelser</span><span class="compact-staff-detail">17.09.1992 (33) | Deutschland | Physiotherapeut</span></li><li class="compact-staff-row"><span class="compact-staff-role">Physio</span><span class="compact-staff-name">Simon Brüggemann</span><span class="compact-staff-detail">02.05.1990 (36) | Deutschland | Physiotherapeut</span></li><li class="compact-staff-row"><span class="compact-staff-role">Arzt</span><span class="compact-staff-name">Dr. Christian Fechtrup</span><span class="compact-staff-detail">13.03.1961 (65) | Deutschland | Arzt</span></li><li class="compact-staff-row"><span class="compact-staff-role">Arzt</span><span class="compact-staff-name">Dr. Silvia Everding</span><span class="compact-staff-detail">08.11.1983 (42) | Deutschland | Arzt</span></li><li class="compact-staff-row"><span class="compact-staff-role">Arzt</span><span class="compact-staff-name">Prof. Dr. med. Peter Willeke</span><span class="compact-staff-detail">15.09.1970 (55) | Deutschland | Arzt</span></li><li class="compact-staff-row"><span class="compact-staff-role">Arzt</span><span class="compact-staff-name">Rieke Herzog</span><span class="compact-staff-detail">11.12.1979 (46) | Deutschland | Arzt</span></li></ul></details></article></div></details></section>
+    <section class="transfer-group block compact-block" id="wechsel"><h2>Wechselbörse kompakt</h2><p class="section-lead">Trainer, Zugänge, Vertragsstatus und Abgänge im gleichen kompakten Karten-/Listenraster wie die Trikotlisten.</p><details class="compact-details" open><summary>Wechselbörse aufklappen</summary><div class="compact-two-grid transfer-compact-grid"><article class="compact-card transfer-compact-card compact-card--opponent" aria-label="Dresdner SC Wechselbörse kompakt"><h3>DRE <span>Dresdner SC</span></h3><div class="compact-transfer-head" aria-hidden="true"><span>Name</span><span>Pos.</span><span>Nat.</span><span>Status</span><span>Von / Ziel</span></div><ul class="compact-transfer-list"><li class="compact-transfer-category compact-transfer-category--trainer">Trainer</li><li class="compact-transfer-row compact-transfer-row--trainer" title="Alexander Waibl | T | GER | Vertrag bis 2030"><span class="compact-transfer-name">Alexander Waibl</span><span class="compact-transfer-pos">T</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2030</span><span class="compact-transfer-club"></span></li><li class="compact-transfer-category compact-transfer-category--zugaenge">Zugänge</li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Florentine Rosemann | MB | GER | Vertrag bis 2028 | VC Olympia Dresden"><span class="compact-transfer-name">Florentine Rosemann</span><span class="compact-transfer-pos">MB</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2028</span><span class="compact-transfer-club">VC Olympia Dresden</span></li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Sarah Straube | Z | GER | Vertrag bis 2027 | San Giovanni in Marignano"><span class="compact-transfer-name">Sarah Straube</span><span class="compact-transfer-pos">Z</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">San Giovanni in Marignano</span></li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Lena Kindermann | D | GER | Vertrag bis 2027 | Wash4Green Monviso"><span class="compact-transfer-name">Lena Kindermann</span><span class="compact-transfer-pos">D</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">Wash4Green Monviso</span></li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Mackenzie Foley | AA | USA | Vertrag bis 2027 | VfB Suhl LOTTO Thüringen"><span class="compact-transfer-name">Mackenzie Foley</span><span class="compact-transfer-pos">AA</span><span class="compact-transfer-nat">USA</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">VfB Suhl LOTTO Thüringen</span></li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Morgan Geddes | AA | USA | Vertrag bis 2027 | VBC Cheseaux"><span class="compact-transfer-name">Morgan Geddes</span><span class="compact-transfer-pos">AA</span><span class="compact-transfer-nat">USA</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">VBC Cheseaux</span></li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Maia Dvoracek | D | USA | Vertrag bis 2027 | Viteos NUC"><span class="compact-transfer-name">Maia Dvoracek</span><span class="compact-transfer-pos">D</span><span class="compact-transfer-nat">USA</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">Viteos NUC</span></li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Raeven Chase | MB | CAN | Vertrag bis 2027 | Bordeaux Mérignac Volley"><span class="compact-transfer-name">Raeven Chase</span><span class="compact-transfer-pos">MB</span><span class="compact-transfer-nat">CAN</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">Bordeaux Mérignac Volley</span></li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Rylen Reid | AA | USA | Vertrag bis 2027 | Bahçelievler Belediyespor"><span class="compact-transfer-name">Rylen Reid</span><span class="compact-transfer-pos">AA</span><span class="compact-transfer-nat">USA</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">Bahçelievler Belediyespor</span></li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Emilia Schaarschmidt | L | GER | Vertrag bis 2027 | VC Olympia Dresden"><span class="compact-transfer-name">Emilia Schaarschmidt</span><span class="compact-transfer-pos">L</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">VC Olympia Dresden</span></li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Lena Olliges | Z | GER | Vertrag bis 2027 | VC Olympia Dresden"><span class="compact-transfer-name">Lena Olliges</span><span class="compact-transfer-pos">Z</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">VC Olympia Dresden</span></li><li class="compact-transfer-category compact-transfer-category--bleibt">weiterhin im Kader</li><li class="compact-transfer-row compact-transfer-row--bleibt" title="Mette Pfeffer | MB | GER | Vertrag bis 2028"><span class="compact-transfer-name">Mette Pfeffer</span><span class="compact-transfer-pos">MB</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2028</span><span class="compact-transfer-club"></span></li><li class="compact-transfer-row compact-transfer-row--bleibt" title="Patricia Nestler | L | GER | Vertrag bis 2027"><span class="compact-transfer-name">Patricia Nestler</span><span class="compact-transfer-pos">L</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club"></span></li><li class="compact-transfer-row compact-transfer-row--bleibt" title="Jette Kuipers | AA | NED | Vertrag bis 2027"><span class="compact-transfer-name">Jette Kuipers</span><span class="compact-transfer-pos">AA</span><span class="compact-transfer-nat">NED</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club"></span></li><li class="compact-transfer-category compact-transfer-category--abgaenge">Abgänge</li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Marta Levinska | D | LTV | unbekannt"><span class="compact-transfer-name">Marta Levinska</span><span class="compact-transfer-pos">D</span><span class="compact-transfer-nat">LTV</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">unbekannt</span></li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Lorena Lorber Fijok | AA | SVN | CSO Voluntari 2005"><span class="compact-transfer-name">Lorena Lorber Fijok</span><span class="compact-transfer-pos">AA</span><span class="compact-transfer-nat">SVN</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">CSO Voluntari 2005</span></li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Emma Grome | Z | USA | Volley Mulhouse Alsace"><span class="compact-transfer-name">Emma Grome</span><span class="compact-transfer-pos">Z</span><span class="compact-transfer-nat">USA</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">Volley Mulhouse Alsace</span></li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Larissa Winter | Z | GER | Schwarz-Weiß Erfurt"><span class="compact-transfer-name">Larissa Winter</span><span class="compact-transfer-pos">Z</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">Schwarz-Weiß Erfurt</span></li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Rosa Entius | D | NED | Ladies in Black Aachen"><span class="compact-transfer-name">Rosa Entius</span><span class="compact-transfer-pos">D</span><span class="compact-transfer-nat">NED</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">Ladies in Black Aachen</span></li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Miku Akimoto | AA | JPN | Eurotek Laica UYBA Busto Arsizio"><span class="compact-transfer-name">Miku Akimoto</span><span class="compact-transfer-pos">AA</span><span class="compact-transfer-nat">JPN</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">Eurotek Laica UYBA Busto Arsizio</span></li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Amelia Van der Werff | MB | USA | unbekannt"><span class="compact-transfer-name">Amelia Van der Werff</span><span class="compact-transfer-pos">MB</span><span class="compact-transfer-nat">USA</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">unbekannt</span></li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Amanda Siksna | MB | CAN | unbekannt"><span class="compact-transfer-name">Amanda Siksna</span><span class="compact-transfer-pos">MB</span><span class="compact-transfer-nat">CAN</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">unbekannt</span></li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Teresa Ziegenbalg | AA | GER | Ausleihe Schwarz-Weiß Erfurt"><span class="compact-transfer-name">Teresa Ziegenbalg</span><span class="compact-transfer-pos">AA</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">Ausleihe Schwarz-Weiß Erfurt</span></li></ul></article><article class="compact-card transfer-compact-card compact-card--usc" aria-label="USC Münster Wechselbörse kompakt"><h3>USC <span>USC Münster</span></h3><div class="compact-transfer-head" aria-hidden="true"><span>Name</span><span>Pos.</span><span>Nat.</span><span>Status</span><span>Von / Ziel</span></div><ul class="compact-transfer-list"><li class="compact-transfer-category compact-transfer-category--trainer">Trainer</li><li class="compact-transfer-row compact-transfer-row--trainer" title="Matthias Pack | T | AUT | Vertrag bis 2029"><span class="compact-transfer-name">Matthias Pack</span><span class="compact-transfer-pos">T</span><span class="compact-transfer-nat">AUT</span><span class="compact-transfer-contract">Vertrag bis 2029</span><span class="compact-transfer-club"></span></li><li class="compact-transfer-category compact-transfer-category--zugaenge">Zugänge</li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Bel Zimmerman | AA/D | GER | Vertrag bis 2027 | Auburn University"><span class="compact-transfer-name">Bel Zimmerman</span><span class="compact-transfer-pos">AA/D</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">Auburn University</span></li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Carla Fuchs | Z | GER | Vertrag bis 2027 | USC Münster II"><span class="compact-transfer-name">Carla Fuchs</span><span class="compact-transfer-pos">Z</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">USC Münster II</span></li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Leana Zuvic | AA | SUI | Vertrag bis 2027 | VC Kanti Schaffhausen"><span class="compact-transfer-name">Leana Zuvic</span><span class="compact-transfer-pos">AA</span><span class="compact-transfer-nat">SUI</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">VC Kanti Schaffhausen</span></li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Chalina Lederer | MB | GER | Vertrag bis 2027 | Guerreras de Puebla"><span class="compact-transfer-name">Chalina Lederer</span><span class="compact-transfer-pos">MB</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">Guerreras de Puebla</span></li><li class="compact-transfer-row compact-transfer-row--zugaenge" title="Madison Scheer | AA | USA | Vertrag bis 2027 | Southern Methodist University"><span class="compact-transfer-name">Madison Scheer</span><span class="compact-transfer-pos">AA</span><span class="compact-transfer-nat">USA</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club">Southern Methodist University</span></li><li class="compact-transfer-category compact-transfer-category--bleibt">weiterhin im Kader</li><li class="compact-transfer-row compact-transfer-row--bleibt" title="Esther Spöler | MB | GER | Vertrag bis 2027"><span class="compact-transfer-name">Esther Spöler</span><span class="compact-transfer-pos">MB</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club"></span></li><li class="compact-transfer-row compact-transfer-row--bleibt" title="Emilia Jordan | Z | GER | Vertrag bis 2027"><span class="compact-transfer-name">Emilia Jordan</span><span class="compact-transfer-pos">Z</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club"></span></li><li class="compact-transfer-row compact-transfer-row--bleibt" title="Elena Kömmling | AA | GER | Vertrag bis 2027"><span class="compact-transfer-name">Elena Kömmling</span><span class="compact-transfer-pos">AA</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club"></span></li><li class="compact-transfer-row compact-transfer-row--bleibt" title="Amelie Strothoff | AA | GER | Vertrag bis 2028"><span class="compact-transfer-name">Amelie Strothoff</span><span class="compact-transfer-pos">AA</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2028</span><span class="compact-transfer-club"></span></li><li class="compact-transfer-row compact-transfer-row--bleibt" title="Pippa Molenaar | L | NED | Vertrag bis 2027"><span class="compact-transfer-name">Pippa Molenaar</span><span class="compact-transfer-pos">L</span><span class="compact-transfer-nat">NED</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club"></span></li><li class="compact-transfer-row compact-transfer-row--bleibt" title="Diane Seybering | MB | GER | Vertrag bis 2027"><span class="compact-transfer-name">Diane Seybering</span><span class="compact-transfer-pos">MB</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club"></span></li><li class="compact-transfer-row compact-transfer-row--bleibt" title="Franziska Heil | MB | GER | Vertrag bis 2027"><span class="compact-transfer-name">Franziska Heil</span><span class="compact-transfer-pos">MB</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club"></span></li><li class="compact-transfer-row compact-transfer-row--bleibt" title="Lena Schultze | AA | GER | Vertrag bis 2027"><span class="compact-transfer-name">Lena Schultze</span><span class="compact-transfer-pos">AA</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract">Vertrag bis 2027</span><span class="compact-transfer-club"></span></li><li class="compact-transfer-category compact-transfer-category--abgaenge">Abgänge</li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Brianna Ford | D | USA | Columbus Fury"><span class="compact-transfer-name">Brianna Ford</span><span class="compact-transfer-pos">D</span><span class="compact-transfer-nat">USA</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">Columbus Fury</span></li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Cecilia Malm | AA | SWE | unbekannt"><span class="compact-transfer-name">Cecilia Malm</span><span class="compact-transfer-pos">AA</span><span class="compact-transfer-nat">SWE</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">unbekannt</span></li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Yina Liu | Z | GER | Skurios Volleys Borken"><span class="compact-transfer-name">Yina Liu</span><span class="compact-transfer-pos">Z</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">Skurios Volleys Borken</span></li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Anke Waelkens | MB | BEL | E.S. Charleroi Volley"><span class="compact-transfer-name">Anke Waelkens</span><span class="compact-transfer-pos">MB</span><span class="compact-transfer-nat">BEL</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">E.S. Charleroi Volley</span></li><li class="compact-transfer-row compact-transfer-row--abgaenge" title="Lara-Marie Schaefer | L | GER | Binder Blaubären TV Flacht"><span class="compact-transfer-name">Lara-Marie Schaefer</span><span class="compact-transfer-pos">L</span><span class="compact-transfer-nat">GER</span><span class="compact-transfer-contract"></span><span class="compact-transfer-club">Binder Blaubären TV Flacht</span></li></ul></article></div></details></section>
+    <section class="news-group block" id="news">
+      <details class="accordion">
+        <summary>News von Dresdner SC</summary>
+        <div class="accordion-content">
+          <ul class="news-list">
+            <li><a href="https://www.tag24.de/sport/volleyball/dresden-dsc-damen/mit-ganz-viel-dsc-power-deutsche-volleyballerinnen-landen-sensationellen-sieg-gegen-brasilien-3509720">Mit ganz viel DSC-Power: Deutsche Volleyballerinnen landen sensationellen Sieg gegen Brasilien</a><span class="news-meta">Tag 24 via VBL Pressespiegel – 21.06.2026 21:34</span></li>
+          </ul>
+        </div>
+      </details>
+      <details class="accordion">
+        <summary>News von USC Münster</summary>
+        <div class="accordion-content">
+          <ul class="news-list">
+            <li><a href="https://www.usc-muenster.de/erste-liga/spielplan-2026-27-veroeffentlicht-usc-muenster-startet-mit-heimspiel-gegen-den-vc-wiesbaden/">Spielplan 2026/27 veröffentlicht: USC Münster startet mit Heimspiel gegen den VC Wiesbaden</a><span class="news-meta">Homepage USC Münster – 30.06.2026 18:01</span></li>
+      <li><a href="https://www.usc-muenster.de/jugend/usc-muenster-erreicht-silber-bei-der-deutschen-u15-beachvolleyballmeisterschaft/">USC Münster erreicht Silber bei der Deutschen U15-Beachvolleyballmeisterschaft</a><span class="news-meta">Homepage USC Münster – 29.06.2026 10:50</span></li>
+      <li><a href="https://www.usc-muenster.de/erste-liga/usc-muenster-verpflichtet-us-amerikanerin-madison-scheer/">USC Münster verpflichtet US-Amerikanerin Madison Scheer</a><span class="news-meta">Homepage USC Münster – 26.06.2026 12:00</span></li>
+      <li><a href="https://www.usc-muenster.de/erste-liga/dvv-pokal-usc-muenster-trifft-im-achtelfinale-auf-die-roten-raben-vilsbiburg/">Zoi DVV-Pokal: USC Münster trifft im Achtelfinale auf die Roten Raben Vilsbiburg</a><span class="news-meta">Homepage USC Münster – 24.06.2026 15:30</span></li>
+      <li><a href="https://www.usc-muenster.de/jugend/sparkassen-foerderung-staerkt-die-nachwuchsarbeit-des-usc-muenster/">Sparkassen-Förderung stärkt die Nachwuchsarbeit des USC Münster</a><span class="news-meta">Homepage USC Münster – 23.06.2026 14:15</span></li>
+      <li><a href="https://www.usc-muenster.de/usc/challenge-cup-auslosung-wer-wird-der-erste-europapokalgegner-des-usc/">Challenge Cup – Auslosung: Wer wird der erste Gegner des USC?</a><span class="news-meta">Homepage USC Münster – 22.06.2026 14:15</span></li>
+      <li><a href="https://www.usc-muenster.de/erste-liga/usc-muenster-muss-in-der-saison-2026-27-auf-amelie-strothoff-verzichten/">USC Münster muss in der Saison 2026/27 auf Amelie Strothoff verzichten</a><span class="news-meta">Homepage USC Münster – 18.06.2026 12:00</span></li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="mvp-group block" id="mvp">
+      <details class="mvp-overview">
+        <summary>MVP-Rankings</summary>
+        <div class="mvp-overview-content">
+          <p class="mvp-note">Top-3-Platzierungen je Team aus dem offiziellen MVP-Ranking der Volleyball Bundesliga.</p>
+          <div class="mvp-legend">
+            <span class="mvp-legend-item" data-team="usc">Münster</span>
+            <span class="mvp-legend-item" data-team="opponent">Dresden</span>
+          </div>
+          <details class="mvp-category" open>
+            <summary>
+              <span class="mvp-category-title">alle Spielelemente / Top-Scorer</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">2.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Levinska, Marta Kamēlija</span>
+                    <span class="mvp-entry-meta">Diagonal • Dresdner SC • 65 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">199</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">7.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Pfeffer, Mette Marleen</span>
+                    <span class="mvp-entry-meta">Mittelblock • Dresdner SC • 70 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">115</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">9.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Kuipers, Jette</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 65 Sätze • 18 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">104</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">5.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Spöler, Esther</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 70 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">129</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">22.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Kömmling, Elena</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 55 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">73</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">28.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Strothoff, Amelie</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 66 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">64</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Aufschlag / Quote Aufschläge mit Wirkung</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">32.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Pfeffer, Mette Marleen</span>
+                    <span class="mvp-entry-meta">Mittelblock • Dresdner SC • 70 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">29,5%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">38.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Siksna, Amanda</span>
+                    <span class="mvp-entry-meta">Mittelblock • Dresdner SC • 58 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">28,6%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">35.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Strothoff, Amelie</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 66 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">29,2%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">46.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Schultze, Lena</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 36 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">27,4%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">50.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 49 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">26,4%</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Annahme / Quote perfekte oder gute Annahme</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">27.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Kuipers, Jette</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 65 Sätze • 18 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">36,2%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">30.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Akimoto, Miku</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 45 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">34,5%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">43.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 49 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">30,5%</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Aufschlag / Quote Aufschlagpunkte</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">30.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Siksna, Amanda</span>
+                    <span class="mvp-entry-meta">Mittelblock • Dresdner SC • 58 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">9,7%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">42.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Winter, Larissa</span>
+                    <span class="mvp-entry-meta">Zuspiel • Dresdner SC • 40 Sätze • 16 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">8,8%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">29.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Waelkens, Anke</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 33 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">9,8%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">45.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 49 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">8,3%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">48.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Jordan, Emilia</span>
+                    <span class="mvp-entry-meta">Zuspiel • USC Münster • 73 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">8,0%</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Annahme / Annahmeeffizienz</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">31.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Akimoto, Miku</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 45 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">19,5%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">46.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 49 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">7,4%</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Angriff / Angriffseffizienz</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">33.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Lorber Fijok, Lorena</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 50 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">28,0%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">38.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Akimoto, Miku</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 45 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">26,1%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">40.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Kuipers, Jette</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 65 Sätze • 18 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">25,8%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">34.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Jordan, Emilia</span>
+                    <span class="mvp-entry-meta">Zuspiel • USC Münster • 73 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">27,7%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">36.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Kömmling, Elena</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 55 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">26,3%</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Block / Blockpunkte</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">28.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Levinska, Marta Kamēlija</span>
+                    <span class="mvp-entry-meta">Diagonal • Dresdner SC • 65 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">19</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">38.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Kuipers, Jette</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 65 Sätze • 18 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">17</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">43.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Rosemann, Florentine</span>
+                    <span class="mvp-entry-meta">Mittelblock • Dresdner SC • 29 Sätze • 11 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">15</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">25.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Jordan, Emilia</span>
+                    <span class="mvp-entry-meta">Zuspiel • USC Münster • 73 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">20</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">31.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Seybering, Diane</span>
+                    <span class="mvp-entry-meta">Mittelblock • USC Münster • 67 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">18</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">43.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Strothoff, Amelie</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 66 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">15</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Aufschlag / Aufschlagpunkte</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">30.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Grome, Emma</span>
+                    <span class="mvp-entry-meta">Zuspiel • Dresdner SC • 70 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">14</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">30.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Lorber Fijok, Lorena</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 50 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">14</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">45.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Kömmling, Elena</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 55 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">12</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Angriff / Quote Angriffspunkte</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">28.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Levinska, Marta Kamēlija</span>
+                    <span class="mvp-entry-meta">Diagonal • Dresdner SC • 65 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">44,5%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">29.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Lorber Fijok, Lorena</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 50 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">44,4%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">33.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Akimoto, Miku</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 45 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">41,7%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">48.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Jordan, Emilia</span>
+                    <span class="mvp-entry-meta">Zuspiel • USC Münster • 73 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">38,5%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">50.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Kömmling, Elena</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 55 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">38,2%</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Angriff / Angriffspunkte</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">26.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Akimoto, Miku</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 45 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">123</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">31.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Lorber Fijok, Lorena</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 50 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">114</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">32.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Pfeffer, Mette Marleen</span>
+                    <span class="mvp-entry-meta">Mittelblock • Dresdner SC • 70 Sätze • 20 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">107</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+          <details class="mvp-category">
+            <summary>
+              <span class="mvp-category-title">Aufschlag / Aufschlageffizienz</span>
+            </summary>
+            <div class="mvp-category-content">
+              <ol class="mvp-list">
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">29.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Entius, Rosa</span>
+                    <span class="mvp-entry-meta">Diagonal • Dresdner SC • 34 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">-4,2%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">33.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Akimoto, Miku</span>
+                    <span class="mvp-entry-meta">Außenangriff • Dresdner SC • 45 Sätze • 15 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">-6,3%</span>
+                </li>
+                <li class="mvp-entry" data-team="opponent">
+                  <span class="mvp-entry-rank">34.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Siksna, Amanda</span>
+                    <span class="mvp-entry-meta">Mittelblock • Dresdner SC • 58 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">-6,3%</span>
+                </li>
+                <li class="mvp-entry" data-team="usc">
+                  <span class="mvp-entry-rank">50.</span>
+                  <div class="mvp-entry-info">
+                    <span class="mvp-entry-name">Malm, Cecilia</span>
+                    <span class="mvp-entry-meta">Außenangriff • USC Münster • 49 Sätze • 19 Spiele</span>
+                  </div>
+                  <span class="mvp-entry-score">-10,7%</span>
+                </li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </details>
+    </section>
+
+    <section class="instagram-group block" id="instagram">
+      <h2>Instagram-Links</h2>
+      <div class="instagram-grid">
+        <article class="instagram-card">
+          <h3>Dresdner SC</h3>
+          <ul class="instagram-list">
+            <li><a href="https://www.instagram.com/dsc1898">@dsc1898</a></li>
+          </ul>
+        </article>
+        <article class="instagram-card">
+          <h3>USC Münster</h3>
+          <ul class="instagram-list">
+            <li><a href="https://www.instagram.com/uscmuenster">@uscmuenster</a></li>
+          </ul>
+        </article>
+      </div>
+    </section>
+    <section class="season-results block" id="saison">
+      <div class="season-results-header">
+        <h2>Ergebnis der Saison 2024/25</h2>
+      </div>
+      <div class="season-results-grid">
+        <article class="season-results-card">
+          <h3>Dresdner SC</h3>
+            <ul class="season-results-list">
+              <li>Normalrunde: Platz 3 (19 Siege, 5 Niederlagen, 10 x 3:0)</li>
+              <li>Vizemeister (Wiesbaden 2:0, Stuttgart 2:1, Schwerin 0:3)</li>
+            </ul>
+        </article>
+        <article class="season-results-card">
+          <h3>USC Münster</h3>
+            <ul class="season-results-list">
+              <li>Normalrunde: Platz 7 (7 Siege, 17 Niederlagen, 2 x 3:0)</li>
+              <li>Playoff Platz 5 (Stuttgart 0:2)</li>
+            </ul>
+        </article>
+      </div>
+      <div class="season-results-links">
+        <h3>Weitere Informationen</h3>
+        <ul class="season-results-link-list">
+          <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/archiv/ergebnisse.xhtml?LeaguePresenter.view=resultTable&amp;LeaguePresenter.matchSeriesId=770580199#samsCmsComponent_208408" rel="noopener" target="_blank">Normalrunde 2024/25</a></li>
+          <li><a href="https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/archiv/ergebnisse.xhtml?LeaguePresenter.view=matches&amp;LeaguePresenter.matchSeriesId=770580129#samsCmsComponent_208408" rel="noopener" target="_blank">Playoffs 2024/25</a></li>
+          <li><a href="internationale_spiele.html">Internationale Spiele 2025/26</a></li>
+          <li><a href="https://uscmuenster.github.io/scouting/index2.html" rel="noopener" target="_blank">Scouting USC Münster</a></li>
+          <li><a href="https://github.com/uscmuenster/usc_streaminginfos" rel="noopener" target="_blank">GitHub Projekt - Streaminginfos</a></li>
+        </ul>
+      </div>
+    </section>
+    <footer class="page-footer">
+      <p class="update-note" role="status">
+        <span aria-hidden="true">📅</span>
+        <span><strong>Aktualisiert am</strong> Donnerstag, 02. Juli 2026 um 07:54</span>
+      </p>
+    </footer>
+
+
+  </main>
+  <script>
+    (() => {
+      const themeColor = "#0f766e";
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeMeta) {
+        themeMeta.setAttribute("content", themeColor);
+      }
+
+      const createTimeZoneOffsetGetter = (timeZone) => {
+        try {
+          const formatter = new Intl.DateTimeFormat('en-US', {
+            timeZone,
+            hour12: false,
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          });
+          return (date) => {
+            const parts = formatter.formatToParts(date);
+            let year;
+            let month;
+            let day;
+            let hour;
+            let minute;
+            let second;
+            for (const part of parts) {
+              if (part.type === 'year') {
+                year = Number(part.value);
+              } else if (part.type === 'month') {
+                month = Number(part.value);
+              } else if (part.type === 'day') {
+                day = Number(part.value);
+              } else if (part.type === 'hour') {
+                hour = Number(part.value);
+              } else if (part.type === 'minute') {
+                minute = Number(part.value);
+              } else if (part.type === 'second') {
+                second = Number(part.value);
+              }
+            }
+
+            if (
+              year === undefined ||
+              month === undefined ||
+              day === undefined ||
+              hour === undefined ||
+              minute === undefined ||
+              second === undefined
+            ) {
+              return Number.NaN;
+            }
+
+            const utcMillis = Date.UTC(
+              year,
+              month - 1,
+              day,
+              hour,
+              minute,
+              second,
+            );
+            return (date.getTime() - utcMillis) / 60000;
+          };
+        } catch (error) {
+          return null;
+        }
+      };
+
+      const banner = document.querySelector('[data-countdown-banner]');
+      if (banner) {
+        const iso = banner.getAttribute('data-kickoff');
+        const timeZone = banner.getAttribute('data-timezone') || 'Europe/Berlin';
+        if (iso) {
+          const targetMs = Date.parse(iso);
+          if (!Number.isNaN(targetMs)) {
+            const getOffset = createTimeZoneOffsetGetter(timeZone);
+            const targetDate = new Date(targetMs);
+            const targetOffset = getOffset ? getOffset(targetDate) : Number.NaN;
+            const heading = banner.querySelector('[data-countdown-heading]');
+            const display = banner.querySelector('[data-countdown-display]');
+            const pad = (value) => String(value).padStart(2, '0');
+            const plural = (value, singular, pluralForm) =>
+              value + ' ' + (value === 1 ? singular : pluralForm);
+            const update = () => {
+              const now = new Date();
+              let diff = targetMs - now.getTime();
+
+              if (
+                getOffset &&
+                Number.isFinite(targetOffset)
+              ) {
+                const nowOffset = getOffset(now);
+                if (Number.isFinite(nowOffset)) {
+                  diff -= (targetOffset - nowOffset) * 60000;
+                }
+              }
+
+              const isLive = diff <= 0;
+              const totalSeconds = Math.floor(Math.abs(diff) / 1000);
+              const days = Math.floor(totalSeconds / 86400);
+              const hours = Math.floor((totalSeconds % 86400) / 3600);
+              const minutes = Math.floor((totalSeconds % 3600) / 60);
+              const seconds = totalSeconds % 60;
+              const parts = [];
+              if (days > 0) {
+                parts.push(plural(days, 'Tag', 'Tage'));
+              }
+              let timeLabel = pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+              if (isLive) {
+                timeLabel = '+' + timeLabel;
+                banner.classList.add('countdown-banner--live');
+                if (heading) {
+                  heading.textContent = 'Live';
+                }
+              } else {
+                banner.classList.remove('countdown-banner--live');
+                if (heading) {
+                  heading.textContent = 'Countdown';
+                }
+              }
+              parts.push(timeLabel);
+              if (display) {
+                display.textContent = parts.join(' · ');
+              }
+            };
+
+            update();
+            window.setInterval(update, 1000);
+          }
+        }
+      }
+
+      const setBreakInput = document.querySelector('[data-set-break-duration-input]');
+      const setBreakTable = document.querySelector('[data-set-break-table]');
+      if (setBreakInput && setBreakTable) {
+        const rows = Array.from(setBreakTable.querySelectorAll('tbody tr'));
+        const parseDuration = (value) => {
+          const normalized = String(value || '').trim();
+          if (!normalized) {
+            return null;
+          }
+          const parts = normalized.split(':').map((part) => Number(part));
+          if (parts.some((part) => !Number.isFinite(part) || part < 0)) {
+            return null;
+          }
+          if (parts.length === 2) {
+            return (parts[0] * 60) + parts[1];
+          }
+          if (parts.length === 3) {
+            return (parts[0] * 3600) + (parts[1] * 60) + parts[2];
+          }
+          return null;
+        };
+        const formatDuration = (seconds) => {
+          const clamped = Math.max(0, Math.floor(seconds));
+          const minutes = Math.floor(clamped / 60);
+          const remainingSeconds = clamped % 60;
+          return String(minutes) + ':' + String(remainingSeconds).padStart(2, '0');
+        };
+        const updateSetBreakSchedule = () => {
+          const customSeconds = parseDuration(setBreakInput.value);
+          let cumulativeSeconds = 0;
+          for (const row of rows) {
+            const startCell = row.querySelector('[data-start-cell]');
+            const durationCell = row.querySelector('[data-duration-cell]');
+            if (startCell) {
+              startCell.textContent = formatDuration(cumulativeSeconds);
+            }
+            let rowSeconds = parseDuration(durationCell?.textContent || '');
+            if (row.hasAttribute('data-editable-duration-row') && customSeconds !== null) {
+              rowSeconds = customSeconds;
+              if (durationCell) {
+                durationCell.textContent = formatDuration(customSeconds);
+              }
+            }
+            cumulativeSeconds += rowSeconds ?? 0;
+          }
+        };
+
+        setBreakInput.addEventListener('input', updateSetBreakSchedule);
+        updateSetBreakSchedule();
+      }
+
+      const stopwatch = document.querySelector('[data-stopwatch]');
+      if (stopwatch) {
+        const display = stopwatch.querySelector('[data-stopwatch-display]');
+        const startButton = stopwatch.querySelector('[data-stopwatch-start]');
+        const stopButton = stopwatch.querySelector('[data-stopwatch-stop]');
+        const resetButton = stopwatch.querySelector('[data-stopwatch-reset]');
+
+        let startTimestamp = 0;
+        let accumulatedMs = 0;
+        let intervalId;
+
+        const formatTime = (totalMs) => {
+          const totalSeconds = Math.floor(totalMs / 1000);
+          const minutes = Math.floor(totalSeconds / 60);
+          const seconds = totalSeconds % 60;
+          return (
+            String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0')
+          );
+        };
+
+        const stopInterval = () => {
+          if (typeof intervalId === 'number') {
+            window.clearInterval(intervalId);
+          }
+          intervalId = undefined;
+        };
+
+        const render = () => {
+          const runningMs = startTimestamp ? Date.now() - startTimestamp : 0;
+          const totalMs = accumulatedMs + Math.max(runningMs, 0);
+          if (display) {
+            display.textContent = formatTime(totalMs);
+          }
+        };
+
+        const setRunning = (running) => {
+          stopwatch.classList.toggle('stopwatch--running', running);
+        };
+
+        const start = () => {
+          if (startTimestamp) {
+            return;
+          }
+          startTimestamp = Date.now();
+          stopInterval();
+          intervalId = window.setInterval(render, 200);
+          setRunning(true);
+          render();
+        };
+
+        const stop = () => {
+          if (!startTimestamp) {
+            return;
+          }
+          accumulatedMs += Date.now() - startTimestamp;
+          startTimestamp = 0;
+          stopInterval();
+          setRunning(false);
+          render();
+        };
+
+        const reset = () => {
+          accumulatedMs = 0;
+          startTimestamp = 0;
+          stopInterval();
+          setRunning(false);
+          render();
+        };
+
+        startButton?.addEventListener('click', start);
+        stopButton?.addEventListener('click', stop);
+        resetButton?.addEventListener('click', reset);
+
+        stopwatch.addEventListener('toggle', () => {
+          if (!stopwatch.open) {
+            stop();
+          }
+        });
+
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState !== 'visible' && startTimestamp) {
+            accumulatedMs += Date.now() - startTimestamp;
+            startTimestamp = Date.now();
+          }
+          render();
+        });
+
+        render();
+      }
+
+    })();
+  </script>
+</body>
+</html>
+<!-- Build c40e4cd 2026-07-02T05:54:59Z -->
