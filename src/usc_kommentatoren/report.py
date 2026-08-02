@@ -2110,17 +2110,18 @@ def get_team_homepage(team_name: str) -> Optional[str]:
 
 def _build_team_roster_ids() -> Dict[str, str]:
     pairs = {
-        "Allianz MTV Stuttgart": "776311283",
-        "Binder Blaubären TSV Flacht": "776308950",
-        "Dresdner SC": "776311462",
-        "ETV Hamburger Volksbank Volleys": "776308974",
-        "Ladies in Black Aachen": "776311428",
-        "SSC Palmberg Schwerin": "776311399",
-        "Schwarz-Weiß Erfurt": "776311376",
-        "Skurios Volleys Borken": "776309053",
-        "USC Münster": "776311313",
-        "VC Wiesbaden": "776311253",
-        "VfB Suhl LOTTO Thüringen": "776311348",
+        "Allianz MTV Stuttgart": "781343665",
+        "Binder Blaubären TSV Flacht": "781343898",
+        "Dresdner SC": "781343694",
+        "ETV Hamburger Volksbank Volleys": "781343873",
+        "Ladies in Black Aachen": "781343839",
+        "Rote Raben Vilsbiburg": "781345412",
+        "SSC Palmberg Schwerin": "781343925",
+        "Schwarz-Weiß Erfurt": "781343958",
+        "Skurios Volleys Borken": "781343777",
+        "USC Münster": "781343629",
+        "VC Wiesbaden": "781343741",
+        "VfB Suhl LOTTO Thüringen": "781343809",
     }
     return {normalize_name(name): team_id for name, team_id in pairs.items()}
 
