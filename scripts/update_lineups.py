@@ -77,8 +77,9 @@ def main() -> int:
 
     dataset = lineups.build_lineup_dataset(
         limit=args.limit,
-        schedule_csv_url=args.schedule_url or lineups.DEFAULT_SCHEDULE_URL,
-        schedule_page_url=args.schedule_page_url or lineups.SCHEDULE_PAGE_URL,
+        schedule_csv_url=args.schedule_url or cfg.schedule_csv_url or lineups.DEFAULT_SCHEDULE_URL,
+        schedule_ics_url=cfg.schedule_ics_url or lineups.DEFAULT_SCHEDULE_ICS_URL,
+        schedule_page_url=args.schedule_page_url or cfg.schedule_page_url or lineups.SCHEDULE_PAGE_URL,
         output_path=args.output or lineups.DEFAULT_OUTPUT_PATH,
         pdf_cache_dir=args.cache_dir or lineups.PDF_CACHE_DIR,
         roster_cache_dir=args.roster_dir or lineups.ROSTER_CACHE_DIR,

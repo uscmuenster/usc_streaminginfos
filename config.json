@@ -2,5 +2,37 @@
   "home_team": "USC Münster",
   "theme": {
     "primary": "#0f766e"
+  },
+  "data_sources": {
+    "schedule_csv_url": "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171",
+    "schedule_ics_url": "https://www.volleyball-bundesliga.de/iCal/matchSeries/matches.ical?matchSeriesId=776311171&calenderType=ics",
+    "schedule_page_url": "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/spielplan.xhtml?playingScheduleMode=full",
+    "comparison_seasons": [
+      {
+        "season": "2025/26",
+        "urls": [
+          "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171"
+        ]
+      },
+      {
+        "season": "2024/25",
+        "urls": [
+          "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=770580199"
+        ]
+      },
+      {
+        "season": "2023/24",
+        "urls": [
+          "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=766160508",
+          "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=766160398"
+        ]
+      },
+      {
+        "season": "2022/23",
+        "urls": [
+          "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=758959411"
+        ]
+      }
+    ]
   }
 }

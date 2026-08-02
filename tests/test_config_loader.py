@@ -33,6 +33,36 @@ def test_load_config_full(tmp_path: Path) -> None:
     assert cfg.theme_primary == "#ff0000"
 
 
+def test_load_config_data_sources(tmp_path: Path) -> None:
+    """Saisonabhängige Links werden zentral aus data_sources geladen."""
+    config_file = tmp_path / "config.json"
+    config_file.write_text(
+        json.dumps(
+            {
+                "data_sources": {
+                    "schedule_csv_url": " https://example.test/current.csv ",
+                    "schedule_ics_url": "https://example.test/current.ics",
+                    "schedule_page_url": "https://example.test/schedule",
+                    "comparison_seasons": [
+                        {"season": "2026/27", "urls": ["https://example.test/current.csv"]},
+                        {"season": "", "urls": ["https://example.test/ignored.csv"]},
+                    ],
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    cfg = load_config(config_file)
+
+    assert cfg.schedule_csv_url == "https://example.test/current.csv"
+    assert cfg.schedule_ics_url == "https://example.test/current.ics"
+    assert cfg.schedule_page_url == "https://example.test/schedule"
+    assert len(cfg.comparison_seasons) == 1
+    assert cfg.comparison_seasons[0].season == "2026/27"
+    assert cfg.comparison_seasons[0].urls == ("https://example.test/current.csv",)
+
+
 def test_load_config_no_theme(tmp_path: Path) -> None:
     """config.json ohne theme.primary → theme_primary ist None."""
     config_file = tmp_path / "config.json"

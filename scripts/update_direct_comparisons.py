@@ -379,7 +379,11 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     args = parse_args(argv)
     cfg = load_config(args.config)
-    dataset = build_dataset(SEASON_SOURCES, home_team=cfg.home_team)
+    sources = (
+        tuple(SeasonSource(season=item.season, urls=item.urls) for item in cfg.comparison_seasons)
+        or SEASON_SOURCES
+    )
+    dataset = build_dataset(sources, home_team=cfg.home_team)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(dataset, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return 0

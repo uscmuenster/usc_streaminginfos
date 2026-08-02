@@ -6,7 +6,7 @@ import json
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple
 
 # Standard-Heimteam, wenn keine config.json vorhanden ist
 DEFAULT_HOME_TEAM = "USC Münster"
@@ -17,11 +17,47 @@ _DEFAULT_CONFIG_PATH = Path(__file__).resolve().parents[2] / "config.json"
 
 
 @dataclass(frozen=True)
+class SeasonSourceConfig:
+    """Eine Saison mit einem oder mehreren CSV-Spielplanexporten."""
+
+    season: str
+    urls: Tuple[str, ...]
+
+
+@dataclass(frozen=True)
 class AppConfig:
     """Anwendungskonfiguration aus config.json."""
 
     home_team: str
     theme_primary: Optional[str]
+    schedule_csv_url: Optional[str] = None
+    schedule_ics_url: Optional[str] = None
+    schedule_page_url: Optional[str] = None
+    comparison_seasons: Tuple[SeasonSourceConfig, ...] = ()
+
+
+def _optional_string(data: object, key: str) -> Optional[str]:
+    if not isinstance(data, dict):
+        return None
+    value = data.get(key)
+    return value.strip() if isinstance(value, str) and value.strip() else None
+
+
+def _comparison_seasons(data: object) -> Tuple[SeasonSourceConfig, ...]:
+    if not isinstance(data, list):
+        return ()
+    result = []
+    for entry in data:
+        season = _optional_string(entry, "season")
+        raw_urls = entry.get("urls") if isinstance(entry, dict) else None
+        urls = tuple(
+            url.strip()
+            for url in raw_urls or ()
+            if isinstance(url, str) and url.strip()
+        )
+        if season and urls:
+            result.append(SeasonSourceConfig(season=season, urls=urls))
+    return tuple(result)
 
 
 def load_config(path: Optional[Path] = None) -> AppConfig:
@@ -76,4 +112,14 @@ def load_config(path: Optional[Path] = None) -> AppConfig:
         if primary and isinstance(primary, str) and primary.strip():
             theme_primary = primary.strip()
 
-    return AppConfig(home_team=home_team, theme_primary=theme_primary)
+    sources = data.get("data_sources")
+    return AppConfig(
+        home_team=home_team,
+        theme_primary=theme_primary,
+        schedule_csv_url=_optional_string(sources, "schedule_csv_url"),
+        schedule_ics_url=_optional_string(sources, "schedule_ics_url"),
+        schedule_page_url=_optional_string(sources, "schedule_page_url"),
+        comparison_seasons=_comparison_seasons(
+            sources.get("comparison_seasons") if isinstance(sources, dict) else None
+        ),
+    )

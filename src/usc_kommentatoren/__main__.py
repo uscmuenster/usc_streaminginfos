@@ -65,13 +65,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--schedule-url",
-        default=DEFAULT_SCHEDULE_URL,
-        help="CSV export URL of the Volleyball Bundesliga schedule.",
+        default=None,
+        help="CSV-Spielplan-URL (überschreibt config.json).",
     )
     parser.add_argument(
         "--schedule-ics-url",
-        default=DEFAULT_SCHEDULE_ICS_URL,
-        help="ICS-URL des Spielplans für den Abgleich des nächsten Heimspiels.",
+        default=None,
+        help="ICS-Spielplan-URL (überschreibt config.json).",
     )
     parser.add_argument(
         "--output",
@@ -164,14 +164,18 @@ def main() -> int:
 
     cfg: AppConfig = load_config(args.config)
     home_team = cfg.home_team
+    schedule_url = args.schedule_url or cfg.schedule_csv_url or DEFAULT_SCHEDULE_URL
+    schedule_ics_url = args.schedule_ics_url or cfg.schedule_ics_url or DEFAULT_SCHEDULE_ICS_URL
 
     schedule_file = download_schedule(
         args.schedule_path,
-        url=args.schedule_url,
+        url=schedule_url,
     )
     matches = load_schedule_from_file(schedule_file)
     try:
-        schedule_metadata = fetch_schedule_match_metadata()
+        schedule_metadata = fetch_schedule_match_metadata(
+            cfg.schedule_page_url
+        ) if cfg.schedule_page_url else fetch_schedule_match_metadata()
     except Exception as exc:  # pragma: no cover - network failure
         print(
             f"Warnung: Match-Metadaten konnten nicht geladen werden: {exc}",
@@ -181,7 +185,7 @@ def main() -> int:
     next_home = find_next_home_match(matches, home_team)
     next_home_ics = None
     try:
-        ics_text = fetch_ics_schedule(args.schedule_ics_url)
+        ics_text = fetch_ics_schedule(schedule_ics_url)
         ics_events = parse_ics_schedule(ics_text)
         next_home_ics = find_next_home_match_in_ics(ics_events, home_team)
     except Exception as exc:  # pragma: no cover - network failure

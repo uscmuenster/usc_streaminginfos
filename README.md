@@ -74,6 +74,25 @@ Das Tool ist vollständig konfigurierbar und lässt sich für beliebige Vereine 
 |---|---|---|
 | `home_team` | Nein | Name des Heimteams wie er im VBL-Spielplan steht (z. B. `"Dresdner SC"`). Fehlt das Feld oder die Datei, wird `"USC Münster"` als Standard verwendet. Wirkt sich auf Spieltagsbericht, Startaufstellungen (`aufstellungen.json`) und direkten Vergleich (`direct_comparisons.json`) aus. |
 | `theme.primary` | Nein | Primärfarbe als CSS-Farbwert (z. B. `"#0f766e"`). Beeinflusst `--theme-color`, `--home-accent`, `--mvp-overview-summary-bg` in den generierten HTML-Dateien sowie `theme_color`/`background_color` im PWA-Manifest. Fehlt der Wert, bleibt die Standard-Farbe erhalten. |
+| `data_sources.schedule_csv_url` | Nein | CSV-Export des aktuellen VBL-Spielplans für Bericht und Aufstellungen. |
+| `data_sources.schedule_ics_url` | Nein | ICS-Export derselben Spielserie für Terminabgleiche. |
+| `data_sources.schedule_page_url` | Nein | Öffentliche Spielplanseite, auf der Links zu Spielberichtsbögen und Statistiken stehen. |
+| `data_sources.comparison_seasons` | Nein | Saisonbezeichnungen und CSV-Links, die den Datensatz für direkte Vergleiche bilden. |
+
+### Saisonwechsel: Links an einer Stelle ändern
+
+Für eine neue Saison muss in der Regel nur der Block `data_sources` in `config.json`
+angepasst werden:
+
+1. Bei `schedule_csv_url` und `schedule_ics_url` die neue `matchSeriesId` einsetzen.
+2. `schedule_page_url` prüfen und bei einer geänderten VBL-Spielplanseite ersetzen.
+3. In `comparison_seasons` die neue Saison als ersten Eintrag ergänzen. Alte Einträge
+   bleiben darunter stehen, damit der direkte Vergleich seine Historie behält.
+
+Die Hauptanwendung, der Aufstellungs- sowie der Direktvergleich-Job lesen diese Werte
+automatisch. Explizite CLI-Optionen wie `--schedule-url` haben weiterhin Vorrang vor
+`config.json`. Fehlen die neuen Felder, greifen aus Gründen der Rückwärtskompatibilität
+die bisherigen eingebauten Standardwerte.
 
 ### Betroffene Skripte
 
