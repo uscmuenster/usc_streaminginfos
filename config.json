@@ -4,8 +4,8 @@
     "primary": "#0f766e"
   },
   "data_sources": {
-    "schedule_csv_url": "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=776311171",
-    "schedule_ics_url": "https://www.volleyball-bundesliga.de/iCal/matchSeries/matches.ical?matchSeriesId=776311171&calenderType=ics",
+    "schedule_csv_url": "https://www.volleyball-bundesliga.de/servlet/league/PlayingScheduleCsvExport?matchSeriesId=781343569",
+    "schedule_ics_url": "https://www.volleyball-bundesliga.de/iCal/matchSeries/matches.ical?matchSeriesId=781343569&calenderType=ics",
     "schedule_page_url": "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/statistik/hauptrunde/spielplan.xhtml?playingScheduleMode=full",
     "comparison_seasons": [
       {
