@@ -7085,7 +7085,7 @@ def build_html_report(
   <main>
     <section class="notice" aria-label="Kurzbriefing"><strong>Spieltermin:</strong> {escape(kickoff_label)} · <strong>Ort:</strong> {escape(location)} · <strong>Wettbewerb:</strong> {escape(next_home.competition or 'VBL')} · <strong>Schiedsgericht:</strong> {escape(', '.join(next_home.referees) if next_home.referees else 'noch nicht veröffentlicht')}</section>
     <div aria-label="Schnellübersicht" class="quickstats"><div class="stat"><b>{escape(heading)}</b><span>Gegner</span></div><div class="stat"><b>{escape(kickoff_time)}</b><span>Spielbeginn</span></div><div class="stat"><b>{len(opponent_roster)}</b><span>Gegner Kader/Staff</span></div><div class="stat"><b>{len(usc_roster)}</b><span>USC Kader/Staff</span></div><div class="stat"><b>{len(opponent_recent) + len(usc_recent)}</b><span>Formspiele</span></div></div>
-    <section class="block live-regie-block" id="live-regie"><h2>Live-Regie &amp; Sendeablauf</h2><p class="info">Ablaufpläne, Countdown und Stoppuhr bleiben bedienbar; die Darstellung folgt dem kartenbasierten DVV-Layout.</p>
+    <section class="block live-regie-block" id="live-regie"><h2>Live-Regie &amp; Sendeablauf</h2>
 {hero_layout_html}
     </section>
 {notes_html}
