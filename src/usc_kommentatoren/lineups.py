@@ -395,9 +395,20 @@ def fetch_schedule_pdf_links(page_url: str = SCHEDULE_PAGE_URL) -> Dict[str, str
 
 
 def download_pdf(url: str, destination: Path) -> Path:
-    destination.parent.mkdir(parents=True, exist_ok=True)
     response = requests.get(url, headers=REQUEST_HEADERS, timeout=60)
     response.raise_for_status()
+
+    # Some SAMSscore URLs answer with an HTML error page and HTTP 200 when no
+    # scoresheet exists.  Do not cache that response: pdfplumber would otherwise
+    # fail later with the rather cryptic "No /Root object" error.
+    if b"%PDF-" not in response.content[:1024]:
+        content_type = response.headers.get("Content-Type", "unknown")
+        raise requests.RequestException(
+            f"Antwort ist kein PDF (Content-Type: {content_type})",
+            response=response,
+        )
+
+    destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(response.content)
     return destination
 
