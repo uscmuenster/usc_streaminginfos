@@ -6194,6 +6194,24 @@ def build_html_report(
     .accordion-content {{
       padding: 0 1.2rem 1.2rem;
     }}
+    .national-team-details > summary {{
+      cursor: pointer;
+      list-style: none;
+      font-size: calc(var(--font-scale) * var(--font-context-scale) * clamp(1.5rem, 4vw, 2.25rem));
+      line-height: 1.2;
+    }}
+    .national-team-details > summary::-webkit-details-marker {{
+      display: none;
+    }}
+    .national-team-frame {{
+      display: block;
+      width: 100%;
+      min-height: 80vh;
+      margin-top: 1.25rem;
+      border: 0;
+      border-radius: 1rem;
+      background: #f8f8f8;
+    }}
     .news-list {{
       list-style: none;
       margin: 0;
@@ -7109,10 +7127,9 @@ def build_html_report(
         </div>
       </details>
     </section>
-{mvp_section_html}    <details class=\"block\" id=\"nationalmannschaft-sommer\">
+{mvp_section_html}    <details class=\"block national-team-details\" id=\"nationalmannschaft-sommer\">
       <summary><strong>Nationalmannschaft im Sommer 2026</strong></summary>
-      <p>Die ausführliche statische Auswertung bündelt alle zwölf deutschen VNL-Spiele, die Wochen- und Tiebreak-Analyse, das Final Eight sowie die Rollen der sieben Bundesliga-Spielerinnen.</p>
-      <p><a href=\"dvv_vnl_2026.html\">VNL 2026: Deutschland in der Detailanalyse</a></p>
+      <iframe class=\"national-team-frame\" src=\"dvv_vnl_2026.html\" title=\"VNL 2026: Deutschland in der Detailanalyse\" loading=\"lazy\"></iframe>
     </details>
     <section class=\"instagram-group block\" id=\"instagram\">
       <h2>Instagram-Links</h2>
@@ -7407,6 +7424,22 @@ def build_html_report(
         }});
 
         render();
+      }}
+
+      for (const frame of document.querySelectorAll('.national-team-frame')) {{
+        frame.addEventListener('load', () => {{
+          const embeddedDocument = frame.contentDocument;
+          if (!embeddedDocument) return;
+          const resizeFrame = () => {{
+            frame.style.height = `${{embeddedDocument.documentElement.scrollHeight}}px`;
+          }};
+          resizeFrame();
+          if ('ResizeObserver' in window) {{
+            new ResizeObserver(resizeFrame).observe(embeddedDocument.documentElement);
+          }} else {{
+            window.addEventListener('resize', resizeFrame);
+          }}
+        }});
       }}
 
     }})();
