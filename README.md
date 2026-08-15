@@ -165,7 +165,7 @@ Das Paket stellt einen kleinen Helfer bereit, der den offiziellen Spielplan läd
 PYTHONPATH=src python -m usc_kommentatoren
 ```
 
-Beim ersten Aufruf (und bei jeder späteren Aktualisierung) lädt das Skript den CSV-Spielplan herunter und speichert ihn unter `data/schedule.csv`. Wenn bereits eine lokale Kopie existiert, wird sie überschrieben. Der Pfad kann mit `--schedule-path` angepasst werden. Zusätzlich lädt der Generator die offiziellen Teamkader als CSV-Export in `data/rosters/`, cacht Mannschaftsfotos im Verzeichnis `data/team_photos/`, ergänzt Saisonstatistiken aus `docs/data/season_results_2024_25.json` und wertet die Wechselbörse aus. Über `--app-output`, `--app-scale` und `--skip-app-output` steuerst du bei Bedarf, wohin die App-Variante geschrieben wird, wie stark die Schrift verkleinert werden soll oder ob sie komplett entfallen darf. Optional kannst du außerdem Zielpfad, Quelle, Anzahl der vergangenen Partien sowie den News-Zeitraum ändern:
+Beim ersten Aufruf (und bei jeder späteren Aktualisierung) lädt das Skript den CSV-Spielplan herunter und speichert ihn unter `data/schedule.csv`. Wenn bereits eine lokale Kopie existiert, wird sie überschrieben. Der Pfad kann mit `--schedule-path` angepasst werden. Zusätzlich lädt der Generator die offiziellen Teamkader als CSV-Export in `data/rosters/`, cacht Mannschaftsfotos im Verzeichnis `data/team_photos/`, ergänzt Saisonstatistiken aus `docs/data/season_results_2025_26.json` und wertet die Wechselbörse aus. Über `--app-output`, `--app-scale` und `--skip-app-output` steuerst du bei Bedarf, wohin die App-Variante geschrieben wird, wie stark die Schrift verkleinert werden soll oder ob sie komplett entfallen darf. Optional kannst du außerdem Zielpfad, Quelle, Anzahl der vergangenen Partien sowie den News-Zeitraum ändern:
 
 ```bash
 PYTHONPATH=src python -m usc_kommentatoren \
@@ -178,7 +178,7 @@ PYTHONPATH=src python -m usc_kommentatoren \
   --output docs/custom_report.html \
   --app-output docs/custom_app.html \
   --app-scale 0.7 \
-  --season-results docs/data/season_results_2024_25.json
+  --season-results docs/data/season_results_2025_26.json
 ```
 
 ### CLI-Optionen im Überblick

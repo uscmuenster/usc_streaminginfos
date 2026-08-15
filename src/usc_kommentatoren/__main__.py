@@ -128,8 +128,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--season-results",
         type=Path,
-        default=Path("docs/data/season_results_2024_25.json"),
-        help="Pfad zur JSON-Datei mit den Saisonergebnissen (Standard: docs/data/season_results_2024_25.json).",
+        default=Path("docs/data/season_results_2025_26.json"),
+        help="Pfad zur JSON-Datei mit den Saisonergebnissen (Standard: docs/data/season_results_2025_26.json).",
     )
     parser.add_argument(
         "--direct-comparisons",
