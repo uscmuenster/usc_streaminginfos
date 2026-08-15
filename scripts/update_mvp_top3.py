@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Mapping, Sequence
@@ -28,6 +29,13 @@ HEADERS = {"User-Agent": "Mozilla/5.0"}
 
 class MVPDatasetError(RuntimeError):
     pass
+
+
+RECOVERABLE_FETCH_ERRORS = (MVPDatasetError, requests.RequestException, ElementTree.ParseError)
+
+
+def warn(message: str) -> None:
+    print(f"Warning: {message}", file=sys.stderr)
 
 
 def _load_team_information(lineups_path: Path) -> tuple[str, str]:
@@ -235,12 +243,16 @@ def build_dataset(home_team: str, opponent_team: str, *, limit: int = 3, scan_li
     result = []
 
     for indicator_id, label in indicators.items():
-        rows, pages, viewstate = fetch_indicator(
-            session,
-            indicator_id,
-            viewstate,
-            max_rows=effective_scan_limit,
-        )
+        try:
+            rows, pages, viewstate = fetch_indicator(
+                session,
+                indicator_id,
+                viewstate,
+                max_rows=effective_scan_limit,
+            )
+        except RECOVERABLE_FETCH_ERRORS as exc:
+            warn(f"MVP indicator '{label}' ({indicator_id}) could not be fetched: {exc}")
+            rows, pages = [], 0
 
         result.append(
             {
@@ -295,7 +307,14 @@ def main(argv: Sequence[str] | None = None) -> None:
         home_team = home_team or home_team_ds
         opponent_team = opponent_team or opponent_team_ds
 
-    dataset = build_dataset(home_team, opponent_team, limit=args.limit, scan_limit=args.scan_limit)
+    try:
+        dataset = build_dataset(home_team, opponent_team, limit=args.limit, scan_limit=args.scan_limit)
+    except RECOVERABLE_FETCH_ERRORS as exc:
+        # A temporary source failure must not break the complete report workflow or
+        # replace the last successfully generated dataset with an empty file.
+        warn(f"MVP dataset was not updated: {exc}")
+        return
+
     dump_dataset(dataset, output_path=args.output)
 
 
