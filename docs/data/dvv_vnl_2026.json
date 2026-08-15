@@ -1,0 +1,35 @@
+{
+  "year": 2026,
+  "updated": "15.08.2026",
+  "summary": {"rank": 12, "teams": 18, "wins": 5, "losses": 7, "points": 17, "sets": "21:25", "ball_points": "1011:1014", "ball_difference": "−3"},
+  "comparison": {"2025": {"wins": 7, "points": 23, "rank": 7, "finals": "erreicht"}, "2026": {"wins": 5, "points": 17, "rank": 12, "finals": "verpasst"}},
+  "weeks": [
+    {"id": "week-1", "label": "Woche 1 · Québec", "place": "Québec, Kanada", "record": "1 Sieg · 3 Niederlagen", "title": "Zu viele Schwankungen", "analysis": "Der Auftaktsieg gegen Kanada war stark. Danach kosteten instabile Phasen, Probleme im Gegenangriff und verlorene Satzenden wichtige Punkte. Besonders das 2:3 gegen die Ukraine war teuer.", "games": [
+      {"opponent": "Kanada", "result": "3:1", "sets": ["28:26", "22:25", "25:18", "25:18"], "note": "Starker Auftakt. Nach dem verlorenen zweiten Satz kontrollierte Deutschland die Partie."},
+      {"opponent": "Ukraine", "result": "2:3", "sets": ["21:25", "28:30", "25:14", "25:19", "13:15"], "note": "Nach 0:2-Satzrückstand kam Deutschland zurück, gewann insgesamt sogar mehr Ballpunkte und verlor den Tiebreak nur 13:15."},
+      {"opponent": "Japan", "result": "0:3", "sets": ["20:25", "15:25", "24:26"], "note": "In den ersten beiden Sätzen deutlich unterlegen, erreichte Deutschland erst im dritten Satz wieder Augenhöhe."},
+      {"opponent": "USA", "result": "0:3", "sets": ["22:25", "15:25", "12:25"], "note": "Nach einem ordentlichen ersten Satz verlor Deutschland immer stärker den Zugriff."}
+    ]},
+    {"id": "week-2", "label": "Woche 2 · Ankara", "place": "Ankara, Türkiye", "record": "2 Siege · 2 Niederlagen", "title": "Topniveau gegen die Weltspitze", "featured": true, "analysis": "China 2:3, Belgien 3:0, Türkiye 2:3 und Brasilien 3:2: In Ankara zeigte Deutschland über mehrere Spiele das Niveau eines Final-Eight-Teams.", "games": [
+      {"opponent": "China", "result": "2:3", "sets": ["27:25", "23:25", "25:18", "20:25", "6:15"], "note": "Deutschland führte nach drei Sätzen 2:1, konnte die Partie aber nicht schließen; China gewann den Tiebreak 15:6."},
+      {"opponent": "Belgien", "result": "3:0", "sets": ["25:20", "25:19", "25:21"], "note": "Über drei Sätze ein stabiler und kontrollierter deutscher Auftritt."},
+      {"opponent": "Türkiye", "result": "2:3", "sets": ["25:18", "26:24", "19:25", "22:25", "13:15"], "note": "Gegen den späteren Champion führte Deutschland 2:0 und im Tiebreak noch 12:11, verlor aber 13:15.", "featured": true},
+      {"opponent": "Brasilien", "result": "3:2", "sets": ["26:24", "28:26", "15:25", "19:25", "16:14"], "note": "Größter deutscher Einzelerfolg: Nach dem 2:2-Ausgleich schloss Deutschland diesmal den Tiebreak und beendete Brasiliens perfekte Serie.", "featured": true}
+    ]},
+    {"id": "week-3", "label": "Woche 3 · Belgrad", "place": "Belgrad, Serbien", "record": "2 Siege · 2 Niederlagen", "title": "Chance nicht genutzt", "analysis": "Nach dem 3:1 gegen Tschechien war die Final-Eight-Qualifikation noch möglich. Das 0:3 gegen die Niederlande mit dreimal 23:25 wurde zum entscheidenden Rückschlag.", "games": [
+      {"opponent": "Tschechien", "result": "3:1", "sets": ["22:25", "25:15", "25:22", "25:17"], "note": "Nach verlorenem ersten Satz steigerte sich Deutschland deutlich und gewann die folgenden drei Sätze."},
+      {"opponent": "Niederlande", "result": "0:3", "sets": ["23:25", "23:25", "23:25"], "note": "Das 0:3 sieht deutlicher aus, als es war: Über drei komplette Sätze trennten beide Teams lediglich sechs Ballpunkte.", "featured": true},
+      {"opponent": "Serbien", "result": "0:3", "sets": ["20:25", "22:25", "23:25"], "note": "Deutschland wurde von Satz zu Satz konkurrenzfähiger, gewann aber keinen Satz."},
+      {"opponent": "Bulgarien", "result": "3:0", "sets": ["25:20", "25:20", "25:15"], "note": "Überzeugender Abschluss. Lena Kindermann war mit 18 Punkten (13 Angriff, 4 Block, 1 Ass) Topscorerin."}
+    ]}
+  ],
+  "players": [
+    {"name": "Sarah Straube", "club": "Dresdner SC", "position": "Zuspiel", "phase": "Woche 1–3", "matches": "12", "points": "11 (6 Angriff · 2 Block · 3 Asse)", "role": "Klare Nummer eins im deutschen Zuspiel", "text": "Sie führte über weite Strecken den Spielaufbau und war die wichtigste aktuelle Bundesliga-Spielerin. Für Dresden kehrt damit eine Zuspielerin zurück, die bereits eine zentrale Nationalmannschaftsrolle übernommen hat.", "source": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/players/181272"},
+    {"name": "Lena Kindermann", "club": "Dresdner SC", "position": "Diagonal", "phase": "Woche 2–3", "matches": "8", "points": "52 (40 Angriff · 10 Block · 2 Asse)", "role": "Größter aktueller Bundesliga-Offensivfaktor", "text": "Ihre Rolle wuchs ab Woche zwei deutlich. Mit 18 Punkten gegen Bulgarien (13 Angriff, 4 Block, 1 Ass) war sie deutsche Topscorerin und gehört zu den größten Gewinnerinnen des Sommers.", "source": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/players/209880"},
+    {"name": "Hannah Kohn", "club": "SSC Palmberg Schwerin", "position": "Zuspiel", "phase": "Woche 1–3", "matches": "12", "points": "2 Asse", "role": "Zweite Zuspielerin · Doppelwechsel · taktische Alternative", "text": "Kohn war in allen Wochen dabei, kam vor allem über Doppelwechsel oder zur Veränderung des Rhythmus. Gegen China begann sie den fünften Satz im Zuspiel.", "source": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/players/184715"},
+    {"name": "Mette Pfeffer", "club": "Dresdner SC", "position": "Mittelblock", "phase": "Woche 1–3", "matches": "10", "points": "7 (4 Angriff · 3 Block)", "role": "Entwicklungs- und Rotationsspielerin", "text": "Beim 3:0 gegen Bulgarien erzielte die junge Mittelblockerin fünf ihrer sieben VNL-Punkte: vier Angriffe und einen Block.", "source": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/players/187423"},
+    {"name": "Mia Kirchhoff", "club": "SSC Palmberg Schwerin", "position": "Diagonal / Außen", "phase": "Woche 1–2", "matches": "8", "points": "6 (5 Angriff · 1 Block)", "role": "Ergänzungs- und Wechselspielerin", "text": "Sie erhielt punktuell Einsatzzeit, war für Belgrad nicht mehr nominiert und spielte zuvor für den VCO Münster und USC Münster.", "source": "https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/players/187416"},
+    {"name": "Patricia Nestler", "club": "Dresdner SC", "position": "Libera", "phase": "Woche 2–3", "matches": "–", "points": "0", "role": "Zweite Libera · Defensivoption", "text": "Annie Cesar war die primäre Libera. Nestler wurde situativ für Annahme und Feldabwehr eingesetzt; Scorerpunkte sind bei einer Libera kein Leistungsmaßstab."},
+    {"name": "Emma Sambale", "club": "VfB Suhl LOTTO Thüringen", "position": "Libera", "phase": "Woche 1", "matches": "–", "points": "0", "role": "Entwicklung · erste VNL-Einsätze", "text": "Sie gehörte in Québec zum Aufgebot und erhielt erste Einsatzanteile auf VNL-Niveau; für Woche zwei und drei wurde sie nicht mehr nominiert."}
+  ]
+}
