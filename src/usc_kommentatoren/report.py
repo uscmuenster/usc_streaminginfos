@@ -4630,7 +4630,7 @@ def _format_season_results_section(
     if isinstance(raw_title, str) and raw_title.strip():
         title = raw_title.strip()
     else:
-        title = "Ergebnis der Saison 2024/25"
+        title = "Ergebnis der Saison 2025/26"
 
     teams_raw = data.get("teams")
     teams_by_key: Dict[str, Dict[str, Any]] = {}
