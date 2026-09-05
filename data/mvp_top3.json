@@ -1,0 +1,76 @@
+{
+  "generated_at": "2026-09-05T06:36:12.593630+00:00",
+  "home_team": "USC Münster",
+  "usc_team": "USC Münster",
+  "opponent_team": "VC Wiesbaden",
+  "limit": 3,
+  "scan_limit": 50,
+  "indicators": [
+    {
+      "id": "60245649",
+      "label": "alle Spielelemente / Top-Scorer",
+      "pages": 0,
+      "all_players": []
+    },
+    {
+      "id": "29593924",
+      "label": "Aufschlag / Quote Aufschläge mit Wirkung",
+      "pages": 0,
+      "all_players": []
+    },
+    {
+      "id": "31385020",
+      "label": "Annahme / Quote perfekte oder gute Annahme",
+      "pages": 0,
+      "all_players": []
+    },
+    {
+      "id": "29593922",
+      "label": "Aufschlag / Quote Aufschlagpunkte",
+      "pages": 0,
+      "all_players": []
+    },
+    {
+      "id": "60245660",
+      "label": "Annahme / Annahmeeffizienz",
+      "pages": 0,
+      "all_players": []
+    },
+    {
+      "id": "29593918",
+      "label": "Angriff / Angriffseffizienz",
+      "pages": 0,
+      "all_players": []
+    },
+    {
+      "id": "29593928",
+      "label": "Block / Blockpunkte",
+      "pages": 0,
+      "all_players": []
+    },
+    {
+      "id": "29593923",
+      "label": "Aufschlag / Aufschlagpunkte",
+      "pages": 0,
+      "all_players": []
+    },
+    {
+      "id": "29593919",
+      "label": "Angriff / Quote Angriffspunkte",
+      "pages": 0,
+      "all_players": []
+    },
+    {
+      "id": "29593920",
+      "label": "Angriff / Angriffspunkte",
+      "pages": 0,
+      "all_players": []
+    },
+    {
+      "id": "60245659",
+      "label": "Aufschlag / Aufschlageffizienz",
+      "pages": 0,
+      "all_players": []
+    }
+  ]
+}
