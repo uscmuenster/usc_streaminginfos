@@ -1,0 +1,89 @@
+{
+  "title": "Ergebnis der Saison 2025/26",
+  "teams": [
+    {
+      "name": "Allianz MTV Stuttgart",
+      "details": [
+        "Normalrunde: Platz 1 (19 Siege, 1 Niederlage, 15 x 3:0)",
+        "Playoff Platz 3 (Erfurt 2:0, Dresden 0:2)"
+      ]
+    },
+    {
+      "name": "USC Münster",
+      "details": [
+        "Normalrunde: Platz 5 (11 Siege, 9 Niederlagen, 8 x 3:0)",
+        "Playoff Platz 5 (Dresden 0:2)"
+      ]
+    },
+    {
+      "name": "SSC Palmberg Schwerin",
+      "details": [
+        "Normalrunde: Platz 3 (15 Siege, 5 Niederlagen, 10 x 3:0)",
+        "Playoff Platz 3 (Aachen 2:1, Suhl 0:2)"
+      ]
+    },
+    {
+      "name": "VC Wiesbaden",
+      "details": [
+        "Normalrunde: Platz 7 (8 Siege, 12 Niederlagen, 4 x 3:0)",
+        "Playoff Platz 5 (Suhl 0:2)"
+      ]
+    },
+    {
+      "name": "VfB Suhl LOTTO Thüringen",
+      "details": [
+        "Normalrunde: Platz 2 (16 Siege, 4 Niederlagen, 10 x 3:0)",
+        "Deutscher Meister (Wiesbaden 2:0, Schwerin 2:0, Dresden 3:0)"
+      ]
+    },
+    {
+      "name": "Schwarz-Weiß Erfurt",
+      "details": [
+        "Normalrunde: Platz 8 (6 Siege, 14 Niederlagen, 5 x 3:0)",
+        "Playoff Platz 5 (Stuttgart 0:2)"
+      ]
+    },
+    {
+      "name": "Dresdner SC",
+      "details": [
+        "Normalrunde: Platz 4 (16 Siege, 4 Niederlagen, 11 x 3:0)",
+        "Vizemeister (Münster 2:0, Stuttgart 2:0, Suhl 0:3)"
+      ]
+    },
+    {
+      "name": "Ladies in Black Aachen",
+      "details": [
+        "Normalrunde: Platz 6 (11 Siege, 9 Niederlagen, 6 x 3:0)",
+        "Playoff Platz 5 (Schwerin 1:2)"
+      ]
+    },
+    {
+      "name": "Skurios Volleys Borken",
+      "details": [
+        "Normalrunde: Platz 10 (3 Siege, 17 Niederlagen, 2 x 3:0)"
+      ]
+    },
+    {
+      "name": "Binder Blaubären TSV Flacht",
+      "details": [
+        "Normalrunde: Platz 9 (3 Siege, 17 Niederlagen)"
+      ]
+    },
+    {
+      "name": "ETV Hamburger Volksbank Volleys",
+      "details": [
+        "Normalrunde: Platz 11 (2 Siege, 18 Niederlagen, 11 x 0:3)"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "label": "Normalrunde 2025/26",
+      "url": "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/archiv/ergebnisse.xhtml?LeaguePresenter.view=resultTable&LeaguePresenter.matchSeriesId=776311171#samsCmsComponent_208408"
+    },
+    {
+      "label": "Playoffs 2025/26",
+      "url": "https://www.volleyball-bundesliga.de/cms/home/1_bundesliga_frauen/archiv/ergebnisse.xhtml?LeaguePresenter.view=matches&LeaguePresenter.matchSeriesId=776311124#samsCmsComponent_208408"
+    }
+  ]
+}
