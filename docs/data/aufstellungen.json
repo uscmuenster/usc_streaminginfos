@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-13T10:51:15.247777+02:00",
+  "generated_at": "2026-10-14T09:00:57.310547+02:00",
   "home_team": "USC Münster",
   "opponent_team": "Rote Raben Vilsbiburg",
   "matches": [
@@ -400,6 +400,318 @@
             "A": "23"
           },
           "score_label": "25:23"
+        }
+      ]
+    },
+    {
+      "focus": "opponent",
+      "focus_team_code": "B",
+      "focus_team_name": "Rote Raben Vilsbiburg",
+      "match_number": "2009",
+      "kickoff": "2026-10-13T19:00:00+02:00",
+      "date_label": "13.10.2026",
+      "home_team": "Rote Raben Vilsbiburg",
+      "away_team": "VfB Suhl LOTTO Thüringen",
+      "competition": "DEKRA 1. Volleyball Bundesliga Frauen",
+      "venue": "Ballsporthalle Vilsbiburg (84137 Vilsbiburg)",
+      "season": "2026/27",
+      "result": "0:3",
+      "home_code": "B",
+      "away_code": "A",
+      "set_scores": [
+        "16:25",
+        "13:25",
+        "18:25"
+      ],
+      "pdf_url": "https://distributor.sams-score.de/scoresheet/pdf/b59555e5-26f4-4fde-9dbc-9027ab1cd1a0/2009",
+      "team_codes": {
+        "B": "Rote Raben Vilsbiburg",
+        "A": "VfB Suhl LOTTO Thüringen"
+      },
+      "home_team_code": null,
+      "opponent_code": "B",
+      "teams": [
+        {
+          "code": "B",
+          "name": "Rote Raben Vilsbiburg",
+          "is_focus": true,
+          "is_home": true,
+          "is_opponent": true,
+          "setters": [
+            "2",
+            "11"
+          ]
+        },
+        {
+          "code": "A",
+          "name": "VfB Suhl LOTTO Thüringen",
+          "is_focus": false,
+          "is_home": false,
+          "is_opponent": false,
+          "setters": [
+            "2",
+            "3"
+          ]
+        }
+      ],
+      "sets": [
+        {
+          "number": 1,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "13",
+                "full_name": "Boyd, Emma",
+                "short_name": "Boyd"
+              },
+              {
+                "slot": "II",
+                "number": "5",
+                "full_name": "Hartmann, Hannah",
+                "short_name": "Hartmann"
+              },
+              {
+                "slot": "III",
+                "number": "1",
+                "full_name": "Naujack, Svea",
+                "short_name": "Naujack"
+              },
+              {
+                "slot": "IV",
+                "number": "4",
+                "full_name": "Roosa Laakkonen",
+                "short_name": "Laakkonen"
+              },
+              {
+                "slot": "V",
+                "number": "3",
+                "full_name": "Nagels, Lara",
+                "short_name": "Nagels"
+              },
+              {
+                "slot": "VI",
+                "number": "10",
+                "full_name": "Herdova, Lucia",
+                "short_name": "Herdova"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "11",
+                "full_name": "Laura Sertic de Prá",
+                "short_name": "Prá"
+              },
+              {
+                "slot": "II",
+                "number": "8",
+                "full_name": "Clemente, Alice",
+                "short_name": "Clemente"
+              },
+              {
+                "slot": "III",
+                "number": "5",
+                "full_name": "Burbrink, Nadine",
+                "short_name": "Burbrink"
+              },
+              {
+                "slot": "IV",
+                "number": "23",
+                "full_name": "Emma Ellis",
+                "short_name": "Ellis"
+              },
+              {
+                "slot": "V",
+                "number": "3",
+                "full_name": "Keller, Luisa",
+                "short_name": "Keller"
+              },
+              {
+                "slot": "VI",
+                "number": "14",
+                "full_name": "Cavalcanti, Amanda",
+                "short_name": "Cavalcanti"
+              }
+            ]
+          },
+          "scores": {
+            "A": "25",
+            "B": "16"
+          },
+          "score_label": "16:25"
+        },
+        {
+          "number": 2,
+          "lineups": {
+            "B": [
+              {
+                "slot": "I",
+                "number": "11",
+                "full_name": "Laura Sertic de Prá",
+                "short_name": "Prá"
+              },
+              {
+                "slot": "II",
+                "number": "8",
+                "full_name": "Clemente, Alice",
+                "short_name": "Clemente"
+              },
+              {
+                "slot": "III",
+                "number": "5",
+                "full_name": "Burbrink, Nadine",
+                "short_name": "Burbrink"
+              },
+              {
+                "slot": "IV",
+                "number": "23",
+                "full_name": "Emma Ellis",
+                "short_name": "Ellis"
+              },
+              {
+                "slot": "V",
+                "number": "3",
+                "full_name": "Keller, Luisa",
+                "short_name": "Keller"
+              },
+              {
+                "slot": "VI",
+                "number": "14",
+                "full_name": "Cavalcanti, Amanda",
+                "short_name": "Cavalcanti"
+              }
+            ],
+            "A": [
+              {
+                "slot": "I",
+                "number": "3",
+                "full_name": "Nagels, Lara",
+                "short_name": "Nagels"
+              },
+              {
+                "slot": "II",
+                "number": "10",
+                "full_name": "Herdova, Lucia",
+                "short_name": "Herdova"
+              },
+              {
+                "slot": "III",
+                "number": "13",
+                "full_name": "Boyd, Emma",
+                "short_name": "Boyd"
+              },
+              {
+                "slot": "IV",
+                "number": "5",
+                "full_name": "Hartmann, Hannah",
+                "short_name": "Hartmann"
+              },
+              {
+                "slot": "V",
+                "number": "1",
+                "full_name": "Naujack, Svea",
+                "short_name": "Naujack"
+              },
+              {
+                "slot": "VI",
+                "number": "4",
+                "full_name": "Roosa Laakkonen",
+                "short_name": "Laakkonen"
+              }
+            ]
+          },
+          "scores": {
+            "B": "13",
+            "A": "25"
+          },
+          "score_label": "13:25"
+        },
+        {
+          "number": 3,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "13",
+                "full_name": "Boyd, Emma",
+                "short_name": "Boyd"
+              },
+              {
+                "slot": "II",
+                "number": "5",
+                "full_name": "Hartmann, Hannah",
+                "short_name": "Hartmann"
+              },
+              {
+                "slot": "III",
+                "number": "1",
+                "full_name": "Naujack, Svea",
+                "short_name": "Naujack"
+              },
+              {
+                "slot": "IV",
+                "number": "4",
+                "full_name": "Roosa Laakkonen",
+                "short_name": "Laakkonen"
+              },
+              {
+                "slot": "V",
+                "number": "3",
+                "full_name": "Nagels, Lara",
+                "short_name": "Nagels"
+              },
+              {
+                "slot": "VI",
+                "number": "10",
+                "full_name": "Herdova, Lucia",
+                "short_name": "Herdova"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "8",
+                "full_name": "Clemente, Alice",
+                "short_name": "Clemente"
+              },
+              {
+                "slot": "II",
+                "number": "5",
+                "full_name": "Burbrink, Nadine",
+                "short_name": "Burbrink"
+              },
+              {
+                "slot": "III",
+                "number": "23",
+                "full_name": "Emma Ellis",
+                "short_name": "Ellis"
+              },
+              {
+                "slot": "IV",
+                "number": "6",
+                "full_name": "Hatch, Anne",
+                "short_name": "Hatch"
+              },
+              {
+                "slot": "V",
+                "number": "14",
+                "full_name": "Cavalcanti, Amanda",
+                "short_name": "Cavalcanti"
+              },
+              {
+                "slot": "VI",
+                "number": "2",
+                "full_name": "Pia Fernau",
+                "short_name": "Fernau"
+              }
+            ]
+          },
+          "scores": {
+            "A": "25",
+            "B": "18"
+          },
+          "score_label": "18:25"
         }
       ]
     },
