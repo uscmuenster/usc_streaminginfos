@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-24T08:48:07.342779+02:00",
+  "generated_at": "2026-10-25T08:11:59.271122+01:00",
   "home_team": "USC Münster",
   "opponent_team": "Allianz MTV Stuttgart",
   "matches": [
@@ -718,6 +718,405 @@
     },
     {
       "focus": "opponent",
+      "focus_team_code": "A",
+      "focus_team_name": "Allianz MTV Stuttgart",
+      "match_number": "2019",
+      "kickoff": "2026-10-24T17:00:00+02:00",
+      "date_label": "24.10.2026",
+      "home_team": "Allianz MTV Stuttgart",
+      "away_team": "VfB Suhl LOTTO Thüringen",
+      "competition": "DEKRA 1. Volleyball Bundesliga Frauen",
+      "venue": "SCHARRena Stuttgart (70372 Stuttgart)",
+      "season": "2026/27",
+      "result": "3:1",
+      "home_code": "A",
+      "away_code": "B",
+      "set_scores": [
+        "25:15",
+        "25:23",
+        "15:25",
+        "26:24"
+      ],
+      "pdf_url": "https://distributor.sams-score.de/scoresheet/pdf/3fcb8399-4bda-4ec5-94ad-2558936ff990/2019",
+      "team_codes": {
+        "A": "Allianz MTV Stuttgart",
+        "B": "VfB Suhl LOTTO Thüringen"
+      },
+      "home_team_code": null,
+      "opponent_code": "A",
+      "teams": [
+        {
+          "code": "A",
+          "name": "Allianz MTV Stuttgart",
+          "is_focus": true,
+          "is_home": true,
+          "is_opponent": true,
+          "setters": [
+            "10",
+            "19"
+          ]
+        },
+        {
+          "code": "B",
+          "name": "VfB Suhl LOTTO Thüringen",
+          "is_focus": false,
+          "is_home": false,
+          "is_opponent": false,
+          "setters": [
+            "2",
+            "3"
+          ]
+        }
+      ],
+      "sets": [
+        {
+          "number": 1,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "15",
+                "full_name": "Fričová, Karolina",
+                "short_name": "Fričová"
+              },
+              {
+                "slot": "II",
+                "number": "3",
+                "full_name": "Gross, Jasmine",
+                "short_name": "Gross"
+              },
+              {
+                "slot": "III",
+                "number": "10",
+                "full_name": "Pia Kästner",
+                "short_name": "Kästner"
+              },
+              {
+                "slot": "IV",
+                "number": "8",
+                "full_name": "Holthaus, Eleanor Joy…",
+                "short_name": "Holthaus"
+              },
+              {
+                "slot": "V",
+                "number": "20",
+                "full_name": "Marie Steinhilber",
+                "short_name": "Steinhilber"
+              },
+              {
+                "slot": "VI",
+                "number": "5",
+                "full_name": "Grote, Lydia",
+                "short_name": "Grote"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "5",
+                "full_name": "Hartmann, Hannah",
+                "short_name": "Hartmann"
+              },
+              {
+                "slot": "II",
+                "number": "1",
+                "full_name": "Svea Naujack",
+                "short_name": "Naujack"
+              },
+              {
+                "slot": "III",
+                "number": "4",
+                "full_name": "Roosa Laakkonen",
+                "short_name": "Laakkonen"
+              },
+              {
+                "slot": "IV",
+                "number": "3",
+                "full_name": "Nagels, Lara",
+                "short_name": "Nagels"
+              },
+              {
+                "slot": "V",
+                "number": "10",
+                "full_name": "Herdova, Lucia",
+                "short_name": "Herdova"
+              },
+              {
+                "slot": "VI",
+                "number": "11",
+                "full_name": "Berger, Laura",
+                "short_name": "Berger"
+              }
+            ]
+          },
+          "scores": {
+            "A": "25",
+            "B": "15"
+          },
+          "score_label": "25:15"
+        },
+        {
+          "number": 2,
+          "lineups": {
+            "B": [
+              {
+                "slot": "I",
+                "number": "1",
+                "full_name": "Svea Naujack",
+                "short_name": "Naujack"
+              },
+              {
+                "slot": "II",
+                "number": "4",
+                "full_name": "Roosa Laakkonen",
+                "short_name": "Laakkonen"
+              },
+              {
+                "slot": "III",
+                "number": "3",
+                "full_name": "Nagels, Lara",
+                "short_name": "Nagels"
+              },
+              {
+                "slot": "IV",
+                "number": "10",
+                "full_name": "Herdova, Lucia",
+                "short_name": "Herdova"
+              },
+              {
+                "slot": "V",
+                "number": "11",
+                "full_name": "Berger, Laura",
+                "short_name": "Berger"
+              },
+              {
+                "slot": "VI",
+                "number": "5",
+                "full_name": "Hartmann, Hannah",
+                "short_name": "Hartmann"
+              }
+            ],
+            "A": [
+              {
+                "slot": "I",
+                "number": "3",
+                "full_name": "Gross, Jasmine",
+                "short_name": "Gross"
+              },
+              {
+                "slot": "II",
+                "number": "10",
+                "full_name": "Pia Kästner",
+                "short_name": "Kästner"
+              },
+              {
+                "slot": "III",
+                "number": "8",
+                "full_name": "Holthaus, Eleanor Joy…",
+                "short_name": "Holthaus"
+              },
+              {
+                "slot": "IV",
+                "number": "20",
+                "full_name": "Marie Steinhilber",
+                "short_name": "Steinhilber"
+              },
+              {
+                "slot": "V",
+                "number": "5",
+                "full_name": "Grote, Lydia",
+                "short_name": "Grote"
+              },
+              {
+                "slot": "VI",
+                "number": "15",
+                "full_name": "Fričová, Karolina",
+                "short_name": "Fričová"
+              }
+            ]
+          },
+          "scores": {
+            "B": "23",
+            "A": "25"
+          },
+          "score_label": "25:23"
+        },
+        {
+          "number": 3,
+          "lineups": {
+            "A": [
+              {
+                "slot": "I",
+                "number": "15",
+                "full_name": "Fričová, Karolina",
+                "short_name": "Fričová"
+              },
+              {
+                "slot": "II",
+                "number": "3",
+                "full_name": "Gross, Jasmine",
+                "short_name": "Gross"
+              },
+              {
+                "slot": "III",
+                "number": "10",
+                "full_name": "Pia Kästner",
+                "short_name": "Kästner"
+              },
+              {
+                "slot": "IV",
+                "number": "8",
+                "full_name": "Holthaus, Eleanor Joy…",
+                "short_name": "Holthaus"
+              },
+              {
+                "slot": "V",
+                "number": "20",
+                "full_name": "Marie Steinhilber",
+                "short_name": "Steinhilber"
+              },
+              {
+                "slot": "VI",
+                "number": "5",
+                "full_name": "Grote, Lydia",
+                "short_name": "Grote"
+              }
+            ],
+            "B": [
+              {
+                "slot": "I",
+                "number": "4",
+                "full_name": "Roosa Laakkonen",
+                "short_name": "Laakkonen"
+              },
+              {
+                "slot": "II",
+                "number": "3",
+                "full_name": "Nagels, Lara",
+                "short_name": "Nagels"
+              },
+              {
+                "slot": "III",
+                "number": "10",
+                "full_name": "Herdova, Lucia",
+                "short_name": "Herdova"
+              },
+              {
+                "slot": "IV",
+                "number": "13",
+                "full_name": "Boyd, Emma",
+                "short_name": "Boyd"
+              },
+              {
+                "slot": "V",
+                "number": "8",
+                "full_name": "Nina Dreisigova",
+                "short_name": "Dreisigova"
+              },
+              {
+                "slot": "VI",
+                "number": "1",
+                "full_name": "Svea Naujack",
+                "short_name": "Naujack"
+              }
+            ]
+          },
+          "scores": {
+            "A": "15",
+            "B": "25"
+          },
+          "score_label": "15:25"
+        },
+        {
+          "number": 4,
+          "lineups": {
+            "B": [
+              {
+                "slot": "I",
+                "number": "3",
+                "full_name": "Nagels, Lara",
+                "short_name": "Nagels"
+              },
+              {
+                "slot": "II",
+                "number": "10",
+                "full_name": "Herdova, Lucia",
+                "short_name": "Herdova"
+              },
+              {
+                "slot": "III",
+                "number": "13",
+                "full_name": "Boyd, Emma",
+                "short_name": "Boyd"
+              },
+              {
+                "slot": "IV",
+                "number": "8",
+                "full_name": "Nina Dreisigova",
+                "short_name": "Dreisigova"
+              },
+              {
+                "slot": "V",
+                "number": "1",
+                "full_name": "Svea Naujack",
+                "short_name": "Naujack"
+              },
+              {
+                "slot": "VI",
+                "number": "4",
+                "full_name": "Roosa Laakkonen",
+                "short_name": "Laakkonen"
+              }
+            ],
+            "A": [
+              {
+                "slot": "I",
+                "number": "8",
+                "full_name": "Holthaus, Eleanor Joy…",
+                "short_name": "Holthaus"
+              },
+              {
+                "slot": "II",
+                "number": "3",
+                "full_name": "Gross, Jasmine",
+                "short_name": "Gross"
+              },
+              {
+                "slot": "III",
+                "number": "10",
+                "full_name": "Pia Kästner",
+                "short_name": "Kästner"
+              },
+              {
+                "slot": "IV",
+                "number": "2",
+                "full_name": "Slacanin, Leilani",
+                "short_name": "Slacanin"
+              },
+              {
+                "slot": "V",
+                "number": "20",
+                "full_name": "Marie Steinhilber",
+                "short_name": "Steinhilber"
+              },
+              {
+                "slot": "VI",
+                "number": "5",
+                "full_name": "Grote, Lydia",
+                "short_name": "Grote"
+              }
+            ]
+          },
+          "scores": {
+            "B": "24",
+            "A": "26"
+          },
+          "score_label": "26:24"
+        }
+      ]
+    },
+    {
+      "focus": "opponent",
       "focus_team_code": "B",
       "focus_team_name": "Allianz MTV Stuttgart",
       "match_number": "2015",
@@ -1025,318 +1424,6 @@
             "B": "25"
           },
           "score_label": "17:25"
-        }
-      ]
-    },
-    {
-      "focus": "opponent",
-      "focus_team_code": "A",
-      "focus_team_name": "Allianz MTV Stuttgart",
-      "match_number": "2007",
-      "kickoff": "2026-10-13T19:00:00+02:00",
-      "date_label": "13.10.2026",
-      "home_team": "Allianz MTV Stuttgart",
-      "away_team": "Binder Blaubären TSV Flacht",
-      "competition": "DEKRA 1. Volleyball Bundesliga Frauen",
-      "venue": "SCHARRena Stuttgart (70372 Stuttgart)",
-      "season": "2026/27",
-      "result": "3:0",
-      "home_code": "A",
-      "away_code": "B",
-      "set_scores": [
-        "25:17",
-        "25:11",
-        "25:19"
-      ],
-      "pdf_url": "https://distributor.sams-score.de/scoresheet/pdf/06a1bb81-4f04-434e-836b-ee01b2e39283/2007",
-      "team_codes": {
-        "A": "Allianz MTV Stuttgart",
-        "B": "Binder Blaubären TSV Flacht"
-      },
-      "home_team_code": null,
-      "opponent_code": "A",
-      "teams": [
-        {
-          "code": "A",
-          "name": "Allianz MTV Stuttgart",
-          "is_focus": true,
-          "is_home": true,
-          "is_opponent": true,
-          "setters": [
-            "10",
-            "19"
-          ]
-        },
-        {
-          "code": "B",
-          "name": "Binder Blaubären TSV Flacht",
-          "is_focus": false,
-          "is_home": false,
-          "is_opponent": false,
-          "setters": [
-            "1",
-            "13"
-          ]
-        }
-      ],
-      "sets": [
-        {
-          "number": 1,
-          "lineups": {
-            "A": [
-              {
-                "slot": "I",
-                "number": "15",
-                "full_name": "Fričová, Karolina",
-                "short_name": "Fričová"
-              },
-              {
-                "slot": "II",
-                "number": "9",
-                "full_name": "Anna Koulberg",
-                "short_name": "Koulberg"
-              },
-              {
-                "slot": "III",
-                "number": "10",
-                "full_name": "Pia Kästner",
-                "short_name": "Kästner"
-              },
-              {
-                "slot": "IV",
-                "number": "2",
-                "full_name": "Slacanin, Leilani",
-                "short_name": "Slacanin"
-              },
-              {
-                "slot": "V",
-                "number": "3",
-                "full_name": "Gross, Jasmine",
-                "short_name": "Gross"
-              },
-              {
-                "slot": "VI",
-                "number": "5",
-                "full_name": "Grote, Lydia",
-                "short_name": "Grote"
-              }
-            ],
-            "B": [
-              {
-                "slot": "I",
-                "number": "14",
-                "full_name": "Tändler, Anni",
-                "short_name": "Tändler"
-              },
-              {
-                "slot": "II",
-                "number": "13",
-                "full_name": "Vogel, Roxana",
-                "short_name": "Vogel"
-              },
-              {
-                "slot": "III",
-                "number": "16",
-                "full_name": "Kögler, Hanna",
-                "short_name": "Kögler"
-              },
-              {
-                "slot": "IV",
-                "number": "7",
-                "full_name": "Schammer, Britta",
-                "short_name": "Schammer"
-              },
-              {
-                "slot": "V",
-                "number": "11",
-                "full_name": "Skrabak, Frauke",
-                "short_name": "Skrabak"
-              },
-              {
-                "slot": "VI",
-                "number": "8",
-                "full_name": "Binkau, Hanne",
-                "short_name": "Binkau"
-              }
-            ]
-          },
-          "scores": {
-            "A": "25",
-            "B": "17"
-          },
-          "score_label": "25:17"
-        },
-        {
-          "number": 2,
-          "lineups": {
-            "B": [
-              {
-                "slot": "I",
-                "number": "13",
-                "full_name": "Vogel, Roxana",
-                "short_name": "Vogel"
-              },
-              {
-                "slot": "II",
-                "number": "16",
-                "full_name": "Kögler, Hanna",
-                "short_name": "Kögler"
-              },
-              {
-                "slot": "III",
-                "number": "7",
-                "full_name": "Schammer, Britta",
-                "short_name": "Schammer"
-              },
-              {
-                "slot": "IV",
-                "number": "11",
-                "full_name": "Skrabak, Frauke",
-                "short_name": "Skrabak"
-              },
-              {
-                "slot": "V",
-                "number": "3",
-                "full_name": "Dörschug, Viktoria",
-                "short_name": "Dörschug"
-              },
-              {
-                "slot": "VI",
-                "number": "14",
-                "full_name": "Tändler, Anni",
-                "short_name": "Tändler"
-              }
-            ],
-            "A": [
-              {
-                "slot": "I",
-                "number": "15",
-                "full_name": "Fričová, Karolina",
-                "short_name": "Fričová"
-              },
-              {
-                "slot": "II",
-                "number": "9",
-                "full_name": "Anna Koulberg",
-                "short_name": "Koulberg"
-              },
-              {
-                "slot": "III",
-                "number": "10",
-                "full_name": "Pia Kästner",
-                "short_name": "Kästner"
-              },
-              {
-                "slot": "IV",
-                "number": "2",
-                "full_name": "Slacanin, Leilani",
-                "short_name": "Slacanin"
-              },
-              {
-                "slot": "V",
-                "number": "3",
-                "full_name": "Gross, Jasmine",
-                "short_name": "Gross"
-              },
-              {
-                "slot": "VI",
-                "number": "5",
-                "full_name": "Grote, Lydia",
-                "short_name": "Grote"
-              }
-            ]
-          },
-          "scores": {
-            "B": "11",
-            "A": "25"
-          },
-          "score_label": "25:11"
-        },
-        {
-          "number": 3,
-          "lineups": {
-            "A": [
-              {
-                "slot": "I",
-                "number": "15",
-                "full_name": "Fričová, Karolina",
-                "short_name": "Fričová"
-              },
-              {
-                "slot": "II",
-                "number": "9",
-                "full_name": "Anna Koulberg",
-                "short_name": "Koulberg"
-              },
-              {
-                "slot": "III",
-                "number": "19",
-                "full_name": "Tea Jerkovic",
-                "short_name": "Jerkovic"
-              },
-              {
-                "slot": "IV",
-                "number": "2",
-                "full_name": "Slacanin, Leilani",
-                "short_name": "Slacanin"
-              },
-              {
-                "slot": "V",
-                "number": "20",
-                "full_name": "Marie Steinhilber",
-                "short_name": "Steinhilber"
-              },
-              {
-                "slot": "VI",
-                "number": "14",
-                "full_name": "Jordan Genevieve Iliff",
-                "short_name": "Iliff"
-              }
-            ],
-            "B": [
-              {
-                "slot": "I",
-                "number": "1",
-                "full_name": "Gesa Brandstrup",
-                "short_name": "Brandstrup"
-              },
-              {
-                "slot": "II",
-                "number": "16",
-                "full_name": "Kögler, Hanna",
-                "short_name": "Kögler"
-              },
-              {
-                "slot": "III",
-                "number": "7",
-                "full_name": "Schammer, Britta",
-                "short_name": "Schammer"
-              },
-              {
-                "slot": "IV",
-                "number": "11",
-                "full_name": "Skrabak, Frauke",
-                "short_name": "Skrabak"
-              },
-              {
-                "slot": "V",
-                "number": "5",
-                "full_name": "Lea Finger",
-                "short_name": "Finger"
-              },
-              {
-                "slot": "VI",
-                "number": "14",
-                "full_name": "Tändler, Anni",
-                "short_name": "Tändler"
-              }
-            ]
-          },
-          "scores": {
-            "A": "25",
-            "B": "19"
-          },
-          "score_label": "25:19"
         }
       ]
     }
