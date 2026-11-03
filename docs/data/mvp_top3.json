@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-02T08:44:58.536017+00:00",
+  "generated_at": "2026-11-03T08:55:31.401815+00:00",
   "home_team": "USC Münster",
   "usc_team": "USC Münster",
   "opponent_team": "Dresdner SC",
@@ -13,14 +13,8 @@
       "all_players": []
     },
     {
-      "id": "29593924",
-      "label": "Aufschlag / Quote Aufschläge mit Wirkung",
-      "pages": 0,
-      "all_players": []
-    },
-    {
-      "id": "31385020",
-      "label": "Annahme / Quote perfekte oder gute Annahme",
+      "id": "29593923",
+      "label": "Aufschlag / Aufschlagpunkte",
       "pages": 0,
       "all_players": []
     },
@@ -31,8 +25,26 @@
       "all_players": []
     },
     {
-      "id": "60245660",
-      "label": "Annahme / Annahmeeffizienz",
+      "id": "29593924",
+      "label": "Aufschlag / Quote Aufschläge mit Wirkung",
+      "pages": 0,
+      "all_players": []
+    },
+    {
+      "id": "60245659",
+      "label": "Aufschlag / Aufschlageffizienz",
+      "pages": 0,
+      "all_players": []
+    },
+    {
+      "id": "29593920",
+      "label": "Angriff / Angriffspunkte",
+      "pages": 0,
+      "all_players": []
+    },
+    {
+      "id": "29593919",
+      "label": "Angriff / Quote Angriffspunkte",
       "pages": 0,
       "all_players": []
     },
@@ -49,26 +61,14 @@
       "all_players": []
     },
     {
-      "id": "29593923",
-      "label": "Aufschlag / Aufschlagpunkte",
+      "id": "31385020",
+      "label": "Annahme / Quote perfekte oder gute Annahme",
       "pages": 0,
       "all_players": []
     },
     {
-      "id": "29593919",
-      "label": "Angriff / Quote Angriffspunkte",
-      "pages": 0,
-      "all_players": []
-    },
-    {
-      "id": "29593920",
-      "label": "Angriff / Angriffspunkte",
-      "pages": 0,
-      "all_players": []
-    },
-    {
-      "id": "60245659",
-      "label": "Aufschlag / Aufschlageffizienz",
+      "id": "60245660",
+      "label": "Annahme / Annahmeeffizienz",
       "pages": 0,
       "all_players": []
     }
